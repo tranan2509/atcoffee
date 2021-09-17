@@ -7,7 +7,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "bill")
-public class BillEntity extends BaseEntity implements Serializable{
+public class BillEntity extends BaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private float amount;

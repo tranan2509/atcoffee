@@ -15,15 +15,16 @@ import javax.persistence.Temporal;
 public class PromotionEntity extends BaseEntity implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
-	
-	private String name;
+
 	private String code;
+	@Column(name = "name")
+	private String name;
 	private String image;
 	@Column(columnDefinition = "TEXT")
 	private String description;
 	private int discount;
 	private String object;
-	private int condition;
+	private int proviso;
 	@Temporal(TIMESTAMP)
 	private Date startDate;
 	@Temporal(TIMESTAMP)
@@ -82,14 +83,13 @@ public class PromotionEntity extends BaseEntity implements Serializable{
 		this.object = object;
 	}
 
-	public int getCondition() {
-		return condition;
+	public int getProviso() {
+		return proviso;
 	}
 
-	public void setCondition(int condition) {
-		this.condition = condition;
+	public void setProviso(int proviso) {
+		this.proviso = proviso;
 	}
-
 	public Date getStartDate() {
 		return startDate;
 	}

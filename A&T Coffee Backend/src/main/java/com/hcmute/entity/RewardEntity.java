@@ -2,17 +2,19 @@ package com.hcmute.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "reward")
 public class RewardEntity extends BaseEntity implements Serializable{
-	
-	private static final long serialVersionUID = 1L;
-	
+
+	private static final long serialVersionUID = -3898916842853162269L;
+
+	@Column(name = "name")
 	private String name;
-	private int condition;
+	private int proviso;
 	private int redution;
 	private boolean state;
 	
@@ -28,12 +30,12 @@ public class RewardEntity extends BaseEntity implements Serializable{
 		this.name = name;
 	}
 
-	public int getCondition() {
-		return condition;
+	public int getProviso() {
+		return proviso;
 	}
 
-	public void setCondition(int condition) {
-		this.condition = condition;
+	public void setProviso(int proviso) {
+		this.proviso = proviso;
 	}
 
 	public int getRedution() {
@@ -51,6 +53,4 @@ public class RewardEntity extends BaseEntity implements Serializable{
 	public void setState(boolean state) {
 		this.state = state;
 	}
-	
-	
 }

@@ -2,20 +2,22 @@ package com.hcmute.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "rank")
-public class RankEntity extends BaseEntity implements Serializable {
+@Table(name = "type")
+public class TypeEntity extends BaseEntity implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = -1664557373960746806L;
+
+	@Column(name = "name")
 	private String name;
 	private int point;
 	private boolean state;
-	
-	public RankEntity() {
+
+	public TypeEntity() {
 		super();
 	}
 
@@ -42,6 +44,5 @@ public class RankEntity extends BaseEntity implements Serializable {
 	public void setState(boolean state) {
 		this.state = state;
 	}
-	
-	
+
 }
