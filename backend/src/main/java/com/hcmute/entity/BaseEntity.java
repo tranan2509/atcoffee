@@ -43,7 +43,8 @@ public abstract class BaseEntity {
 	@Temporal(TIMESTAMP)
 	@LastModifiedDate
 	private Date modifiedDate;
-
+	
+	@Column(columnDefinition = "boolean default true")
 	private boolean state;
 
 	public Long getId() {
