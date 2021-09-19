@@ -15,7 +15,7 @@ public class TypeAPI {
 	@Autowired
 	private TypeService typeService;
 	
-	@PostMapping("api/info/type")
+	@PostMapping("api/admin/type")
 	public ResponseEntity<TypeDTO> add( @RequestBody TypeDTO dto){
 		dto = typeService.save(dto);
 		return ResponseEntity.ok(dto);

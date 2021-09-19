@@ -1,7 +1,6 @@
 package com.hcmute.entity;
 
 import java.io.Serializable;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,8 +21,8 @@ public class StoreEntity extends BaseEntity implements Serializable{
 	
 	private String name;
 	private String address;
-	private LocalTime timeOpen;
-	private LocalTime timeClose;
+	private String timeOpen;
+	private String timeClose;
 	
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "store_product",
@@ -54,19 +53,19 @@ public class StoreEntity extends BaseEntity implements Serializable{
 		this.address = address;
 	}
 
-	public LocalTime getTimeOpen() {
+	public String getTimeOpen() {
 		return timeOpen;
 	}
 
-	public void setTimeOpen(LocalTime timeOpen) {
+	public void setTimeOpen(String timeOpen) {
 		this.timeOpen = timeOpen;
 	}
 
-	public LocalTime getTimeClose() {
+	public String getTimeClose() {
 		return timeClose;
 	}
 
-	public void setTimeClose(LocalTime timeClose) {
+	public void setTimeClose(String timeClose) {
 		this.timeClose = timeClose;
 	}
 

@@ -15,7 +15,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Service
 public class JwtUtil {
 	private String SECRET_KEY = "secret";
-	private int LONG_EXPIRATION = 30;
+	private int LONG_EXPIRATION = 10;
 	
 	public String extractUsername(String token) {
 		return extractClaim(token, Claims::getSubject);

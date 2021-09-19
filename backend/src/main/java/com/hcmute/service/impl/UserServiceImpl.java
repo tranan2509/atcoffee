@@ -57,18 +57,22 @@ public class UserServiceImpl implements UserService{
 		StoreEntity storeEntity = new StoreEntity();
 		TypeEntity typeEntity = new TypeEntity();
 		if (userDTO.getStoreId() != null) {
-			storeRepository.findOne(userDTO.getStoreId());
+			storeEntity = storeRepository.findOne(userDTO.getStoreId());
+			typeEntity = null;
 		}else {
 			if (userDTO.getTypeId() != null) {
-				typeRepository.findOne(userDTO.getId());
+				typeEntity = typeRepository.findOne(userDTO.getId());
+				storeEntity = null;
 			}
 		}
 		
-		RoleEntity roleEntity = roleRepository.findOneByName(userDTO.getName());
+		RoleEntity roleEntity = roleRepository.findOneByName(userDTO.getRoleName());
 		UserEntity userEntity = mapper.map(userDTO, UserEntity.class);
-		userEntity.setRole(roleEntity);;
-		userEntity.setStore(storeEntity);
-		userEntity.setType(typeEntity);
+		userEntity.setRole(roleEntity);
+		if (storeEntity != null)
+			userEntity.setStore(storeEntity);
+		if (typeEntity != null)
+			userEntity.setType(typeEntity);
 		userRepository.save(userEntity);
 		return mapper.map(userEntity, UserDTO.class);
 	}

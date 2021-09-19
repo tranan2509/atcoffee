@@ -5,8 +5,8 @@ import java.time.LocalTime;
 public class StoreDTO extends BaseDTO<StoreDTO>{
 	private String name;
 	private String address;
-	private LocalTime timeOpen;
-	private LocalTime timeClose;
+	private String timeOpen;
+	private  String timeClose;
 	
 	public StoreDTO() {
 		super();
@@ -24,16 +24,16 @@ public class StoreDTO extends BaseDTO<StoreDTO>{
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	public LocalTime getTimeOpen() {
+	public String getTimeOpen() {
 		return timeOpen;
 	}
-	public void setTimeOpen(LocalTime timeOpen) {
+	public void setTimeOpen(String timeOpen) {
 		this.timeOpen = timeOpen;
 	}
-	public LocalTime getTimeClose() {
+	public String getTimeClose() {
 		return timeClose;
 	}
-	public void setTimeClose(LocalTime timeClose) {
+	public void setTimeClose(String timeClose) {
 		this.timeClose = timeClose;
 	}
 	
