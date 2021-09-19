@@ -1,9 +1,12 @@
 package com.hcmute.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -16,6 +19,9 @@ public class TypeEntity extends BaseEntity implements Serializable {
 	private String name;
 	private int point;
 	private boolean state;
+	
+	@OneToMany(mappedBy = "type")
+	private List<UserEntity> users = new ArrayList<>();
 
 	public TypeEntity() {
 		super();
@@ -43,6 +49,14 @@ public class TypeEntity extends BaseEntity implements Serializable {
 
 	public void setState(boolean state) {
 		this.state = state;
+	}
+
+	public List<UserEntity> getUsers() {
+		return users;
+	}
+
+	public void setUsers(List<UserEntity> users) {
+		this.users = users;
 	}
 
 }

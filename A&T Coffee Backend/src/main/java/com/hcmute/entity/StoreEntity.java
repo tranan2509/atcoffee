@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -29,6 +30,9 @@ public class StoreEntity extends BaseEntity implements Serializable{
 			joinColumns = @JoinColumn(name = "store_id"),
 			inverseJoinColumns = @JoinColumn(name = "product_id"))
 	private List<ProductEntity> products = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "store")
+	private List<UserEntity> users = new ArrayList<>();
 	
 	public StoreEntity() {
 		super();
@@ -72,6 +76,14 @@ public class StoreEntity extends BaseEntity implements Serializable{
 
 	public void setProducts(List<ProductEntity> products) {
 		this.products = products;
+	}
+
+	public List<UserEntity> getUsers() {
+		return users;
+	}
+
+	public void setUsers(List<UserEntity> users) {
+		this.users = users;
 	}
 	
 	

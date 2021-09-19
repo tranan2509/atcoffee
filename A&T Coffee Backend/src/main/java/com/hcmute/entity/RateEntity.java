@@ -20,6 +20,10 @@ public class RateEntity extends BaseEntity implements Serializable {
 	private boolean state;
 	
 	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private UserEntity user;
+	
+	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private ProductEntity product;
 	
@@ -58,5 +62,13 @@ public class RateEntity extends BaseEntity implements Serializable {
 	public void setProduct(ProductEntity product) {
 		this.product = product;
 	}
-	
+
+	public UserEntity getUser() {
+		return user;
+	}
+
+	public void setUser(UserEntity user) {
+		this.user = user;
+	}
+		
 }
