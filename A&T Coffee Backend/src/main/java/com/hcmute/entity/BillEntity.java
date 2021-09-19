@@ -1,8 +1,13 @@
 package com.hcmute.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -15,10 +20,24 @@ public class BillEntity extends BaseEntity implements Serializable {
 	private int discount;
 	private boolean state;
 	
+	@OneToMany(mappedBy = "bill")
+	List<BillDetailEntity> billDetails = new ArrayList<>();
+	
+	@ManyToOne
+	@JoinColumn(name = "reward_id")
+	private RewardEntity reward;
+	
+	@ManyToOne
+	@JoinColumn(name = "promotion_id")
+	private PromotionEntity promotion;
+	
+	@ManyToOne
+	@JoinColumn(name = "payment_id")
+	private PaymentEntity payment;
+	
 	public BillEntity() {
 		super();
 	}
-	
 	public float getAmount() {
 		return amount;
 	}
@@ -43,7 +62,30 @@ public class BillEntity extends BaseEntity implements Serializable {
 	public void setState(boolean state) {
 		this.state = state;
 	}
-	
+	public List<BillDetailEntity> getBillDetails() {
+		return billDetails;
+	}
+	public void setBillDetails(List<BillDetailEntity> billDetails) {
+		this.billDetails = billDetails;
+	}
+	public RewardEntity getReward() {
+		return reward;
+	}
+	public void setReward(RewardEntity reward) {
+		this.reward = reward;
+	}
+	public PromotionEntity getPromotion() {
+		return promotion;
+	}
+	public void setPromotion(PromotionEntity promotion) {
+		this.promotion = promotion;
+	}
+	public PaymentEntity getPayment() {
+		return payment;
+	}
+	public void setPayment(PaymentEntity payment) {
+		this.payment = payment;
+	}
 	
 	
 }

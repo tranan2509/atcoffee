@@ -1,9 +1,12 @@
 package com.hcmute.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -17,6 +20,9 @@ public class RewardEntity extends BaseEntity implements Serializable{
 	private int proviso;
 	private int redution;
 	private boolean state;
+	
+	@OneToMany(mappedBy = "reward")
+	private List<BillEntity> bills = new ArrayList<>();
 	
 	public RewardEntity() {
 		super();
@@ -53,4 +59,14 @@ public class RewardEntity extends BaseEntity implements Serializable{
 	public void setState(boolean state) {
 		this.state = state;
 	}
+
+	public List<BillEntity> getBills() {
+		return bills;
+	}
+
+	public void setBills(List<BillEntity> bills) {
+		this.bills = bills;
+	}
+	
+	
 }

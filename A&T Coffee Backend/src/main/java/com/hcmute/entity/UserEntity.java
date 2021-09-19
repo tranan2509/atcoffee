@@ -29,7 +29,7 @@ public class UserEntity extends BaseEntity implements Serializable{
 	
 	@ManyToOne
 	@JoinColumn(name = "role_id")
-	private Role role;
+	private RoleEntity role;
 
 	public String getUsername() {
 		return username;
@@ -71,11 +71,11 @@ public class UserEntity extends BaseEntity implements Serializable{
 		this.gender = gender;
 	}
 
-	public Role getRole() {
+	public RoleEntity getRole() {
 		return role;
 	}
 
-	public void setRole(Role role) {
+	public void setRole(RoleEntity role) {
 		this.role = role;
 	}
 

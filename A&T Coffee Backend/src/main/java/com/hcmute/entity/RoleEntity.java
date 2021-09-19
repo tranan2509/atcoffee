@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "role")
-public class Role extends BaseEntity implements Serializable{
+public class RoleEntity extends BaseEntity implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -22,7 +22,7 @@ public class Role extends BaseEntity implements Serializable{
 	@OneToMany(mappedBy = "role")
 	List<UserEntity> users = new ArrayList<>();
 	
-	public Role() {
+	public RoleEntity() {
 	}
 	
 	public String getCode() {
@@ -37,4 +37,14 @@ public class Role extends BaseEntity implements Serializable{
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public List<UserEntity> getUsers() {
+		return users;
+	}
+
+	public void setUsers(List<UserEntity> users) {
+		this.users = users;
+	}
+	
+	
 }

@@ -2,8 +2,15 @@ package com.hcmute.entity;
 
 import java.io.Serializable;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -16,6 +23,12 @@ public class StoreEntity extends BaseEntity implements Serializable{
 	private String address;
 	private LocalTime timeOpen;
 	private LocalTime timeClose;
+	
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinTable(name = "store_product",
+			joinColumns = @JoinColumn(name = "store_id"),
+			inverseJoinColumns = @JoinColumn(name = "product_id"))
+	private List<ProductEntity> products = new ArrayList<>();
 	
 	public StoreEntity() {
 		super();
@@ -51,6 +64,14 @@ public class StoreEntity extends BaseEntity implements Serializable{
 
 	public void setTimeClose(LocalTime timeClose) {
 		this.timeClose = timeClose;
+	}
+
+	public List<ProductEntity> getProducts() {
+		return products;
+	}
+
+	public void setProducts(List<ProductEntity> products) {
+		this.products = products;
 	}
 	
 	

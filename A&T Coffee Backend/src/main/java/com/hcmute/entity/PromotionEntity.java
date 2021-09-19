@@ -3,10 +3,13 @@ package com.hcmute.entity;
 import static javax.persistence.TemporalType.TIMESTAMP;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 
@@ -30,6 +33,9 @@ public class PromotionEntity extends BaseEntity implements Serializable{
 	@Temporal(TIMESTAMP)
 	private Date endDate;
 	private boolean state;
+	
+	@OneToMany(mappedBy = "promotion")
+	private List<BillEntity> bills = new ArrayList<>();
 	
 	public PromotionEntity() {
 		super();
@@ -112,6 +118,14 @@ public class PromotionEntity extends BaseEntity implements Serializable{
 
 	public void setState(boolean state) {
 		this.state = state;
+	}
+
+	public List<BillEntity> getBills() {
+		return bills;
+	}
+
+	public void setBills(List<BillEntity> bills) {
+		this.bills = bills;
 	}
 	
 	

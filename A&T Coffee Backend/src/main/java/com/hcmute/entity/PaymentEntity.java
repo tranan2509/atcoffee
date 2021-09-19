@@ -1,8 +1,11 @@
 package com.hcmute.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -12,6 +15,9 @@ public class PaymentEntity extends BaseEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private boolean state;
+	
+	@OneToMany(mappedBy = "payment")
+	private List<BillEntity> bills = new ArrayList<>();
 	
 	public PaymentEntity() {
 		super();
@@ -28,6 +34,14 @@ public class PaymentEntity extends BaseEntity implements Serializable {
 	}
 	public void setState(boolean state) {
 		this.state = state;
+	}
+
+	public List<BillEntity> getBills() {
+		return bills;
+	}
+
+	public void setBills(List<BillEntity> bills) {
+		this.bills = bills;
 	}
 	
 	
