@@ -5,9 +5,13 @@ import java.util.Date;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class UserDTO extends BaseDTO<UserDTO>{
 	private String username; 
 	private String password;
+	private String image;
+	private MultipartFile file;
 	private String name;
 	private String phone;
 	private String gender;
@@ -27,6 +31,21 @@ public class UserDTO extends BaseDTO<UserDTO>{
 	public UserDTO() {
 		super();
 	}
+	public UserDTO(String username, String password, String image, String name, String phone, String gender,
+			String email, Date dob, String indentityCard, Long storeId, String roleName) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.image = image;
+		this.name = name;
+		this.phone = phone;
+		this.gender = gender;
+		this.email = email;
+		this.dob = dob;
+		this.indentityCard = indentityCard;
+		this.storeId = storeId;
+		this.roleName = roleName;
+	}
 	public String getUsername() {
 		return username;
 	}
@@ -38,6 +57,19 @@ public class UserDTO extends BaseDTO<UserDTO>{
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
+	}
+	public MultipartFile getFile() {
+		return file;
+	}
+	public void setFile(MultipartFile file) {
+		this.file = file;
 	}
 	public String getName() {
 		return name;

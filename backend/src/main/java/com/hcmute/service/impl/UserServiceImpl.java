@@ -1,6 +1,8 @@
 package com.hcmute.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.modelmapper.ModelMapper;
@@ -80,6 +82,19 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public UserDTO findOneByUsername(String username) {
 		return mapper.map(userRepository.findOneByUsername(username), UserDTO.class);
+	}
+
+	@Override
+	public UserDTO findOne(Long id) {
+		return mapper.map(userRepository.findOne(id), UserDTO.class);
+	}
+
+	@Override
+	public List<UserDTO> findAll() {
+		List<UserDTO> dtos = new ArrayList<UserDTO>();
+		List<UserEntity> entities = userRepository.findAll();
+		entities.forEach(entity -> dtos.add(mapper.map(entity, UserDTO.class)));
+		return dtos;
 	}
 
 }

@@ -9,6 +9,12 @@ public class RoleDTO extends BaseDTO<RoleDTO>{
 		super();
 	}
 	
+	public RoleDTO(String code, String name) {
+		super();
+		this.code = code;
+		this.name = name;
+	}
+
 	public String getCode() {
 		return code;
 	}

@@ -7,6 +7,11 @@ public class TypeDTO extends BaseDTO<TypeDTO>{
 	public TypeDTO() {
 		super();
 	}
+	public TypeDTO(String name, int point) {
+		super();
+		this.name = name;
+		this.point = point;
+	}
 	public String getName() {
 		return name;
 	}

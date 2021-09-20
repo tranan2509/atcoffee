@@ -24,6 +24,7 @@ public class UserEntity extends BaseEntity implements Serializable{
 	private String username; 
 	@Column(nullable = false)
 	private String password;
+	private String image;
 	@Column(nullable = false)
 	private String name;
 	@Column(unique = true)
@@ -71,6 +72,14 @@ public class UserEntity extends BaseEntity implements Serializable{
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 	public String getName() {

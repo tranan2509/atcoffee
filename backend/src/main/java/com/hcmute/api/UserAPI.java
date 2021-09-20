@@ -16,6 +16,13 @@ public class UserAPI {
 	
 	@PostMapping("/api/login/user")
 	public ResponseEntity<UserDTO> signUp(@RequestBody UserDTO userDTO){
+		userDTO.setRoleName("USER");
+		userDTO = userService.save(userDTO);
+		return ResponseEntity.ok(userDTO);
+	}
+	
+	@PostMapping("/api/admin/user")
+	public ResponseEntity<UserDTO> add(@RequestBody UserDTO userDTO){
 		userDTO = userService.save(userDTO);
 		return ResponseEntity.ok(userDTO);
 	}

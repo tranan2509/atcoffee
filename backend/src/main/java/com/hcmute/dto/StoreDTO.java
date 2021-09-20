@@ -1,7 +1,5 @@
 package com.hcmute.dto;
 
-import java.time.LocalTime;
-
 public class StoreDTO extends BaseDTO<StoreDTO>{
 	private String name;
 	private String address;
@@ -12,6 +10,14 @@ public class StoreDTO extends BaseDTO<StoreDTO>{
 		super();
 	}
 	
+	public StoreDTO(String name, String address, String timeOpen, String timeClose) {
+		super();
+		this.name = name;
+		this.address = address;
+		this.timeOpen = timeOpen;
+		this.timeClose = timeClose;
+	}
+
 	public String getName() {
 		return name;
 	}

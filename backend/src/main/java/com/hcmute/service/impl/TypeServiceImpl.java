@@ -1,5 +1,8 @@
 package com.hcmute.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +31,14 @@ public class TypeServiceImpl implements TypeService{
 	public TypeDTO findOne(Long id) {
 		// TODO Auto-generated method stub
 		return mapper.map(typeRepository.findOne(id), TypeDTO.class);
+	}
+
+	@Override
+	public List<TypeDTO> findAll() {
+		List<TypeDTO> dtos = new ArrayList<TypeDTO>();
+		List<TypeEntity> entities = typeRepository.findAll();
+		entities.forEach(entity -> dtos.add(mapper.map(entity, TypeDTO.class)));
+		return dtos;
 	}
 
 }
