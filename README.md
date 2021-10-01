@@ -1,9 +1,7 @@
 <h1 align="center">
-  <br>
-  <a href="#"><img src="https://res.cloudinary.com/tranan2509/image/upload/v1633099012/logo_transparent_rerp84.png" alt="Markdownify" width="200"></a>
+  <a href="#"><img src="https://res.cloudinary.com/tranan2509/image/upload/v1633099012/logo_transparent_rerp84.png" alt="Markdownify" style="width:12rem; height:auto"></a>
   <br>
   A&amp;T Coffee
-  <br>
 </h1>
 
 <h4 align="center">Application A&T Coffee is built by <a href="https://hcmute.edu.vn" target="_blank">HCMUTE</a> students</h4>
