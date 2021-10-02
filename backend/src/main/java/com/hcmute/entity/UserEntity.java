@@ -34,7 +34,7 @@ public class UserEntity extends BaseEntity implements Serializable{
 	//Staff 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dob;
-	private String indentityCard;
+	private String identityCard;
 	@ManyToOne
 	@JoinColumn(name = "store_id")
 	private StoreEntity store;
@@ -130,12 +130,12 @@ public class UserEntity extends BaseEntity implements Serializable{
 		this.dob = dob;
 	}
 
-	public String getIndentityCard() {
-		return indentityCard;
+	public String getIdentityCard() {
+		return identityCard;
 	}
 
-	public void setIndentityCard(String indentityCard) {
-		this.indentityCard = indentityCard;
+	public void setIdentityCard(String identityCard) {
+		this.identityCard = identityCard;
 	}
 
 	public int getAccumulatedPoints() {

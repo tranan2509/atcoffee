@@ -19,7 +19,7 @@ public class UserDTO extends BaseDTO<UserDTO>{
 	//Staff 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dob;
-	private String indentityCard;
+	private String identityCard;
 	private Long storeId;
 //	Customer
 	private int accumulatedPoints;
@@ -42,7 +42,7 @@ public class UserDTO extends BaseDTO<UserDTO>{
 		this.gender = gender;
 		this.email = email;
 		this.dob = dob;
-		this.indentityCard = indentityCard;
+		this.identityCard = indentityCard;
 		this.storeId = storeId;
 		this.roleName = roleName;
 	}
@@ -101,11 +101,11 @@ public class UserDTO extends BaseDTO<UserDTO>{
 	public void setDob(Date dob) {
 		this.dob = dob;
 	}
-	public String getIndentityCard() {
-		return indentityCard;
+	public String getIdentityCard() {
+		return identityCard;
 	}
-	public void setIndentityCard(String indentityCard) {
-		this.indentityCard = indentityCard;
+	public void setIdentityCard(String identityCard) {
+		this.identityCard = identityCard;
 	}
 	public Long getStoreId() {
 		return storeId;
