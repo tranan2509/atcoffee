@@ -17,8 +17,12 @@ const userModule = {
   },
 
   mutations: {
-    [MutationsName.MUTATION_LOGIN](state, {user, jwt}) {
+    [MutationsName.MUTATION_LOGIN](state, { user, jwt }) {
       Jwt.setJWT(jwt);
+      state.user = user;
+    },
+
+    [MutationsName.AUTHENTICATED](state, user) {
       state.user = user;
     },
   },
@@ -31,17 +35,32 @@ const userModule = {
      */
     async login({ commit }, user) {
       try {
-
         const res = await Login.login(user);
         if (res.status === 200) {
-          commit(MutationsName.MUTATION_LOGIN, {user: res.data.user, jwt: res.data.jwt});
+          commit(MutationsName.MUTATION_LOGIN, {
+            user: res.data.user,
+            jwt: res.data.jwt,
+          });
           return true;
-        }else{
+        } else {
           return false;
         }
       } catch (error) {
         return false;
       }
+    },
+
+    /**
+     * Function authenticated
+     * @returns
+     */
+    async authenticated({ commit }) {
+      const res = await Login.authenticated();
+      if (res != null) {
+        commit(MutationsName.AUTHENTICATED, res);
+        return true;
+      }
+      return true;
     },
   },
 };

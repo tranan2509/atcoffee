@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container-fluid">
     <router-view />
   </div>
 </template>
@@ -13,8 +13,9 @@ export default {
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Nunito", "Segoe UI", arial;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: #f4f6f9;
 }
 </style>

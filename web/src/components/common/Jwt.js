@@ -1,3 +1,5 @@
+import * as Constants from '../common/Constants'
+
 const JWT = {
 
   /**
@@ -5,7 +7,7 @@ const JWT = {
    * @param {*} jwt
    */
   setJWT: (jwt) => {
-    localStorage.setItem('jwt', jwt);
+    localStorage.setItem(Constants.JWT_NAME, jwt);
   },
 
   /**
@@ -14,7 +16,7 @@ const JWT = {
    */
   getJWT: () => {
 
-    const jwt = localStorage.getItem("jwt");
+    const jwt = localStorage.getItem(Constants.JWT_NAME);
     return jwt;
   },
 
@@ -24,7 +26,7 @@ const JWT = {
    */
    getBearerJWT: () => {
 
-    const jwt = `Bearer ${localStorage.getItem('jwt')}`;
+    const jwt = `Bearer ${localStorage.getItem(Constants.JWT_NAME)}`;
     return jwt;
   },
 };

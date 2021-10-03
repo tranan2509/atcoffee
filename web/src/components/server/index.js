@@ -50,7 +50,7 @@ const connect = {
      */
     getData: async (url) => {
 
-      let res = await instance.post(url);
+      let res = await instance.get(url);
       return res.data ? res.data : null;
     }
 

@@ -9,11 +9,32 @@ const LoginCommand = {
    */
   login: async (user) => {
 
-    const url = '/api/authenticate';
-    const res = await server.postDataLogin(url, user);
-    return res ? res : null;
-  }
+    try{
+      
+      const url = '/api/authenticate';
+      const res = await server.postDataLogin(url, user);
+      return res ? res : null;
+    } catch (error){
+      return null;
+    }
+    
+  },
 
+  /**
+   * Function: authenticated
+   * @returns 
+   */
+  authenticated: async () => {
+    
+    try{
+
+      const url = '/api/user/authenticate';
+      const res = await server.getData(url);
+      return res ? res : null;
+    } catch (error) {
+      return null;
+    }
+  }
 }
 
 export default LoginCommand;

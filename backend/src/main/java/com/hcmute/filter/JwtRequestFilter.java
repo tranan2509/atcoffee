@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,7 +16,9 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.hcmute.dto.UserDTO;
 import com.hcmute.service.UserService;
+import com.hcmute.util.ConstantsUtil;
 import com.hcmute.util.JwtUtil;
 
 @Component
@@ -25,6 +28,8 @@ public class JwtRequestFilter extends OncePerRequestFilter{
 	private UserService userDetailsService;
 	@Autowired
 	private JwtUtil jwtUtil;
+	@Autowired
+	private ModelMapper mapper;
 	
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
@@ -47,6 +52,8 @@ public class JwtRequestFilter extends OncePerRequestFilter{
 				usernamePasswordAuthenticationToken
 					.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+				
+				ConstantsUtil.userDTO = mapper.map(userDetailsService.findOneByUsername(username), UserDTO.class);
 			}
 		}
 		chain.doFilter(request, response);

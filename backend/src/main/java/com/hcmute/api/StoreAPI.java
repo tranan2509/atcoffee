@@ -17,6 +17,7 @@ public class StoreAPI {
 	@Autowired
 	private StoreService storeService;
 	
+	
 	@GetMapping("/api/info/store/{id}")
 	public ResponseEntity<StoreDTO> get(@PathVariable(name = "id") long id){
 		return ResponseEntity.ok(storeService.findOne(id));
