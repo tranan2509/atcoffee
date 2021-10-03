@@ -36,7 +36,6 @@
                       class="form-control"
                       tabindex="1"
                       required
-                      autofocus
                       v-model="username"
                     />
                     <div class="invalid-feedback">
@@ -72,7 +71,7 @@
                     <button
                       type="submit"
                       class="btn btn-primary btn-lg btn-block"
-                      tabindex="4"
+                      tabindex="3"
                     >
                       Đăng nhập
                     </button>
