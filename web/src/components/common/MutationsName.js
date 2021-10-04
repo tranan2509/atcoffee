@@ -1,2 +1,0 @@
-export const MUTATION_LOGIN = 'LOGIN';
-export const AUTHENTICATED = 'AUTHENTICATED';
