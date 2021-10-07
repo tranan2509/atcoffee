@@ -8,6 +8,7 @@ import {
   TextInput,
   FlatList,
   StyleSheet,
+  Platform,
 } from 'react-native';
 import {IconButton, TabButton} from '../components';
 import {dummyData, COLORS, SIZES, FONTS, icons, images} from '../constants';
@@ -29,7 +30,7 @@ const Location = ({navigation, appTheme}) => {
             flexDirection: 'row',
             paddingHorizontal: SIZES.radius,
             alignItems: 'center',
-            marginTop: 30,
+            marginTop: Platform.OS === 'android' ? 30 : 0,
           }}>
           {/* Back Button */}
           <IconButton
