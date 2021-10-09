@@ -21,7 +21,7 @@ public class ProductEntity extends BaseEntity implements Serializable {
 
 	private String name;
 	private String image;
-	private float price;
+	private String description;
 	private int discount;
 	
 	@ManyToMany(mappedBy = "products", fetch = FetchType.EAGER)
@@ -38,6 +38,9 @@ public class ProductEntity extends BaseEntity implements Serializable {
 	@OneToMany(mappedBy = "product")
 	private List<RateEntity> rates = new ArrayList<>();
 
+	@OneToMany(mappedBy = "product")
+	private List<SizeEntity> sizes = new ArrayList<>();
+	
 	public ProductEntity() {
 		super();
 	}
@@ -58,12 +61,12 @@ public class ProductEntity extends BaseEntity implements Serializable {
 		this.image = image;
 	}
 
-	public float getPrice() {
-		return price;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setPrice(float price) {
-		this.price = price;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public int getDiscount() {
@@ -104,6 +107,14 @@ public class ProductEntity extends BaseEntity implements Serializable {
 
 	public void setRates(List<RateEntity> rates) {
 		this.rates = rates;
+	}
+
+	public List<SizeEntity> getSizes() {
+		return sizes;
+	}
+
+	public void setSizes(List<SizeEntity> sizes) {
+		this.sizes = sizes;
 	}
 
 	

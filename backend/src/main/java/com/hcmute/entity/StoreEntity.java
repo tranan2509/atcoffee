@@ -33,6 +33,9 @@ public class StoreEntity extends BaseEntity implements Serializable{
 	@OneToMany(mappedBy = "store")
 	private List<UserEntity> users = new ArrayList<>();
 	
+	@OneToMany(mappedBy = "store")
+	private List<BillEntity> bills = new ArrayList<>();
+	
 	public StoreEntity() {
 		super();
 	}
@@ -83,6 +86,14 @@ public class StoreEntity extends BaseEntity implements Serializable{
 
 	public void setUsers(List<UserEntity> users) {
 		this.users = users;
+	}
+
+	public List<BillEntity> getBills() {
+		return bills;
+	}
+
+	public void setBills(List<BillEntity> bills) {
+		this.bills = bills;
 	}
 	
 	

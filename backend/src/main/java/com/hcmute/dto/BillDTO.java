@@ -9,6 +9,8 @@ public class BillDTO extends BaseDTO<BillDTO>{
 	private Long paymentId;
 	private Long staffId;
 	private Long customerId;
+	private Long storeId;
+	
 	public BillDTO() {
 		super();
 	}
@@ -60,7 +62,11 @@ public class BillDTO extends BaseDTO<BillDTO>{
 	public void setCustomerId(Long customerId) {
 		this.customerId = customerId;
 	}
-	
-	
+	public Long getStoreId() {
+		return storeId;
+	}
+	public void setStoreId(Long storeId) {
+		this.storeId = storeId;
+	}
 	
 }

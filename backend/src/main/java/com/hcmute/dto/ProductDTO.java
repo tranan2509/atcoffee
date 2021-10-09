@@ -3,7 +3,7 @@ package com.hcmute.dto;
 public class ProductDTO extends BaseDTO<ProductDTO>{
 	private String name;
 	private String image;
-	private float price;
+	private String description; 
 	private int discount;
 	private float rate;
 	private int numberReviewers;
@@ -22,11 +22,12 @@ public class ProductDTO extends BaseDTO<ProductDTO>{
 	public void setImage(String image) {
 		this.image = image;
 	}
-	public float getPrice() {
-		return price;
+
+	public String getDescription() {
+		return description;
 	}
-	public void setPrice(float price) {
-		this.price = price;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	public int getDiscount() {
 		return discount;

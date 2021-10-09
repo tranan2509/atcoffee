@@ -42,6 +42,10 @@ public class BillEntity extends BaseEntity implements Serializable {
 	@JoinColumn(name = "customer_id")
 	private UserEntity customer;
 	
+	@ManyToOne
+	@JoinColumn(name = "store_id")
+	private StoreEntity store;
+	
 	public BillEntity() {
 		super();
 	}
@@ -98,6 +102,12 @@ public class BillEntity extends BaseEntity implements Serializable {
 	}
 	public void setCustomer(UserEntity customer) {
 		this.customer = customer;
+	}
+	public StoreEntity getStore() {
+		return store;
+	}
+	public void setStore(StoreEntity store) {
+		this.store = store;
 	}
 	
 	
