@@ -13,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.hcmute.filter.JwtRequestFilter;
 
 @Configuration
@@ -28,6 +30,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return new BCryptPasswordEncoder();
 	}
 
+	@Bean
+    public Cloudinary cloudinary() {
+        Cloudinary c = new Cloudinary(ObjectUtils.asMap(
+                "cloud_name", "tranan2509",
+                "api_key", "885521887955987",
+                "api_secret", "bBHD10tgOSkeqEMx3Hx6BLiO5ko",
+                "secure", true
+        ));
+
+        return c;
+    }
+	
 	@Override
 	@Bean
 	public AuthenticationManager authenticationManagerBean() throws Exception {

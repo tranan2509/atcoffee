@@ -1,8 +1,14 @@
 package com.hcmute.dto;
 
+import javax.persistence.Transient;
+
+import org.springframework.web.multipart.MultipartFile;
+
 public class ProductDTO extends BaseDTO<ProductDTO>{
 	private String name;
 	private String image;
+	@Transient
+	private MultipartFile file;
 	private String description; 
 	private int discount;
 	private float rate;
@@ -23,6 +29,12 @@ public class ProductDTO extends BaseDTO<ProductDTO>{
 		this.image = image;
 	}
 
+	public MultipartFile getFile() {
+		return file;
+	}
+	public void setFile(MultipartFile file) {
+		this.file = file;
+	}
 	public String getDescription() {
 		return description;
 	}
