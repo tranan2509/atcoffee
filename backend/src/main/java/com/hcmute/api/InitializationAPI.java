@@ -8,10 +8,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hcmute.dto.CategoryDTO;
 import com.hcmute.dto.RoleDTO;
 import com.hcmute.dto.StoreDTO;
 import com.hcmute.dto.TypeDTO;
 import com.hcmute.dto.UserDTO;
+import com.hcmute.service.CategoryService;
 import com.hcmute.service.RoleService;
 import com.hcmute.service.StoreService;
 import com.hcmute.service.TypeService;
@@ -28,6 +30,8 @@ public class InitializationAPI {
 	private RoleService roleService;
 	@Autowired
 	private UserService userService;
+	@Autowired 
+	private CategoryService categoryService;
 	
 	
 	@PostMapping("/api/initialization")
@@ -53,6 +57,14 @@ public class InitializationAPI {
 				roleService.save(role);
 				role = new RoleDTO("ROLE_USER", "USER");
 				roleService.save(role);
+			}
+			if(categoryService.findAll().isEmpty()) {
+				CategoryDTO category = new CategoryDTO("COFFEE", "Cà phê");
+				categoryService.save(category);
+				category = new CategoryDTO("MILKTEA", "Trà sữa");
+				categoryService.save(category);
+				category = new CategoryDTO("DRINK", "Đồ uống");
+				categoryService.save(category);
 			}
 			if (userService.findAll().isEmpty()) {
 				Date dob = new Date();
