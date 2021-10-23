@@ -1,5 +1,7 @@
 package com.hcmute.service;
 
-public interface ProductService {
+import com.hcmute.dto.ProductDTO;
 
+public interface ProductService {
+	ProductDTO save(ProductDTO dto);
 }

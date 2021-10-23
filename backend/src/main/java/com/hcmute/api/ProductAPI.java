@@ -1,14 +1,19 @@
 package com.hcmute.api;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hcmute.dto.ProductDTO;
+import com.hcmute.service.ProductService;
 
 @RestController
 public class ProductAPI {
@@ -17,40 +22,23 @@ public class ProductAPI {
 	private Cloudinary cloudinary;
 	@Autowired
 	private ObjectMapper objectMapper;
+	@Autowired
+	private ProductService productService;
 	
 	
-//	@PostMapping("/api/admin/product")
-//	public ResponseEntity<Boolean> saveProduct(@RequestBody ProductDTO product) {
-//		MultipartFile uploadFile = product.getFile();
-//		try {
-//            Map r = this.cloudinary.uploader().upload(product.getFile().getBytes(),
-//                    ObjectUtils.asMap("resource_type", "auto"));
-//            String img = (String) r.get("secure_url");
-//            product.setImage(img);
-//        } catch (IOException ex) {
-//            System.err.println("Add product error " + ex.getMessage());
-//            ex.printStackTrace();
-//        }
-//		return ResponseEntity.ok(true);
-//	}
-	
-	@PostMapping("/api/info/product/test")
-	public String testProduct(@RequestParam("file") MultipartFile multipartFile, @RequestParam("product") String productJson) {
+	@PostMapping("/api/admin/product")
+	public ResponseEntity<ProductDTO> testProduct(@RequestParam("file") MultipartFile multipartFile, @RequestParam("product") String productJson) {
 		try {
-
-			ProductDTO product = objectMapper.readValue(productJson, ProductDTO.class);
+			ProductDTO product = objectMapper.readValue(productJson, ProductDTO.class);	
+			Map r = this.cloudinary.uploader().upload(multipartFile.getBytes(),
+	                  ObjectUtils.asMap("resource_type", "auto"));
+			String img = (String) r.get("secure_url");
+	        product.setImage(img);
+	        product = productService.save(product);
+			return ResponseEntity.ok(product);
+			
 		} catch (Exception e) {
-			return null;
+			return ResponseEntity.ok(null);
 		}
-//		try {
-//          Map r = this.cloudinary.uploader().upload(multipartFile.getBytes(),
-//                  ObjectUtils.asMap("resource_type", "auto"));
-//          String img = (String) r.get("secure_url");
-//          return img;
-//      } catch (IOException ex) {
-//          System.err.println("Add product error " + ex.getMessage());
-//          ex.printStackTrace();
-//      }
-		return String.format("File %s uploaded successfully", multipartFile.getOriginalFilename());
 	}
 }

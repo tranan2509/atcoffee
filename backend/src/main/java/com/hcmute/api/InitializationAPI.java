@@ -41,6 +41,8 @@ public class InitializationAPI {
 			if (storeService.findAll().isEmpty()) {
 				StoreDTO store = new StoreDTO("A&T Coffee", "Thủ Đức, Hồ Chí Minh", "8:00", "23:00");
 				storeService.save(store);
+				store = new StoreDTO("A&T Coffee", "Quận 2, Hồ Chí Minh", "8:00", "23:00");
+				storeService.save(store);
 			}
 			if (typeService.findAll().isEmpty()) {
 				TypeDTO type = new TypeDTO("Đồng", 10000);
@@ -69,7 +71,7 @@ public class InitializationAPI {
 			if (userService.findAll().isEmpty()) {
 				Date dob = new Date();
 				UserDTO user = new UserDTO("admin", "admin", "https://res.cloudinary.com/tranan2509/image/upload/v1629857862/sample.jpg", "Admin", "01692889894", "Name",
-						"admin@gmail.com", dob, "215523098", 1L, "ADMIN");
+						"admin@gmail.com", "9 Trình Hoài Đức, Quận 9", dob, "215523098", 1L, "ADMIN");
 				userService.save(user);
 			}
 		}catch (Exception e) {

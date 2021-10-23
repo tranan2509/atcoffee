@@ -18,7 +18,7 @@ public class BillEntity extends BaseEntity implements Serializable {
 	private float amount;
 	private float price;
 	private int discount;
-	
+	private String address;
 	@OneToMany(mappedBy = "bill")
 	List<BillDetailEntity> billDetails = new ArrayList<>();
 	
@@ -66,6 +66,12 @@ public class BillEntity extends BaseEntity implements Serializable {
 	}
 	public void setDiscount(int discount) {
 		this.discount = discount;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
 	}
 	public List<BillDetailEntity> getBillDetails() {
 		return billDetails;

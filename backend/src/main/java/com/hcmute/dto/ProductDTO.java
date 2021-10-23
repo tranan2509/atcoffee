@@ -1,5 +1,7 @@
 package com.hcmute.dto;
 
+import java.util.List;
+
 import javax.persistence.Transient;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -13,6 +15,10 @@ public class ProductDTO extends BaseDTO<ProductDTO>{
 	private int discount;
 	private float rate;
 	private int numberReviewers;
+	private List<CategoryDTO> categories;
+	private List<StoreDTO> stores;
+	private List<SizeDTO> sizes;
+	
 	public ProductDTO() {
 		super();
 	}
@@ -58,6 +64,24 @@ public class ProductDTO extends BaseDTO<ProductDTO>{
 	}
 	public void setNumberReviewers(int numberReviewers) {
 		this.numberReviewers = numberReviewers;
+	}
+	public List<CategoryDTO> getCategories() {
+		return categories;
+	}
+	public void setCategories(List<CategoryDTO> categories) {
+		this.categories = categories;
+	}
+	public List<StoreDTO> getStores() {
+		return stores;
+	}
+	public void setStores(List<StoreDTO> stores) {
+		this.stores = stores;
+	}
+	public List<SizeDTO> getSizes() {
+		return sizes;
+	}
+	public void setSizes(List<SizeDTO> sizes) {
+		this.sizes = sizes;
 	}
 	
 }

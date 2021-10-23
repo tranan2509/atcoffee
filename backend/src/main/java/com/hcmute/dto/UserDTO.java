@@ -16,6 +16,7 @@ public class UserDTO extends BaseDTO<UserDTO>{
 	private String phone;
 	private String gender;
 	private String email;
+	private String address;
 	//Staff 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dob;
@@ -32,7 +33,7 @@ public class UserDTO extends BaseDTO<UserDTO>{
 		super();
 	}
 	public UserDTO(String username, String password, String image, String name, String phone, String gender,
-			String email, Date dob, String indentityCard, Long storeId, String roleName) {
+			String email, String address, Date dob, String indentityCard, Long storeId, String roleName) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -41,6 +42,7 @@ public class UserDTO extends BaseDTO<UserDTO>{
 		this.phone = phone;
 		this.gender = gender;
 		this.email = email;
+		this.address = address;
 		this.dob = dob;
 		this.identityCard = indentityCard;
 		this.storeId = storeId;
@@ -94,6 +96,13 @@ public class UserDTO extends BaseDTO<UserDTO>{
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
 	}
 	public Date getDob() {
 		return dob;
