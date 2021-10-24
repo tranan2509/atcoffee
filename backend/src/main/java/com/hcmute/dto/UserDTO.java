@@ -47,6 +47,7 @@ public class UserDTO extends BaseDTO<UserDTO>{
 		this.identityCard = indentityCard;
 		this.storeId = storeId;
 		this.roleName = roleName;
+		setState(true);
 	}
 	public String getUsername() {
 		return username;

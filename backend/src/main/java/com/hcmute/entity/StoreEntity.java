@@ -26,8 +26,8 @@ public class StoreEntity extends BaseEntity implements Serializable{
 	
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "store_product",
-			joinColumns = @JoinColumn(name = "store_id"),
-			inverseJoinColumns = @JoinColumn(name = "product_id"))
+			joinColumns = {@JoinColumn(name = "store_id")},
+			inverseJoinColumns = {@JoinColumn(name = "product_id")})
 	private List<ProductEntity> products = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "store")

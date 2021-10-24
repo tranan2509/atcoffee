@@ -1,6 +1,6 @@
 package com.hcmute.dto;
 
-public class SizeDTO {
+public class SizeDTO extends BaseDTO<SizeDTO>{
 	private String size;
 	private float price;
 	private Long productId;
