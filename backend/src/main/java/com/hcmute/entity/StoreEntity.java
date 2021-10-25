@@ -24,7 +24,7 @@ public class StoreEntity extends BaseEntity implements Serializable{
 	private String timeOpen;
 	private String timeClose;
 	
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = ProductEntity.class)
 	@JoinTable(name = "store_product",
 			joinColumns = {@JoinColumn(name = "store_id")},
 			inverseJoinColumns = {@JoinColumn(name = "product_id")})
@@ -77,7 +77,10 @@ public class StoreEntity extends BaseEntity implements Serializable{
 	}
 
 	public void setProducts(List<ProductEntity> products) {
-		this.products = products;
+		for(ProductEntity product : products) {
+			this.products.add(product);
+			product.getStores().add(this);
+		}
 	}
 
 	public List<UserEntity> getUsers() {

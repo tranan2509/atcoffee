@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
@@ -30,7 +31,7 @@ public class ProductEntity extends BaseEntity implements Serializable {
 
 	@ManyToMany(mappedBy = "products", fetch = FetchType.EAGER)
 	@Fetch(value = FetchMode.SUBSELECT)
-	private List<StoreEntity> stores = new ArrayList<>();
+	private List<StoreEntity> stores = new ArrayList<StoreEntity>();
 
 	@OneToMany(mappedBy = "product")
 	private List<BillDetailEntity> billDetails = new ArrayList<BillDetailEntity>();
@@ -38,7 +39,7 @@ public class ProductEntity extends BaseEntity implements Serializable {
 	@OneToMany(mappedBy = "product")
 	private List<RateEntity> rates = new ArrayList<>();
 
-	@OneToMany(mappedBy = "product")
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
 	private List<SizeEntity> sizes = new ArrayList<>();
 	
 	public ProductEntity() {
@@ -82,7 +83,11 @@ public class ProductEntity extends BaseEntity implements Serializable {
 	}
 
 	public void setCategories(List<CategoryEntity> categories) {
-		this.categories = categories;
+		this.categories = new ArrayList<CategoryEntity>();
+		for (CategoryEntity category: categories) {
+			this.categories.add(category);
+			category.getProducts().add(this);
+		}
 	}
 
 	public List<BillDetailEntity> getBillDetails() {
@@ -98,7 +103,11 @@ public class ProductEntity extends BaseEntity implements Serializable {
 	}
 
 	public void setStores(List<StoreEntity> stores) {
-		this.stores = stores;
+		this.stores = new ArrayList<StoreEntity>();
+		for (StoreEntity store: stores) {
+			this.stores.add(store);
+			store.getProducts().add(this);
+		}
 	}
 
 	public List<RateEntity> getRates() {
@@ -114,7 +123,11 @@ public class ProductEntity extends BaseEntity implements Serializable {
 	}
 
 	public void setSizes(List<SizeEntity> sizes) {
-		this.sizes = sizes;
+		this.sizes = new ArrayList<SizeEntity>();
+		for (SizeEntity size: sizes) {
+			size.setProduct(this);
+			this.sizes.add(size);
+		}
 	}
 
 	

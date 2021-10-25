@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hcmute.dto.ProductDTO;
-import com.hcmute.dto.SizeDTO;
-import com.hcmute.entity.CategoryEntity;
 import com.hcmute.entity.ProductEntity;
-import com.hcmute.entity.SizeEntity;
 import com.hcmute.repository.ProductRepository;
 import com.hcmute.repository.SizeRepository;
 import com.hcmute.service.ProductService;
@@ -29,24 +26,14 @@ public class ProductServiceImpl implements ProductService{
 	@Override
 	public ProductDTO save(ProductDTO dto) {
 		ProductEntity entity = mapper.map(dto, ProductEntity.class);
-		List<CategoryEntity> categories = new ArrayList<CategoryEntity>();
-		dto.getCategories().forEach(category -> mapper.map(category, CategoryEntity.class));
-		entity.setCategories(categories);
-//		List<StoreEntity> stores = new ArrayList<StoreEntity>();
-//		for (StoreDTO store: dto.getStores()) {
-//			
+//		List<StoreEntity> stores = entity.getStores();
+//		entity.setStores(null);
+//		for (StoreEntity store : stores) {
+//			entity.getStores().add(store);
+//			store.getProducts().add(entity);
 //		}
-//		entity.setStores(stores);
+//		
 		entity = productRepository.save(entity);
-		List<SizeEntity> sizes = new ArrayList<SizeEntity>();
-		for (SizeDTO size: dto.getSizes()){
-			SizeEntity sizeEntity = mapper.map(size, SizeEntity.class);
-			sizeEntity.setProduct(entity);
-			sizeEntity.setState(true);
-			sizes.add(sizeEntity);
-		};
-		sizes = sizeRepository.save(sizes);
-		entity.setSizes(sizes);
 		return mapper.map(entity, ProductDTO.class);
 	}
 

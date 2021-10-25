@@ -49,7 +49,10 @@ public class CategoryEntity extends BaseEntity implements Serializable{
 		return products;
 	}
 	public void setProducts(List<ProductEntity> products) {
-		this.products = products;
+		for (ProductEntity product : products) {
+			this.products.add(product);
+			product.getCategories().add(this);
+		}
 	}
 	
 }

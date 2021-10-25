@@ -9,6 +9,7 @@ public class SizeDTO extends BaseDTO<SizeDTO>{
 		this.size = size;
 		this.price = price;
 		this.productId = productId;
+		this.setState(true);
 	}
 	public SizeDTO() {
 		super();
