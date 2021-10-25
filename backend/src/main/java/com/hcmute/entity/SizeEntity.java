@@ -1,7 +1,5 @@
 package com.hcmute.entity;
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -9,7 +7,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "size")
-public class SizeEntity extends BaseEntity implements Serializable{
+public class SizeEntity extends BaseEntity{
 
 	private static final long serialVersionUID = 1L;
 	

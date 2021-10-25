@@ -31,7 +31,7 @@ public class ProductEntity extends BaseEntity implements Serializable {
 
 	@ManyToMany(mappedBy = "products", fetch = FetchType.EAGER)
 	@Fetch(value = FetchMode.SUBSELECT)
-	private List<StoreEntity> stores = new ArrayList<StoreEntity>();
+	private List<StoreEntity> stores = new ArrayList<>();
 
 	@OneToMany(mappedBy = "product")
 	private List<BillDetailEntity> billDetails = new ArrayList<BillDetailEntity>();

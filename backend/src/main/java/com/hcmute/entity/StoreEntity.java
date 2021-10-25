@@ -24,7 +24,7 @@ public class StoreEntity extends BaseEntity implements Serializable{
 	private String timeOpen;
 	private String timeClose;
 	
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = ProductEntity.class)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "store_product",
 			joinColumns = {@JoinColumn(name = "store_id")},
 			inverseJoinColumns = {@JoinColumn(name = "product_id")})
