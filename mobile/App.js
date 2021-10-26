@@ -1,5 +1,5 @@
 import React from 'react';
-import {Location, Order, OrderDetail} from './src/screens';
+import {Location, Order, OrderDetail, SignIn, SignUp} from './src/screens';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import SplashScreen from 'react-native-splash-screen';
@@ -22,6 +22,10 @@ const App = () => {
           headerShown: false,
         }}
         initialRouteName={'Home'}>
+        <Stack.Screen name="SignIn" component={SignIn} />
+
+        <Stack.Screen name="SignUp" component={SignUp} />
+
         <Stack.Screen name="Home" component={Tabs} />
 
         <Stack.Screen name="Location" component={Location} />

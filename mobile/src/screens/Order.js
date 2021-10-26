@@ -11,7 +11,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import {IconButton, TabButton, VerticalTextButton} from '../components';
-import {icons, COLORS, images, SIZES, FONTS, dummyData} from '../constants';
+import {icons, COLORS, SIZES, FONTS, dummyData} from '../constants';
 import Svg, {Circle} from 'react-native-svg';
 
 import {connect} from 'react-redux';
@@ -27,6 +27,7 @@ const Order = ({navigation, appTheme, route}) => {
   React.useEffect(() => {
     let {selectedLocation} = route.params;
     setSelectedLocation(selectedLocation);
+    //return () => console.log('cleanup');
   }, []);
 
   React.useEffect(() => {
@@ -229,6 +230,7 @@ const Order = ({navigation, appTheme, route}) => {
         style={{
           flex: 1,
           backgroundColor: appTheme.backgroundColor,
+          // backgroundColor: 'red',
           marginTop: -45,
           borderTopLeftRadius: 40,
           borderTopRightRadius: 40,
@@ -257,7 +259,9 @@ const Order = ({navigation, appTheme, route}) => {
               return (
                 <TouchableWithoutFeedback
                   onPress={() =>
-                    navigation.navigate('OrderDetail', {selectedItem: item})
+                    navigation.navigate('OrderDetail', {
+                      selectedItem: item,
+                    })
                   }>
                   <View
                     style={{
