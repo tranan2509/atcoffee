@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
@@ -21,7 +22,7 @@ public class ProductEntity extends BaseEntity implements Serializable {
 
 	private String name;
 	private String image;
-	private float price;
+	private String description;
 	private int discount;
 	
 	@ManyToMany(mappedBy = "products", fetch = FetchType.EAGER)
@@ -38,6 +39,9 @@ public class ProductEntity extends BaseEntity implements Serializable {
 	@OneToMany(mappedBy = "product")
 	private List<RateEntity> rates = new ArrayList<>();
 
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+	private List<SizeEntity> sizes = new ArrayList<>();
+	
 	public ProductEntity() {
 		super();
 	}
@@ -58,12 +62,12 @@ public class ProductEntity extends BaseEntity implements Serializable {
 		this.image = image;
 	}
 
-	public float getPrice() {
-		return price;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setPrice(float price) {
-		this.price = price;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public int getDiscount() {
@@ -79,7 +83,11 @@ public class ProductEntity extends BaseEntity implements Serializable {
 	}
 
 	public void setCategories(List<CategoryEntity> categories) {
-		this.categories = categories;
+		this.categories = new ArrayList<CategoryEntity>();
+		for (CategoryEntity category: categories) {
+			this.categories.add(category);
+			category.getProducts().add(this);
+		}
 	}
 
 	public List<BillDetailEntity> getBillDetails() {
@@ -95,7 +103,11 @@ public class ProductEntity extends BaseEntity implements Serializable {
 	}
 
 	public void setStores(List<StoreEntity> stores) {
-		this.stores = stores;
+		this.stores = new ArrayList<StoreEntity>();
+		for (StoreEntity store: stores) {
+			this.stores.add(store);
+			store.getProducts().add(this);
+		}
 	}
 
 	public List<RateEntity> getRates() {
@@ -104,6 +116,18 @@ public class ProductEntity extends BaseEntity implements Serializable {
 
 	public void setRates(List<RateEntity> rates) {
 		this.rates = rates;
+	}
+
+	public List<SizeEntity> getSizes() {
+		return sizes;
+	}
+
+	public void setSizes(List<SizeEntity> sizes) {
+		this.sizes = new ArrayList<SizeEntity>();
+		for (SizeEntity size: sizes) {
+			size.setProduct(this);
+			this.sizes.add(size);
+		}
 	}
 
 	

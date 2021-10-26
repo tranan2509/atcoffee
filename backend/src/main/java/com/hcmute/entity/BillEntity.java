@@ -18,7 +18,7 @@ public class BillEntity extends BaseEntity implements Serializable {
 	private float amount;
 	private float price;
 	private int discount;
-	
+	private String address;
 	@OneToMany(mappedBy = "bill")
 	List<BillDetailEntity> billDetails = new ArrayList<>();
 	
@@ -42,6 +42,10 @@ public class BillEntity extends BaseEntity implements Serializable {
 	@JoinColumn(name = "customer_id")
 	private UserEntity customer;
 	
+	@ManyToOne
+	@JoinColumn(name = "store_id")
+	private StoreEntity store;
+	
 	public BillEntity() {
 		super();
 	}
@@ -62,6 +66,12 @@ public class BillEntity extends BaseEntity implements Serializable {
 	}
 	public void setDiscount(int discount) {
 		this.discount = discount;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
 	}
 	public List<BillDetailEntity> getBillDetails() {
 		return billDetails;
@@ -98,6 +108,12 @@ public class BillEntity extends BaseEntity implements Serializable {
 	}
 	public void setCustomer(UserEntity customer) {
 		this.customer = customer;
+	}
+	public StoreEntity getStore() {
+		return store;
+	}
+	public void setStore(StoreEntity store) {
+		this.store = store;
 	}
 	
 	

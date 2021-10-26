@@ -26,12 +26,15 @@ public class StoreEntity extends BaseEntity implements Serializable{
 	
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "store_product",
-			joinColumns = @JoinColumn(name = "store_id"),
-			inverseJoinColumns = @JoinColumn(name = "product_id"))
+			joinColumns = {@JoinColumn(name = "store_id")},
+			inverseJoinColumns = {@JoinColumn(name = "product_id")})
 	private List<ProductEntity> products = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "store")
 	private List<UserEntity> users = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "store")
+	private List<BillEntity> bills = new ArrayList<>();
 	
 	public StoreEntity() {
 		super();
@@ -74,7 +77,10 @@ public class StoreEntity extends BaseEntity implements Serializable{
 	}
 
 	public void setProducts(List<ProductEntity> products) {
-		this.products = products;
+		for(ProductEntity product : products) {
+			this.products.add(product);
+			product.getStores().add(this);
+		}
 	}
 
 	public List<UserEntity> getUsers() {
@@ -83,6 +89,14 @@ public class StoreEntity extends BaseEntity implements Serializable{
 
 	public void setUsers(List<UserEntity> users) {
 		this.users = users;
+	}
+
+	public List<BillEntity> getBills() {
+		return bills;
+	}
+
+	public void setBills(List<BillEntity> bills) {
+		this.bills = bills;
 	}
 	
 	

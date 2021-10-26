@@ -31,6 +31,7 @@ public class UserEntity extends BaseEntity implements Serializable{
 	private String phone;
 	private String gender;
 	private String email;
+	private String address;
 	//Staff 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dob;
@@ -120,6 +121,14 @@ public class UserEntity extends BaseEntity implements Serializable{
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public Date getDob() {

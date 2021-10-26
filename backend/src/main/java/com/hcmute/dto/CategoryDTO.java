@@ -6,6 +6,13 @@ public class CategoryDTO extends BaseDTO<CategoryDTO>{
 	public CategoryDTO() {
 		super();
 	}
+	
+	public CategoryDTO(String code, String name) {
+		super();
+		this.code = code;
+		this.name = name;
+	}
+
 	public String getCode() {
 		return code;
 	}

@@ -47,6 +47,10 @@ public abstract class BaseEntity {
 	@Column(columnDefinition = "boolean default true")
 	private boolean state;
 
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public Long getId() {
 		return id;
 	}

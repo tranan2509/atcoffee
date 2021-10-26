@@ -2,6 +2,7 @@ package com.hcmute.dto;
 
 public class BillDetailDTO {
 	private int quantity;
+	private String description;
 	private float amount;
 	private float price;
 	private int discount;
@@ -15,6 +16,12 @@ public class BillDetailDTO {
 	}
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	public float getAmount() {
 		return amount;

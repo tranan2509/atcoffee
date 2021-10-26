@@ -13,6 +13,7 @@ public class BillDetailEntity extends BaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private int quantity;
+	private String description;
 	private float amount;
 	private float price;
 	private int discount;
@@ -43,6 +44,14 @@ public class BillDetailEntity extends BaseEntity implements Serializable {
 
 	public void setAmount(float amount) {
 		this.amount = amount;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public float getPrice() {

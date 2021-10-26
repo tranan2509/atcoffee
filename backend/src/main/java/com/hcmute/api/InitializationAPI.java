@@ -8,10 +8,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hcmute.dto.CategoryDTO;
 import com.hcmute.dto.RoleDTO;
 import com.hcmute.dto.StoreDTO;
 import com.hcmute.dto.TypeDTO;
 import com.hcmute.dto.UserDTO;
+import com.hcmute.service.CategoryService;
 import com.hcmute.service.RoleService;
 import com.hcmute.service.StoreService;
 import com.hcmute.service.TypeService;
@@ -28,6 +30,8 @@ public class InitializationAPI {
 	private RoleService roleService;
 	@Autowired
 	private UserService userService;
+	@Autowired 
+	private CategoryService categoryService;
 	
 	
 	@PostMapping("/api/initialization")
@@ -36,6 +40,8 @@ public class InitializationAPI {
 		try {
 			if (storeService.findAll().isEmpty()) {
 				StoreDTO store = new StoreDTO("A&T Coffee", "Thủ Đức, Hồ Chí Minh", "8:00", "23:00");
+				storeService.save(store);
+				store = new StoreDTO("A&T Coffee", "Quận 2, Hồ Chí Minh", "8:00", "23:00");
 				storeService.save(store);
 			}
 			if (typeService.findAll().isEmpty()) {
@@ -54,10 +60,18 @@ public class InitializationAPI {
 				role = new RoleDTO("ROLE_USER", "USER");
 				roleService.save(role);
 			}
+			if(categoryService.findAll().isEmpty()) {
+				CategoryDTO category = new CategoryDTO("COFFEE", "Cà phê");
+				categoryService.save(category);
+				category = new CategoryDTO("MILKTEA", "Trà sữa");
+				categoryService.save(category);
+				category = new CategoryDTO("DRINK", "Đồ uống");
+				categoryService.save(category);
+			}
 			if (userService.findAll().isEmpty()) {
 				Date dob = new Date();
 				UserDTO user = new UserDTO("admin", "admin", "https://res.cloudinary.com/tranan2509/image/upload/v1629857862/sample.jpg", "Admin", "01692889894", "Name",
-						"admin@gmail.com", dob, "215523098", 1L, "ADMIN");
+						"admin@gmail.com", "9 Trình Hoài Đức, Quận 9", dob, "215523098", 1L, "ADMIN");
 				userService.save(user);
 			}
 		}catch (Exception e) {

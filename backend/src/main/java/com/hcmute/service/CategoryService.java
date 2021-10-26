@@ -1,5 +1,11 @@
 package com.hcmute.service;
 
-public interface CategoryService {
+import java.util.List;
 
+import com.hcmute.dto.CategoryDTO;
+
+public interface CategoryService {
+	CategoryDTO save(CategoryDTO dto);
+	CategoryDTO findOne(Long id);
+	List<CategoryDTO> findAll();
 }
