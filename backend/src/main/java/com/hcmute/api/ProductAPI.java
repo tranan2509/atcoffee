@@ -30,13 +30,15 @@ public class ProductAPI {
 	
 	
 	@PostMapping("/api/admin/product")
-	public ResponseEntity<ProductDTO> save(@RequestParam("file") MultipartFile multipartFile, @RequestParam("product") String productJson) {
+	public ResponseEntity<ProductDTO> save(@RequestParam(value="file", required=false) MultipartFile multipartFile, @RequestParam("product") String productJson) {
 		try {
 			ProductDTO product = objectMapper.readValue(productJson, ProductDTO.class);	
-			Map r = this.cloudinary.uploader().upload(multipartFile.getBytes(),
-	                  ObjectUtils.asMap("resource_type", "auto"));
-			String img = (String) r.get("secure_url");
-	        product.setImage(img);
+			if (multipartFile != null) {
+				Map r = this.cloudinary.uploader().upload(multipartFile.getBytes(),
+		                  ObjectUtils.asMap("resource_type", "auto"));
+				String img = (String) r.get("secure_url");
+		        product.setImage(img);
+			}
 	        product = productService.save(product);
 			return ResponseEntity.ok(product);
 		} catch (Exception e) {

@@ -129,6 +129,7 @@ public class ProductEntity extends BaseEntity implements Serializable {
 			this.sizes.add(size);
 		}
 	}
-
+	
+	
 	
 }

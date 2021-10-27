@@ -35,6 +35,19 @@ public class ProductServiceImpl implements ProductService{
 	public ProductDTO save(ProductDTO dto) {
 		ProductEntity entity = mapper.map(dto, ProductEntity.class);
 		entity = productRepository.save(entity);
+		if (entity.getId() != null)
+		{
+			List<StoreEntity> stores = storeRepository.findAll();
+			for (int i = 0; i < stores.size(); i++) {
+				stores.get(i).getProducts().removeIf(product -> product.getId() == dto.getId());
+			}
+			storeRepository.save(stores);
+			List<CategoryEntity> categories = categoryRepository.findAll();
+			for (int j = 0; j < categories.size(); j++) {
+				categories.get(j).getProducts().removeIf(product -> product.getId() == dto.getId());
+			}
+			categoryRepository.save(categories);
+		}
 		for (StoreDTO storeDTO : dto.getStores()) {
 			StoreEntity storeEntity = storeRepository.findOne(storeDTO.getId());
 			storeEntity.getProducts().add(entity);
