@@ -17,6 +17,8 @@
     "react": "17.0.2",
     "react-native": "0.65.1",
     "react-native-gesture-handler": "^1.10.3",
+    "react-native-keyboard-aware-scroll-view": "github:APSL/react-native-keyboard-aware-scroll-view#pull/501/head",
+    "react-native-reanimated": "^2.2.3",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.8.0",
     "react-native-splash-screen": "^3.2.0",
