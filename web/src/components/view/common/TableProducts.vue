@@ -32,7 +32,7 @@
                   <td class="text-center">{{product.id}}</td>
                   <td>{{product.name}}</td>
                   <td class="text-center">
-                    <img :src="product.image" alt="image">
+                    <img :src="product.image" alt="image" @click="handleViewImage(product.image)">
                   </td>
                   <td class="text-center">{{product.sizes[1].price}} vnd</td>
                   <td class="text-center">Dang ban</td>
@@ -48,6 +48,7 @@
         </div>
       </div>
     </div>
+    <view-image :isViewImage="isViewImage" :image="imageSelected" @handleHide="handleHideViewImage"></view-image>
   </div>
 </template>
 
@@ -55,18 +56,22 @@
 import * as Constants from '../../common/Constants'
 import ProductCommand from '../../command/ProductCommand'
 import Pagination from '../common/Pagination.vue'
+import ViewImage from '../popup/ViewImage.vue'
 
 export default {
   name: Constants.COMPONENT_NAME_TABLE_PRODUCTS,
 
   components: {
-    Pagination
+    Pagination,
+    ViewImage
   },
 
   data() {
     return {
       products: [],
-      currentPage: 1
+      currentPage: 1,
+      isViewImage: false,
+      imageSelected: ''
     }
   },
 
@@ -82,11 +87,25 @@ export default {
 
     handleChangePage(page) {
       this.currentPage = page;
+      this.$router.push({path: '/admin/products', query: {page: this.currentPage}});
       this.loadProducts(this.currentPage, Constants.PAGE_SIZE_PRODUCT); 
+    },
+
+    handleViewImage(image) {
+      this.isViewImage = true;
+      this.imageSelected = image;
+    },
+
+    handleHideViewImage(){
+      this.isViewImage = false;
     }
   },
 
   created(){
+    this.currentPage = this.$route.query.page;
+    if (typeof this.currentPage == 'undefined') {
+      this.currentPage = 1;
+    }
     this.loadProducts(this.currentPage, Constants.PAGE_SIZE_PRODUCT);
   }
 }

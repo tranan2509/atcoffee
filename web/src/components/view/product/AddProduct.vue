@@ -8,7 +8,7 @@
         <router-link to="">Sản phẩm</router-link>
       </div>
       <div class="breadcrumb-item active" v-if="this.$route.path.toString().includes('edit-product')">
-        <router-link to="/admin/products">Danh sách sản phẩm</router-link>
+        <router-link :to="linkBackProducts">Danh sách sản phẩm</router-link>
       </div>
       <div class="breadcrumb-item">
         {{title}}
@@ -40,6 +40,12 @@ export default {
     Admin,
     SectionHeader,
     ActionProduct
+  },
+
+  computed: {
+    linkBackProducts(){
+      return `/admin/products?page=${this.$store.getters.currentPageProduct}`;
+    }
   },
 
   created() {

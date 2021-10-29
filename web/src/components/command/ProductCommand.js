@@ -26,6 +26,7 @@ var ProductCommand = {
     if (res != null) {
       store.commit(MutationsName.MUTATION_NAME_SET_PRODUCTS, res.products);
       store.commit(MutationsName.MUTATION_NAME_SET_TOTAL_PAGE_PRODUCT, res.totalPage);
+      store.commit(MutationsName.MUTATION_NAME_SET_CURRENT_PAGE_PRODUCT, res.page);
       return res.products;
     }
     return null;

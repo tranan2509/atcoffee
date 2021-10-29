@@ -46,7 +46,7 @@
         </router-link>
         <ul class="dropdown-menu" :class="menu.product.value ? 'visible' : 'invisible'">
           <li :class="menu.product.submenu.products ? 'active': ''" @click="handleLink(menu.product, 'products')">
-            <router-link to="/admin/products" class="nav-link" >Danh sách sản phẩm</router-link>
+            <router-link to="/admin/products?page=1" class="nav-link" >Danh sách sản phẩm</router-link>
           </li>
           <li :class="menu.product.submenu.add_product ? 'active': ''" @click="handleLink(menu.product, 'add_product')">
             <router-link to="/admin/add-product" class="nav-link">Thêm sản phẩm</router-link>
@@ -103,6 +103,7 @@ export default {
 
 <style scoped>
 #sidebar-wrapper {
+  position: fixed;
   display: block;
   font-weight: 400;
   color: #6c757d;
@@ -113,6 +114,7 @@ export default {
   background: #fff;
   overflow-y: auto;
   overflow-x: hidden;
+  scrollbar-width: thin;
 }
 
 #sidebar-wrapper .sidebar-brand {

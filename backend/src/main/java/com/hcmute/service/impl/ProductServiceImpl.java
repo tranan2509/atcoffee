@@ -35,6 +35,7 @@ public class ProductServiceImpl implements ProductService{
 	@Override
 	public ProductDTO save(ProductDTO dto) {
 		ProductEntity entity = mapper.map(dto, ProductEntity.class);
+		entity.setState(true);
 		entity = productRepository.save(entity);
 		if (entity.getId() != null)
 		{

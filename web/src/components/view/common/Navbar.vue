@@ -2,6 +2,101 @@
   <div class="navbar-bg"></div>  
   <nav class="navbar navbar-expand-lg main-navbar">
     <ul class="navbar-nav navbar-right">
+      <li class="dropdown dropdown-list-toggle">
+         <router-link to="" class="nav-link notification-toggle nav-link-lg beep" data-toggle="dropdown" aria-expanded="false">
+          <i class="far fa-bell" @click="handleShowNotification(navbar)"></i>
+        </router-link>
+        <div class="dropdown-menu dropdown-list dropdown-menu-right show" v-if="navbar.notification" v-click-outside="handleHideNotification">
+          <div class="dropdown-header">
+            Thông báo
+            <div class="float-right">
+              <router-link to="">Đánh dấu đã đọc tất cả</router-link>
+            </div>
+          </div>
+          <div class="dropdown-list-content dropdown-list-icons" style="outline: currentcolor none medium;" tabindex="3">
+            <router-link to="" class="dropdown-item dropdown-item-unread">
+              <div class="dropdown-item-icon bg-primary text-white">
+                <i class="fas fa-bell"></i>
+              </div>
+              <div class="dropdown-item-desc">
+                Đơn hàng số 5 được đặt. Đơn hàng số 5 được đặt. Đơn hàng số 5 được đặt
+                <div class="time text-primary">5 phút trước</div>
+              </div>
+            </router-link>
+            <router-link to="" class="dropdown-item">
+              <div class="dropdown-item-icon bg-info text-white">
+                <i class="fas fa-bell"></i>
+              </div>
+              <div class="dropdown-item-desc">
+                Đơn hàng số 6 được đặt
+                <div class="time">5 phút trước</div>
+              </div>
+            </router-link>
+             <router-link to="" class="dropdown-item">
+              <div class="dropdown-item-icon bg-info text-white">
+                <i class="fas fa-bell"></i>
+              </div>
+              <div class="dropdown-item-desc">
+                Đơn hàng số 6 được đặt
+                <div class="time">5 phút trước</div>
+              </div>
+            </router-link>
+             <router-link to="" class="dropdown-item">
+              <div class="dropdown-item-icon bg-info text-white">
+                <i class="fas fa-bell"></i>
+              </div>
+              <div class="dropdown-item-desc">
+                Đơn hàng số 6 được đặt
+                <div class="time">5 phút trước</div>
+              </div>
+            </router-link>
+             <router-link to="" class="dropdown-item">
+              <div class="dropdown-item-icon bg-info text-white">
+                <i class="fas fa-bell"></i>
+              </div>
+              <div class="dropdown-item-desc">
+                Đơn hàng số 6 được đặt
+                <div class="time">5 phút trước</div>
+              </div>
+            </router-link>
+             <router-link to="" class="dropdown-item">
+              <div class="dropdown-item-icon bg-info text-white">
+                <i class="fas fa-bell"></i>
+              </div>
+              <div class="dropdown-item-desc">
+                Đơn hàng số 6 được đặt
+                <div class="time">5 phút trước</div>
+              </div>
+            </router-link>
+             <router-link to="" class="dropdown-item">
+              <div class="dropdown-item-icon bg-info text-white">
+                <i class="fas fa-bell"></i>
+              </div>
+              <div class="dropdown-item-desc">
+                Đơn hàng số 6 được đặt
+                <div class="time">5 phút trước</div>
+              </div>
+            </router-link>
+             <router-link to="" class="dropdown-item">
+              <div class="dropdown-item-icon bg-info text-white">
+                <i class="fas fa-bell"></i>
+              </div>
+              <div class="dropdown-item-desc">
+                Đơn hàng số 6 được đặt
+                <div class="time">5 phút trước</div>
+              </div>
+            </router-link>
+          </div>
+          <div class="dropdown-footer text-center">
+            <router-link to="">
+              Xem tất cả
+              <i class="fas fa-chevron-right"></i>
+            </router-link>
+          </div>
+          <!-- <div id="ascrail2002" class="nicescroll-rails nicescroll-rails-vr" style="width: 9px; z-index: 1000; cursor: default; position: absolute; top: 58px; left: 341px; height: 350px; opacity: 0.3; display: block;"><div style="position: relative; top: 0px; float: right; width: 7px; height: 306px; background-color: rgb(66, 66, 66); border: 1px solid rgb(255, 255, 255); background-clip: padding-box; border-radius: 5px;" class="nicescroll-cursors"></div></div> -->
+        </div>
+        
+      </li>
       <li class="dropdown" v-click-outside="handleHide">
         <router-link to="" class="nav-link dropdown-toggle nav-link-lg nav-link-user" data-toggle="dropdown" aria-expanded="false" @click="handleShow(navbar)">
           <img :src="this.$store.getters.user.image" alt="avatar" class="rounded-circle mr-1">
@@ -41,7 +136,8 @@ export default {
   data() {
     return {
       navbar: {
-        dropdown: false
+        dropdown: false,
+        notification: false
       }
     }
   },
@@ -56,8 +152,16 @@ export default {
       navbar.dropdown = !navbar.dropdown;
     },
 
+    handleShowNotification(navbar) {
+      this.navbar.notification = !navbar.notification;
+    },
+
     handleHide() {
       this.navbar.dropdown = false;
+    },
+
+    handleHideNotification() {
+      this.navbar.notification = false;
     },
 
     handleLogout() {
@@ -72,6 +176,10 @@ export default {
 
 ul {
   list-style-type: none;
+}
+
+a {
+  color: var(--primary);
 }
 
 .navbar-bg {
@@ -96,6 +204,7 @@ ul {
   z-index: 890;
   background: transparent;
   display: flex;
+  flex-direction: row;
   padding: 0.5rem 1rem;
 }
 
@@ -140,6 +249,38 @@ ul {
   border-left: 0.3rem solid transparent;
 }
 
+.beep {
+  position: relative;
+}
+
+.beep::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  right: 8px;
+  width: 7px;
+  height: 7px;
+  background-color: #ffa426;
+  border-radius: 50%;
+  animation: pulsate 1s ease-out;
+  animation-iteration-count: infinite;
+  opacity: 1;
+}
+
+@keyframes pulsate {
+  0% {
+    --webkit-transform: scale(0.1, 0.1);
+    opacity: 0.0;
+  }
+  50% {
+    opacity: 1.0;
+  }
+  100% {
+    --webkit-transfrom: scale(1.2, 1.2);
+    opacity: 0.0;
+  }
+}
+
 .navbar .nav-link.nav-link-user {
   color: #fff;
   font-weight: 600;
@@ -147,6 +288,13 @@ ul {
 
 .navbar .nav-link.nav-link-user img {
   width: 30px;
+}
+
+.navbar .nav-link.nav-link-lg i {
+  margin-left: 0 !important;
+  font-size: 18px;
+  line-height: 32px;
+  color: #fff;
 }
 
 .mr-1 {
@@ -231,4 +379,131 @@ a.dropdown-item {
   margin-right: 10px;
 }
 
+.dropdown-list {
+  width: 350px !important;
+  padding: 0;
+}
+
+.dropdown-list .dropdown-header {
+  letter-spacing: .5px;
+  font-weight: 600;
+  padding: 15px;
+}
+
+.dropdown-header {
+  display: block;
+  margin-bottom: 0;
+  font-size: .875rem;
+  color: #6c757d;
+  white-space: nowrap;
+}
+
+.float-right {
+  float: right !important;
+}
+
+.dropdown-list .dropdown-header a {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--primary);
+}
+
+.dropdown-list .dropdown-header a:hover {
+  text-decoration: underline;
+}
+
+
+.dropdown-list .dropdown-list-content {
+  height: 350px;
+  width: 100%;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.dropdown-list .dropdown-list-icons .dropdown-item {
+  display: flex;
+}
+
+.dropdown-list .dropdown-list-icons .dropdown-item:active {
+  background: var(--lightGreen);
+}
+
+.dropdown-list .dropdown-item.dropdown-item-unread {
+  background: #fbfbfb;
+  border-bottom-color: #f2f2f2;
+}
+
+.dropdown-list .dropdown-item {
+  width: 100%;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  font-size: 13px;
+  border-bottom: 1px solid #f9f9f9;
+}
+
+.dropdown-list .dropdown-list-icons .dropdown-item .dropdown-item-icon {
+  flex-shrink: 0;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  line-height: 42px;
+  text-align: center;
+}
+
+.dropdown-list .dropdown-list-icons .dropdown-item .dropdown-item-icon i {
+  margin: 0;
+}
+
+.dropdown-list .dropdown-list-icons .dropdown-item .dropdown-item-desc {
+  margin-left: 15px;
+  line-height: 20px;
+}
+
+.dropdown-list .dropdown-item .dropdown-item-desc {
+  white-space: normal;
+  color: #34395e;
+}
+
+.dropdown-list .dropdown-list-icons .dropdown-item .dropdown-item-desc .time {
+  margin-top: 5px;
+}
+
+.dropdown-list .dropdown-item .time {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: .5px;
+}
+
+.dropdown-list .dropdown-footer {
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  padding: 15px;
+}
+
+.dropdown-list .dropdown-footer a{
+  font-weight: 600;
+  font-size: 13;
+}
+
+.dropdown-list .dropdown-footer a:hover{
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+.dropdown-list .dropdown-footer i{
+  color: var(--primary);
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.text-width {
+  color: #fff !important;
+}
+
+.bg-primary {
+  background: var(--primary);
+}
 </style>

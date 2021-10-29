@@ -4,7 +4,8 @@ const productModule = {
   state() {
     return {
       products: null,
-      totalPageProduct: 0
+      totalPageProduct: 0,
+      currentPageProduct: 1
     };
   },
 
@@ -14,6 +15,9 @@ const productModule = {
     },
     totalPageProduct(state) {
       return state.totalPageProduct;
+    },
+    currentPageProduct(state) {
+      return state.currentPageProduct;
     }
   },
 
@@ -24,6 +28,10 @@ const productModule = {
 
     [MutationsName.MUTATION_NAME_SET_TOTAL_PAGE_PRODUCT](state, totalPageProduct) {
       state.totalPageProduct = totalPageProduct;
+    },
+
+    [MutationsName.MUTATION_NAME_SET_CURRENT_PAGE_PRODUCT](state, currentPageProduct) {
+      state.currentPageProduct = currentPageProduct;
     },
   }
 };

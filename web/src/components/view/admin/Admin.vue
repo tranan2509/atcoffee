@@ -27,7 +27,7 @@ export default {
     async authenticated () {
       const isAuth = await LoginCommand.authenticated(this.$store);
       if (isAuth != null) {
-        console.log(isAuth);
+        // console.log(isAuth);
       } else {
         this.$router.push({path: '/login'})
       }
@@ -41,5 +41,4 @@ export default {
 </script>
 
 <style>
-
 </style>
