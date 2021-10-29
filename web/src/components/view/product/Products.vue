@@ -1,9 +1,6 @@
 <template>
-  <div class="main-content">
-    <side-bar />
-    <navbar />
-    <div class="section">
-      <section-header :title="title">
+  <admin>
+    <section-header :title="title">
         <div class="breadcrumb-item active">
           <router-link to="/admin">Trang chủ</router-link>
         </div>
@@ -17,14 +14,12 @@
       <div class="section-body">
         <table-products></table-products>
       </div>
-    </div>
-  </div>
+  </admin>
 </template>
 
 <script>
 import * as Constants from '../../common/Constants'
-import SideBar from '../common/SideBar.vue';
-import Navbar from '../common/Navbar.vue'
+import Admin from '../admin/Admin.vue'
 import SectionHeader from '../common/SectionHeader.vue'
 import TableProducts from '../common/TableProducts.vue'
 
@@ -32,8 +27,7 @@ export default {
   name: Constants.COMPONENT_NAME_PRODUCTS,
 
   components: {
-    SideBar,
-    Navbar,
+    Admin,
     SectionHeader,
     TableProducts
   },

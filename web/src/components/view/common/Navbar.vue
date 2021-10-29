@@ -4,9 +4,9 @@
     <ul class="navbar-nav navbar-right">
       <li class="dropdown" v-click-outside="handleHide">
         <router-link to="" class="nav-link dropdown-toggle nav-link-lg nav-link-user" data-toggle="dropdown" aria-expanded="false" @click="handleShow(navbar)">
-          <img src="../../../assets/avatar-3.png" alt="avatar" class="rounded-circle mr-1">
+          <img :src="this.$store.getters.user.image" alt="avatar" class="rounded-circle mr-1">
           <div class="d-sm-none d-lg-inline-block">
-            Trần Văn Ân
+            {{this.$store.getters.user.name}}
           </div>
         </router-link>
         <div class="dropdown-menu dropdown-menu-right" :class="navbar.dropdown ? 'show' : ''">
@@ -21,7 +21,7 @@
               <i class="fas fa-cog"></i> Cài đặt
             </router-link>  
             <div class="dropdown-divider"></div>
-            <router-link to="/login" class="dropdown-item has-icon text-danger" @click="handleLogout">
+            <router-link to="" class="dropdown-item has-icon text-danger" @click.prevent="handleLogout">
               <i class="fas fa-sign-out-alt"></i> Đăng xuất
             </router-link>
         </div>
@@ -32,6 +32,7 @@
 
 <script>
 import * as Constants from '../../common/Constants'
+import LoginCommand from '../../command/LoginCommand'
 import vClickOutside from 'click-outside-vue3'
 
 export default {
@@ -60,9 +61,8 @@ export default {
     },
 
     handleLogout() {
-      localStorage.clear();
-      this.$store.dispatch('logout');
-      this.$router.push({path: '/login'});
+      let isLogout = LoginCommand.logout(this.$store);
+      isLogout ? this.$router.push({path: '/login'}) : '';
     },
   }
 }
@@ -110,6 +110,11 @@ ul {
   padding-left: 0;
   margin-bottom: 0;
   list-style: none;
+}
+
+.rounded-circle {
+  height: 30px;
+  width: 30px;
 }
 
 .navbar .nav-link {

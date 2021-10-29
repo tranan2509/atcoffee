@@ -215,7 +215,7 @@ export default {
         size: 'L',
         price: ''
       }],
-      this.$refs.file.reset();
+      this.$refs.file.value = '';
       this.error = '',
       this.loadCategories();
       this.loadStores();

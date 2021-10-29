@@ -4,7 +4,7 @@
       <div class="container">
         <div class="row">
           <div
-            class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4"
+            class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4 login-form"
           >
             <div class="text-center">
               <img
@@ -26,7 +26,7 @@
               <div class="card-body">
                 <form
                   class="needs-validation"
-                  @submit.prevent="login({ username, password })"
+                  @submit.prevent="login(username, password)"
                 >
                   <div class="form-group">
                     <label for="username">Tên đăng nhập</label>
@@ -88,8 +88,7 @@
 
 <script>
 import * as Constants from "../../common/Constants";
-// import COLORS from '../../common/CommonColors'
-import {mapActions, mapGetters} from 'vuex'
+import LoginCommand from '../../command/LoginCommand'
 
 export default {
   name: Constants.COMPONENT_NAME_LOGIN,
@@ -102,23 +101,14 @@ export default {
     };
   },
 
-  computed: {
-
-    ...mapGetters(['user']),
-  },
-
   methods: {
-
-    ...mapActions(['authenticated']),
 
     /**
      * Function login
      */
-    async login({ username, password }) {
-      const result = await this.$store.dispatch("login", {
-        username,
-        password,
-      });
+    async login(username, password) {
+      var params = {username, password};
+      const result = await LoginCommand.login(params, this.$store);
       if (result) {
         this.$router.push('/admin')
       } else {
@@ -129,17 +119,16 @@ export default {
     /**
      * Function: authenticated
      */
-    async isAuthenticated() {
-      const isAuth = await this.authenticated();
-      if (isAuth && this.user.roleName === Constants.ROLE_ADMIN){
+    async authenticated() {
+      const auth = await LoginCommand.authenticated(this.$store);
+      if (auth && auth.roleName === Constants.ROLE_ADMIN){
         this.$router.push({path: '/admin'})
       }
     },
   },
 
   created() {
-    console.log('created');
-    this.isAuthenticated();
+    this.authenticated();
   },
 };
 </script>
@@ -149,6 +138,10 @@ export default {
   min-height: 100vh;
   background: #f4f6f9;
   padding-top: 4%;
+}
+
+.login-form {
+  min-width: 360px;
 }
 
 .login .alert {

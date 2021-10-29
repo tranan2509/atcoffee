@@ -44,25 +44,7 @@
           </div>
         </div>
         <div class="card-footer text-right">
-          <nav class="d-inline-block">
-            <ul class="pagination mb-0">
-              <li class="page-item disable">
-                <router-link to="/" class="page-link"><i class="fas fa-chevron-left"></i></router-link>
-              </li>
-              <li class="page-item active">
-                <router-link to="/" class="page-link">1</router-link>
-              </li>
-              <li class="page-item">
-                <router-link to="/" class="page-link">2</router-link>
-              </li>
-              <li class="page-item">
-                <router-link to="/" class="page-link">3</router-link>
-              </li>
-              <li class="page-item">
-                <router-link to="/" class="page-link"><i class="fas fa-chevron-right"></i></router-link>
-              </li>
-            </ul>
-          </nav>
+          <pagination :currentPage="currentPage" @handleChange="handleChangePage"/>
         </div>
       </div>
     </div>
@@ -72,29 +54,40 @@
 <script>
 import * as Constants from '../../common/Constants'
 import ProductCommand from '../../command/ProductCommand'
+import Pagination from '../common/Pagination.vue'
 
 export default {
   name: Constants.COMPONENT_NAME_TABLE_PRODUCTS,
 
+  components: {
+    Pagination
+  },
+
   data() {
     return {
       products: [],
+      currentPage: 1
     }
   },
 
   methods: {
 
-    async loadProducts() {
-      this.products = await ProductCommand.fineAll(this.$store);
+    async loadProducts(page, size) {
+      this.products = await ProductCommand.fineAll(page, size, this.$store);
     },
 
     handleEdit(id){
       this.$router.push({path: '/admin/edit-product', query: {id}});
+    },
+
+    handleChangePage(page) {
+      this.currentPage = page;
+      this.loadProducts(this.currentPage, Constants.PAGE_SIZE_PRODUCT); 
     }
   },
 
   created(){
-    this.loadProducts();
+    this.loadProducts(this.currentPage, Constants.PAGE_SIZE_PRODUCT);
   }
 }
 </script>
@@ -284,55 +277,6 @@ ul {
 
 ul:not(.list-unstyled) {
   line-height: 28px;
-}
-
-.pagination {
-  display: flex;
-  padding-left: 0;
-  list-style: none;
-  border-radius: .25rem;
-}
-
-.page-item .page-link {
-  border-color: transparent;
-  background: #f9fafe;
-  color: var(--primary);
-  opacity: 0.9;
-  border-radius: 3px;
-  margin: 0 3px;
-}
-
-.page-link {
-  font-weight: 600;
-  position: relative;
-  display: block;
-  padding: .5rem .75rem;
-  line-height: 1.25;
-  border: 1px solid #dee2e6;
-}
-
-.page-item a {
-  text-decoration: none !important;
-}
-
-.page-item.disable .page-link:hover {
-  border-color: transparent !important;
-  background: #f9fafe !important;
-  color: var(--primary) !important;
-}
-
-.page-item.active .page-link {
-  background: var(--primary) !important;
-  border-color: var(--primary) !important;
-  z-index: 1;
-  color: #fff;
-}
-
-.page-item .page-link:hover {
-  background: var(--primary) !important;
-  border-color: var(--primary) !important;
-  z-index: 1;
-  color: #fff;
 }
 
 </style>

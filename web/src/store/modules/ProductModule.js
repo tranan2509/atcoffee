@@ -1,10 +1,10 @@
 import * as MutationsName from "../../components/common/MutationsName";
-import ProductCommand from "../../components/command/ProductCommand";
 
 const productModule = {
   state() {
     return {
       products: null,
+      totalPageProduct: 0
     };
   },
 
@@ -12,19 +12,19 @@ const productModule = {
     products(state) {
       return state.products;
     },
+    totalPageProduct(state) {
+      return state.totalPageProduct;
+    }
   },
 
   mutations: {
     [MutationsName.MUTATION_NAME_SET_PRODUCTS](state, products) {
       state.products = products;
     },
-  },
 
-  actions: {
-    async saveProduct(product) {
-      const result = await ProductCommand.saveProduct(product);
-      return result;
-    }
+    [MutationsName.MUTATION_NAME_SET_TOTAL_PAGE_PRODUCT](state, totalPageProduct) {
+      state.totalPageProduct = totalPageProduct;
+    },
   }
 };
 

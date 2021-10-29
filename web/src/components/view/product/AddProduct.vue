@@ -1,34 +1,29 @@
 <template>
-  <div class="main-content">
-    <side-bar />
-    <navbar />
-    <div class="section">
-      <section-header :title="title">
-        <div class="breadcrumb-item active">
-          <router-link to="/admin">Trang chủ</router-link>
-        </div>
-        <div class="breadcrumb-item active">
-          <router-link to="">Sản phẩm</router-link>
-        </div>
-        <div class="breadcrumb-item active" v-if="this.$route.path.toString().includes('edit-product')">
-          <router-link to="/admin/products">Danh sách sản phẩm</router-link>
-        </div>
-        <div class="breadcrumb-item">
-          {{title}}
-        </div>
-      </section-header>
-      <div class="section-body">
-        <action-product/>
+  <admin>
+    <section-header :title="title">
+      <div class="breadcrumb-item active">
+        <router-link to="/admin">Trang chủ</router-link>
       </div>
+      <div class="breadcrumb-item active">
+        <router-link to="">Sản phẩm</router-link>
+      </div>
+      <div class="breadcrumb-item active" v-if="this.$route.path.toString().includes('edit-product')">
+        <router-link to="/admin/products">Danh sách sản phẩm</router-link>
+      </div>
+      <div class="breadcrumb-item">
+        {{title}}
+      </div>
+    </section-header>
+    <div class="section-body">
+      <action-product/>
     </div>
-  </div>
+  </admin>
 </template>
 
 <script>
 import * as Constants from '../../common/Constants'
 import * as MutationsName from '../../common/MutationsName'
-import SideBar from '../common/SideBar.vue';
-import Navbar from '../common/Navbar.vue'
+import Admin from '../admin/Admin.vue'
 import SectionHeader from '../common/SectionHeader.vue'
 import ActionProduct from '../common/ActionProduct.vue'
 
@@ -42,8 +37,7 @@ export default {
   },
 
   components: {
-    SideBar,
-    Navbar,
+    Admin,
     SectionHeader,
     ActionProduct
   },

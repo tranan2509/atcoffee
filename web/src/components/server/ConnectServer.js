@@ -27,8 +27,12 @@ const connect = {
      */
     postData: async (url, data) => {
 
-      let res = await instance.post(url, data);
-      return res ? res : null;
+      try {
+        let res = await instance.post(url, data);
+        return res && res.data ? res.data : null;
+      } catch (error) {
+        return null;
+      }
     },
 
     /**
@@ -38,9 +42,12 @@ const connect = {
      * @returns 
      */
      postDataLogin: async (url, data) => {
-
-      let res = await instanceLogin.post(url, data);
-      return res ? res : null;
+      try{
+        let res = await instanceLogin.post(url, data);
+        return res && res.data ? res.data : null;
+      } catch {
+        return null;
+      }
     },
 
     /**
@@ -49,9 +56,12 @@ const connect = {
      * @returns 
      */
     getData: async (url) => {
-
-      let res = await instance.get(url);
-      return res.data ? res.data : null;
+      try{
+        let res = await instance.get(url);
+        return res != null && res.data ? res.data : null;
+      } catch (error) {
+        return null;
+      }
     }
 
 }
