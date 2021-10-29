@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.hcmute.dto.CategoryDTO;
@@ -72,6 +73,19 @@ public class ProductServiceImpl implements ProductService{
 		List<ProductDTO> dtos = new ArrayList<ProductDTO>();
 		entities.forEach(entity -> dtos.add(mapper.map(entity, ProductDTO.class)));
 		return dtos;
+	}
+
+	@Override
+	public List<ProductDTO> findAll(Pageable pageable) {
+		List<ProductEntity> entities = productRepository.findAll(pageable).getContent();
+		List<ProductDTO> dtos = new ArrayList<ProductDTO>();
+		entities.forEach(entity -> dtos.add(mapper.map(entity, ProductDTO.class)));
+		return dtos;
+	}
+
+	@Override
+	public int countItem() {
+		return (int)productRepository.count();
 	}
 
 }
