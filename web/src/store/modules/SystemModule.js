@@ -3,7 +3,7 @@ import * as MutationsName from "../../components/common/MutationsName";
 // import Jwt from "../../components/common/Jwt";
 // import Login from "../../components/command/Login";
 
-const systemModule = {
+const SystemModule = {
   state() {
     return {
       menu: {
@@ -54,4 +54,4 @@ const systemModule = {
   }
 };
 
-export default systemModule;
+export default SystemModule;

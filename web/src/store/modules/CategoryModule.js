@@ -1,6 +1,6 @@
 import * as MutationsName from "../../components/common/MutationsName";
 
-const categoryModule = {
+const CategoryModule = {
   state() {
     return {
       categories: null,
@@ -23,4 +23,4 @@ const categoryModule = {
   }
 };
 
-export default categoryModule;
+export default CategoryModule;

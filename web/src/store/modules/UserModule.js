@@ -1,7 +1,7 @@
 import * as MutationsName from "../../components/common/MutationsName";
 import Jwt from "../../components/common/Jwt";
 
-const userModule = {
+const UserModule = {
   state() {
     return {
       user: null,
@@ -31,4 +31,4 @@ const userModule = {
 
 };
 
-export default userModule;
+export default UserModule;

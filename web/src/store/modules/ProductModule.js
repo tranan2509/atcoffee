@@ -1,6 +1,6 @@
 import * as MutationsName from "../../components/common/MutationsName";
 
-const productModule = {
+const ProductModule = {
   state() {
     return {
       products: null,
@@ -36,4 +36,4 @@ const productModule = {
   }
 };
 
-export default productModule;
+export default ProductModule;

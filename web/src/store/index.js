@@ -7,6 +7,7 @@ import SystemModule from './modules/SystemModule'
 import CategoryModule from './modules/CategoryModule'
 import StoreModule from "./modules/StoreModule";
 import ProductModule from './modules/ProductModule'
+import BillModule from "./modules/BillModule";
 
 const store = createStore({
   plugins: [createPersistedState()],
@@ -15,7 +16,8 @@ const store = createStore({
     SystemModule,
     CategoryModule,
     StoreModule,
-    ProductModule
+    ProductModule,
+    BillModule
   },
 });
 

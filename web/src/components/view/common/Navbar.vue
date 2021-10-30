@@ -14,6 +14,16 @@
             </div>
           </div>
           <div class="dropdown-list-content dropdown-list-icons" style="outline: currentcolor none medium;" tabindex="3">
+            <router-link to="" class="dropdown-item" :class="bill.read ? 'dropdown-item-unread' : ''"
+             v-for="bill in this.$store.getters.billsReverse" :key="bill.id" @click="handleReadBill(bill)">
+              <div class="dropdown-item-icon bg-primary text-white">
+                <i class="fas fa-bell"></i>
+              </div>
+              <div class="dropdown-item-desc">
+                Đơn hàng với ID {{bill.id}} được yêu cầu từ khách hàng{{bill.customerId}} vị trí ở {{bill.address}}
+                <div class="time text-primary">{{bill.createdDate}}</div>
+              </div>
+            </router-link>
             <router-link to="" class="dropdown-item dropdown-item-unread">
               <div class="dropdown-item-icon bg-primary text-white">
                 <i class="fas fa-bell"></i>
@@ -128,6 +138,7 @@
 <script>
 import * as Constants from '../../common/Constants'
 import LoginCommand from '../../command/LoginCommand'
+import BillDataService from '../../services/BillDataService'
 import vClickOutside from 'click-outside-vue3'
 
 export default {
@@ -164,10 +175,55 @@ export default {
       this.navbar.notification = false;
     },
 
+    handleReadBill(bill) {
+      bill.read = false;
+      BillDataService.update(bill, this.$store);
+    },
+
     handleLogout() {
       let isLogout = LoginCommand.logout(this.$store);
       isLogout ? this.$router.push({path: '/login'}) : '';
     },
+
+    getBills() {
+      BillDataService.findAll(this.$store);
+    },
+
+    addBill() {
+      var bill = {
+        id: 4,
+        amount: 80000,
+        price: 100000,
+        discount: 20,
+        address: 'HCM City',
+        status: 'REQUEST',
+        staffId: '',
+        customerId: 1,
+        rewardId: '',
+        promotionId: '',
+        paymentId: 1,
+        storeId: 1,
+        read: false,
+        createdDate: new Date().getTime(),
+        billDetails: [
+          {
+            quantity: 4,
+            amount: 80000,
+            price: 20000,
+            discount: 0,
+            description: 'Khong duong',
+            productId: 1,
+            billId: 3
+          }
+        ]
+      }
+      BillDataService.save(bill);
+    }
+  },
+
+  created(){
+    this.getBills();
+    // this.addBill();
   }
 }
 </script>
