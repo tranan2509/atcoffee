@@ -2,7 +2,6 @@ package com.hcmute.dto;
 
 public class RoleDTO extends BaseDTO<RoleDTO>{
 	
-	private String code;
 	private String name;
 	
 	public RoleDTO() {
@@ -11,16 +10,11 @@ public class RoleDTO extends BaseDTO<RoleDTO>{
 	
 	public RoleDTO(String code, String name) {
 		super();
-		this.code = code;
 		this.name = name;
+		setCode(code);
+		setState(true);
 	}
 
-	public String getCode() {
-		return code;
-	}
-	public void setCode(String code) {
-		this.code = code;
-	}
 	public String getName() {
 		return name;
 	}

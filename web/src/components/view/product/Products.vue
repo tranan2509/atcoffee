@@ -19,6 +19,7 @@
 
 <script>
 import * as Constants from '../../common/Constants'
+import * as MutationsName from '../../common/MutationsName'
 import Admin from '../admin/Admin.vue'
 import SectionHeader from '../common/SectionHeader.vue'
 import TableProducts from '../common/TableProducts.vue'
@@ -39,6 +40,7 @@ export default {
   },
 
   created() {
+    this.$store.commit(MutationsName.MUTATION_NAME_RESET_MENU);
     this.$store.getters.menu.product.value = true;
     this.$store.getters.menu.product.submenu.products = true;
   }

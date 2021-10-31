@@ -6,6 +6,15 @@ public class PaymentDTO extends BaseDTO<PaymentDTO>{
 	public PaymentDTO() {
 		super();
 	}
+	
+
+	public PaymentDTO(String code, String name) {
+		super();
+		setCode(code);
+		this.name = name;
+		setState(true);
+	}
+
 
 	public String getName() {
 		return name;

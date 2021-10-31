@@ -12,8 +12,12 @@ const BillModule = {
       return state.bills;
     },
 
-    billsReverse(state) {
-      return state.bills.reverse();
+    billsSortByCreatedDate(state) {
+      return state.bills.sort((a, b) => b.createdDate - a.createdDate);
+    },
+
+    billsUnread(state) {
+      return state.bills.filter(bill => !bill.read);
     },
   },
 

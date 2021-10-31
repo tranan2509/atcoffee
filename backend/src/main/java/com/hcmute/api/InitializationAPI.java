@@ -9,11 +9,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hcmute.dto.CategoryDTO;
+import com.hcmute.dto.PaymentDTO;
 import com.hcmute.dto.RoleDTO;
 import com.hcmute.dto.StoreDTO;
 import com.hcmute.dto.TypeDTO;
 import com.hcmute.dto.UserDTO;
 import com.hcmute.service.CategoryService;
+import com.hcmute.service.PaymentService;
 import com.hcmute.service.RoleService;
 import com.hcmute.service.StoreService;
 import com.hcmute.service.TypeService;
@@ -32,6 +34,8 @@ public class InitializationAPI {
 	private UserService userService;
 	@Autowired 
 	private CategoryService categoryService;
+	@Autowired
+	private PaymentService paymentService;
 	
 	
 	@PostMapping("/api/initialization")
@@ -39,17 +43,17 @@ public class InitializationAPI {
 		boolean flag = true;
 		try {
 			if (storeService.findAll().isEmpty()) {
-				StoreDTO store = new StoreDTO("A&T Coffee", "Thủ Đức, Hồ Chí Minh", "8:00", "23:00");
+				StoreDTO store = new StoreDTO("ATCOFFEE_THUDUC", "A&T Coffee", "Thủ Đức, Hồ Chí Minh", "8:00", "23:00");
 				storeService.save(store);
-				store = new StoreDTO("A&T Coffee", "Quận 2, Hồ Chí Minh", "8:00", "23:00");
+				store = new StoreDTO("ATCOFFEE_DISTRICT2", "A&T Coffee", "Quận 2, Hồ Chí Minh", "8:00", "23:00");
 				storeService.save(store);
 			}
 			if (typeService.findAll().isEmpty()) {
-				TypeDTO type = new TypeDTO("Đồng", 10000);
+				TypeDTO type = new TypeDTO("BRONZE", "Đồng", 10000);
 				typeService.save(type);
-				type = new TypeDTO("Vàng", 50000);
+				type = new TypeDTO("GOLD", "Vàng", 50000);
 				typeService.save(type);
-				type = new TypeDTO("Bạch Kim", 125000);
+				type = new TypeDTO("PLATINUM", "Bạch Kim", 125000);
 				typeService.save(type);
 			}
 			if (roleService.findAll().isEmpty()) {
@@ -72,7 +76,18 @@ public class InitializationAPI {
 				Date dob = new Date();
 				UserDTO user = new UserDTO("admin", "admin", "https://res.cloudinary.com/tranan2509/image/upload/v1635433632/logo_hvnmwc.png", "Admin", "01692889894", "Name",
 						"admin@gmail.com", "9 Trình Hoài Đức, Quận 9", dob, "215523098", 1L, "ADMIN");
+				user.setCode("AN_TV_ADMIN");
 				userService.save(user);
+				user = new UserDTO("staff", "staff", "https://res.cloudinary.com/tranan2509/image/upload/v1635433632/logo_hvnmwc.png", "Admin", "01692889893", "Nữ",
+						"thuntm@gmail.com", "9 Trình Hoài Đức, Quận 9", dob, "215533098", 1L, "STAFF");
+				user.setCode("THU_NTM_STAFF");
+				userService.save(user);
+			}
+			if(paymentService.findAll().isEmpty()) {
+				PaymentDTO payment = new PaymentDTO("CASH", "Tiền mặt");
+				paymentService.save(payment);
+				payment = new PaymentDTO("CREDIT_CARD", "Thẻ tín dụng");
+				paymentService.save(payment);
 			}
 		}catch (Exception e) {
 			flag = false;

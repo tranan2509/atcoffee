@@ -4,10 +4,30 @@
       <div class="card">
         <div class="card-header">
           <h4>Danh sách sản phẩm</h4>
-          <div class="card-header-form">
-            <form>
+          <div class="card-header-form flex-row">
+            <div class="form-group">
+              <select v-model="storeSelected" class="form-custom" @change="handleChangeStore">
+                <option value="ALL">Tất cả các của hàng</option>
+                <option v-for="store in this.$store.getters.stores" :key="store.id"
+                  :value="store.code">
+                  {{store.address}}
+                </option>
+              </select>
+            </div>
+            <div class="empty-space"></div>
+            <div class="form-group">
+              <select v-model="categorySelected" class="form-custom" @change="handleChangeCategory">
+                <option value="ALL">Tất cả các loại</option>
+                <option v-for="category in this.$store.getters.categories" :key="category.id"
+                  :value="category.code">
+                  {{category.name}}
+                </option>
+              </select>
+            </div>
+            <div class="empty-space"></div>
+            <form @submit.prevent="handleSearch">
               <div class="input-group">
-                <input type="text" class="form-control" placeholder="Tìm kiếm">
+                <input type="text" class="form-control" placeholder="Tìm kiếm" v-model="keyword">
                 <div class="input-group-btn">
                   <button class="btn btn-primary"><i class="fas fa-search"></i></button>
                 </div>
@@ -20,21 +40,23 @@
             <table class="table table-striped">
               <tbody>
                 <tr>
-                  <th class="text-center">ID</th>
-                  <th>Tên sản phẩm</th>
-                  <th>Hình ảnh</th>
-                  <th>Giá sản phẩm</th>
-                  <th>Trạng thái</th>
-                  <th>Hành động</th>
-                  <th>Chi tiết</th>
+                  <th class="text-center">SST</th>
+                  <th class="text-center">Mã</th>
+                  <th class="text-center">Tên sản phẩm</th>
+                  <th class="text-center">Hình ảnh</th>
+                  <th class="text-center">Giá sản phẩm</th>
+                  <th class="text-center">Trạng thái</th>
+                  <th class="text-center">Hành động</th>
+                  <th class="text-center">Chi tiết</th>
                 </tr>
-                <tr v-for="product in products" :key="product.id">
-                  <td class="text-center">{{product.id}}</td>
-                  <td>{{product.name}}</td>
+                <tr v-for="(product, index) in products" :key="product.id">
+                  <td class="text-center">{{number(index)}}</td>
+                  <td class="text-center">{{product.code}}</td>
+                  <td class="text-center">{{product.name}}</td>
                   <td class="text-center">
                     <img :src="product.image" alt="image" @click="handleViewImage(product.image)">
                   </td>
-                  <td class="text-center">{{product.sizes[1].price}} vnd</td>
+                  <td class="text-center">{{formatPrice(product.sizes[1].price)}}</td>
                   <td class="text-center">Dang ban</td>
                   <td class="text-center">Them</td>
                   <td class="text-center"><i class="fas fa-info-circle" @click="handleEdit(product.id)"></i></td>
@@ -43,7 +65,7 @@
             </table>
           </div>
         </div>
-        <div class="card-footer text-right">
+        <div class="card-footer text-right" v-if="this.$store.getters.totalPageProduct > 0">
           <pagination :currentPage="currentPage" @handleChange="handleChangePage"/>
         </div>
       </div>
@@ -55,6 +77,8 @@
 <script>
 import * as Constants from '../../common/Constants'
 import ProductCommand from '../../command/ProductCommand'
+import CategoryCommand from '../../command/CategoryCommnad'
+import StoreCommand from '../../command/StoreCommand'
 import Pagination from '../common/Pagination.vue'
 import ViewImage from '../popup/ViewImage.vue'
 
@@ -71,14 +95,40 @@ export default {
       products: [],
       currentPage: 1,
       isViewImage: false,
-      imageSelected: ''
+      imageSelected: '',
+      storeSelected: 'ALL',
+      categorySelected: 'ALL',
+      keyword: ''
     }
   },
 
   methods: {
 
-    async loadProducts(page, size) {
-      this.products = await ProductCommand.fineAll(page, size, this.$store);
+    init(){
+      this.currentPage = this.$route.query.page;
+      if (typeof this.currentPage == 'undefined') {
+        this.currentPage = 1;
+      }
+      this.keyword = this.$route.query.keyword;
+      if (typeof this.keyword == 'undefined') {
+        this.keyword = '';
+      }
+      this.storeSelected = this.$route.query.store;
+      if (typeof this.storeSelected == 'undefined') {
+        this.storeSelected = 'ALL';
+      }
+      this.categorySelected = this.$route.query.category;
+      if (typeof this.categorySelected == 'undefined') {
+        this.categorySelected = 'ALL';
+      }
+    },
+    
+    formatPrice(price) {
+      return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(price)
+    },
+
+    number(index){
+      return (this.currentPage - 1) * Constants.PAGE_SIZE_PRODUCT + index + 1;
     },
 
     handleEdit(id){
@@ -87,8 +137,10 @@ export default {
 
     handleChangePage(page) {
       this.currentPage = page;
-      this.$router.push({path: '/admin/products', query: {page: this.currentPage}});
-      this.loadProducts(this.currentPage, Constants.PAGE_SIZE_PRODUCT); 
+      const query = Object.assign({}, this.$route.query);
+      this.$router.push({path: '/admin/products', query: {...query, page: this.currentPage}});
+      // this.loadProducts(this.currentPage, Constants.PAGE_SIZE_PRODUCT); 
+      this.loadProductsBySort(this.currentPage, Constants.PAGE_SIZE_PRODUCT);
     },
 
     handleViewImage(image) {
@@ -98,15 +150,83 @@ export default {
 
     handleHideViewImage(){
       this.isViewImage = false;
-    }
+    },
+
+    handleSearch(){
+      const query = Object.assign({}, this.$route.query);
+      if (this.keyword.trim() == '') {
+        delete query.keyword;
+        this.$router.replace({ query });
+      } else {
+        this.$router.push({path: '/admin/products', query: {...query, keyword: this.keyword}});
+      }
+      this.loadProductsBySort(this.currentPage, Constants.PAGE_SIZE_PRODUCT);
+    },
+
+    handleChangeStore() {
+      const query = Object.assign({}, this.$route.query);
+      if (this.storeSelected == 'ALL') {
+        delete query.store;
+        this.$router.replace({ query });
+      } else {
+        this.$router.push({path: '/admin/products', query: {...query, store: this.storeSelected}});
+      }
+      this.loadProductsBySort(this.currentPage, Constants.PAGE_SIZE_PRODUCT);
+    }, 
+
+    handleChangeCategory() {
+      const query = Object.assign({}, this.$route.query);
+      if (this.categorySelected == 'ALL') {
+        delete query.category;
+         this.$router.replace({ query });
+      } else {
+        this.$router.push({path: '/admin/products', query: {...query, category: this.categorySelected}});
+      }
+      this.loadProductsBySort(this.currentPage, Constants.PAGE_SIZE_PRODUCT);
+    },  
+
+    async loadData() {
+      this.isSpinner = true;
+      await this.loadCategories();
+      await this.loadStores();
+    },
+
+    async loadProducts(page, size) {
+      this.products = await ProductCommand.fineAll(page, size, this.$store);
+    },
+
+    async loadProductsBySort(page, size) {
+      var store = this.storeSelected == 'ALL' ? '' : this.storeSelected;
+      var category = this.categorySelected == 'ALL' ? '' : this.categorySelected;
+      var keyword = this.keyword;
+      this.products = await ProductCommand.fineAllByOrder(page, size, store, category, keyword, this.$store);
+    },
+
+    async loadCategories() {
+      let result = await CategoryCommand.findAll(this.$store);
+      this.categories = result.map(category => {
+        category.selected = false;
+        return category;
+      });
+      return this.categories;
+    },
+    
+    async loadStores() {
+      let result = await StoreCommand.findAll(this.$store);
+      this.stores = result.map(store => {
+        store.selected = false;
+        return store;
+      });
+      this.stores.unshift({id: 0, address: 'Tất cả', selected: false});
+      return this.stores;
+    },
   },
 
   created(){
-    this.currentPage = this.$route.query.page;
-    if (typeof this.currentPage == 'undefined') {
-      this.currentPage = 1;
-    }
-    this.loadProducts(this.currentPage, Constants.PAGE_SIZE_PRODUCT);
+    this.init();
+    this.loadData();
+    // this.loadProducts(this.currentPage, Constants.PAGE_SIZE_PRODUCT);
+    this.loadProductsBySort(this.currentPage, Constants.PAGE_SIZE_PRODUCT);
   }
 }
 </script>
@@ -298,4 +418,27 @@ ul:not(.list-unstyled) {
   line-height: 28px;
 }
 
+.flex-row {
+  display: flex;
+  flex-direction: row !important;
+  flex-wrap: wrap;
+}
+
+select.form-custom {
+  height: 32px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 2px 15px;
+  font-size: 13px;
+}
+
+select.form-custom option {
+  height: 32px;
+  padding: 4px 15px;
+}
+
+.empty-space {
+  width: 20px;
+}
 </style>

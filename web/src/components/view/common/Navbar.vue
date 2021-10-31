@@ -3,7 +3,8 @@
   <nav class="navbar navbar-expand-lg main-navbar">
     <ul class="navbar-nav navbar-right">
       <li class="dropdown dropdown-list-toggle">
-         <router-link to="" class="nav-link notification-toggle nav-link-lg beep" data-toggle="dropdown" aria-expanded="false">
+         <router-link to="" class="nav-link notification-toggle nav-link-lg" :class="this.$store.getters.billsUnread.length > 0 ? 'beep' : ''"
+          data-toggle="dropdown" aria-expanded="false">
           <i class="far fa-bell" @click="handleShowNotification(navbar)"></i>
         </router-link>
         <div class="dropdown-menu dropdown-list dropdown-menu-right show" v-if="navbar.notification" v-click-outside="handleHideNotification">
@@ -14,86 +15,14 @@
             </div>
           </div>
           <div class="dropdown-list-content dropdown-list-icons" style="outline: currentcolor none medium;" tabindex="3">
-            <router-link to="" class="dropdown-item" :class="bill.read ? 'dropdown-item-unread' : ''"
-             v-for="bill in this.$store.getters.billsReverse" :key="bill.id" @click="handleReadBill(bill)">
+            <router-link to="" class="dropdown-item" :class="!bill.read ? 'dropdown-item-unread' : ''"
+             v-for="bill in this.$store.getters.billsSortByCreatedDate" :key="bill.id" @click="handleReadBill(bill)">
               <div class="dropdown-item-icon bg-primary text-white">
                 <i class="fas fa-bell"></i>
               </div>
               <div class="dropdown-item-desc">
                 Đơn hàng với ID {{bill.id}} được yêu cầu từ khách hàng{{bill.customerId}} vị trí ở {{bill.address}}
-                <div class="time text-primary">{{bill.createdDate}}</div>
-              </div>
-            </router-link>
-            <router-link to="" class="dropdown-item dropdown-item-unread">
-              <div class="dropdown-item-icon bg-primary text-white">
-                <i class="fas fa-bell"></i>
-              </div>
-              <div class="dropdown-item-desc">
-                Đơn hàng số 5 được đặt. Đơn hàng số 5 được đặt. Đơn hàng số 5 được đặt
-                <div class="time text-primary">5 phút trước</div>
-              </div>
-            </router-link>
-            <router-link to="" class="dropdown-item">
-              <div class="dropdown-item-icon bg-info text-white">
-                <i class="fas fa-bell"></i>
-              </div>
-              <div class="dropdown-item-desc">
-                Đơn hàng số 6 được đặt
-                <div class="time">5 phút trước</div>
-              </div>
-            </router-link>
-             <router-link to="" class="dropdown-item">
-              <div class="dropdown-item-icon bg-info text-white">
-                <i class="fas fa-bell"></i>
-              </div>
-              <div class="dropdown-item-desc">
-                Đơn hàng số 6 được đặt
-                <div class="time">5 phút trước</div>
-              </div>
-            </router-link>
-             <router-link to="" class="dropdown-item">
-              <div class="dropdown-item-icon bg-info text-white">
-                <i class="fas fa-bell"></i>
-              </div>
-              <div class="dropdown-item-desc">
-                Đơn hàng số 6 được đặt
-                <div class="time">5 phút trước</div>
-              </div>
-            </router-link>
-             <router-link to="" class="dropdown-item">
-              <div class="dropdown-item-icon bg-info text-white">
-                <i class="fas fa-bell"></i>
-              </div>
-              <div class="dropdown-item-desc">
-                Đơn hàng số 6 được đặt
-                <div class="time">5 phút trước</div>
-              </div>
-            </router-link>
-             <router-link to="" class="dropdown-item">
-              <div class="dropdown-item-icon bg-info text-white">
-                <i class="fas fa-bell"></i>
-              </div>
-              <div class="dropdown-item-desc">
-                Đơn hàng số 6 được đặt
-                <div class="time">5 phút trước</div>
-              </div>
-            </router-link>
-             <router-link to="" class="dropdown-item">
-              <div class="dropdown-item-icon bg-info text-white">
-                <i class="fas fa-bell"></i>
-              </div>
-              <div class="dropdown-item-desc">
-                Đơn hàng số 6 được đặt
-                <div class="time">5 phút trước</div>
-              </div>
-            </router-link>
-             <router-link to="" class="dropdown-item">
-              <div class="dropdown-item-icon bg-info text-white">
-                <i class="fas fa-bell"></i>
-              </div>
-              <div class="dropdown-item-desc">
-                Đơn hàng số 6 được đặt
-                <div class="time">5 phút trước</div>
+                <div class="time text-primary">{{fromNow(bill.createdDate)}}</div>
               </div>
             </router-link>
           </div>
@@ -137,6 +66,7 @@
 
 <script>
 import * as Constants from '../../common/Constants'
+import CommonUtils from '../../common/CommonUtils'
 import LoginCommand from '../../command/LoginCommand'
 import BillDataService from '../../services/BillDataService'
 import vClickOutside from 'click-outside-vue3'
@@ -159,6 +89,10 @@ export default {
 
   methods: {
 
+    fromNow(timeStamp) {
+      return CommonUtils.fromNow(timeStamp);
+    },
+
     handleShow(navbar) {
       navbar.dropdown = !navbar.dropdown;
     },
@@ -176,7 +110,7 @@ export default {
     },
 
     handleReadBill(bill) {
-      bill.read = false;
+      bill.read = true;
       BillDataService.update(bill, this.$store);
     },
 
@@ -185,13 +119,13 @@ export default {
       isLogout ? this.$router.push({path: '/login'}) : '';
     },
 
-    getBills() {
-      BillDataService.findAll(this.$store);
+    getBillsByStoreId() {
+      BillDataService.findByStoreId(this.$store);
     },
 
     addBill() {
       var bill = {
-        id: 4,
+        id: 0,
         amount: 80000,
         price: 100000,
         discount: 20,
@@ -213,7 +147,7 @@ export default {
             discount: 0,
             description: 'Khong duong',
             productId: 1,
-            billId: 3
+            billId: ''
           }
         ]
       }
@@ -222,7 +156,7 @@ export default {
   },
 
   created(){
-    this.getBills();
+    this.getBillsByStoreId();
     // this.addBill();
   }
 }
@@ -485,7 +419,12 @@ a.dropdown-item {
 }
 
 .dropdown-list .dropdown-item.dropdown-item-unread {
-  background: #fbfbfb;
+  background: #f8f8f8;
+  border-bottom-color: #f2f2f2;
+}
+
+.dropdown-list .dropdown-item.dropdown-item-unread:hover {
+  background: #f2f2f2;
   border-bottom-color: #f2f2f2;
 }
 

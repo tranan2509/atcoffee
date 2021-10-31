@@ -20,7 +20,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class BaseEntity{
+public abstract class BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,6 +43,8 @@ public abstract class BaseEntity{
 	@Temporal(TIMESTAMP)
 	@LastModifiedDate
 	private Date modifiedDate;
+	
+	private String code;
 	
 	@Column(columnDefinition = "boolean default true")
 	private boolean state;
@@ -87,6 +89,15 @@ public abstract class BaseEntity{
 		this.modifiedBy = modifiedBy;
 	}
 
+	
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
 	public boolean isState() {
 		return state;
 	}
@@ -94,10 +105,5 @@ public abstract class BaseEntity{
 	public void setState(boolean state) {
 		this.state = state;
 	}
-	
-	 @Override
-	 public boolean equals(Object o) {
-		return this.getId() == ((BaseEntity)o).getId();
-	 }
 	
 }

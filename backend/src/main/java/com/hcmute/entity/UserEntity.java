@@ -59,6 +59,9 @@ public class UserEntity extends BaseEntity implements Serializable{
 	@OneToMany(mappedBy = "customer")
 	private List<BillEntity> customerBills = new ArrayList<>();
 	
+	@OneToMany(mappedBy = "customer")
+	private List<CartEntity> customerCarts = new ArrayList<>();
+	
 	public String getUsername() {
 		return username;
 	}
@@ -202,5 +205,14 @@ public class UserEntity extends BaseEntity implements Serializable{
 	public void setCustomerBills(List<BillEntity> customerBills) {
 		this.customerBills = customerBills;
 	}
+
+	public List<CartEntity> getCustomerCarts() {
+		return customerCarts;
+	}
+
+	public void setCustomerCarts(List<CartEntity> customerCarts) {
+		this.customerCarts = customerCarts;
+	}
+	
 	
 }

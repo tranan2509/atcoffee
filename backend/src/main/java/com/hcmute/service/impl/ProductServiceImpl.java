@@ -89,4 +89,40 @@ public class ProductServiceImpl implements ProductService{
 		return (int)productRepository.count();
 	}
 
+	@Override
+	public List<ProductDTO> findByStoreCodeAndKeyword(String storeCode, Pageable pageable) {
+		StoreEntity store = storeRepository.findOneByCode(storeCode);
+		List<ProductEntity> entities = productRepository.findByStoreIdAndKeyword(store.getId(), pageable).getContent();
+		List<ProductDTO> dtos = new ArrayList<ProductDTO>();
+		entities.forEach(entity -> dtos.add(mapper.map(entity, ProductDTO.class)));
+		return dtos;
+	}
+
+	@Override
+	public List<ProductDTO> findByCategoryCodeAndKeyword(String categoryCode, Pageable pageable) {
+		CategoryEntity category = categoryRepository.findOneByCode(categoryCode);
+		List<ProductEntity> entities = productRepository.findByCategoryIdAndKeyword(category.getId(), pageable).getContent();
+		List<ProductDTO> dtos = new ArrayList<ProductDTO>();
+		entities.forEach(entity -> dtos.add(mapper.map(entity, ProductDTO.class)));
+		return dtos;
+	}
+
+	@Override
+	public List<ProductDTO> findByStoreCodeAndCategoryCodeAndKeyword(String storeCode, String categoryCode, Pageable pageable) {
+		StoreEntity store = storeRepository.findOneByCode(storeCode);
+		CategoryEntity category = categoryRepository.findOneByCode(categoryCode);
+		List<ProductEntity> entities = productRepository.findByStoreIdAndCategoryIdAndKeyword(store.getId(), category.getId(), pageable).getContent();
+		List<ProductDTO> dtos = new ArrayList<ProductDTO>();
+		entities.forEach(entity -> dtos.add(mapper.map(entity, ProductDTO.class)));
+		return dtos;
+	}
+
+	@Override
+	public List<ProductDTO> findByKeyword(String keyword, Pageable pageable) {
+		List<ProductEntity> entities = productRepository.findByNameContainingOrCodeContaining(keyword, keyword, pageable).getContent();
+		List<ProductDTO> dtos = new ArrayList<ProductDTO>();
+		entities.forEach(entity -> dtos.add(mapper.map(entity, ProductDTO.class)));
+		return dtos;
+	}
+
 }

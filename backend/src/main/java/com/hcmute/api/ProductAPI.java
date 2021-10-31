@@ -1,5 +1,7 @@
 package com.hcmute.api;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,17 +55,30 @@ public class ProductAPI {
 		return ResponseEntity.ok(productService.findOne(id));
 	}
 	
-//	@GetMapping("/api/info/product")
-//	public ResponseEntity<List<ProductDTO>> findAll() {
-//		return ResponseEntity.ok(productService.findAll());
-//	}
-	
 	@GetMapping("/api/info/product") 
 	public ResponseEntity<ProductResponse> findAll(@RequestParam(name = "page", defaultValue = "1") int page,
-			@RequestParam(name = "size") int size) {
+			@RequestParam(name = "size") int size, @RequestParam(name = "store", required = false) String storeCode,
+			@RequestParam(name="category", required = false) String categoryCode,
+			@RequestParam(name = "keyword", required = false) String keyword) {
+		
 		ProductResponse result  = new ProductResponse();
 		Pageable pageable = new PageRequest(page - 1, size);
-		result.setProducts(productService.findAll(pageable));
+		List<ProductDTO> dtos = new ArrayList<ProductDTO>();
+		if (storeCode == "" && categoryCode == "" && keyword == "") {
+			dtos = productService.findAll(pageable);
+		} else {
+			keyword = keyword == "" ? "" : keyword;
+			if (storeCode != "" && categoryCode != "") {
+				dtos = productService.findByStoreCodeAndCategoryCodeAndKeyword(storeCode, categoryCode, pageable);
+			} else if (storeCode != "") {
+				dtos = productService.findByStoreCodeAndKeyword(storeCode, pageable);
+			} else if (categoryCode != "") {
+				dtos = productService.findByCategoryCodeAndKeyword(categoryCode, pageable);
+			} else {
+				dtos = productService.findByKeyword(keyword, pageable);
+			}
+		}
+		result.setProducts(dtos);
 		result.setPage(page);
 		result.setSize(size);
 		int totalPage = (int)Math.ceil((double) productService.countItem() / size);

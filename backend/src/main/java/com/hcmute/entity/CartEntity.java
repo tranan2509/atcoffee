@@ -8,83 +8,62 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "bill_detail")
-public class BillDetailEntity extends BaseEntity implements Serializable {
+@Table(name = "cart")
+public class CartEntity extends BaseEntity implements Serializable{
 
 	private static final long serialVersionUID = 1L;
+	
 	private int quantity;
 	private String description;
-	private float amount;
-	private float price;
-	private int discount;		
-
-	@ManyToOne
-	@JoinColumn(name = "bill_id")
-	private BillEntity bill;
-
 	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private ProductEntity product;
-
-	public BillDetailEntity() {
+	@ManyToOne
+	@JoinColumn(name = "customer_id")
+	private UserEntity customer;
+	@ManyToOne
+	@JoinColumn(name = "store_id")
+	private StoreEntity store;
+	
+	public CartEntity(int quantity, String description, ProductEntity product, UserEntity customer, StoreEntity store) {
+		super();
+		this.quantity = quantity;
+		this.description = description;
+		this.product = product;
+		this.customer = customer;
+		this.store = store;
+	}
+	public CartEntity() {
 		super();
 	}
-
 	public int getQuantity() {
 		return quantity;
 	}
-
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
-
-	public float getAmount() {
-		return amount;
-	}
-
-	public void setAmount(float amount) {
-		this.amount = amount;
-	}
-
 	public String getDescription() {
 		return description;
 	}
-
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	public float getPrice() {
-		return price;
-	}
-
-	public void setPrice(float price) {
-		this.price = price;
-	}
-
-	public int getDiscount() {
-		return discount;
-	}
-
-	public void setDiscount(int discount) {
-		this.discount = discount;
-	}
-
-	public BillEntity getBill() {
-		return bill;
-	}
-
-	public void setBill(BillEntity bill) {
-		this.bill = bill;
-	}
-
 	public ProductEntity getProduct() {
 		return product;
 	}
-
 	public void setProduct(ProductEntity product) {
 		this.product = product;
 	}
-
-	
-}
+	public UserEntity getCustomer() {
+		return customer;
+	}
+	public void setCustomer(UserEntity customer) {
+		this.customer = customer;
+	}
+	public StoreEntity getStore() {
+		return store;
+	}
+	public void setStore(StoreEntity store) {
+		this.store = store;
+	}	
+}	

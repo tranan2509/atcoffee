@@ -9,6 +9,10 @@
           <form @submit.prevent="handleSave">
             <div class="row">
               <div class="col-8">
+                 <div class="form-group">
+                  <label for="code">Mã sản phẩm</label>
+                  <input type="text" class="form-control" id="code" v-model="product.code" required>
+                </div>
                 <div class="form-group">
                   <label for="name">Tên sản phẩm</label>
                   <input type="text" class="form-control" id="name" v-model="product.name" required>
@@ -48,7 +52,15 @@
                   <label for="discount">Giảm giá</label>
                   <input type="number" class="form-control" id="discount" min="0" required max="100" v-model="product.discount">
                 </div>
-                <div class="form-group">
+              </div>
+              <div class="col-4">
+                <div class="img-content">
+                  <img :src="url" alt="Image" @click="$refs.file.click()">
+                  <input type="file" accept="image/*" ref="file" name="file" :required="this.$route.path.includes('add-product')" @change="handleSelectedImage" class="invisible"/>
+                </div>
+              </div>
+            </div>
+             <div class="form-group">
                   <label for="store">Cửa hàng áp dụng</label>
                   <div class="form-group-horizontal" id="store">
                     <div class="chip"
@@ -58,14 +70,6 @@
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="col-4">
-                <div class="img-content">
-                  <img :src="url" alt="Image" @click="$refs.file.click()">
-                  <input type="file" accept="image/*" ref="file" name="file" :required="this.$route.path.includes('add-product')" @change="handleSelectedImage" class="invisible"/>
-                </div>
-              </div>
-            </div>
             <div class="action">
               <input type="submit" :value="this.$route.path.includes('add-product') ? 'Thêm' : 'Cập nhật'" class="btn btn-success">
             </div>
@@ -96,6 +100,7 @@ export default {
       url: 'https://res.cloudinary.com/tranan2509/image/upload/v1633099012/logo_transparent_rerp84.png',
       formData: null,
       product: {
+        code: '',
         name: '',
         description: '',
         discount: 0,
@@ -196,6 +201,7 @@ export default {
       this.url = 'https://res.cloudinary.com/tranan2509/image/upload/v1633099012/logo_transparent_rerp84.png';
       this.formData = null;
       this.product = {
+        code: '',
         name: '',
         description: '',
         discount: 0,

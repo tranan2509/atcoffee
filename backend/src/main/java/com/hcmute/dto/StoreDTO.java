@@ -10,14 +10,17 @@ public class StoreDTO extends BaseDTO<StoreDTO>{
 		super();
 	}
 	
-	public StoreDTO(String name, String address, String timeOpen, String timeClose) {
+	public StoreDTO(String code, String name, String address, String timeOpen, String timeClose) {
 		super();
+		setCode(code);
 		this.name = name;
 		this.address = address;
 		this.timeOpen = timeOpen;
 		this.timeClose = timeClose;
+		setState(true);
 	}
 
+	
 	public String getName() {
 		return name;
 	}
