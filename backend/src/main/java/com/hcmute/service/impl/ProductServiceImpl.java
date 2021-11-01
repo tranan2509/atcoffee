@@ -5,9 +5,11 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.hcmute.api.response.ProductResponse;
 import com.hcmute.dto.CategoryDTO;
 import com.hcmute.dto.ProductDTO;
 import com.hcmute.dto.StoreDTO;
@@ -77,11 +79,17 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
-	public List<ProductDTO> findAll(Pageable pageable) {
-		List<ProductEntity> entities = productRepository.findAll(pageable).getContent();
+	public ProductResponse findAll(Pageable pageable) {
+		Page<ProductEntity> page = productRepository.findAll(pageable);
+		List<ProductEntity> entities = page.getContent();
 		List<ProductDTO> dtos = new ArrayList<ProductDTO>();
 		entities.forEach(entity -> dtos.add(mapper.map(entity, ProductDTO.class)));
-		return dtos;
+		ProductResponse result = new ProductResponse();
+		result.setProducts(dtos);
+		result.setTotalPage(page.getTotalPages());
+		result.setSize(page.getSize());
+		result.setPage(pageable.getPageNumber());
+		return result;
 	}
 
 	@Override
@@ -90,39 +98,63 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
-	public List<ProductDTO> findByStoreCodeAndKeyword(String storeCode, Pageable pageable) {
+	public ProductResponse findByStoreCodeAndKeyword(String storeCode, String keyword, Pageable pageable) {
 		StoreEntity store = storeRepository.findOneByCode(storeCode);
-		List<ProductEntity> entities = productRepository.findByStoreIdAndKeyword(store.getId(), pageable).getContent();
+		Page<ProductEntity> page = productRepository.findByStoreIdAndKeyword(store.getId(), keyword, pageable);
+		List<ProductEntity> entities = page.getContent();
 		List<ProductDTO> dtos = new ArrayList<ProductDTO>();
 		entities.forEach(entity -> dtos.add(mapper.map(entity, ProductDTO.class)));
-		return dtos;
+		ProductResponse result = new ProductResponse();
+		result.setProducts(dtos);
+		result.setTotalPage(page.getTotalPages());
+		result.setSize(page.getSize());
+		result.setPage(pageable.getPageNumber());
+		return result;
 	}
 
 	@Override
-	public List<ProductDTO> findByCategoryCodeAndKeyword(String categoryCode, Pageable pageable) {
+	public ProductResponse findByCategoryCodeAndKeyword(String categoryCode, String keyword,  Pageable pageable) {
 		CategoryEntity category = categoryRepository.findOneByCode(categoryCode);
-		List<ProductEntity> entities = productRepository.findByCategoryIdAndKeyword(category.getId(), pageable).getContent();
+		Page<ProductEntity> page = productRepository.findByCategoryIdAndKeyword(category.getId(), keyword, pageable);
+		List<ProductEntity> entities = page.getContent();
 		List<ProductDTO> dtos = new ArrayList<ProductDTO>();
 		entities.forEach(entity -> dtos.add(mapper.map(entity, ProductDTO.class)));
-		return dtos;
+		ProductResponse result = new ProductResponse();
+		result.setProducts(dtos);
+		result.setTotalPage(page.getTotalPages());
+		result.setSize(page.getSize());
+		result.setPage(pageable.getPageNumber());
+		return result;
 	}
 
 	@Override
-	public List<ProductDTO> findByStoreCodeAndCategoryCodeAndKeyword(String storeCode, String categoryCode, Pageable pageable) {
+	public ProductResponse findByStoreCodeAndCategoryCodeAndKeyword(String storeCode, String categoryCode, String keyword, Pageable pageable) {
 		StoreEntity store = storeRepository.findOneByCode(storeCode);
 		CategoryEntity category = categoryRepository.findOneByCode(categoryCode);
-		List<ProductEntity> entities = productRepository.findByStoreIdAndCategoryIdAndKeyword(store.getId(), category.getId(), pageable).getContent();
+		Page<ProductEntity> page = productRepository.findByStoreIdAndCategoryIdAndKeyword(store.getId(), category.getId(), keyword, pageable);
+		List<ProductEntity> entities = page.getContent();
 		List<ProductDTO> dtos = new ArrayList<ProductDTO>();
 		entities.forEach(entity -> dtos.add(mapper.map(entity, ProductDTO.class)));
-		return dtos;
+		ProductResponse result = new ProductResponse();
+		result.setProducts(dtos);
+		result.setTotalPage(page.getTotalPages());
+		result.setSize(page.getSize());
+		result.setPage(pageable.getPageNumber());
+		return result;
 	}
 
 	@Override
-	public List<ProductDTO> findByKeyword(String keyword, Pageable pageable) {
-		List<ProductEntity> entities = productRepository.findByNameContainingOrCodeContaining(keyword, keyword, pageable).getContent();
+	public ProductResponse findByKeyword(String keyword, Pageable pageable) {
+		Page<ProductEntity> page = productRepository.findByNameContainingOrCodeContaining(keyword, keyword, pageable);
+		List<ProductEntity> entities = page.getContent();
 		List<ProductDTO> dtos = new ArrayList<ProductDTO>();
 		entities.forEach(entity -> dtos.add(mapper.map(entity, ProductDTO.class)));
-		return dtos;
+		ProductResponse result = new ProductResponse();
+		result.setProducts(dtos);
+		result.setTotalPage(page.getTotalPages());
+		result.setSize(page.getSize());
+		result.setPage(pageable.getPageNumber());
+		return result;
 	}
 
 }

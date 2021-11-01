@@ -1,7 +1,5 @@
 package com.hcmute.api;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,26 +61,19 @@ public class ProductAPI {
 		
 		ProductResponse result  = new ProductResponse();
 		Pageable pageable = new PageRequest(page - 1, size);
-		List<ProductDTO> dtos = new ArrayList<ProductDTO>();
 		if (storeCode == "" && categoryCode == "" && keyword == "") {
-			dtos = productService.findAll(pageable);
+			result = productService.findAll(pageable);
 		} else {
-			keyword = keyword == "" ? "" : keyword;
 			if (storeCode != "" && categoryCode != "") {
-				dtos = productService.findByStoreCodeAndCategoryCodeAndKeyword(storeCode, categoryCode, pageable);
+				result = productService.findByStoreCodeAndCategoryCodeAndKeyword(storeCode, categoryCode, keyword, pageable);
 			} else if (storeCode != "") {
-				dtos = productService.findByStoreCodeAndKeyword(storeCode, pageable);
+				result = productService.findByStoreCodeAndKeyword(storeCode, keyword, pageable);
 			} else if (categoryCode != "") {
-				dtos = productService.findByCategoryCodeAndKeyword(categoryCode, pageable);
+				result = productService.findByCategoryCodeAndKeyword(categoryCode, keyword, pageable);
 			} else {
-				dtos = productService.findByKeyword(keyword, pageable);
+				result = productService.findByKeyword(keyword, pageable);
 			}
 		}
-		result.setProducts(dtos);
-		result.setPage(page);
-		result.setSize(size);
-		int totalPage = (int)Math.ceil((double) productService.countItem() / size);
-		result.setTotalPage(totalPage);
 		return ResponseEntity.ok(result);
 	}
 }

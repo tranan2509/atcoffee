@@ -4,16 +4,17 @@ import java.util.List;
 
 import org.springframework.data.domain.Pageable;
 
+import com.hcmute.api.response.ProductResponse;
 import com.hcmute.dto.ProductDTO;
 
 public interface ProductService {
 	ProductDTO save(ProductDTO dto);
 	ProductDTO findOne(long id);
 	List<ProductDTO> findAll();
-	List<ProductDTO> findAll(Pageable pageable);
-	List<ProductDTO> findByKeyword(String keyword, Pageable pageable);
-	List<ProductDTO>findByStoreCodeAndKeyword(String storeCode , Pageable pageable);	
-	List<ProductDTO>findByCategoryCodeAndKeyword(String categoryCode , Pageable pageable);
-	List<ProductDTO>findByStoreCodeAndCategoryCodeAndKeyword(String storeCode, String categoryCode, Pageable pageable);
+	ProductResponse  findAll(Pageable pageable);
+	ProductResponse  findByKeyword(String keyword, Pageable pageable);
+	ProductResponse findByStoreCodeAndKeyword(String storeCode, String keyword , Pageable pageable);	
+	ProductResponse findByCategoryCodeAndKeyword(String categoryCode, String keyword , Pageable pageable);
+	ProductResponse findByStoreCodeAndCategoryCodeAndKeyword(String storeCode, String categoryCode, String keyword, Pageable pageable);
 	int countItem();
 }

@@ -44,7 +44,18 @@ export default {
 
   computed: {
     linkBackProducts(){
-      return `/admin/products?page=${this.$store.getters.currentPageProduct}`;
+      var sortProduct = this.$store.getters.sortProduct;
+      var urlStore = '', urlCategory = '', urlKeyword = '';
+      if (sortProduct.store != '') {
+        urlStore += '&store=' + sortProduct.store;
+      }
+      if (sortProduct.category != '') {
+        urlStore += '&category=' + sortProduct.category;
+      }
+      if (sortProduct.keyword != '') {
+        urlStore += '&keyword=' + sortProduct.keyword;
+      }
+      return `/admin/products?page=${this.$store.getters.sortProduct.page + urlStore +urlCategory + urlKeyword}`;
     }
   },
 

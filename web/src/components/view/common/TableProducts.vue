@@ -154,34 +154,39 @@ export default {
 
     handleSearch(){
       const query = Object.assign({}, this.$route.query);
+      this.currentPage = 1;
       if (this.keyword.trim() == '') {
         delete query.keyword;
         this.$router.replace({ query });
       } else {
-        this.$router.push({path: '/admin/products', query: {...query, keyword: this.keyword}});
+        this.$router.push({path: '/admin/products', query: {...query, page: this.currentPage, keyword: this.keyword}});
       }
       this.loadProductsBySort(this.currentPage, Constants.PAGE_SIZE_PRODUCT);
     },
 
     handleChangeStore() {
       const query = Object.assign({}, this.$route.query);
+      this.currentPage = 1;
       if (this.storeSelected == 'ALL') {
         delete query.store;
         this.$router.replace({ query });
       } else {
-        this.$router.push({path: '/admin/products', query: {...query, store: this.storeSelected}});
+        this.$router.push({path: '/admin/products', query: {...query, page: this.currentPage, store: this.storeSelected}});
       }
+      this.currentPage = 1;
       this.loadProductsBySort(this.currentPage, Constants.PAGE_SIZE_PRODUCT);
     }, 
 
     handleChangeCategory() {
       const query = Object.assign({}, this.$route.query);
+      this.currentPage = 1;
       if (this.categorySelected == 'ALL') {
         delete query.category;
          this.$router.replace({ query });
       } else {
-        this.$router.push({path: '/admin/products', query: {...query, category: this.categorySelected}});
+        this.$router.push({path: '/admin/products', query: {...query, page: this.currentPage, category: this.categorySelected}});
       }
+      this.currentPage = 1;
       this.loadProductsBySort(this.currentPage, Constants.PAGE_SIZE_PRODUCT);
     },  
 
@@ -191,9 +196,9 @@ export default {
       await this.loadStores();
     },
 
-    async loadProducts(page, size) {
-      this.products = await ProductCommand.fineAll(page, size, this.$store);
-    },
+    // async loadProducts(page, size) {
+    //   this.products = await ProductCommand.fineAll(page, size, this.$store);
+    // },
 
     async loadProductsBySort(page, size) {
       var store = this.storeSelected == 'ALL' ? '' : this.storeSelected;

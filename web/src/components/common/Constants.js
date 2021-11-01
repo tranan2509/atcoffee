@@ -1,23 +1,33 @@
 export const HOSTNAME = 'http://localhost:8086';
 export const HOSTNAME_DEFAULT = 'http://localhost:8080';
 export const JWT_NAME = 'jwt';
-export const ROLE_ADMIN = 'ADMIN';
-export const ROLE_STAFF = 'STAFF';
-export const ROLE_USER = 'USER';
+export const ROLE = { 
+  ROLE_ADMIN:'ADMIN',
+  ROLE_STAFF: 'STAFF',
+  ROLE_USER: 'USER'
+};
+export const STATUS_BILL = {
+  REQUESTED: 'REQUESTED',
+  APPROVED: 'APPROVED',
+  UNAPPROVED: 'UNAPPROVED',
+  CANCELED: 'CANCELED',
+  DELIVERY: 'DELIVERY',
+  COMPLETED: 'COMPLETED'
+};
 export const PAGE_SIZE_PRODUCT = 2;
 export const ITEM_NUMBER_PAGINATION = 5;
 export const LIMIT_NOTIFICATION_SHOW = 5;
-export const COMPONENT_NAME_LOGIN = 'Login';
-export const COMPONENT_NAME_DASHBOARD = 'Dashboard';
-export const COMPONENT_NAME_STATISTICS = 'Statistics';
-export const COMPONENT_NAME_SIDE_BAR = 'SideBar';
-export const COMPONENT_NAME_NAVBAR = 'Navbar';
-export const COMPONENT_NAME_ERROR = 'Error';
-export const COMPONENT_NAME_PRODUCTS = 'Products';
-export const COMPONENT_NAME_SECTION_HEADER = 'SectionHeader';
-export const COMPONENT_NAME_TABLE_PRODUCTS = 'TableProducts';
-export const COMPONENT_NAME_TABLE_ADD_PRODUCT = 'AddProduct';
-export const COMPONENT_NAME_TABLE_ACTION_PRODUCT = 'ActionProduct';
-export const COMPONENT_NAME_SPINNER = 'Spinner';
-export const COMPONENT_NAME_VIEW_IMAGE = 'ViewImage';
-export const COMPONENT_NAME_PAGINATION = 'Pagination';
+export const COMPONENT_NAME_LOGIN = 'LOGIN';
+export const COMPONENT_NAME_DASHBOARD = 'DASHBOARD';
+export const COMPONENT_NAME_STATISTICS = 'STATISTICS';
+export const COMPONENT_NAME_SIDE_BAR = 'SIDE_BAR';
+export const COMPONENT_NAME_NAVBAR = 'NAVBAR';
+export const COMPONENT_NAME_ERROR = 'ERROR';
+export const COMPONENT_NAME_PRODUCTS = 'PRODUCTS';
+export const COMPONENT_NAME_SECTION_HEADER = 'SECTION_HEADER';
+export const COMPONENT_NAME_TABLE_PRODUCTS = 'TABLE_PRODUCTS';
+export const COMPONENT_NAME_TABLE_ADD_PRODUCT = 'ADD_PRODUCT';
+export const COMPONENT_NAME_TABLE_ACTION_PRODUCT = 'ACTION_PRODUCT';
+export const COMPONENT_NAME_SPINNER = 'SPINNER';
+export const COMPONENT_NAME_VIEW_IMAGE = 'VIEW_IMAGE';
+export const COMPONENT_NAME_PAGINATION = 'PAGINATION';

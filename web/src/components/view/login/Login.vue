@@ -121,7 +121,7 @@ export default {
      */
     async authenticated() {
       const auth = await LoginCommand.authenticated(this.$store);
-      if (auth && auth.roleName === Constants.ROLE_ADMIN){
+      if (auth && auth.roleName === Constants.ROLE.ROLE_ADMIN){
         this.$router.push({path: '/admin'})
       }
     },
