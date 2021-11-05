@@ -27,6 +27,20 @@ const SystemModule = {
             products: false,
             add_product: false,
           }
+        },
+        staff: {
+          value: false,
+          submenu: {
+            staffs: false,
+            add_staff: false
+          }
+        },
+        profile: {
+          value: false,
+          submenu: {
+            profile: false,
+            change_password: false
+          }
         }
       }
     };

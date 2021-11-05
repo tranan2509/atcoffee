@@ -37,7 +37,7 @@
           </li>
         </ul>
       </li>
-       <li class="menu-header">QUẢN LÝ</li>
+      <li class="menu-header">QUẢN LÝ</li>
       <li class="nav-item dropdown" :class="menu.product.value ? 'active' : ''">
         <router-link to="" class="nav-link has-dropdown" @click="handleDropdown(menu.product)">
           <i class="fas fa-coffee"></i>
@@ -50,6 +50,37 @@
           </li>
           <li :class="menu.product.submenu.add_product ? 'active': ''" @click="handleLink(menu.product, 'add_product')">
             <router-link to="/admin/add-product" class="nav-link">Thêm sản phẩm</router-link>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item dropdown" :class="menu.staff.value ? 'active' : ''">  
+        <router-link to="" class="nav-link has-dropdown" @click="handleDropdown(menu.staff)">
+          <i class="fas fa-users"></i>
+          <span>Nhân viên</span>
+          <i class="fas fa-chevron-right"></i>
+        </router-link>
+        <ul class="dropdown-menu" :class="menu.staff.value ? 'visible' : 'invisible'">
+          <li :class="menu.staff.submenu.staffs ? 'active': ''" @click="handleLink(menu.staff, 'staffs')">
+            <router-link to="/admin/staffs?page=1" class="nav-link" >Danh sách nhân viên</router-link>
+          </li>
+          <li :class="menu.staff.submenu.add_staff ? 'active': ''" @click="handleLink(menu.staff, 'add_staff')">
+            <router-link to="/admin/add-staff" class="nav-link">Thêm nhân viên</router-link>
+          </li>
+        </ul>
+      </li>
+      <li class="menu-header">HỒ SƠ</li>
+      <li class="nav-item dropdown" :class="menu.profile.value ? 'active' : ''">
+        <router-link to="" class="nav-link has-dropdown" @click="handleDropdown(menu.profile)">
+          <i class="fas fa-user"></i>
+          <span>Hồ sơ</span>
+          <i class="fas fa-chevron-right"></i>
+        </router-link>
+        <ul class="dropdown-menu" :class="menu.profile.value ? 'visible' : 'invisible'">
+          <li :class="menu.profile.submenu.profile ? 'active': ''" @click="handleLink(menu.profile, 'profile')">
+            <router-link to="/admin/profile" class="nav-link" >Thông tin cá nhân</router-link>
+          </li>
+          <li :class="menu.profile.submenu.change_password ? 'active': ''" @click="handleLink(menu.profile, 'change_password')">
+            <router-link to="/admin/profile/change-password" class="nav-link">Đổi mật khẩu</router-link>
           </li>
         </ul>
       </li>

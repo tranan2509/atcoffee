@@ -69,6 +69,11 @@ public class ProductServiceImpl implements ProductService{
 	public ProductDTO findOne(long id) {
 		return mapper.map(productRepository.findOne(id), ProductDTO.class);
 	}
+	
+	@Override
+	public ProductDTO findOneByCode(String code ) {
+		return mapper.map(productRepository.findOneByCode(code), ProductDTO.class);
+	}
 
 	@Override
 	public List<ProductDTO> findAll() {

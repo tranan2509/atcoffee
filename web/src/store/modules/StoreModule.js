@@ -4,6 +4,7 @@ const StoreModule = {
   state() {
     return {
       stores: null,
+      store: null
     };
   },
 
@@ -11,11 +12,17 @@ const StoreModule = {
     stores(state) {
       return state.stores;
     },
+    store(state) {
+      return state.store;
+    }
   },
 
   mutations: {
     [MutationsName.MUTATION_NAME_SET_STORES](state, stores) {
       state.stores = stores;
+    },
+    [MutationsName.MUTATION_NAME_SET_STORE](state, store) {
+      state.store = store;
     },
   },
 

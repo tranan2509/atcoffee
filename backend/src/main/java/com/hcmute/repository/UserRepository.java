@@ -6,4 +6,5 @@ import com.hcmute.entity.UserEntity;
 
 public interface UserRepository extends JpaRepository<UserEntity, Long>{
 	UserEntity findOneByUsername(String username);
+	UserEntity findOneByUsernameAndPassword(String username, String password);
 }

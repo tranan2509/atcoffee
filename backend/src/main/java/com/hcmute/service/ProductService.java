@@ -10,6 +10,7 @@ import com.hcmute.dto.ProductDTO;
 public interface ProductService {
 	ProductDTO save(ProductDTO dto);
 	ProductDTO findOne(long id);
+	ProductDTO findOneByCode(String code);
 	List<ProductDTO> findAll();
 	ProductResponse  findAll(Pageable pageable);
 	ProductResponse  findByKeyword(String keyword, Pageable pageable);

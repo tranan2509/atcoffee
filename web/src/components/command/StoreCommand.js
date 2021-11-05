@@ -12,6 +12,16 @@ var StoreCommand = {
       return result;
     }
     return null;
+  },
+
+  async findOne(id, store) {
+    const url = `${Constants.HOSTNAME_DEFAULT}/api/info/store/${id}`;
+    let result = await ConnectServer.getData(url);
+    if (result != null) {
+      store.commit(MutationsName.MUTATION_NAME_SET_STORE, result);
+      return result;
+    }
+    return null;
   }
 }
 

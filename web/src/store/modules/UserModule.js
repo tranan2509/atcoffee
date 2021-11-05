@@ -20,6 +20,10 @@ const UserModule = {
       state.user = user;
     },
 
+    [MutationsName.MUTATION_NAME_SET_USER](state, user) {
+      state.user = user;
+    },
+
     [MutationsName.AUTHENTICATED](state, user) {
       state.user = user;
     },

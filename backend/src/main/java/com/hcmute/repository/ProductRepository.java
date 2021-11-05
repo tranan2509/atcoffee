@@ -15,4 +15,5 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long>{
 	Page<ProductEntity> findByCategoryIdAndKeyword(Long categoryId, String keyword, Pageable pageable);
 	@Query("select p from ProductEntity p left join p.stores as s left join p.categories as c where s.id = ?1 AND c.id = ?2 AND (p.name LIKE %?3% OR p.code LIKE %?3%)")
 	Page<ProductEntity> findByStoreIdAndCategoryIdAndKeyword(Long storeId, Long categoryId, String keyword, Pageable pageable);
+	ProductEntity findOneByCode(String code);
 }

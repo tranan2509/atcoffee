@@ -75,7 +75,7 @@ public class InitializationAPI {
 			if (userService.findAll().isEmpty()) {
 				Date dob = new Date();
 				UserDTO user = new UserDTO("admin", "admin", "https://res.cloudinary.com/tranan2509/image/upload/v1635433632/logo_hvnmwc.png", "Admin", "01692889894", "Name",
-						"admin@gmail.com", "9 Trình Hoài Đức, Quận 9", dob, "215523098", 1L, "ADMIN");
+						"tranan2509@gmail.com", "9 Trình Hoài Đức, Quận 9", dob, "215523098", 1L, "ADMIN");
 				user.setCode("AN_TV_ADMIN");
 				userService.save(user);
 				user = new UserDTO("staff", "staff", "https://res.cloudinary.com/tranan2509/image/upload/v1635433632/logo_hvnmwc.png", "Admin", "01692889893", "Nữ",

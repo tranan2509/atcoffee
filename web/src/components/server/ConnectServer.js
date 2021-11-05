@@ -26,11 +26,25 @@ const connect = {
      * @returns 
      */
     postData: async (url, data) => {
-
       try {
         let res = await instance.post(url, data);
         return res && res.data ? res.data : null;
       } catch (error) {
+        return null;
+      }
+    },
+
+    /**
+     * putData
+     * @param {*} url 
+     * @param {*} data 
+     * @returns 
+     */
+    putData: async (url, data) => {
+      try{
+        let res = await instance.put(url, data);
+        return res && res.data ? res.data : null;
+      } catch(error) {
         return null;
       }
     },

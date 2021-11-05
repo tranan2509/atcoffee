@@ -45,7 +45,7 @@
         </router-link>
         <div class="dropdown-menu dropdown-menu-right" :class="navbar.dropdown ? 'show' : ''">
           <div class="dropdown-title">Thông tin</div>
-            <router-link to="/admin" class="dropdown-item has-icon">
+            <router-link to="/admin/profile" class="dropdown-item has-icon">
               <i class="far fa-user"></i> Hồ sơ
             </router-link>
             <router-link to="/admin" class="dropdown-item has-icon">
