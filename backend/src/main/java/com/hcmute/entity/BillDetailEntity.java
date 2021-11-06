@@ -16,7 +16,7 @@ public class BillDetailEntity extends BaseEntity implements Serializable {
 	private String description;
 	private float amount;
 	private float price;
-	private int discount;
+	private int discount;		
 
 	@ManyToOne
 	@JoinColumn(name = "bill_id")

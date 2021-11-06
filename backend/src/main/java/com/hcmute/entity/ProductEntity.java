@@ -42,6 +42,9 @@ public class ProductEntity extends BaseEntity implements Serializable {
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
 	private List<SizeEntity> sizes = new ArrayList<>();
 	
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+	private List<CartEntity> carts = new ArrayList<>();
+	
 	public ProductEntity() {
 		super();
 	}
@@ -130,5 +133,12 @@ public class ProductEntity extends BaseEntity implements Serializable {
 		}
 	}
 
+	public List<CartEntity> getCarts() {
+		return carts;
+	}
+
+	public void setCarts(List<CartEntity> carts) {
+		this.carts = carts;
+	}
 	
 }

@@ -44,6 +44,8 @@ public abstract class BaseEntity {
 	@LastModifiedDate
 	private Date modifiedDate;
 	
+	private String code;
+	
 	@Column(columnDefinition = "boolean default true")
 	private boolean state;
 
@@ -85,6 +87,15 @@ public abstract class BaseEntity {
 
 	public void setModifiedBy(String modifiedBy) {
 		this.modifiedBy = modifiedBy;
+	}
+
+	
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	public boolean isState() {

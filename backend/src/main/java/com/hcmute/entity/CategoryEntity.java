@@ -21,7 +21,6 @@ public class CategoryEntity extends BaseEntity implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Column(unique = true, nullable = false)
-	private String code;
 	private String name;
 	
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -33,12 +32,7 @@ public class CategoryEntity extends BaseEntity implements Serializable{
 	public CategoryEntity() {
 		super();
 	}
-	public String getCode() {
-		return code;
-	}
-	public void setCode(String code) {
-		this.code = code;
-	}
+	
 	public String getName() {
 		return name;
 	}

@@ -7,6 +7,9 @@ import java.util.Set;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -15,6 +18,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.hcmute.api.request.PasswordRequest;
 import com.hcmute.dto.UserDTO;
 import com.hcmute.entity.RoleEntity;
 import com.hcmute.entity.StoreEntity;
@@ -41,6 +45,8 @@ public class UserServiceImpl implements UserService{
 	private BCryptPasswordEncoder passwordEncoder;
 	@Autowired
 	private ModelMapper mapper;
+	@Autowired
+	private AuthenticationManager authenticationManager;
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -95,6 +101,26 @@ public class UserServiceImpl implements UserService{
 		List<UserEntity> entities = userRepository.findAll();
 		entities.forEach(entity -> dtos.add(mapper.map(entity, UserDTO.class)));
 		return dtos;
+	}
+
+	@Override
+	public UserDTO updatePassword(PasswordRequest passwordRequest) {
+		UserDTO dto = passwordRequest.getUser();
+		try {
+			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+					dto.getUsername(), passwordRequest.getOldPassword()));
+		} catch (BadCredentialsException e) {
+			return null;
+		}
+		
+		UserEntity entity = userRepository.findOneByUsername(dto.getUsername());
+		if (entity != null) {
+			String newPassword = passwordEncoder.encode(passwordRequest.getNewPassword());
+			entity.setPassword(newPassword);
+			entity = userRepository.save(entity);
+			return mapper.map(entity, UserDTO.class);
+		}
+		return null;
 	}
 
 }

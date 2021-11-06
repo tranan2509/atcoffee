@@ -5,6 +5,7 @@ public class BillDTO extends BaseDTO<BillDTO>{
 	private float price;
 	private int discount;
 	private String address; 
+	private String status;
 	private Long rewardId;
 	private Long promotionId;
 	private Long paymentId;
@@ -32,6 +33,13 @@ public class BillDTO extends BaseDTO<BillDTO>{
 	}
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	public int getDiscount() {
 		return discount;

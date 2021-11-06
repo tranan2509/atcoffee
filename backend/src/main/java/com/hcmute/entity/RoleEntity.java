@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -15,8 +14,6 @@ public class RoleEntity extends BaseEntity implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
-	@Column(nullable = false)
-	private String code;
 	private String name;
 	
 	@OneToMany(mappedBy = "role")
@@ -24,13 +21,7 @@ public class RoleEntity extends BaseEntity implements Serializable{
 	
 	public RoleEntity() {
 	}
-	
-	public String getCode() {
-		return code;
-	}
-	public void setCode(String code) {
-		this.code = code;
-	}
+
 	public String getName() {
 		return name;
 	}

@@ -1,5 +1,10 @@
 package com.hcmute.service;
 
-public interface PaymentService {
+import java.util.List;
 
+import com.hcmute.dto.PaymentDTO;
+
+public interface PaymentService {
+	PaymentDTO save(PaymentDTO dto);
+	List<PaymentDTO> findAll();
 }

@@ -10,6 +10,7 @@ public class BaseDTO<T> {
 	private Date modifiedDate;
 	private String createdBy;
 	private String modifiedBy;
+	private String code;
 	private boolean state;
 	
 	private List<T> results = new ArrayList<>();
@@ -49,6 +50,13 @@ public class BaseDTO<T> {
 	}
 	public void setResults(List<T> results) {
 		this.results = results;
+	}
+	
+	public String getCode() {
+		return code;
+	}
+	public void setCode(String code) {
+		this.code = code;
 	}
 	public boolean isState() {
 		return state;

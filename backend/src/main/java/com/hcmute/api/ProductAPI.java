@@ -1,9 +1,10 @@
 package com.hcmute.api;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hcmute.api.response.ProductResponse;
 import com.hcmute.dto.ProductDTO;
 import com.hcmute.service.ProductService;
 
@@ -30,13 +32,15 @@ public class ProductAPI {
 	
 	
 	@PostMapping("/api/admin/product")
-	public ResponseEntity<ProductDTO> save(@RequestParam("file") MultipartFile multipartFile, @RequestParam("product") String productJson) {
+	public ResponseEntity<ProductDTO> save(@RequestParam(value="file", required=false) MultipartFile multipartFile, @RequestParam("product") String productJson) {
 		try {
 			ProductDTO product = objectMapper.readValue(productJson, ProductDTO.class);	
-			Map r = this.cloudinary.uploader().upload(multipartFile.getBytes(),
-	                  ObjectUtils.asMap("resource_type", "auto"));
-			String img = (String) r.get("secure_url");
-	        product.setImage(img);
+			if (multipartFile != null) {
+				Map r = this.cloudinary.uploader().upload(multipartFile.getBytes(),
+		                  ObjectUtils.asMap("resource_type", "auto"));
+				String img = (String) r.get("secure_url");
+		        product.setImage(img);
+			}
 	        product = productService.save(product);
 			return ResponseEntity.ok(product);
 		} catch (Exception e) {
@@ -49,8 +53,32 @@ public class ProductAPI {
 		return ResponseEntity.ok(productService.findOne(id));
 	}
 	
-	@GetMapping("/api/info/product")
-	public ResponseEntity<List<ProductDTO>> findAll() {
-		return ResponseEntity.ok(productService.findAll());
+	@GetMapping("/api/info/product/find")
+	public ResponseEntity<ProductDTO> findOneByCode(@RequestParam(name = "code") String code) {
+		return ResponseEntity.ok(productService.findOneByCode(code));
+	}
+	
+	@GetMapping("/api/info/product") 
+	public ResponseEntity<ProductResponse> findAll(@RequestParam(name = "page", defaultValue = "1") int page,
+			@RequestParam(name = "size") int size, @RequestParam(name = "store", required = false) String storeCode,
+			@RequestParam(name="category", required = false) String categoryCode,
+			@RequestParam(name = "keyword", required = false) String keyword) {
+		
+		ProductResponse result  = new ProductResponse();
+		Pageable pageable = new PageRequest(page - 1, size);
+		if (storeCode == "" && categoryCode == "" && keyword == "") {
+			result = productService.findAll(pageable);
+		} else {
+			if (storeCode != "" && categoryCode != "") {
+				result = productService.findByStoreCodeAndCategoryCodeAndKeyword(storeCode, categoryCode, keyword, pageable);
+			} else if (storeCode != "") {
+				result = productService.findByStoreCodeAndKeyword(storeCode, keyword, pageable);
+			} else if (categoryCode != "") {
+				result = productService.findByCategoryCodeAndKeyword(categoryCode, keyword, pageable);
+			} else {
+				result = productService.findByKeyword(keyword, pageable);
+			}
+		}
+		return ResponseEntity.ok(result);
 	}
 }
