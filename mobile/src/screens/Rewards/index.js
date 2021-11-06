@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet, FlatList, ImageBackground} from 'react-native';
-import {HeaderBar, CustomButton} from '../components';
-import {FONTS, COLORS, dummyData, SIZES, icons} from '../constants';
+import {HeaderBar, CustomButton} from '../../components';
+import {FONTS, COLORS, dummyData, SIZES, icons} from '../../constants';
 import {connect} from 'react-redux';
 
 const Rewards = ({navigation, appTheme}) => {

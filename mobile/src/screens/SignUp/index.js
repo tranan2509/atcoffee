@@ -18,7 +18,7 @@ import Animated, {
   Extrapolate,
   withDelay,
 } from 'react-native-reanimated';
-import {images} from '../constants';
+import {images} from '../../constants';
 
 const SignUpScreen = ({navigation}) => {
   const {width, height} = Dimensions.get('window');

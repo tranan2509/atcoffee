@@ -2,14 +2,14 @@ import React from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   TouchableOpacity,
   Image,
   ScrollView,
   ImageBackground,
+  TextInput,
 } from 'react-native';
-import {COLORS, FONTS, images, icons, SIZES, dummyData} from '../constants';
-import {IconButton} from '../components';
+import {COLORS, FONTS, images, icons, SIZES, dummyData} from '../../constants';
+import {IconButton} from '../../components';
 import {connect} from 'react-redux';
 
 const OrderDetail = ({navigation, appTheme, route}) => {
@@ -23,6 +23,10 @@ const OrderDetail = ({navigation, appTheme, route}) => {
     React.useState(50);
 
   const [selectedIceLevel, setSelectedIceLevel] = React.useState(50);
+
+  const [amount, setAmount] = React.useState('1');
+
+  const [favorites, setFavorites] = React.useState(false);
 
   React.useEffect(() => {
     let {selectedItem} = route.params;
@@ -80,8 +84,61 @@ const OrderDetail = ({navigation, appTheme, route}) => {
           style={{
             width: SIZES.width * 0.7,
             height: SIZES.width * 0.7,
+            marginBottom: 20,
           }}
         />
+        {/* Amount */}
+        <View
+          style={{
+            position: 'absolute',
+            bottom: -20,
+            width: SIZES.width,
+            height: 50,
+            justifyContent: 'center',
+            flexDirection: 'row',
+          }}>
+          <TouchableOpacity
+            style={{
+              width: 50,
+              backgroundColor: COLORS.white,
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderTopLeftRadius: 25,
+              borderBottomLeftRadius: 25,
+            }}
+            // onPress={() => editOrder("-", item.menuId, item.price)}
+          >
+            <Text style={{...FONTS.body1}}>-</Text>
+          </TouchableOpacity>
+          <View
+            style={{
+              width: 50,
+              backgroundColor: COLORS.white,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            {/* <Text style={{ ...FONTS.h2 }}>{getOrderQty(item.menuId)}</Text> */}
+            <TextInput
+              style={{...FONTS.h2}}
+              value={amount}
+              onChangeText={setAmount}
+            />
+          </View>
+
+          <TouchableOpacity
+            style={{
+              width: 50,
+              backgroundColor: COLORS.white,
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderTopRightRadius: 25,
+              borderBottomRightRadius: 25,
+            }}
+            // onPress={() => editOrder("+", item.menuId, item.price)}
+          >
+            <Text style={{...FONTS.body1}}>+</Text>
+          </TouchableOpacity>
+        </View>
         {/* Back button */}
         <IconButton
           containerStyle={{
@@ -94,6 +151,19 @@ const OrderDetail = ({navigation, appTheme, route}) => {
           }}
           icon={icons.leftArrow}
           onPress={() => navigation.navigate('Order')}
+        />
+        <IconButton
+          containerStyle={{
+            position: 'absolute',
+            top: 30,
+            right: 10,
+            padding: 10,
+            borderRadius: SIZES.radius,
+            //backgroundColor: COLORS.black,
+          }}
+          iconStyle={{tintColor: favorites ? COLORS.red2 : COLORS.white}}
+          icon={icons.heart}
+          onPress={() => setFavorites(!favorites)}
         />
       </View>
     );
@@ -144,12 +214,42 @@ const OrderDetail = ({navigation, appTheme, route}) => {
             }}>
             Pick A Size
           </Text>
-          {/* Cup */}
+
+          {/* Cup1 */}
           <View
             style={{
               flex: 1,
               flexDirection: 'row',
+              marginRight: 50,
             }}>
+            <TouchableOpacity
+              style={{
+                alignItems: 'center',
+                justifyContent: 'flex-end',
+              }}
+              onPress={() => setSelectedSize(10)}>
+              <ImageBackground
+                source={icons.coffee_cup}
+                style={{
+                  width: 50,
+                  height: 50,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                imageStyle={{
+                  tintColor: selectedSize == 10 ? COLORS.primary : COLORS.gray2,
+                }}>
+                <Text style={{color: COLORS.white, ...FONTS.body3}}>10oz</Text>
+              </ImageBackground>
+              <Text
+                style={{
+                  marginTop: 3,
+                  color: COLORS.white,
+                  ...FONTS.body3,
+                }}>
+                $4.50
+              </Text>
+            </TouchableOpacity>
             <TouchableOpacity
               style={{
                 alignItems: 'center',
@@ -466,6 +566,48 @@ const OrderDetail = ({navigation, appTheme, route}) => {
         {/* Detail */}
         {renderDetailSection()}
       </ScrollView>
+      <View
+        style={{
+          backgroundColor: COLORS.backgroundColor,
+          height: 70,
+          width: '100%',
+          flexDirection: 'row',
+        }}>
+        {/* Mua ngay */}
+        <TouchableOpacity
+          style={{
+            backgroundColor: COLORS.primary,
+            height: '100%',
+            width: SIZES.width * 0.3,
+            justifyContent: 'center',
+            alignItems: 'center',
+            //borderRadius: 20,
+          }}>
+          <Text style={{color: 'white', ...FONTS.h3}}>Mua ngay</Text>
+        </TouchableOpacity>
+        {/* Tổng */}
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: SIZES.width * 0.4,
+            //backgroundColor: COLORS.white,
+          }}>
+          <Text style={{color: 'white', ...FONTS.h3}}>Tổng tiền: </Text>
+          <Text style={{color: 'white', ...FONTS.h3}}>10000000$</Text>
+        </View>
+        {/* Thêm vào giỏ */}
+        <TouchableOpacity
+          style={{
+            backgroundColor: COLORS.primary,
+            height: '100%',
+            width: SIZES.width * 0.3,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text style={{color: 'white', ...FONTS.h3}}>Thêm vào giỏ</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };

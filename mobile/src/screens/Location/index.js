@@ -10,8 +10,8 @@ import {
   StyleSheet,
   Platform,
 } from 'react-native';
-import {IconButton, TabButton} from '../components';
-import {dummyData, COLORS, SIZES, FONTS, icons, images} from '../constants';
+import {IconButton, TabButton} from '../../components';
+import {dummyData, COLORS, SIZES, FONTS, icons, images} from '../../constants';
 import {connect} from 'react-redux';
 
 const Location = ({navigation, appTheme}) => {

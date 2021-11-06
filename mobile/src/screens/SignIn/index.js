@@ -10,7 +10,7 @@ import {
   KeyboardAvoidingView,
   TouchableOpacity,
 } from 'react-native';
-import {images} from '../constants';
+import {images} from '../../constants';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,

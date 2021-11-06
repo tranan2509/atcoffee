@@ -17,9 +17,9 @@ import {
   images,
   FONTS,
   dummyData,
-} from '../constants';
+} from '../../constants';
 import {connect} from 'react-redux';
-import {HeaderBar, CustomButton} from '../components';
+import {HeaderBar, CustomButton} from '../../components';
 
 const promoTabs = constants.promoTabs.map(promoTab => ({
   ...promoTab,

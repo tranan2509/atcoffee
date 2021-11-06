@@ -10,8 +10,8 @@ import {
   FlatList,
   StyleSheet,
 } from 'react-native';
-import {IconButton, TabButton, VerticalTextButton} from '../components';
-import {icons, COLORS, SIZES, FONTS, dummyData} from '../constants';
+import {IconButton, TabButton, VerticalTextButton} from '../../components';
+import {icons, COLORS, SIZES, FONTS, dummyData} from '../../constants';
 import Svg, {Circle} from 'react-native-svg';
 
 import {connect} from 'react-redux';
