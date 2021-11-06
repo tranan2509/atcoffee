@@ -89,7 +89,7 @@ import StoreCommand from '../../command/StoreCommand'
 import Spinner from '../popup/Spinner.vue'
 
 export default {
-  name: Constants.COMPONENT_NAME_TABLE_ACTION_PRODUCT,
+  name: Constants.COMPONENT_NAME_ACTION_PRODUCT,
 
   components: {
     Spinner

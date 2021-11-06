@@ -14,11 +14,11 @@
           <router-link to="" @click.prevent="handleChangePage(pagination)"
           class="page-link">{{pagination}}</router-link>
         </li>
-        <li class="page-item" :class="currentPage == lastItemPagination ? 'disable' : ''">
+        <li class="page-item" :class="currentPage == totalPage ? 'disable' : ''">
           <router-link to="" @click.prevent="handleChangePage('RIGHT')"
           class="page-link"><i class="fas fa-angle-right"></i></router-link>
         </li>
-        <li class="page-item" :class="currentPage == lastItemPagination ? 'disable' : ''">
+        <li class="page-item" :class="currentPage == totalPage ? 'disable' : ''">
           <router-link to="" @click.prevent="handleChangePage('DOUBLE_RIGHT')"
           class="page-link"><i class="fas fa-angle-double-right"></i></router-link>
         </li>
@@ -33,18 +33,18 @@ import * as Constants from '../../common/Constants'
 export default {
   name: Constants.COMPONENT_NAME_PAGINATION,
 
-  props: ['currentPage'],
+  props: ['currentPage', 'totalPage'],
 
   computed: {
     itemsPagination() {
       var result = [];
-      var len = this.lastItemPagination < Constants.ITEM_NUMBER_PAGINATION ? this.lastItemPagination : Constants.ITEM_NUMBER_PAGINATION;
+      var len = this.totalPage < Constants.ITEM_NUMBER_PAGINATION ? this.totalPage : Constants.ITEM_NUMBER_PAGINATION;
       if (this.currentPage <= Math.ceil(Constants.ITEM_NUMBER_PAGINATION / 2)) {
         for (let i = 0; i < len; i++) {
           result.push(i + 1);
         }
-      } else if (this.currentPage >= this.lastItemPagination - Math.ceil(Constants.ITEM_NUMBER_PAGINATION / 2)){
-        for (let i = this.lastItemPagination; i > this.lastItemPagination - len; i--) {
+      } else if (this.currentPage > this.totalPage - Math.ceil(Constants.ITEM_NUMBER_PAGINATION / 2)){
+        for (let i = this.totalPage; i > this.totalPage - len; i--) {
           result.unshift(i);
         }
       } else {
@@ -57,9 +57,9 @@ export default {
       return result;
     },
 
-    lastItemPagination() {
-      return this.$store.getters.totalPageProduct;
-    }
+    // lastItemPagination() {
+    //   return this.$store.getters.totalPageProduct;
+    // }
   },
   methods: {
     handleChangePage(type) {
@@ -72,10 +72,10 @@ export default {
           page -= page > 1 ? 1 : 0;
           break;
         case 'RIGHT':
-          page += page < this.lastItemPagination ? 1 : 0;
+          page += page < this.totalPage ? 1 : 0;
           break;
         case 'DOUBLE_RIGHT': 
-          page = this.lastItemPagination;
+          page = this.totalPage;
           break;
         default: 
           page = type;

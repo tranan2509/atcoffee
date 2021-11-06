@@ -28,7 +28,7 @@ import SectionHeader from '../common/SectionHeader.vue'
 import ActionProduct from '../common/ActionProduct.vue'
 
 export default {
-  name: Constants.COMPONENT_NAME_TABLE_ADD_PRODUCT,
+  name: Constants.COMPONENT_NAME_ADD_PRODUCT,
 
   data(){
     return {

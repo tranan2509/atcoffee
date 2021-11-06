@@ -90,7 +90,7 @@ import {mapGetters} from 'vuex'
 import vClickOutside from 'click-outside-vue3'
 
 export default {
-  name: Constants.COMPONENT_NAME_TABLE_ACTION_PRODUCT,
+  name: Constants.COMPONENT_NAME_PERSONAL_INFO,
 
   directives: {
       clickOutside: vClickOutside.directive

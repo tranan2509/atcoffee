@@ -3,7 +3,7 @@
     <div class="col-12">
       <div class="card">
         <div class="card-header">
-          <h4>Danh sách sản phẩm</h4>
+          <h4>Danh sách nhân viên</h4>
           <div class="card-header-form flex-row">
             <div class="form-group">
               <select v-model="storeSelected" class="form-custom" @change="handleChangeStore">
@@ -16,11 +16,11 @@
             </div>
             <div class="empty-space"></div>
             <div class="form-group">
-              <select v-model="categorySelected" class="form-custom" @change="handleChangeCategory">
-                <option value="ALL">Tất cả các loại</option>
-                <option v-for="category in this.$store.getters.categories" :key="category.id"
-                  :value="category.code">
-                  {{category.name}}
+              <select v-model="roleSelected" class="form-custom" @change="handleChangeRole">
+                <option value="ALL">Tất cả các quyền</option>
+                <option v-for="role in this.$store.getters.roles" :key="role.id"
+                  :value="role.name">
+                  {{role.name}}
                 </option>
               </select>
             </div>
@@ -42,31 +42,35 @@
                 <tr>
                   <th class="text-center">SST</th>
                   <th class="text-center">Mã</th>
-                  <th class="text-center">Tên sản phẩm</th>
+                  <th class="text-center">Tên</th>
                   <th class="text-center">Hình ảnh</th>
-                  <th class="text-center">Giá sản phẩm</th>
+                  <th class="text-center">Email</th>
+                  <th class="text-center">SDT</th>
+                  <th class="text-center">CMND/CCCD</th>
                   <th class="text-center">Trạng thái</th>
-                  <th class="text-center">Hành động</th>
                   <th class="text-center">Chi tiết</th>
                 </tr>
-                <tr v-for="(product, index) in products" :key="product.id">
+                <tr v-for="(user, index) in users" :key="user.id">
                   <td class="text-center">{{number(index)}}</td>
-                  <td class="text-center">{{product.code}}</td>
-                  <td class="text-center">{{product.name}}</td>
+                  <td class="text-center">{{user.code}}</td>
+                  <td class="text-center">{{user.name}}</td>
                   <td class="text-center">
-                    <img :src="product.image" alt="image" @click="handleViewImage(product.image)">
+                    <img :src="user.image" alt="image" @click="handleViewImage(user.image)">
                   </td>
-                  <td class="text-center">{{formatPrice(product.sizes[1].price)}}</td>
-                  <td class="text-center">Dang ban</td>
-                  <td class="text-center">Them</td>
-                  <td class="text-center"><i class="fas fa-info-circle" @click="handleEdit(product.id)"></i></td>
+                  <td class="text-center">{{user.email}}</td>
+                  <td class="text-center">{{user.phone}}</td>
+                  <td class="text-center">{{user.identityCard}}</td>
+                  <td class="text-center">
+                    <input type="checkbox" name="state" id="state" :checked="user.state">
+                  </td>
+                  <td class="text-center"><i class="fas fa-info-circle" @click="handleEdit(user.id)"></i></td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
-        <div class="card-footer text-right" v-if="this.$store.getters.totalPageProduct > 0">
-          <pagination :currentPage="currentPage" @handleChange="handleChangePage" :totalPage="this.$store.getters.sortProduct.totalPage"/>
+        <div class="card-footer text-right" v-if="this.$store.getters.sortUser.totalPage > 0">
+          <pagination :currentPage="currentPage" @handleChange="handleChangePage" :totalPage="this.$store.getters.sortUser.totalPage"/>
         </div>
       </div>
     </div>
@@ -76,14 +80,15 @@
 
 <script>
 import * as Constants from '../../common/Constants'
-import ProductCommand from '../../command/ProductCommand'
-import CategoryCommand from '../../command/CategoryCommnad'
+import * as MutationsName from '../../common/MutationsName'
+import RoleCommand from '../../command/RoleCommand'
 import StoreCommand from '../../command/StoreCommand'
 import Pagination from '../common/Pagination.vue'
 import ViewImage from '../popup/ViewImage.vue'
+import UserCommand from '../../command/UserCommand'
 
 export default {
-  name: Constants.COMPONENT_NAME_TABLE_PRODUCTS,
+  name: Constants.COMPONENT_NAME_TABLE_STAFFS,
 
   components: {
     Pagination,
@@ -92,13 +97,14 @@ export default {
 
   data() {
     return {
-      products: [],
+      users: [],
       currentPage: 1,
       isViewImage: false,
       imageSelected: '',
       storeSelected: 'ALL',
-      categorySelected: 'ALL',
-      keyword: ''
+      roleSelected: 'ALL',
+      stateSelected: 'ALL',
+      keyword: '',
     }
   },
 
@@ -117,9 +123,13 @@ export default {
       if (typeof this.storeSelected == 'undefined') {
         this.storeSelected = 'ALL';
       }
-      this.categorySelected = this.$route.query.category;
-      if (typeof this.categorySelected == 'undefined') {
-        this.categorySelected = 'ALL';
+      this.roleSelected = this.$route.query.role;
+      if (typeof this.roleSelected == 'undefined') {
+        this.roleSelected = 'ALL';
+      }
+      this.stateSelected = this.$route.query.state;
+      if (typeof this.stateSelected == 'undefined') {
+        this.stateSelected = 'ALL';
       }
     },
     
@@ -128,19 +138,18 @@ export default {
     },
 
     number(index){
-      return (this.currentPage - 1) * Constants.PAGE_SIZE_PRODUCT + index + 1;
+      return (this.currentPage - 1) * Constants.PAGE_SIZE_STAFF + index + 1;
     },
 
     handleEdit(id){
-      this.$router.push({path: '/admin/edit-product', query: {id}});
+      this.$router.push({path: '/admin/edit-staffs', query: {id}});
     },
 
     handleChangePage(page) {
       this.currentPage = page;
       const query = Object.assign({}, this.$route.query);
-      this.$router.push({path: '/admin/products', query: {...query, page: this.currentPage}});
-      // this.loadProducts(this.currentPage, Constants.PAGE_SIZE_PRODUCT); 
-      this.loadProductsBySort(this.currentPage, Constants.PAGE_SIZE_PRODUCT);
+      this.$router.push({path: '/admin/staffs', query: {...query, page: this.currentPage}});
+      this.loadStaffsBySort(this.currentPage, Constants.PAGE_SIZE_STAFF);
     },
 
     handleViewImage(image) {
@@ -159,9 +168,9 @@ export default {
         delete query.keyword;
         this.$router.replace({ query });
       } else {
-        this.$router.push({path: '/admin/products', query: {...query, page: this.currentPage, keyword: this.keyword}});
+        this.$router.push({path: '/admin/staffs', query: {...query, page: this.currentPage, keyword: this.keyword}});
       }
-      this.loadProductsBySort(this.currentPage, Constants.PAGE_SIZE_PRODUCT);
+      this.loadStaffsBySort(this.currentPage, Constants.PAGE_SIZE_STAFF);
     },
 
     handleChangeStore() {
@@ -171,66 +180,63 @@ export default {
         delete query.store;
         this.$router.replace({ query });
       } else {
-        this.$router.push({path: '/admin/products', query: {...query, page: this.currentPage, store: this.storeSelected}});
+        this.$router.push({path: '/admin/staffs', query: {...query, page: this.currentPage, store: this.storeSelected}});
       }
       this.currentPage = 1;
-      this.loadProductsBySort(this.currentPage, Constants.PAGE_SIZE_PRODUCT);
+      this.loadStaffsBySort(this.currentPage, Constants.PAGE_SIZE_STAFF);
     }, 
 
-    handleChangeCategory() {
+    handleChangeRole() {
       const query = Object.assign({}, this.$route.query);
       this.currentPage = 1;
-      if (this.categorySelected == 'ALL') {
-        delete query.category;
+      if (this.roleSelected == 'ALL') {
+        delete query.role;
          this.$router.replace({ query });
       } else {
-        this.$router.push({path: '/admin/products', query: {...query, page: this.currentPage, category: this.categorySelected}});
+        this.$router.push({path: '/admin/staffs', query: {...query, page: this.currentPage, role: this.roleSelected}});
       }
       this.currentPage = 1;
-      this.loadProductsBySort(this.currentPage, Constants.PAGE_SIZE_PRODUCT);
+      this.loadStaffsBySort(this.currentPage, Constants.PAGE_SIZE_STAFF);
     },  
 
     async loadData() {
-      await this.loadCategories();
+      await this.loadRoles();
       await this.loadStores();
     },
 
-    // async loadProducts(page, size) {
-    //   this.products = await ProductCommand.fineAll(page, size, this.$store);
-    // },
-
-    async loadProductsBySort(page, size) {
+    async loadStaffsBySort(page, size) {
       var store = this.storeSelected == 'ALL' ? '' : this.storeSelected;
-      var category = this.categorySelected == 'ALL' ? '' : this.categorySelected;
+      var role = this.roleSelected == 'ALL' ? '' : this.roleSelected;
+      var state = this.stateSelected == 'ALL' ? '' : this.stateSelected;
       var keyword = this.keyword;
-      this.products = await ProductCommand.fineAllByOrder(page, size, store, category, keyword, this.$store);
+      this.users = await UserCommand.fineAllByOrder(page, size, store, role, state, keyword, this.$store);
     },
 
-    async loadCategories() {
-      let result = await CategoryCommand.findAll(this.$store);
-      this.categories = result.map(category => {
-        category.selected = false;
-        return category;
+    async loadRoles() {
+      let result = await RoleCommand.findAll(this.$store);
+      var roles = result.map(role => {
+        role.selected = false;
+        return role;
       });
-      return this.categories;
+      this.$store.commit(MutationsName.MUTATION_NAME_REMOVE_ROLE_BY_NAME, Constants.ROLE.ROLE_USER);
+      roles = roles.filter(role => role.name != Constants.ROLE.ROLE_USER);
+      return roles;
     },
     
     async loadStores() {
       let result = await StoreCommand.findAll(this.$store);
-      this.stores = result.map(store => {
+      var stores = result.map(store => {
         store.selected = false;
         return store;
       });
-      this.stores.unshift({id: 0, address: 'Tất cả', selected: false});
-      return this.stores;
+      return stores;
     },
   },
 
   created(){
     this.init();
     this.loadData();
-    // this.loadProducts(this.currentPage, Constants.PAGE_SIZE_PRODUCT);
-    this.loadProductsBySort(this.currentPage, Constants.PAGE_SIZE_PRODUCT);
+    this.loadStaffsBySort(this.currentPage, Constants.PAGE_SIZE_STAFF);
   }
 }
 </script>
