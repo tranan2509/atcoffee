@@ -60,16 +60,16 @@
                 </div>
               </div>
             </div>
-             <div class="form-group">
-                  <label for="store">Cửa hàng áp dụng</label>
-                  <div class="form-group-horizontal" id="store">
-                    <div class="chip"
-                      v-for="store in stores" :key="store.id"
-                      :class="store.selected ? 'selected' : ''" @click="handleSelectedStore(store)">
-                      <span>{{store.address}}</span>
-                    </div>
-                  </div>
+            <div class="form-group">
+              <label for="store">Cửa hàng áp dụng</label>
+              <div class="form-group-horizontal" id="store">
+                <div class="chip"
+                  v-for="store in stores" :key="store.id"
+                  :class="store.selected ? 'selected' : ''" @click="handleSelectedStore(store)">
+                  <span>{{store.address}}</span>
                 </div>
+              </div>
+            </div>
             <div class="action">
               <input type="submit" :value="this.$route.path.includes('add-product') ? 'Thêm' : 'Cập nhật'" class="btn btn-success">
             </div>
@@ -160,7 +160,7 @@ export default {
         this.isSpinner = true;
         let result = await ProductCommand.saveProduct(this.formData);
         this.isSpinner = false;
-        result != null && this.$route.path.includes('add-product') ? this.clearData() : '';
+        result != null && this.$route.path.includes('add-product') ? this.clearData() : this.$router.push({path: '/admin/product-info', query: {id: this.product.id}});
       } else {
         this.error = categories == null ? 'Vui lòng chọn loại đồ uống!' : 'Vui lòng chọn cửa hàng muốn thêm sản phẩm!';
       }
@@ -172,6 +172,7 @@ export default {
         this.msg = 'Vui lòng chọn ảnh sản phẩm!';
         return false;
       }
+      return true;
     },
 
     handleSelectedCategory(category){
@@ -276,7 +277,7 @@ export default {
     },
 
     async loadProduct(categories, stores, id) {
-      let result = await ProductCommand.fineOne(id);
+      let result = await ProductCommand.findOne(id);
       this.product = {...result};
       this.sizes = [...result.sizes];
       this.url = result.image;

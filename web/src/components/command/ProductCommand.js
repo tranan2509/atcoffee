@@ -14,7 +14,7 @@ var ProductCommand = {
     }
   },
 
-  async fineOne(id) {
+  async findOne(id) {
     const url =  `${Constants.HOSTNAME_DEFAULT}/api/info/product/${id}`;
     let res = await ConnectServer.getData(url);
     return res;

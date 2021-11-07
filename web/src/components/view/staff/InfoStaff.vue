@@ -91,7 +91,7 @@ export default {
     async handleLock(isLock) {
       let result = await UserCommand.findOne(this.userId);
       result['state'] = !isLock;
-      this.$router.push({path: '/admin/info-staff', query: {id: this.userId}});
+      this.$router.push({path: '/admin/staff-info', query: {id: this.userId}});
       this.formData = new FormData();
       this.formData.append('user', JSON.stringify(result));
       await UserCommand.save(this.formData);

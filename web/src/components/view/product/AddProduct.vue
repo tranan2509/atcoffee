@@ -8,7 +8,7 @@
         <router-link to="">Sản phẩm</router-link>
       </div>
       <div class="breadcrumb-item active" v-if="this.$route.path.toString().includes('edit-product')">
-        <router-link :to="linkBackProducts">Danh sách sản phẩm</router-link>
+        <router-link :to="linkBackProducts">Thông tin sản phẩm</router-link>
       </div>
       <div class="breadcrumb-item">
         {{title}}
@@ -33,6 +33,7 @@ export default {
   data(){
     return {
       title: 'Thêm sản phẩm',
+      productId: 0
     }
   },
 
@@ -44,18 +45,7 @@ export default {
 
   computed: {
     linkBackProducts(){
-      var sortProduct = this.$store.getters.sortProduct;
-      var urlStore = '', urlCategory = '', urlKeyword = '';
-      if (sortProduct.store != '') {
-        urlStore += '&store=' + sortProduct.store;
-      }
-      if (sortProduct.category != '') {
-        urlCategory += '&category=' + sortProduct.category;
-      }
-      if (sortProduct.keyword != '') {
-        urlKeyword += '&keyword=' + sortProduct.keyword;
-      }
-      return `/admin/products?page=${this.$store.getters.sortProduct.page + urlStore + urlCategory + urlKeyword}`;
+      return '/admin/product-info?id=' + this.$route.query.id;
     }
   },
 
@@ -65,6 +55,10 @@ export default {
     if (currentPath.indexOf('add-product') > 0){
       this.$store.getters.menu.product.submenu.add_product = true;
     } else if (currentPath.indexOf('edit-product') > 0) {
+      this.productId = this.$route.query.id;
+      if (typeof this.productId == 'undefined') {
+        this.productId = 0;
+      }
       this.title = 'Chỉnh sửa sản phẩm';
       this.$store.getters.menu.product.submenu.products = true;
     }

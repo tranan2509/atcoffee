@@ -164,7 +164,7 @@ export default {
         this.user.storeId = 1;
         this.user.gender = 'Nam';
         this.user.dob = CommonUtils.formatDateReverse(new Date());
-      } else if (this.$route.path.includes('info-staff')){
+      } else if (this.$route.path.includes('staff-info')){
         var id = this.$route.query.id;
         this.btnValue = 'Sửa';
         if (typeof id != 'undefined') {
@@ -331,6 +331,7 @@ export default {
   height: 100px;
   border-radius: 50%;
   border: 5px solid #eaeaea;
+  cursor:pointer;
 }
 
 .col-custom .name {

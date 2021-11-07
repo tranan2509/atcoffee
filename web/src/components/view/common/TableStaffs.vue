@@ -150,7 +150,7 @@ export default {
     },
 
     handleInfo(id){
-      this.$router.push({path: '/admin/info-staff', query: {id}});
+      this.$router.push({path: '/admin/staff-info', query: {id}});
     },
 
     handleChangePage(page) {

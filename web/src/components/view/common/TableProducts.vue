@@ -59,7 +59,7 @@
                   <td class="text-center">{{formatPrice(product.sizes[1].price)}}</td>
                   <td class="text-center">Dang ban</td>
                   <td class="text-center">Them</td>
-                  <td class="text-center"><i class="fas fa-info-circle" @click="handleEdit(product.id)"></i></td>
+                  <td class="text-center"><i class="fas fa-info-circle" @click="handleInfo(product.id)"></i></td>
                 </tr>
               </tbody>
             </table>
@@ -131,8 +131,8 @@ export default {
       return (this.currentPage - 1) * Constants.PAGE_SIZE_PRODUCT + index + 1;
     },
 
-    handleEdit(id){
-      this.$router.push({path: '/admin/edit-product', query: {id}});
+    handleInfo(id){
+      this.$router.push({path: '/admin/product-info', query: {id}});
     },
 
     handleChangePage(page) {
