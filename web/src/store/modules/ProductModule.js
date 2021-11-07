@@ -10,7 +10,8 @@ const ProductModule = {
         page: '',
         store : '',
         category: '',
-        keyword: ''
+        keyword: '',
+        totalPage: ''
       }
     };
   },

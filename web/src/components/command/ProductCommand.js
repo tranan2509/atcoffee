@@ -14,7 +14,7 @@ var ProductCommand = {
     }
   },
 
-  async fineOne(id) {
+  async findOne(id) {
     const url =  `${Constants.HOSTNAME_DEFAULT}/api/info/product/${id}`;
     let res = await ConnectServer.getData(url);
     return res;
@@ -32,13 +32,13 @@ var ProductCommand = {
     return null;
   },
 
-  async fineAllByOrder(page, size, storeCode, categoryCode, keyword, store) {
+  async findAllByOrder(page, size, storeCode, categoryCode, keyword, store) {
     const url =  `${Constants.HOSTNAME_DEFAULT}/api/info/product?page=${page}&size=${size}&store=${storeCode}&category=${categoryCode}&keyword=${keyword}`;
     let res = await ConnectServer.getData(url);
     if (res != null) {
       store.commit(MutationsName.MUTATION_NAME_SET_PRODUCTS, res.products);
       store.commit(MutationsName.MUTATION_NAME_SET_TOTAL_PAGE_PRODUCT, res.totalPage);
-      store.commit(MutationsName.MUTATION_NAME_SET_SORT_PRODUCT, {page, store: storeCode, category: categoryCode, keyword});
+      store.commit(MutationsName.MUTATION_NAME_SET_SORT_PRODUCT, {page, store: storeCode, category: categoryCode, keyword, totalPage: res.totalPage});
       return res.products;
     }
     return null;

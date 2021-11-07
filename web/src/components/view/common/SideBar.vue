@@ -12,7 +12,7 @@
           <span>Dashboard</span>
           <i class="fas fa-chevron-right"></i>
         </router-link>
-        <ul class="dropdown-menu" :class="menu.dashboard.value ? 'visible' : 'invisible'">
+        <ul class="dropdown-menu" :class="menu.dashboard.value ? 'visible' : ''">
           <li :class="menu.dashboard.submenu.general ? 'active': ''" @click="handleLink(menu.dashboard, 'general')">
             <router-link to="/admin" class="nav-link">General Dashboard</router-link>
           </li>
@@ -28,7 +28,7 @@
           <span>Layout</span>
           <i class="fas fa-chevron-right"></i>
         </router-link>
-        <ul class="dropdown-menu" :class="menu.layout.value ? 'visible' : 'invisible'">
+        <ul class="dropdown-menu" :class="menu.layout.value ? 'visible' : ''">
           <li :class="menu.layout.submenu.default ? 'active': ''">
             <router-link to="/admin/statistics" class="nav-link">Default Layout</router-link>
           </li>
@@ -44,7 +44,7 @@
           <span>Sản phẩm</span>
           <i class="fas fa-chevron-right"></i>
         </router-link>
-        <ul class="dropdown-menu" :class="menu.product.value ? 'visible' : 'invisible'">
+        <ul class="dropdown-menu" :class="menu.product.value ? 'visible' : ''">
           <li :class="menu.product.submenu.products ? 'active': ''" @click="handleLink(menu.product, 'products')">
             <router-link to="/admin/products?page=1" class="nav-link" >Danh sách sản phẩm</router-link>
           </li>
@@ -59,7 +59,7 @@
           <span>Nhân viên</span>
           <i class="fas fa-chevron-right"></i>
         </router-link>
-        <ul class="dropdown-menu" :class="menu.staff.value ? 'visible' : 'invisible'">
+        <ul class="dropdown-menu" :class="menu.staff.value ? 'visible' : ''">
           <li :class="menu.staff.submenu.staffs ? 'active': ''" @click="handleLink(menu.staff, 'staffs')">
             <router-link to="/admin/staffs?page=1" class="nav-link" >Danh sách nhân viên</router-link>
           </li>
@@ -75,7 +75,7 @@
           <span>Hồ sơ</span>
           <i class="fas fa-chevron-right"></i>
         </router-link>
-        <ul class="dropdown-menu" :class="menu.profile.value ? 'visible' : 'invisible'">
+        <ul class="dropdown-menu" :class="menu.profile.value ? 'visible' : ''">
           <li :class="menu.profile.submenu.profile ? 'active': ''" @click="handleLink(menu.profile, 'profile')">
             <router-link to="/admin/profile" class="nav-link" >Thông tin cá nhân</router-link>
           </li>
@@ -236,6 +236,7 @@ export default {
 }
 
 #sidebar-wrapper .sidebar-menu li ul.dropdown-menu {
+  display: none;
   position: static;
   float: none;
   width: 100%;

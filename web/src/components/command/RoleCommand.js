@@ -4,25 +4,26 @@ import * as MutationsName from '../common/MutationsName'
 
 var StoreCommand = {
 
-  async findAll(store = null) {
-    const url = `${Constants.HOSTNAME_DEFAULT}/api/info/store`;
+  async findAll(store) {
+    const url = `${Constants.HOSTNAME_DEFAULT}/api/admin/role`;
     let result = await ConnectServer.getData(url);
     if (result != null) {
-      store != null ? store.commit(MutationsName.MUTATION_NAME_SET_STORES, result) : null;
+      store.commit(MutationsName.MUTATION_NAME_SET_ROLES, result);
       return result;
     }
     return null;
   },
 
-  async findOne(id, store = null) {
-    const url = `${Constants.HOSTNAME_DEFAULT}/api/info/store/${id}`;
+  async findOne(id, store) {
+    const url = `${Constants.HOSTNAME_DEFAULT}/api/admin/role/${id}`;
     let result = await ConnectServer.getData(url);
     if (result != null) {
-      store != null ? store.commit(MutationsName.MUTATION_NAME_SET_STORE, result) : null;
+      store.commit(MutationsName.MUTATION_NAME_SET_ROLE, result);
       return result;
     }
     return null;
   }
+  
 }
 
 export default StoreCommand;

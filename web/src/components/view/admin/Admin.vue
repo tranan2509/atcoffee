@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="admin">
+    <div class="background"></div>
     <side-bar />
     <navbar />
     <div class="section">
@@ -41,4 +42,12 @@ export default {
 </script>
 
 <style>
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #f4f6f9;
+}
 </style>

@@ -5,15 +5,14 @@
           <router-link to="/admin">Trang chủ</router-link>
         </div>
         <div class="breadcrumb-item active">
-          <router-link to="">Hồ sơ</router-link>
+          <router-link to="">Nhân viên</router-link>
         </div>
         <div class="breadcrumb-item">
-          Thông tin cá nhân
+          Danh sách nhân viên
         </div>
       </section-header>
       <div class="section-body">
-        <personal-info :user="this.$store.getters.user" :type="type" @handleEdit="handleEdit" v-if="!isEdit"></personal-info>
-        <action-staff v-if="isEdit" @handleCancel="handleCancel" @handleDone="handleDone"></action-staff>
+        <table-staffs></table-staffs>
       </div>
   </admin>
 </template>
@@ -21,54 +20,29 @@
 <script>
 import * as Constants from '../../common/Constants'
 import * as MutationsName from '../../common/MutationsName'
-import UserCommand from '../../command/UserCommand'
 import Admin from '../admin/Admin.vue'
 import SectionHeader from '../common/SectionHeader.vue'
-import PersonalInfo from '../common/PersonalInfo.vue'
-import ActionStaff from '../common/ActionStaff.vue'
+import TableStaffs from '../common/TableStaffs.vue'
 
 export default {
-  name: Constants.COMPONENT_NAME_PROFILE,
+  name: Constants.COMPONENT_NAME_STAFFS,
 
   components: {
     Admin,
     SectionHeader,
-    PersonalInfo,
-    ActionStaff
+    TableStaffs
   },
 
   data() {
     return {
-      title: 'Thông tin cá nhân',
-      type: 'profile',
-      isEdit: false
-    }
-  },
-
-  methods: {
-    handleEdit() {
-      this.isEdit = true;
-    },
-
-    async handleDone() {
-      this.isEdit = false;
-      await this.getUserById();
-    },
-
-    async handleCancel() {
-      this.isEdit = false;
-      await this.getUserById();
-    },
-
-    async getUserById() {
-      await UserCommand.findOne(this.$store.getters.user.id, this.$store);
+      title: 'Danh sách nhân viên'
     }
   },
 
   created() {
     this.$store.commit(MutationsName.MUTATION_NAME_RESET_MENU);
-    this.$store.getters.menu.profile.value = true;
-    this.$store.getters.menu.profile.submenu.profile = true;
+    this.$store.getters.menu.staff.value = true;
+    this.$store.getters.menu.staff.submenu.staffs = true;
   }
 }
 </script>

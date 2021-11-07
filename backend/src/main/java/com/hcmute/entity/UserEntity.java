@@ -30,11 +30,13 @@ public class UserEntity extends BaseEntity implements Serializable{
 	@Column(unique = true)
 	private String phone;
 	private String gender;
+	@Column(unique = true)
 	private String email;
 	private String address;
 	//Staff 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dob;
+	@Column(unique = true)
 	private String identityCard;
 	@ManyToOne
 	@JoinColumn(name = "store_id")

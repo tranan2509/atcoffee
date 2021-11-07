@@ -4,89 +4,80 @@
       <div class="card">
         <div class="card-body">
           <div class="row">
-            <div class="col-3 col-custom col-center info-basic">
-              <div id="triangle-left" v-if="!user.state">
-                <i class="fas fa-lock"></i>
+            <div class="dropdown dropdown-setting">
+                <i class="fas fa-cog icon-absolute" @click="handleToggleSetting"></i>
+                <div class="dropdown-menu dropdown-menu-right show" v-if="isSetting" v-click-outside="handleHideSetting">
+                  <a class="dropdown-item has-icon" @click="handleEdit">
+                    <i class="fas fa-edit"></i>
+                    Chỉnh sửa
+                  </a>
+                  <router-link to="" class="dropdown-item has-icon">
+                    <i class="fas fa-lock"></i>
+                    Ngừng bán
+                  </router-link>
+                </div>
               </div>
-              <img :src="user.image" alt="Ảnh đại diện">
-              <span class="name">{{user.name}}</span>
-              <span class="code">{{user.code}}</span>
-              <span class="createdDate">Thành viên kể từ: {{formatDate(new Date(user.createdDate))}}</span>
-            </div>
             <div class="col-9 col">
               <div class="official-info">
-                <div class="dropdown dropdown-setting">
-                  <i class="fas fa-cog icon-absolute" @click="handleToggleSetting"></i>
-                  <div class="dropdown-menu dropdown-menu-right show" v-if="isSetting" v-click-outside="handleHideSetting">
-                    <a class="dropdown-item has-icon" @click="handleEdit" v-if="this.$store.getters.user.roleName == 'ADMIN'">
-                      <i class="fas fa-user-edit"></i>
-                      Chỉnh sửa
-                    </a>
-                    <router-link to="/admin/profile/change-password" class="dropdown-item has-icon" v-if="type == 'profile'">
-                      <i class="fas fa-lock"></i>
-                      Đổi mật khẩu
-                    </router-link>
-                    <router-link to="" 
-                      class="dropdown-item has-icon" v-if="type == 'info' && this.$store.getters.user.id != user.id"
-                      @click="handleLock(user.state)">
-                      <i class="fas" :class="user.state ? 'fa-lock' : 'fa-unlock'"></i>
-                      {{user.state ? 'Khóa tài khoản' : 'Mở khóa tài khoản'}}
-                    </router-link>
-                  </div>
-                </div>
-                <span class="title">Thông tin chính thức</span> 
+                <span class="title">Thông tin sản phẩm</span> 
                 <div class="line">
                   <div class="info-group">
-                    <label >Email</label>
-                    <span>{{user.email}}</span>
+                    <label>Mã sản phẩm</label>
+                    <span>{{product.code}}</span>
                   </div>
-                  <div class="info-group">
-                    <label >Điện thoại</label>
-                    <span>{{user.phone}}</span>
-                  </div>
-                  <div class="info-group">
-                    <label>Địa chỉ</label>
-                    <span>{{user.address}}</span>
+                  <div class="info-group flex-4">
+                    <label>Tên sản phẩm</label>
+                    <span>{{product.name}}</span>
                   </div>
                 </div>
                 <div class="line">
                   <div class="info-group">
-                    <label >CMND/CCCD</label>
-                    <span>{{user.identityCard}}</span>
+                    <label>Size S</label>
+                    <span>{{product.sizes != null ? formatPrice(product.sizes[0].price) : '0'}}</span>
                   </div>
                   <div class="info-group">
-                    <label >Ngày sinh</label>
-                    <span>{{formatDate(new Date(user.dob))}}</span>
+                    <label>Size M</label>
+                    <span>{{product.sizes != null ? formatPrice(product.sizes[1].price) : ''}}</span>
                   </div>
-                  <div class="line">
-                    <div class="info-group">
-                      <label >Giới tính</label>
-                      <span>{{user.gender}}</span>
-                    </div>
-                    <div class="info-group">
-                      <label >Chức vụ</label>
-                      <span>{{user.roleName}}</span>
+                  <div class="info-group">
+                    <label>Size L</label>
+                    <span>{{product.sizes != null ? formatPrice(product.sizes[2].price) : ''}}</span>
+                  </div>
+                </div>
+                <div class="line">
+                  <div class="info-group">
+                    <label>Mô tả sản phẩm</label>
+                    <span>{{product.description}}</span>
+                  </div>
+                </div>
+                <div class="line">
+                  <div class="info-group">
+                    <label for="category">Loại</label>
+                    <div class="form-group-horizontal" id="category">
+                      <div class="chip"
+                        v-for="category in product.categories" :key="category.code"
+                        :class="category.selected ? 'selected' : ''">
+                        <span>{{category.name}}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="official-info">
-                <span class="title">Thông tin của hàng</span>
-                <div class="line">
-                  <div class="info-group">
-                    <label >Mã cửa hàng</label>
-                    <span>{{store.code}}</span>
-                  </div>
-                  <div class="info-group">
-                    <label >Tên cửa hàng</label>
-                    <span>{{store.name}}</span>
-                  </div>
-                  <div class="info-group">
-                    <label >Địa chỉ</label>
-                    <span>{{store.address}}</span>
+              <div class="line">
+                <div class="info-group">
+                  <label for="store">Cửa hàng áp dụng</label>
+                  <div class="form-group-horizontal" id="store">
+                    <div class="chip"
+                      v-for="store in product.stores" :key="store.id"
+                      :class="store.selected ? 'selected' : ''">
+                      <span>{{store.address}}</span>
+                    </div>
                   </div>
                 </div>
               </div>
+            </div>
+            <div class="col-3 col-custom col-center info-basic">
+              <img :src="product.image" alt="Hình ảnh">
             </div>
           </div>
         </div>
@@ -100,13 +91,12 @@
 import * as Constants from '../../common/Constants'
 import Spinner from '../popup/Spinner.vue'
 import CommonUtils from '../../common/CommonUtils'
-import StoreCommand from '../../command/StoreCommand'
 import vClickOutside from 'click-outside-vue3'
 
 export default {
-  name: Constants.COMPONENT_NAME_PERSONAL_INFO,
+  name: Constants.COMPONENT_NAME_BASIC_PRODUCT_INFO,
 
-  props: ['user', 'type'],
+  props: ['product', 'type'],
 
   directives: {
       clickOutside: vClickOutside.directive
@@ -118,11 +108,12 @@ export default {
 
   data() {
     return {
-      store: {},
+      stores: [],
+      categories: [],
       isSpinner: false,
       isSetting: false,
       isEdit: false,
-      count: 0
+      count: 0,
     }
   },
 
@@ -137,36 +128,25 @@ export default {
     },
 
     handleEdit() {
-      this.$emit('handleEdit');
+      this.$router.push({path: '/admin/edit-product', query: {id: this.product.id}})
     },
 
     formatDate(date) {
       return CommonUtils.formatDate(date);
     },  
 
+    formatPrice(price) {
+      return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(price)
+    },
+
     handleLock(isLock) {
       this.isSetting = false;
       this.$emit('handleLock', isLock);
     },
-
-    async getStore(id) {
-      let store = await StoreCommand.findOne(id);
-      if (store != null) {
-        this.store = store;
-      }
-    }
   },
 
   created() {
   },
-
-  updated() {
-    this.$nextTick(() => {
-      if (this.count++ == 0) {
-        this.getStore(this.user.storeId);
-      }
-    })
-  }
 }
 </script>
 
@@ -180,14 +160,15 @@ export default {
 }
 
 .info-basic {
-  border-right: 0.5px solid #c2c2c2;
+  border-left: 0.5px solid #c2c2c2;
 }
 
 .col-custom img {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  border: 5px solid #eaeaea;
+  width: 18vw;
+  height: 18vw;
+  border-radius: 10px;
+  border: 2px solid #eaeaea;
+  margin-left: 8px;
 }
 
 .col-custom .name {
@@ -376,6 +357,17 @@ form .form-group {
   text-align: center;
 }
 
+.form-group-horizontal .chip span {
+  color: #212529 !important;
+  font-weight: 500;
+}
+
+.form-group-horizontal .chip:hover {
+  background: var(--primary);
+  color: #fff;
+  cursor: pointer;
+}
+
 .form-group.horizontal {
   display: flex;
   flex-direction: row;
@@ -399,18 +391,6 @@ form .form-group {
 
 input[type="number"] {
   text-align: right;
-}
-
-
-.form-group-horizontal .chip:hover {
-  background: var(--primary);
-  color: #fff;
-  cursor: pointer;
-}
-
-.form-group-horizontal .chip.selected {
-  background: var(--primary);
-  color: #fff;
 }
 
 .img-content {
@@ -450,6 +430,10 @@ form .action {
 
 .invisible {
   display: none;
+}
+
+.flex-4 {
+  flex: 4 !important;
 }
 
 #triangle-left {
