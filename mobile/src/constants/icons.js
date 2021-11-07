@@ -17,6 +17,8 @@ const search = require('../assets/icons/search.png');
 const coffee_cup = require('../assets/icons/coffee-cup.png');
 const reward_cup = require('../assets/icons/reward-cup.png');
 const bell = require('../assets/icons/bell.png');
+const info = require('../assets/icons/info.png');
+const logout = require('../assets/icons/logout.png');
 
 export default {
   add,
@@ -38,4 +40,6 @@ export default {
   coffee_cup,
   reward_cup,
   bell,
+  info,
+  logout,
 };

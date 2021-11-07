@@ -4,6 +4,8 @@ const background2 = require('../assets/images/background1.jpg');
 const background3 = require('../assets/images/background2.jpg');
 const background7 = require('../assets/images/background6.jpg');
 const logo = require('../assets/images/logo.png');
+const avatarFemale = require('../assets/images/avatarFemale.jpg');
+const avatarMale = require('../assets/images/avatarMale.jpg');
 
 export default {
   strawberryBackground,
@@ -12,6 +14,8 @@ export default {
   background3,
   background7,
   logo,
+  avatarFemale,
+  avatarMale,
 };
 
 /*
