@@ -12,7 +12,8 @@
         </div>
       </section-header>
       <div class="section-body">
-        <personal-info></personal-info>
+        <personal-info :user="this.$store.getters.user" :type="type" @handleEdit="handleEdit" v-if="!isEdit"></personal-info>
+        <action-staff v-if="isEdit" @handleCancel="handleCancel" @handleDone="handleDone"></action-staff>
       </div>
   </admin>
 </template>
@@ -20,9 +21,11 @@
 <script>
 import * as Constants from '../../common/Constants'
 import * as MutationsName from '../../common/MutationsName'
+import UserCommand from '../../command/UserCommand'
 import Admin from '../admin/Admin.vue'
 import SectionHeader from '../common/SectionHeader.vue'
 import PersonalInfo from '../common/PersonalInfo.vue'
+import ActionStaff from '../common/ActionStaff.vue'
 
 export default {
   name: Constants.COMPONENT_NAME_PROFILE,
@@ -30,12 +33,35 @@ export default {
   components: {
     Admin,
     SectionHeader,
-    PersonalInfo
+    PersonalInfo,
+    ActionStaff
   },
 
   data() {
     return {
-      title: 'Thông tin cá nhân'
+      title: 'Thông tin cá nhân',
+      type: 'profile',
+      isEdit: false
+    }
+  },
+
+  methods: {
+    handleEdit() {
+      this.isEdit = true;
+    },
+
+    async handleDone() {
+      this.isEdit = false;
+      await this.getUserById();
+    },
+
+    async handleCancel() {
+      this.isEdit = false;
+      await this.getUserById();
+    },
+
+    async getUserById() {
+      await UserCommand.findOne(this.$store.getters.user.id, this.$store);
     }
   },
 

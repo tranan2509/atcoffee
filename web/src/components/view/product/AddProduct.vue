@@ -50,12 +50,12 @@ export default {
         urlStore += '&store=' + sortProduct.store;
       }
       if (sortProduct.category != '') {
-        urlStore += '&category=' + sortProduct.category;
+        urlCategory += '&category=' + sortProduct.category;
       }
       if (sortProduct.keyword != '') {
-        urlStore += '&keyword=' + sortProduct.keyword;
+        urlKeyword += '&keyword=' + sortProduct.keyword;
       }
-      return `/admin/products?page=${this.$store.getters.sortProduct.page + urlStore +urlCategory + urlKeyword}`;
+      return `/admin/products?page=${this.$store.getters.sortProduct.page + urlStore + urlCategory + urlKeyword}`;
     }
   },
 

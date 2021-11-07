@@ -5,6 +5,9 @@
         <div class="card-body">
           <div class="row">
             <div class="col-3 col-custom col-center info-basic">
+              <div id="triangle-left" v-if="!user.state">
+                <i class="fas fa-lock"></i>
+              </div>
               <img :src="user.image" alt="Ảnh đại diện">
               <span class="name">{{user.name}}</span>
               <span class="code">{{user.code}}</span>
@@ -15,43 +18,55 @@
                 <div class="dropdown dropdown-setting">
                   <i class="fas fa-cog icon-absolute" @click="handleToggleSetting"></i>
                   <div class="dropdown-menu dropdown-menu-right show" v-if="isSetting" v-click-outside="handleHideSetting">
-                    <a class="dropdown-item has-icon">
+                    <a class="dropdown-item has-icon" @click="handleEdit" v-if="this.$store.getters.user.roleName == 'ADMIN'">
                       <i class="fas fa-user-edit"></i>
                       Chỉnh sửa
                     </a>
-                    <router-link to="/admin/profile/change-password" class="dropdown-item has-icon">
+                    <router-link to="/admin/profile/change-password" class="dropdown-item has-icon" v-if="type == 'profile'">
                       <i class="fas fa-lock"></i>
                       Đổi mật khẩu
+                    </router-link>
+                    <router-link to="" 
+                      class="dropdown-item has-icon" v-if="type == 'info' && this.$store.getters.user.id != user.id"
+                      @click="handleLock(user.state)">
+                      <i class="fas" :class="user.state ? 'fa-lock' : 'fa-unlock'"></i>
+                      {{user.state ? 'Khóa tài khoản' : 'Mở khóa tài khoản'}}
                     </router-link>
                   </div>
                 </div>
                 <span class="title">Thông tin chính thức</span> 
                 <div class="line">
                   <div class="info-group">
-                    <label for="">Email</label>
+                    <label >Email</label>
                     <span>{{user.email}}</span>
                   </div>
                   <div class="info-group">
-                    <label for="">Điện thoại</label>
+                    <label >Điện thoại</label>
                     <span>{{user.phone}}</span>
                   </div>
                   <div class="info-group">
-                    <label for="">Địa chỉ</label>
+                    <label>Địa chỉ</label>
                     <span>{{user.address}}</span>
                   </div>
                 </div>
                 <div class="line">
                   <div class="info-group">
-                    <label for="">CMND/CCCD</label>
+                    <label >CMND/CCCD</label>
                     <span>{{user.identityCard}}</span>
                   </div>
                   <div class="info-group">
-                    <label for="">Ngày sinh</label>
+                    <label >Ngày sinh</label>
                     <span>{{formatDate(new Date(user.dob))}}</span>
                   </div>
-                  <div class="info-group">
-                    <label for="">Chức vụ</label>
-                    <span>{{user.roleName}}</span>
+                  <div class="line">
+                    <div class="info-group">
+                      <label >Giới tính</label>
+                      <span>{{user.gender}}</span>
+                    </div>
+                    <div class="info-group">
+                      <label >Chức vụ</label>
+                      <span>{{user.roleName}}</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -59,15 +74,15 @@
                 <span class="title">Thông tin của hàng</span>
                 <div class="line">
                   <div class="info-group">
-                    <label for="">Mã cửa hàng</label>
+                    <label >Mã cửa hàng</label>
                     <span>{{store.code}}</span>
                   </div>
                   <div class="info-group">
-                    <label for="">Tên cửa hàng</label>
+                    <label >Tên cửa hàng</label>
                     <span>{{store.name}}</span>
                   </div>
                   <div class="info-group">
-                    <label for="">Địa chỉ</label>
+                    <label >Địa chỉ</label>
                     <span>{{store.address}}</span>
                   </div>
                 </div>
@@ -86,11 +101,12 @@ import * as Constants from '../../common/Constants'
 import Spinner from '../popup/Spinner.vue'
 import CommonUtils from '../../common/CommonUtils'
 import StoreCommand from '../../command/StoreCommand'
-import {mapGetters} from 'vuex'
 import vClickOutside from 'click-outside-vue3'
 
 export default {
   name: Constants.COMPONENT_NAME_PERSONAL_INFO,
+
+  props: ['user', 'type'],
 
   directives: {
       clickOutside: vClickOutside.directive
@@ -102,16 +118,13 @@ export default {
 
   data() {
     return {
+      store: {},
       isSpinner: false,
       isSetting: false,
-      isEdit: false
+      isEdit: false,
+      count: 0
     }
   },
-
-  computed: {
-    ...mapGetters(['user', 'store'])
-  },
-
 
   methods: {
 
@@ -123,17 +136,36 @@ export default {
       this.isSetting = false;
     },
 
+    handleEdit() {
+      this.$emit('handleEdit');
+    },
+
     formatDate(date) {
       return CommonUtils.formatDate(date);
     },  
 
-    async getStore() {
-      await StoreCommand.findOne(this.user.storeId, this.$store);
+    handleLock(isLock) {
+      this.isSetting = false;
+      this.$emit('handleLock', isLock);
+    },
+
+    async getStore(id) {
+      let store = await StoreCommand.findOne(id);
+      if (store != null) {
+        this.store = store;
+      }
     }
   },
 
-  created(){
-    this.getStore();
+  created() {
+  },
+
+  updated() {
+    this.$nextTick(() => {
+      if (this.count++ == 0) {
+        this.getStore(this.user.storeId);
+      }
+    })
   }
 }
 </script>
@@ -281,33 +313,21 @@ a.dropdown-item {
   margin: 4px 0 0 0;
 }
 
+.line .line {
+  flex: 3;
+  margin-left: 40px;
+}
 
+.line .line .info-group{
+  flex: 1;
+  width: auto;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.line .line .info-group:nth-child(1){
+  flex: 1;
+  margin-left: 0px;
+  width: auto;
+}
 
 input:focus {
   box-shadow: none;
@@ -431,4 +451,24 @@ form .action {
 .invisible {
   display: none;
 }
+
+#triangle-left {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+	width: 0;
+  height: 0;
+  border-top-left-radius: .25rem;
+  border-top: 80px solid #ccc;
+  border-right: 80px solid transparent;
+}
+
+#triangle-left i {
+  position: absolute;
+  font-size: 20px;
+  top: -68px;
+  left: 15px;
+  color: #333;
+}
+
 </style>

@@ -1,16 +1,24 @@
 package com.hcmute.api;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hcmute.api.request.PasswordRequest;
 import com.hcmute.api.response.UserResponse;
 import com.hcmute.dto.UserDTO;
@@ -19,6 +27,10 @@ import com.hcmute.util.ConstantsUtil;
 
 @RestController
 public class UserAPI {
+	@Autowired
+	private Cloudinary cloudinary;
+	@Autowired
+	private ObjectMapper objectMapper;
 	@Autowired
 	private UserService userService;
 	
@@ -31,6 +43,11 @@ public class UserAPI {
 	@GetMapping("/api/info/user")
 	public ResponseEntity<UserDTO> findOneByUsername(@RequestParam(name = "username") String username){
 		return ResponseEntity.ok(userService.findOneByUsername(username));
+	}
+		
+	@GetMapping("/api/staff/user/{id}")
+	public ResponseEntity<UserDTO> findOne(@PathVariable(name = "id") Long id){
+		return ResponseEntity.ok(userService.findOne(id));
 	}
 	
 	@PutMapping("/api/user/change-password")
@@ -51,10 +68,30 @@ public class UserAPI {
 	}
 	
 	@PostMapping("/api/admin/user")
-	public ResponseEntity<UserDTO> add(@RequestBody UserDTO userDTO){
-		userDTO = userService.save(userDTO);
-		return ResponseEntity.ok(userDTO);
+	public ResponseEntity<UserDTO> add(@RequestParam(value = "file", required = false) MultipartFile multipartFile,
+			@RequestParam("user") String userJson){
+		try {
+			UserDTO user = objectMapper.readValue(userJson, UserDTO.class);	
+			if (multipartFile != null) {
+				Map r = this.cloudinary.uploader().upload(multipartFile.getBytes(),
+		                  ObjectUtils.asMap("resource_type", "auto"));
+				String img = (String) r.get("secure_url");
+				user.setImage(img);
+			}
+			user = userService.save(user);
+			return ResponseEntity.ok(user);
+		} catch (Exception e) {
+			return ResponseEntity.ok(null);
+		}
 	}
+	
+	@GetMapping("/api/admin/user/validate")
+	public ResponseEntity<List<UserDTO>> validate(@RequestParam(name = "username", required = false) String username, @RequestParam(name = "code", required = false) String code,
+			@RequestParam(name = "email", required = false) String email, @RequestParam(name = "phone", required = false) String phone, 
+			@RequestParam(name = "identity-card", required = false) String identityCard){
+		return ResponseEntity.ok(userService.validate(username, code, email, phone, identityCard));
+	}
+	
 	
 	@GetMapping("/api/admin/user") 
 	public ResponseEntity<UserResponse> findAll(@RequestParam(name = "page", defaultValue = "1") int page,
@@ -65,19 +102,28 @@ public class UserAPI {
 		
 		UserResponse result  = new UserResponse();
 		Pageable pageable = new PageRequest(page - 1, size);
-		if (storeCode == "" && roleName == "" && keyword == "") {
+		if (storeCode == "" && roleName == "" && stateString == "" && keyword == "") {
 			result = userService.findByKeyword(keyword, pageable);
 		} else {
 			if (storeCode != "" && roleName != "" && stateString != "") {
 				Boolean state = stateString.equalsIgnoreCase("true");
 				result = userService.findByStoreCodeAndRoleNameAndStateAndKeyword(storeCode, roleName, state, keyword, pageable);
-			}	
-			else if (storeCode != "" && roleName != "") {
+			} else if (storeCode != "" && roleName != "") {
 				result = userService.findByStoreCodeAndRoleNameAndKeyword(storeCode, roleName, keyword, pageable);
-			} else if (storeCode != "") {
+			} else if (storeCode != "" && stateString != "") {
+				Boolean state = stateString.equalsIgnoreCase("true");
+				result = userService.findByStoreCodeAndStateAndKeyword(storeCode, state, keyword, pageable);
+			} else if (roleName != "" && stateString != "") {
+				Boolean state = stateString.equalsIgnoreCase("true");
+				result = userService.findByRoleNameAndStateAndKeyword(roleName, state, keyword, pageable);
+			}
+			else if (storeCode != "") {
 				result = userService.findByStoreCodeAndKeyword(storeCode, keyword, pageable);
 			} else if (roleName != "") {
 				result = userService.findByRoleNameAndKeyword(roleName, keyword, pageable);
+			} else if (stateString != "") {
+				Boolean state = stateString.equalsIgnoreCase("true");
+				result = userService.findByStateAndKeyword(state, keyword, pageable);
 			} else {
 				result = userService.findByKeyword(keyword, pageable);
 			}

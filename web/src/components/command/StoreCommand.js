@@ -4,21 +4,21 @@ import * as MutationsName from '../common/MutationsName'
 
 var StoreCommand = {
 
-  async findAll(store) {
+  async findAll(store = null) {
     const url = `${Constants.HOSTNAME_DEFAULT}/api/info/store`;
     let result = await ConnectServer.getData(url);
     if (result != null) {
-      store.commit(MutationsName.MUTATION_NAME_SET_STORES, result);
+      store != null ? store.commit(MutationsName.MUTATION_NAME_SET_STORES, result) : null;
       return result;
     }
     return null;
   },
 
-  async findOne(id, store) {
+  async findOne(id, store = null) {
     const url = `${Constants.HOSTNAME_DEFAULT}/api/info/store/${id}`;
     let result = await ConnectServer.getData(url);
     if (result != null) {
-      store.commit(MutationsName.MUTATION_NAME_SET_STORE, result);
+      store != null ? store.commit(MutationsName.MUTATION_NAME_SET_STORE, result) : null;
       return result;
     }
     return null;

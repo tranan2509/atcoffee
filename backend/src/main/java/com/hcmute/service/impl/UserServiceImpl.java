@@ -69,7 +69,9 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public UserDTO save(UserDTO userDTO) {
-		userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+		if (userDTO.getId() == null) {
+			userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+		}
 		StoreEntity storeEntity = new StoreEntity();
 		TypeEntity typeEntity = new TypeEntity();
 		if (userDTO.getStoreId() != null) {
@@ -155,45 +157,27 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public UserResponse findByKeyword(String keyword, Pageable pageable) {
 		Page<UserEntity> page = userRepository.findByKeyword(keyword, pageable);
-		List<UserEntity> entities = page.getContent();
-		List<UserDTO> dtos = new ArrayList<UserDTO>();
-		entities.forEach(entity -> dtos.add(mapper.map(entity, UserDTO.class)));
-		UserResponse result = new UserResponse();
-		result.setUsers(dtos);
-		result.setTotalPage(page.getTotalPages());
-		result.setSize(page.getSize());
-		result.setPage(pageable.getPageNumber());
-		return result;
+		return resultUserResponse(page, pageable);
 	}
 
 	@Override
 	public UserResponse findByStoreCodeAndKeyword(String storeCode, String keyword, Pageable pageable) {
 		StoreEntity store = storeRepository.findOneByCode(storeCode);
 		Page<UserEntity> page = userRepository.findByStoreAndKeyword(store, keyword, pageable);
-		List<UserEntity> entities = page.getContent();
-		List<UserDTO> dtos = new ArrayList<UserDTO>();
-		entities.forEach(entity -> dtos.add(mapper.map(entity, UserDTO.class)));
-		UserResponse result = new UserResponse();
-		result.setUsers(dtos);
-		result.setTotalPage(page.getTotalPages());
-		result.setSize(page.getSize());
-		result.setPage(pageable.getPageNumber());
-		return result;
+		return resultUserResponse(page, pageable);
 	}
 	
 	@Override
 	public UserResponse findByRoleNameAndKeyword(String roleName, String keyword, Pageable pageable) {
 		RoleEntity role = roleRepository.findOneByName(roleName);
 		Page<UserEntity> page =  userRepository.findByRoleAndKeyword(role, keyword, pageable);
-		List<UserEntity> entities = page.getContent();
-		List<UserDTO> dtos = new ArrayList<UserDTO>();
-		entities.forEach(entity -> dtos.add(mapper.map(entity, UserDTO.class)));
-		UserResponse result = new UserResponse();
-		result.setUsers(dtos);
-		result.setTotalPage(page.getTotalPages());
-		result.setSize(page.getSize());
-		result.setPage(pageable.getPageNumber());
-		return result;
+		return resultUserResponse(page, pageable);
+	}
+	
+	@Override
+	public UserResponse findByStateAndKeyword(Boolean state, String keyword, Pageable pageable) {
+		Page<UserEntity> page =  userRepository.findByStateAndKeyword(state, keyword, pageable);
+		return resultUserResponse(page, pageable);
 	}
 
 	@Override
@@ -202,6 +186,35 @@ public class UserServiceImpl implements UserService{
 		StoreEntity store = storeRepository.findOneByCode(storeCode);
 		RoleEntity role = roleRepository.findOneByName(roleName);
 		Page<UserEntity> page =  userRepository.findByStoreAndRoleAndKeyword(store, role, keyword, pageable);
+		return resultUserResponse(page, pageable);
+	}
+	
+	@Override
+	public UserResponse findByStoreCodeAndStateAndKeyword(String storeCode, Boolean state, String keyword,
+			Pageable pageable) {
+		StoreEntity store = storeRepository.findOneByCode(storeCode);
+		Page<UserEntity> page =  userRepository.findByStoreAndStateAndKeyword(store, state, keyword, pageable);
+		return resultUserResponse(page, pageable);
+	}
+	
+	@Override
+	public UserResponse findByRoleNameAndStateAndKeyword(String roleName, Boolean state, String keyword,
+			Pageable pageable) {
+		RoleEntity role = roleRepository.findOneByName(roleName);
+		Page<UserEntity> page =  userRepository.findByRoleAndStateAndKeyword(role, state, keyword, pageable);
+		return resultUserResponse(page, pageable);
+	}
+
+	@Override
+	public UserResponse findByStoreCodeAndRoleNameAndStateAndKeyword(String storeCode, String roleName, Boolean state, String keyword, 
+			Pageable pageable) {
+		StoreEntity store = storeRepository.findOneByCode(storeCode);
+		RoleEntity role = roleRepository.findOneByName(roleName);
+		Page<UserEntity> page = userRepository.findByStoreAndRoleAndStateAndKeyword(store, role, state, keyword, pageable);
+		return resultUserResponse(page, pageable);
+	}
+	
+	public UserResponse resultUserResponse(Page<UserEntity> page, Pageable pageable) {
 		List<UserEntity> entities = page.getContent();
 		List<UserDTO> dtos = new ArrayList<UserDTO>();
 		entities.forEach(entity -> dtos.add(mapper.map(entity, UserDTO.class)));
@@ -214,20 +227,11 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public UserResponse findByStoreCodeAndRoleNameAndStateAndKeyword(String storeCode, String roleName, Boolean state, String keyword, 
-			Pageable pageable) {
-		StoreEntity store = storeRepository.findOneByCode(storeCode);
-		RoleEntity role = roleRepository.findOneByName(roleName);
-		Page<UserEntity> page = userRepository.findByStoreAndRoleAndStateAndKeyword(store, role, state, keyword, pageable);
-		List<UserEntity> entities = page.getContent();
+	public List<UserDTO> validate(String username, String code, String email, String phone, String identityCard) {
+		List<UserEntity> entities = userRepository.findByUsernameOrCodeOrEmailOrPhoneOrIdentityCard(username, code, email, phone, identityCard);
 		List<UserDTO> dtos = new ArrayList<UserDTO>();
 		entities.forEach(entity -> dtos.add(mapper.map(entity, UserDTO.class)));
-		UserResponse result = new UserResponse();
-		result.setUsers(dtos);
-		result.setTotalPage(page.getTotalPages());
-		result.setSize(page.getSize());
-		result.setPage(pageable.getPageNumber());
-		return result;
+		return dtos;
 	}
 
 }

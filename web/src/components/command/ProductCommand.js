@@ -32,7 +32,7 @@ var ProductCommand = {
     return null;
   },
 
-  async fineAllByOrder(page, size, storeCode, categoryCode, keyword, store) {
+  async findAllByOrder(page, size, storeCode, categoryCode, keyword, store) {
     const url =  `${Constants.HOSTNAME_DEFAULT}/api/info/product?page=${page}&size=${size}&store=${storeCode}&category=${categoryCode}&keyword=${keyword}`;
     let res = await ConnectServer.getData(url);
     if (res != null) {

@@ -139,7 +139,6 @@ export default {
       this.currentPage = page;
       const query = Object.assign({}, this.$route.query);
       this.$router.push({path: '/admin/products', query: {...query, page: this.currentPage}});
-      // this.loadProducts(this.currentPage, Constants.PAGE_SIZE_PRODUCT); 
       this.loadProductsBySort(this.currentPage, Constants.PAGE_SIZE_PRODUCT);
     },
 
@@ -195,15 +194,11 @@ export default {
       await this.loadStores();
     },
 
-    // async loadProducts(page, size) {
-    //   this.products = await ProductCommand.fineAll(page, size, this.$store);
-    // },
-
     async loadProductsBySort(page, size) {
       var store = this.storeSelected == 'ALL' ? '' : this.storeSelected;
       var category = this.categorySelected == 'ALL' ? '' : this.categorySelected;
       var keyword = this.keyword;
-      this.products = await ProductCommand.fineAllByOrder(page, size, store, category, keyword, this.$store);
+      this.products = await ProductCommand.findAllByOrder(page, size, store, category, keyword, this.$store);
     },
 
     async loadCategories() {
@@ -229,7 +224,6 @@ export default {
   created(){
     this.init();
     this.loadData();
-    // this.loadProducts(this.currentPage, Constants.PAGE_SIZE_PRODUCT);
     this.loadProductsBySort(this.currentPage, Constants.PAGE_SIZE_PRODUCT);
   }
 }
@@ -385,7 +379,7 @@ table {
 }
 
 .table-striped tbody tr:nth-of-type(2n+1) {
-  --bs-table-accent-bg: rgba(0, 0, 0, 0.03);
+  --bs-table-accent-bg: rgba(0, 0, 0, 0.03) !important;
 }
 
 .table td, .table:not(.table-bordered) th {

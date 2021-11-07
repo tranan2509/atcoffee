@@ -25,6 +25,14 @@
               </select>
             </div>
             <div class="empty-space"></div>
+            <div class="form-group">
+              <select v-model="stateSelected" class="form-custom" @change="handleChangeState">
+                <option value="ALL">Tất cả trạng thái</option>
+                <option value="active">Đang kích hoạt</option>
+                <option value="lock">Đã khóa</option>
+              </select>
+            </div>
+            <div class="empty-space"></div>
             <form @submit.prevent="handleSearch">
               <div class="input-group">
                 <input type="text" class="form-control" placeholder="Tìm kiếm" v-model="keyword">
@@ -61,9 +69,9 @@
                   <td class="text-center">{{user.phone}}</td>
                   <td class="text-center">{{user.identityCard}}</td>
                   <td class="text-center">
-                    <input type="checkbox" name="state" id="state" :checked="user.state">
+                    <i class="fas fa-circle" :class="user.state ? 'active' : 'inactive'"></i>
                   </td>
-                  <td class="text-center"><i class="fas fa-info-circle" @click="handleEdit(user.id)"></i></td>
+                  <td class="text-center"><i class="fas fa-info-circle" @click="handleInfo(user.id)"></i></td>
                 </tr>
               </tbody>
             </table>
@@ -141,8 +149,8 @@ export default {
       return (this.currentPage - 1) * Constants.PAGE_SIZE_STAFF + index + 1;
     },
 
-    handleEdit(id){
-      this.$router.push({path: '/admin/edit-staffs', query: {id}});
+    handleInfo(id){
+      this.$router.push({path: '/admin/info-staff', query: {id}});
     },
 
     handleChangePage(page) {
@@ -199,6 +207,19 @@ export default {
       this.loadStaffsBySort(this.currentPage, Constants.PAGE_SIZE_STAFF);
     },  
 
+    handleChangeState() {
+      const query = Object.assign({}, this.$route.query);
+      this.currentPage = 1;
+      if (this.stateSelected == 'ALL') {
+        delete query.state;
+         this.$router.replace({ query });
+      } else {
+        this.$router.push({path: '/admin/staffs', query: {...query, page: this.currentPage, state: this.stateSelected}});
+      }
+      this.currentPage = 1;
+      this.loadStaffsBySort(this.currentPage, Constants.PAGE_SIZE_STAFF);
+    },
+
     async loadData() {
       await this.loadRoles();
       await this.loadStores();
@@ -207,9 +228,9 @@ export default {
     async loadStaffsBySort(page, size) {
       var store = this.storeSelected == 'ALL' ? '' : this.storeSelected;
       var role = this.roleSelected == 'ALL' ? '' : this.roleSelected;
-      var state = this.stateSelected == 'ALL' ? '' : this.stateSelected;
+      var state = this.stateSelected == 'ALL' ? '' : this.stateSelected == 'active';
       var keyword = this.keyword;
-      this.users = await UserCommand.fineAllByOrder(page, size, store, role, state, keyword, this.$store);
+      this.users = await UserCommand.findAllByOrder(page, size, store, role, state, keyword, this.$store);
     },
 
     async loadRoles() {
@@ -254,7 +275,7 @@ export default {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.03);
   background-color: #fff;
   border-radius: 3px;
-  border: none;
+  border: none !important;
   position: relative;
   margin-bottom: 30px;
 }
@@ -450,5 +471,17 @@ select.form-custom option {
 
 .empty-space {
   width: 20px;
+}
+
+.fas.fa-circle {
+  font-size: 16px;
+}
+
+.fa-circle.active {
+  color: #5ad539;
+}
+
+.fa-circle.inactive {
+  color: #ccc;
 }
 </style>

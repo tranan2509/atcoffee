@@ -15,10 +15,14 @@ public interface UserService extends UserDetailsService{
 	Boolean resetPassword(String email);
 	UserDTO findOneByUsername(String username);
 	UserDTO findOne(Long id);
+	List<UserDTO> validate(String username, String code, String email, String phone, String identityCard);
 	List<UserDTO> findAll();
 	UserResponse findByKeyword(String keyword, Pageable pageable);
 	UserResponse findByStoreCodeAndKeyword(String storeCode,  String keyword, Pageable pageable);
 	UserResponse findByRoleNameAndKeyword(String roleName,  String keyword, Pageable pageable);
+	UserResponse findByStateAndKeyword(Boolean state,  String keyword, Pageable pageable);
 	UserResponse findByStoreCodeAndRoleNameAndKeyword(String storeCode, String roleName, String keyword, Pageable pageable);
+	UserResponse findByStoreCodeAndStateAndKeyword(String storeCode, Boolean state, String keyword, Pageable pageable);
+	UserResponse findByRoleNameAndStateAndKeyword(String roleName, Boolean state, String keyword, Pageable pageable);
 	UserResponse findByStoreCodeAndRoleNameAndStateAndKeyword(String storeCode, String roleName, Boolean state, String keyword, Pageable pageable);
 }

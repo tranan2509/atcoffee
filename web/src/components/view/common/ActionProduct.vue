@@ -55,8 +55,8 @@
               </div>
               <div class="col-4">
                 <div class="img-content">
-                  <img :src="url" alt="Image" @click="$refs.file.click()">
-                  <input type="file" accept="image/*" ref="file" name="file" :required="this.$route.path.includes('add-product')" @change="handleSelectedImage" class="invisible"/>
+                  <img :src="url" alt="Ảnh" @click="$refs.file.click()">
+                  <input type="file" accept="image/*" ref="file" name="file" @change="handleSelectedImage" class="invisible"/>
                 </div>
               </div>
             </div>
@@ -78,6 +78,7 @@
       </div>
     </div>
     <spinner :isSpinner="isSpinner">Đang xử lý...</spinner>
+    <alert-popup :isAlertPopup="isAlertPopup" @handleHideAlert="handleHideAlert">{{msg}}</alert-popup>
   </div>
 </template>
 
@@ -87,12 +88,14 @@ import ProductCommand from '../../command/ProductCommand'
 import CategoryCommand from '../../command/CategoryCommnad'
 import StoreCommand from '../../command/StoreCommand'
 import Spinner from '../popup/Spinner.vue'
+import AlertPopup from '../popup/AlertPopup.vue'
 
 export default {
   name: Constants.COMPONENT_NAME_ACTION_PRODUCT,
 
   components: {
-    Spinner
+    Spinner,
+    AlertPopup
   },
 
   data() {
@@ -123,7 +126,9 @@ export default {
         price: ''
       }],
       error: '',
-      isSpinner: false
+      isSpinner: false,
+      isAlertPopup: false,
+      msg: ''
     }
   },
 
@@ -134,10 +139,17 @@ export default {
       this.url = URL.createObjectURL(file);
     },
 
+    handleHideAlert() {
+      this.isAlertPopup = false;
+    },
+
     async handleSave() {
       let file = typeof this.$refs.file.files[0] == 'undefined' ? null : this.$refs.file.files[0];
       let categories = this.processCategories();
       let stores = this.processStores();
+      if (!this.validate()) {
+        return;
+      }
       if (categories != null && stores != null) {
         this.formData = new FormData();
         this.formData.append('file', file);
@@ -148,10 +160,17 @@ export default {
         this.isSpinner = true;
         let result = await ProductCommand.saveProduct(this.formData);
         this.isSpinner = false;
-        console.log(result);
         result != null && this.$route.path.includes('add-product') ? this.clearData() : '';
       } else {
         this.error = categories == null ? 'Vui lòng chọn loại đồ uống!' : 'Vui lòng chọn cửa hàng muốn thêm sản phẩm!';
+      }
+    },
+
+    validate() {
+       if (this.$route.path.includes('add-product') && this.$refs.file.files[0] == null) {
+        this.isAlertPopup = true;
+        this.msg = 'Vui lòng chọn ảnh sản phẩm!';
+        return false;
       }
     },
 
