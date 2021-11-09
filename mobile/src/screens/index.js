@@ -6,5 +6,18 @@ import Rewards from './Rewards';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
 import Profile from './Profile';
+import Cart from './Cart';
+import Notification from './Notification';
 
-export {Home, Location, Order, OrderDetail, Rewards, SignIn, SignUp, Profile};
+export {
+  Home,
+  Location,
+  Order,
+  OrderDetail,
+  Rewards,
+  SignIn,
+  SignUp,
+  Profile,
+  Cart,
+  Notification,
+};

@@ -11,7 +11,7 @@ import {
   BottomTabBar,
 } from '@react-navigation/bottom-tabs';
 import Svg, {Path} from 'react-native-svg';
-import {Home, Rewards, Profile} from '../screens';
+import {Home, Rewards, Profile, Location} from '../screens';
 import {COLORS, SIZES, icons} from '../constants';
 
 const Tab = createBottomTabNavigator();
@@ -157,7 +157,7 @@ const Tabs = () => {
 
       <Tab.Screen
         name="AddOrder"
-        component={Home}
+        component={Location}
         options={{
           tabBarIcon: ({focused}) => (
             <Image

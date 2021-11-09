@@ -23,7 +23,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import {TapGestureHandler} from 'react-native-gesture-handler';
 
-const SignInScreen = ({navigation}) => {
+const SignIn = ({navigation}) => {
   const {width, height} = Dimensions.get('window');
   const opacityButton = useSharedValue(1);
 
@@ -282,4 +282,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignInScreen;
+export default SignIn;

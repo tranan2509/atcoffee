@@ -4,7 +4,7 @@ import {HeaderBar, IconButton} from '../../components';
 import {SIZES, images, COLORS, FONTS, icons} from '../../constants';
 import {connect} from 'react-redux';
 
-const ProfileScreen = ({appTheme}) => {
+const Profile = ({appTheme}) => {
   return (
     <View style={{flex: 1}}>
       <HeaderBar />
@@ -33,6 +33,7 @@ const ProfileScreen = ({appTheme}) => {
               borderRadius: 50,
               backgroundColor: COLORS.white,
               padding: 10,
+              marginBottom: 10,
             }}>
             <Image
               source={images.avatarFemale}
@@ -44,6 +45,7 @@ const ProfileScreen = ({appTheme}) => {
               style={{
                 paddingTop: 5,
                 color: appTheme.textColor,
+                marginBottom: 10,
                 ...FONTS.body3,
               }}>
               Nguyễn Thị Minh Thư
@@ -122,4 +124,4 @@ function mapDispatchToProp(dispatch) {
   return {};
 }
 
-export default connect(mapStateToProps, mapDispatchToProp)(ProfileScreen);
+export default connect(mapStateToProps, mapDispatchToProp)(Profile);

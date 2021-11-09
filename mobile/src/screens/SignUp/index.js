@@ -20,7 +20,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import {images} from '../../constants';
 
-const SignUpScreen = ({navigation}) => {
+const SignUp = ({navigation}) => {
   const {width, height} = Dimensions.get('window');
   const opacityForm = useSharedValue(0);
   const [selectedMale, setSelectedMale] = React.useState(false);
@@ -275,4 +275,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignUpScreen;
+export default SignUp;
