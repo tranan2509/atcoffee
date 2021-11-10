@@ -19,6 +19,12 @@ const reward_cup = require('../assets/icons/reward-cup.png');
 const bell = require('../assets/icons/bell.png');
 const info = require('../assets/icons/info.png');
 const logout = require('../assets/icons/logout.png');
+const point = require('../assets/icons/point.png');
+const mail = require('../assets/icons/mail.png');
+const birthday = require('../assets/icons/birthday.png');
+const gender = require('../assets/icons/gender.png');
+const address = require('../assets/icons/address.png');
+const phone = require('../assets/icons/phone.png');
 
 export default {
   add,
@@ -42,4 +48,10 @@ export default {
   bell,
   info,
   logout,
+  point,
+  address,
+  gender,
+  birthday,
+  mail,
+  phone,
 };

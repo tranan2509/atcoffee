@@ -11,7 +11,11 @@ import {
   BottomTabBar,
 } from '@react-navigation/bottom-tabs';
 import Svg, {Path} from 'react-native-svg';
-import {Home, Rewards, Profile, Location} from '../screens';
+
+import RewardsStackNavigator from './RewardsNavigator';
+import HomeStackNavigation from './HomeNavigator';
+import ProfileStackNavigator from './ProfileNavigator';
+
 import {COLORS, SIZES, icons} from '../constants';
 
 const Tab = createBottomTabNavigator();
@@ -105,7 +109,7 @@ const Tabs = () => {
       tabBar={props => <CustomTabBar props={props} />}>
       <Tab.Screen
         name="Home"
-        component={Home}
+        component={HomeStackNavigation}
         options={{
           tabBarIcon: ({focused}) => (
             <Image
@@ -130,7 +134,7 @@ const Tabs = () => {
       />
       <Tab.Screen
         name="Rewards"
-        component={Rewards}
+        component={RewardsStackNavigator}
         options={{
           tabBarIcon: ({focused}) => (
             <Image
@@ -157,7 +161,7 @@ const Tabs = () => {
 
       <Tab.Screen
         name="AddOrder"
-        component={Location}
+        component={RewardsStackNavigator}
         options={{
           tabBarIcon: ({focused}) => (
             <Image
@@ -177,7 +181,7 @@ const Tabs = () => {
       />
       <Tab.Screen
         name="Favourite"
-        component={Home}
+        component={RewardsStackNavigator}
         options={{
           tabBarIcon: ({focused}) => (
             <Image
@@ -203,7 +207,7 @@ const Tabs = () => {
       />
       <Tab.Screen
         name="Profile"
-        component={Profile}
+        component={ProfileStackNavigator}
         options={{
           tabBarIcon: ({focused}) => (
             <Image

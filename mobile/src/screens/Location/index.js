@@ -10,49 +10,13 @@ import {
   StyleSheet,
   Platform,
 } from 'react-native';
-import {IconButton, TabButton} from '../../components';
+import {Header, TabButton} from '../../components';
 import {dummyData, COLORS, SIZES, FONTS, icons, images} from '../../constants';
 import {connect} from 'react-redux';
 
 const Location = ({navigation, appTheme}) => {
   const [selectedTab, setSelectedTab] = React.useState(0);
 
-  function renderHeader() {
-    return (
-      <SafeAreaView
-        style={{
-          height: 120,
-          backgroundColor: COLORS.primary,
-          alignItems: 'center',
-        }}>
-        <View
-          style={{
-            flexDirection: 'row',
-            paddingHorizontal: SIZES.radius,
-            alignItems: 'center',
-            marginTop: Platform.OS === 'android' ? 30 : 0,
-          }}>
-          {/* Back Button */}
-          <IconButton
-            icon={icons.leftArrow}
-            onPress={() => navigation.goBack()}
-          />
-          {/* Title */}
-          <View
-            style={{
-              flex: 1,
-              alignItems: 'center',
-            }}>
-            <Text style={{color: COLORS.white, ...FONTS.h1, fontSize: 25}}>
-              Location
-            </Text>
-          </View>
-          {/* Empty */}
-          <View style={{width: 25}} />
-        </View>
-      </SafeAreaView>
-    );
-  }
   function renderTopBarSection() {
     return (
       <View
@@ -246,7 +210,7 @@ const Location = ({navigation, appTheme}) => {
   return (
     <View style={styles.container}>
       {/* Header */}
-      {renderHeader()}
+      <Header title="Location" navigation={navigation} />
       {/* Detail */}
       <View
         style={{

@@ -1,6 +1,6 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
-import {Profile} from '../screens';
+import {Profile, Information} from '../screens';
 
 const ProfileStack = createStackNavigator();
 const ProfileStackNavigator = () => {
@@ -10,6 +10,7 @@ const ProfileStackNavigator = () => {
         headerShown: false,
       }}>
       <ProfileStack.Screen name="Profile" component={Profile} />
+      <ProfileStack.Screen name="Information" component={Information} />
     </ProfileStack.Navigator>
   );
 };

@@ -8,6 +8,7 @@ import SignUp from './SignUp';
 import Profile from './Profile';
 import Cart from './Cart';
 import Notification from './Notification';
+import Information from './Profile/Information';
 
 export {
   Home,
@@ -20,4 +21,5 @@ export {
   Profile,
   Cart,
   Notification,
+  Information,
 };

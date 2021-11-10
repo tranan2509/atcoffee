@@ -19,6 +19,7 @@ import Animated, {
   withDelay,
 } from 'react-native-reanimated';
 import {images} from '../../constants';
+import {RadioButton} from '../../components';
 
 const SignUp = ({navigation}) => {
   const {width, height} = Dimensions.get('window');
@@ -67,34 +68,7 @@ const SignUp = ({navigation}) => {
       ],
     };
   });
-  function RadioButton(props) {
-    return (
-      <View
-        style={[
-          {
-            height: 24,
-            width: 24,
-            borderRadius: 12,
-            borderWidth: 2,
-            borderColor: '#000',
-            alignItems: 'center',
-            justifyContent: 'center',
-          },
-          props.style,
-        ]}>
-        {props.selected ? (
-          <View
-            style={{
-              height: 12,
-              width: 12,
-              borderRadius: 6,
-              backgroundColor: '#000',
-            }}
-          />
-        ) : null}
-      </View>
-    );
-  }
+
   return (
     <View
       style={[

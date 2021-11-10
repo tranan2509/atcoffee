@@ -1,6 +1,6 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
-import tabs from './tabs';
+import Tabs from './tabs';
 import SignUpNavigator from './SignUpNavigator';
 import SignInNavigator from './SignInNavigator';
 import {Location, Order, OrderDetail, Notification} from '../screens';
@@ -12,7 +12,7 @@ const AppContainer = () => {
       screenOptions={{
         headerShown: false,
       }}>
-      <AppContainerStack.Screen name="Main" component={tabs} />
+      <AppContainerStack.Screen name="Main" component={Tabs} />
       <AppContainerStack.Screen name="SignIn" component={SignInNavigator} />
       <AppContainerStack.Screen name="SignUp" component={SignUpNavigator} />
       <AppContainerStack.Screen name="Notification" component={Notification} />
