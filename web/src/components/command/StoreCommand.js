@@ -21,7 +21,7 @@ var StoreCommand = {
   },
 
   async findAllByPagination(page, size, store = null) {
-    const url = `${Constants.HOSTNAME_DEFAULT}/api/user/store?page=${page}&size=${size}`;
+    const url = `${Constants.HOSTNAME_DEFAULT}/api/info/store?page=${page}&size=${size}`;
     let result = await ConnectServer.getData(url);
     if (result != null) {
       store != null ? store.commit(MutationsName.MUTATION_NAME_SET_STORES, result.stores) : null;

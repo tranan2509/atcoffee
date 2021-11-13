@@ -50,6 +50,10 @@ public class ProductServiceImpl implements ProductService{
 			for (int j = 0; j < categories.size(); j++) {
 				categories.get(j).getProducts().removeIf(product -> product.getId() == dto.getId());
 			}
+			ProductEntity entityPre = productRepository.findOne(entity.getId());
+			entity.setRates(entityPre.getRates());
+			entity.setBillDetails(entityPre.getBillDetails());
+			entity.setCarts(entityPre.getCarts());
 			categoryRepository.save(categories);
 		}
 		for (StoreDTO storeDTO : dto.getStores()) {

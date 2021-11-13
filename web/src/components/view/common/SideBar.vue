@@ -74,6 +74,12 @@
           <span>Cửa hàng</span>
         </router-link>
       </li>
+      <li class="nav-item dropdown" :class="menu.category.value ? 'active' : ''">  
+        <router-link to="/admin/categories?page=1" class="nav-link" @click="handleDropdown(menu.category)">
+          <i class="fas fa-box-open"></i>
+          <span>Loại sản phẩm</span>
+        </router-link>
+      </li>
       <li class="menu-header">HỒ SƠ</li>
       <li class="nav-item dropdown" :class="menu.profile.value ? 'active' : ''">
         <router-link to="" class="nav-link has-dropdown" @click="handleDropdown(menu.profile)">

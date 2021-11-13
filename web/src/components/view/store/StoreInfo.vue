@@ -69,13 +69,15 @@ export default {
     },
 
     async handleLock(isLock) {
-      let result = await StoreCommand.findOne(this.storeId);
-      result['state'] = !isLock;
-      this.$router.push({path: '/admin/staff-info', query: {id: this.storeId}});
-      this.formData = new FormData();
-      this.formData.append('user', JSON.stringify(result));
-      await StoreCommand.save(this.formData);
-      await this.getStoreById(this.storeId);
+      console.log(isLock);
+      //TODO: lock store
+      // let result = await StoreCommand.findOne(this.storeId);
+      // result['state'] = !isLock;
+      // this.$router.push({path: '/admin/staff-info', query: {id: this.storeId}});
+      // this.formData = new FormData();
+      // this.formData.append('user', JSON.stringify(result));
+      // await StoreCommand.save(this.formData);
+      // await this.getStoreById(this.storeId);
     },
 
     async handleDone() {

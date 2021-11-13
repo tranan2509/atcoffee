@@ -100,7 +100,7 @@ export default {
         return;
       }
       this.formData = new FormData();
-      this.store.state = true;
+      this.store.state = this.$route.path.includes('stores') ? true : this.store.state;
       this.formData.append('store', JSON.stringify(this.store));
       this.isSpinner = true;
       let result = await StoreCommand.save(this.formData);
@@ -141,22 +141,6 @@ export default {
 
     timeMinutes(time) {
       return parseInt(time.split(':')[0]) * 60 + parseInt(time.split(':')[1]);
-    },
-
-    handleSelectedStore(store){
-      this.error = '';
-      this.stores = this.stores.map(item => {
-        if (store.id == 0 && item.id != 0) {
-          item.selected = false;
-        }
-        if (store.id != 0 && item.id == 0) {
-            item.selected = false;
-          }
-        if (item.id == store.id) {
-          item.selected = !item.selected;
-        }
-        return item;
-      })
     },
 
     clearData() {

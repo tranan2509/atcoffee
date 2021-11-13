@@ -89,7 +89,7 @@
 <script>
 import * as Constants from '../../common/Constants'
 import ProductCommand from '../../command/ProductCommand'
-import CategoryCommand from '../../command/CategoryCommnad'
+import CategoryCommand from '../../command/CategoryCommand'
 import StoreCommand from '../../command/StoreCommand'
 import Spinner from '../popup/Spinner.vue'
 import AlertPopup from '../popup/AlertPopup.vue'
@@ -330,10 +330,6 @@ export default {
 
   created(){
     this.loadData();
-  },
-
-  beforeUnmount() {
-    console.log('..........')
   },
 }
 </script>

@@ -77,7 +77,7 @@
 <script>
 import * as Constants from '../../common/Constants'
 import ProductCommand from '../../command/ProductCommand'
-import CategoryCommand from '../../command/CategoryCommnad'
+import CategoryCommand from '../../command/CategoryCommand'
 import StoreCommand from '../../command/StoreCommand'
 import Pagination from '../common/Pagination.vue'
 import ViewImage from '../popup/ViewImage.vue'

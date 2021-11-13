@@ -42,7 +42,7 @@ public class StoreAPI {
 		return ResponseEntity.ok(storeService.findAll());
 	}
 	
-	@GetMapping("/api/user/store")
+	@GetMapping(value = "/api/info/store", params = {"page", "size"})
 	public ResponseEntity<StoreResponse> findAll(@RequestParam(name = "page", defaultValue = "1") int page,
 			@RequestParam(name = "size") int size){
 		Pageable pageable = new PageRequest(page - 1, size);

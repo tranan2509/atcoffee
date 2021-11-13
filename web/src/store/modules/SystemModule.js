@@ -38,6 +38,9 @@ const SystemModule = {
         store: {
           value: false
         },
+        category: {
+          value: false
+        },
         profile: {
           value: false,
           submenu: {
@@ -59,9 +62,11 @@ const SystemModule = {
     [MutationsName.MUTATION_NAME_RESET_MENU] (state) {
       Object.keys(state.menu).forEach(key => {
         state.menu[key].value = false;
-        Object.keys(state.menu[key].submenu).forEach(subkey => {
-          state.menu[key].submenu[subkey] = false;
-        })
+        if (state.menu[key].menu != null) {
+          Object.keys(state.menu[key].submenu).forEach(subkey => {
+            state.menu[key].submenu[subkey] = false;
+          })
+        } 
       })
     }
   },

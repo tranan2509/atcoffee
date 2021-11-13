@@ -91,6 +91,13 @@ public class UserServiceImpl implements UserService{
 			userEntity.setStore(storeEntity);
 		if (typeEntity != null)
 			userEntity.setType(typeEntity);
+		if (userEntity.getId() != null) {
+			UserEntity entityPre = userRepository.findOne(userEntity.getId());
+			userEntity.setRates(entityPre.getRates());
+			userEntity.setBills(entityPre.getBills());
+			userEntity.setCustomerBills(entityPre.getCustomerBills());
+			userEntity.setCustomerCarts(entityPre.getCustomerCarts());
+		}
 		userRepository.save(userEntity);
 		return mapper.map(userEntity, UserDTO.class);
 	}

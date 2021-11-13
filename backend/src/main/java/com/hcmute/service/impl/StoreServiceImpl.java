@@ -26,6 +26,10 @@ public class StoreServiceImpl implements StoreService {
 	@Override
 	public StoreDTO save(StoreDTO storeDTO) {
 		StoreEntity entity = mapper.map(storeDTO, StoreEntity.class);
+		if (entity.getId() != null) {
+			StoreEntity entityPre = storeRepository.findOne(entity.getId());
+			entity.setProducts(entityPre.getProducts());
+		}
 		entity = storeRepository.save(entity);
 		return mapper.map(entity, StoreDTO.class);
 	}

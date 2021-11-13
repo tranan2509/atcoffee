@@ -3,7 +3,7 @@
     <div class="col-12">
       <div class="card">
         <div class="card-header">
-          <h4>Danh sách cửa hàng</h4>
+          <h4>Danh sách loại sản phẩm</h4>
           <div class="card-header-form flex-row">
             <button class="btn btn-success btn-medium" @click.capture="handleAdd">Thêm</button>
           </div>
@@ -16,30 +16,24 @@
                   <th class="text-center">SST</th>
                   <th class="text-center">Mã</th>
                   <th class="text-center">Tên</th>
-                  <th class="text-center">Địa chỉ</th>
-                  <th class="text-center">Thời gian mở cửa</th>
-                  <th class="text-center">Thời gian đóng cửa</th>
                   <th class="text-center">Trạng thái</th>
                   <th class="text-center">Chi tiết</th>
                 </tr>
-                <tr v-for="(store, index) in this.$store.getters.stores" :key="store.id">
+                <tr v-for="(category, index) in this.$store.getters.categories" :key="category.id">
                   <td class="text-center">{{number(index)}}</td>
-                  <td class="text-center">{{store.code}}</td>
-                  <td class="text-center">{{store.name}}</td>
-                  <td class="text-center">{{store.address}}</td>
-                  <td class="text-center">{{store.timeOpen}}</td>
-                  <td class="text-center">{{store.timeClose}}</td>
+                  <td class="text-center">{{category.code}}</td>
+                  <td class="text-center">{{category.name}}</td>
                   <td class="text-center">
-                    <i class="fas fa-circle" :class="store.state ? 'active' : 'inactive'"></i>
+                    <i class="fas fa-circle" :class="category.state ? 'active' : 'inactive'"></i>
                   </td>
-                  <td class="text-center"><i class="fas fa-info-circle" @click="handleInfo(store.id)"></i></td>
+                  <td class="text-center"><i class="fas fa-info-circle" @click="handleInfo(category.id)"></i></td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
-        <div class="card-footer text-right" v-if="this.$store.getters.sortStore.totalPage > 0">
-          <pagination :currentPage="currentPage" @handleChange="handleChangePage" :totalPage="this.$store.getters.sortStore.totalPage"/>
+        <div class="card-footer text-right" v-if="this.$store.getters.sortCategory.totalPage > 0">
+          <pagination :currentPage="currentPage" @handleChange="handleChangePage" :totalPage="this.$store.getters.sortCategory.totalPage"/>
         </div>
       </div>
     </div>
@@ -48,11 +42,11 @@
 
 <script>
 import * as Constants from '../../common/Constants'
-import StoreCommand from '../../command/StoreCommand'
+import CategoryCommand from '../../command/CategoryCommand'
 import Pagination from '../common/Pagination.vue'
 
 export default {
-  name: Constants.COMPONENT_NAME_TABLE_STORES,
+  name: Constants.COMPONENT_NAME_TABLE_CATEGORIES,
 
   components: {
     Pagination
@@ -76,18 +70,18 @@ export default {
     },
 
     number(index){
-      return (this.currentPage - 1) * Constants.PAGE_SIZE_STORE + index + 1;
+      return (this.currentPage - 1) * Constants.PAGE_SIZE_CATEGORY + index + 1;
     },
 
     handleInfo(id){
-      this.$router.push({path: '/admin/store-info', query: {id}});
+      this.$router.push({path: '/admin/category-info', query: {id}});
     },
 
     handleChangePage(page) {
       this.currentPage = page;
       const query = Object.assign({}, this.$route.query);
-      this.$router.push({path: '/admin/stores', query: {...query, page: this.currentPage}});
-      this.loadStores(this.currentPage, Constants.PAGE_SIZE_STORE);
+      this.$router.push({path: '/admin/categories', query: {...query, page: this.currentPage}});
+      this.loadCategories(this.currentPage, Constants.PAGE_SIZE_CATEGORY);
     },
 
     handleAdd() {
@@ -95,11 +89,11 @@ export default {
     },
 
     async loadData() {
-      await this.loadStores(this.currentPage, Constants.PAGE_SIZE_STORE);
+      await this.loadCategories(this.currentPage, Constants.PAGE_SIZE_CATEGORY);
     },
     
-    async loadStores(page, size) {
-      let result = await StoreCommand.findAllByPagination(page, size, this.$store);
+    async loadCategories(page, size) {
+      let result = await CategoryCommand.findAllByPagination(page, size, this.$store);
       this.stores = result;
     },
   },
