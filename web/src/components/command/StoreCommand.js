@@ -4,12 +4,29 @@ import * as MutationsName from '../common/MutationsName'
 
 var StoreCommand = {
 
+  async save(store) {
+    const url = `${Constants.HOSTNAME_DEFAULT}/api/admin/store`;
+    let res = await ConnectServer.postData(url, store);
+    return res != null ? res : null;
+  },
+
   async findAll(store = null) {
     const url = `${Constants.HOSTNAME_DEFAULT}/api/info/store`;
     let result = await ConnectServer.getData(url);
     if (result != null) {
       store != null ? store.commit(MutationsName.MUTATION_NAME_SET_STORES, result) : null;
       return result;
+    }
+    return null;
+  },
+
+  async findAllByPagination(page, size, store = null) {
+    const url = `${Constants.HOSTNAME_DEFAULT}/api/user/store?page=${page}&size=${size}`;
+    let result = await ConnectServer.getData(url);
+    if (result != null) {
+      store != null ? store.commit(MutationsName.MUTATION_NAME_SET_STORES, result.stores) : null;
+      store != null ? store.commit(MutationsName.MUTATION_NAME_SET_SORT_STORE, {page, totalPage: result.totalPage}) : null;
+      return result.stores;
     }
     return null;
   },
@@ -21,6 +38,16 @@ var StoreCommand = {
       store != null ? store.commit(MutationsName.MUTATION_NAME_SET_STORE, result) : null;
       return result;
     }
+    return null;
+  },
+
+  async findOneByCode(code, store = null) {
+    const url = `${Constants.HOSTNAME_DEFAULT}/api/info/store?code=${code}`;
+    let result = await ConnectServer.getData(url);
+    if (result != null) {
+      store != null ? store.commit(MutationsName.MUTATION_NAME_SET_STORE, result) : null;
+      return result;
+    } 
     return null;
   }
 }

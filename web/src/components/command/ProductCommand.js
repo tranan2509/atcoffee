@@ -20,6 +20,16 @@ var ProductCommand = {
     return res;
   },
 
+  async findOneByCode(code, store = null) {
+    const url = `${Constants.HOSTNAME_DEFAULT}/api/info/product?code=${code}`;
+    let res = await ConnectServer.getData(url);
+    if (res != null) {
+      store != null ? store.commit(MutationsName.MUTATION_NAME_SET_PRODUCTS, res) : '';
+      return res;
+    }
+    return null;
+  },
+
   async fineAll(page, size, store) {
     const url =  `${Constants.HOSTNAME_DEFAULT}/api/info/product?page=${page}&size=${size}`;
     let res = await ConnectServer.getData(url);

@@ -31,7 +31,7 @@ import UserCommand from '../../command/UserCommand'
 import ActionStaff from '../common/ActionStaff.vue'
 
 export default {
-  name: Constants.COMPONENT_NAME_INFO_STAFF,
+  name: Constants.COMPONENT_NAME_STAFF_INFO,
 
   components: {
     Admin,

@@ -1,8 +1,6 @@
 <template>
-  <div class="spinner" :class="isAlertPopup ? 'open-popup' : ''">
+  <div class="spinner" :class="isBlankPopup ? 'open-popup' : ''">
     <div class="spinner-inner">
-      <div class="title"><b>A&amp;T Coffee</b><i class="fas fa-times" @click="handleHideAlert"></i></div>
-      <hr>
       <span class="msg"><slot></slot></span>
     </div>
   </div>
@@ -14,11 +12,11 @@ import * as Constants from '../../common/Constants'
 export default {
   name: Constants.COMPONENT_NAME_SPINNER,
 
-  props: ['isAlertPopup'],
+  props: ['isBlankPopup'],
 
   methods: {
     handleHideAlert() {
-      this.$emit('handleHideAlert');
+      this.$emit('handleHideBlank');
     }
   }
 }
@@ -39,6 +37,7 @@ export default {
   visibility: hidden;
   opacity: 0;
   transform: scale(1.2);
+  z-index: 20000;
 }
 
 .open-popup {
@@ -49,14 +48,13 @@ export default {
 
 .spinner-inner {
   display: flex;
+  position: absolute;
   flex-direction: column;
+  top: 78px;
   align-items: center;
   justify-content: center;
   background: #fff;
   border-radius: 4px;
-  transform: translateY(-50%);
-  padding: 10px 10px;
-  width: 400px;
 }
 
 .spinner-inner .title {
@@ -85,7 +83,6 @@ hr {
 .msg {
   width: 100%;
   text-align: left;
-  margin: 10px 0px;
   font-size: 16px;
 }
 </style>

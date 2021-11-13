@@ -8,7 +8,9 @@ import AddProduct from '../components/view/product/AddProduct.vue'
 import ProductInfo from '../components/view/product/ProductInfo.vue'
 import Staffs from '../components/view/staff/Staffs.vue'
 import AddStaff from '../components/view/staff/AddStaff.vue'
-import InfoStaff from '../components/view/staff/InfoStaff.vue'
+import StaffInfo from '../components/view/staff/StaffInfo.vue'
+import Stores from '../components/view/store/Stores.vue'
+import StoreInfo from '../components/view/store/StoreInfo'
 import Profile from '../components/view/profile/Profile.vue'
 import ChangePassword from '../components/view/profile/ChangePassword.vue'
 import Error from '../components/view/error/Error.vue'
@@ -24,7 +26,9 @@ const routes = [
   {path: '/admin/staffs', name: 'staffs', component: Staffs, meta: {title: 'A&T Coffee | Danh sách nhân viên'}},
   {path: '/admin/add-staff', name: 'add-staff', component: AddStaff, meta: {title: 'A&T Coffee | Thêm nhân viên'}},
   {path: '/admin/edit-staff', name: 'edit-staff', component: AddStaff, meta: {title: 'A&T Coffee | Chỉnh sửa nhân viên'}},
-  {path: '/admin/staff-info', name: 'staff-info', component: InfoStaff, meta: {title: 'A&T Coffee | Thông tin nhân viên'}},
+  {path: '/admin/staff-info', name: 'staff-info', component: StaffInfo, meta: {title: 'A&T Coffee | Thông tin nhân viên'}},
+  {path: '/admin/stores', name: 'stores', component: Stores, meta: {title: 'A&T Coffee | Danh sách cửa hàng'}},
+  {path: '/admin/store-info', name: 'store-info', component: StoreInfo, meta: {title: 'A&T Coffee | Thông tin cửa hàng'}},
   {path: '/admin/profile', name: 'profile', component: Profile, meta: {title: 'A&T Coffee | Thông tin cá nhân'}},
   {path: '/admin/profile/change-password', name: 'change-password', component: ChangePassword, meta: {title: 'A&T Coffee | Đổi mật khẩu'}},
   {path: '/:pathMatch(.*)', component: Error, meta: {title: 'A&T Coffee | Lỗi'}},

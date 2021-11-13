@@ -1,32 +1,50 @@
 package com.hcmute.api.response;
 
+import java.util.List;
+
 import com.hcmute.dto.StoreDTO;
-import com.hcmute.dto.UserDTO;
 
 public class StoreResponse {
-	private StoreDTO store;
-	private UserDTO user;
+	private int page;
+	private int size;
+	private int totalPage;
+	private List<StoreDTO> stores;
 	
-	public StoreResponse(StoreDTO store, UserDTO user) {
+	
+	public StoreResponse() {
 		super();
-		this.store = store;
-		this.user = user;
 	}
-
-	public StoreDTO getStore() {
-		return store;
+	public StoreResponse(int page, int size, int totalPage, List<StoreDTO> stores) {
+		super();
+		this.page = page;
+		this.size = size;
+		this.totalPage = totalPage;
+		this.stores = stores;
 	}
-
-	public void setStore(StoreDTO store) {
-		this.store = store;
+	public int getPage() {
+		return page;
 	}
-
-	public UserDTO getUser() {
-		return user;
+	public void setPage(int page) {
+		this.page = page;
 	}
-
-	public void setUser(UserDTO user) {
-		this.user = user;
+	public int getSize() {
+		return size;
 	}
+	public void setSize(int size) {
+		this.size = size;
+	}
+	public int getTotalPage() {
+		return totalPage;
+	}
+	public void setTotalPage(int totalPage) {
+		this.totalPage = totalPage;
+	}
+	public List<StoreDTO> getStores() {
+		return stores;
+	}
+	public void setStores(List<StoreDTO> stores) {
+		this.stores = stores;
+	}
+	
 	
 }

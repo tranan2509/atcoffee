@@ -157,27 +157,27 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public UserResponse findByKeyword(String keyword, Pageable pageable) {
 		Page<UserEntity> page = userRepository.findByKeyword(keyword, pageable);
-		return resultUserResponse(page, pageable);
+		return resultResponse(page, pageable);
 	}
 
 	@Override
 	public UserResponse findByStoreCodeAndKeyword(String storeCode, String keyword, Pageable pageable) {
 		StoreEntity store = storeRepository.findOneByCode(storeCode);
 		Page<UserEntity> page = userRepository.findByStoreAndKeyword(store, keyword, pageable);
-		return resultUserResponse(page, pageable);
+		return resultResponse(page, pageable);
 	}
 	
 	@Override
 	public UserResponse findByRoleNameAndKeyword(String roleName, String keyword, Pageable pageable) {
 		RoleEntity role = roleRepository.findOneByName(roleName);
 		Page<UserEntity> page =  userRepository.findByRoleAndKeyword(role, keyword, pageable);
-		return resultUserResponse(page, pageable);
+		return resultResponse(page, pageable);
 	}
 	
 	@Override
 	public UserResponse findByStateAndKeyword(Boolean state, String keyword, Pageable pageable) {
 		Page<UserEntity> page =  userRepository.findByStateAndKeyword(state, keyword, pageable);
-		return resultUserResponse(page, pageable);
+		return resultResponse(page, pageable);
 	}
 
 	@Override
@@ -186,7 +186,7 @@ public class UserServiceImpl implements UserService{
 		StoreEntity store = storeRepository.findOneByCode(storeCode);
 		RoleEntity role = roleRepository.findOneByName(roleName);
 		Page<UserEntity> page =  userRepository.findByStoreAndRoleAndKeyword(store, role, keyword, pageable);
-		return resultUserResponse(page, pageable);
+		return resultResponse(page, pageable);
 	}
 	
 	@Override
@@ -194,7 +194,7 @@ public class UserServiceImpl implements UserService{
 			Pageable pageable) {
 		StoreEntity store = storeRepository.findOneByCode(storeCode);
 		Page<UserEntity> page =  userRepository.findByStoreAndStateAndKeyword(store, state, keyword, pageable);
-		return resultUserResponse(page, pageable);
+		return resultResponse(page, pageable);
 	}
 	
 	@Override
@@ -202,7 +202,7 @@ public class UserServiceImpl implements UserService{
 			Pageable pageable) {
 		RoleEntity role = roleRepository.findOneByName(roleName);
 		Page<UserEntity> page =  userRepository.findByRoleAndStateAndKeyword(role, state, keyword, pageable);
-		return resultUserResponse(page, pageable);
+		return resultResponse(page, pageable);
 	}
 
 	@Override
@@ -211,10 +211,10 @@ public class UserServiceImpl implements UserService{
 		StoreEntity store = storeRepository.findOneByCode(storeCode);
 		RoleEntity role = roleRepository.findOneByName(roleName);
 		Page<UserEntity> page = userRepository.findByStoreAndRoleAndStateAndKeyword(store, role, state, keyword, pageable);
-		return resultUserResponse(page, pageable);
+		return resultResponse(page, pageable);
 	}
 	
-	public UserResponse resultUserResponse(Page<UserEntity> page, Pageable pageable) {
+	public UserResponse resultResponse(Page<UserEntity> page, Pageable pageable) {
 		List<UserEntity> entities = page.getContent();
 		List<UserDTO> dtos = new ArrayList<UserDTO>();
 		entities.forEach(entity -> dtos.add(mapper.map(entity, UserDTO.class)));

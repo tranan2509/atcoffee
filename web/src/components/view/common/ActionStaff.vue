@@ -16,7 +16,7 @@
               </div>
               <div class="form-group">
                 <label></label>
-                <input type="text" class="form-control" id="code" v-model="user.code" required placeholder="Mã nhân viên">
+                <input type="text" class="form-control" id="code" v-model="user.code" required placeholder="Mã nhân viên" :readonly="this.$route.path.includes('staff-info')">
               </div>
             </div>
             <div class="col-9 col">
@@ -168,7 +168,9 @@ export default {
         var id = this.$route.query.id;
         this.btnValue = 'Sửa';
         if (typeof id != 'undefined') {
+          this.isSpinner = true;
           this.user = await this.loadUser(id);
+          this.isSpinner = false;
           this.user.dob = CommonUtils.formatDateReverse(new Date(this.user.dob));
         }
       } else if (this.$route.path.includes('profile')) {

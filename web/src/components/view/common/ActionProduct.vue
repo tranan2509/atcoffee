@@ -11,7 +11,7 @@
               <div class="col-8">
                  <div class="form-group">
                   <label for="code">Mã sản phẩm</label>
-                  <input type="text" class="form-control" id="code" v-model="product.code" required>
+                  <input type="text" class="form-control" id="code" v-model="product.code" required :readonly="this.$route.path.includes('edit-product')">
                 </div>
                 <div class="form-group">
                   <label for="name">Tên sản phẩm</label>
@@ -71,7 +71,11 @@
               </div>
             </div>
             <div class="action">
-              <input type="submit" :value="this.$route.path.includes('add-product') ? 'Thêm' : 'Cập nhật'" class="btn btn-success">
+              <input class="btn btn-success" v-if="this.$route.path.includes('add-product')" type="submit" value="Thêm">
+              <div class="action-edit" v-else> 
+                <input class="btn btn-info" type="submit" value="Cập nhật">
+                <input class="btn btn-danger" type="button" value="Hủy" @click="handleCancel">
+              </div>
             </div>
           </form>
         </div>
@@ -143,11 +147,18 @@ export default {
       this.isAlertPopup = false;
     },
 
+    handleCancel() {
+      var productId = this.$route.query.id;
+      this.$router.push({path: '/admin/product-info', query: {id: productId}});
+    },
+
     async handleSave() {
       let file = typeof this.$refs.file.files[0] == 'undefined' ? null : this.$refs.file.files[0];
       let categories = this.processCategories();
       let stores = this.processStores();
-      if (!this.validate()) {
+      var validate = await this.validate();
+      console.log(validate);
+      if (!validate) {
         return;
       }
       if (categories != null && stores != null) {
@@ -166,10 +177,17 @@ export default {
       }
     },
 
-    validate() {
+    async validate() {
        if (this.$route.path.includes('add-product') && this.$refs.file.files[0] == null) {
         this.isAlertPopup = true;
         this.msg = 'Vui lòng chọn ảnh sản phẩm!';
+        return false;
+      }
+      var product = await this.findProductByCode(this.product.code);
+      if (this.$route.path.includes('add-product') && product != null ||
+      !this.$route.path.includes('add-product') && product != null && product.id != this.product.id) {
+        this.isAlertPopup = true;
+        this.msg = 'Mã sản phẩm đã tồn tại!';
         return false;
       }
       return true;
@@ -247,6 +265,11 @@ export default {
       this.loadStores();
     },
 
+    async findProductByCode(code) {
+      let result = await ProductCommand.findOneByCode(code);
+      return result;
+    },
+
     async loadData() {
       this.isSpinner = true;
       var categories = await this.loadCategories();
@@ -307,7 +330,11 @@ export default {
 
   created(){
     this.loadData();
-  }
+  },
+
+  beforeUnmount() {
+    console.log('..........')
+  },
 }
 </script>
 

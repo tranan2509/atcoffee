@@ -53,7 +53,7 @@ public class ProductAPI {
 		return ResponseEntity.ok(productService.findOne(id));
 	}
 	
-	@GetMapping("/api/info/product/find")
+	@GetMapping(value = "/api/info/product", params = "code")
 	public ResponseEntity<ProductDTO> findOneByCode(@RequestParam(name = "code") String code) {
 		return ResponseEntity.ok(productService.findOneByCode(code));
 	}

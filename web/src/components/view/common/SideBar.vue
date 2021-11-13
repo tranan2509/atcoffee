@@ -68,6 +68,12 @@
           </li>
         </ul>
       </li>
+      <li class="nav-item dropdown" :class="menu.store.value ? 'active' : ''">  
+        <router-link to="/admin/stores?page=1" class="nav-link" @click="handleDropdown(menu.store)">
+          <i class="fas fa-store"></i>
+          <span>Cửa hàng</span>
+        </router-link>
+      </li>
       <li class="menu-header">HỒ SƠ</li>
       <li class="nav-item dropdown" :class="menu.profile.value ? 'active' : ''">
         <router-link to="" class="nav-link has-dropdown" @click="handleDropdown(menu.profile)">

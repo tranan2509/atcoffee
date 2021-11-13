@@ -35,6 +35,9 @@ const SystemModule = {
             add_staff: false
           }
         },
+        store: {
+          value: false
+        },
         profile: {
           value: false,
           submenu: {

@@ -5,8 +5,11 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.hcmute.api.response.StoreResponse;
 import com.hcmute.dto.StoreDTO;
 import com.hcmute.entity.StoreEntity;
 import com.hcmute.repository.StoreRepository;
@@ -31,6 +34,11 @@ public class StoreServiceImpl implements StoreService {
 	public StoreDTO findOne(Long id) {
 		return mapper.map(storeRepository.findOne(id), StoreDTO.class);
 	}
+	
+	@Override
+	public StoreDTO findOneByCode(String code) {
+		return mapper.map(storeRepository.findOneByCode(code), StoreDTO.class);
+	}
 
 	@Override
 	public List<StoreDTO> findAll() {
@@ -38,6 +46,24 @@ public class StoreServiceImpl implements StoreService {
 		List<StoreEntity> entities = storeRepository.findAll();
 		entities.forEach(entity -> dtos.add(mapper.map(entity, StoreDTO.class)));
 		return dtos;
+	}
+	
+	@Override
+	public StoreResponse findAll(Pageable pageable) {
+		Page<StoreEntity> page = storeRepository.findAll(pageable);
+		return resultResponse(page, pageable);
+	}
+	
+	public StoreResponse resultResponse(Page<StoreEntity> page, Pageable pageable) {
+		List<StoreEntity> entities = page.getContent();
+		List<StoreDTO> dtos = new ArrayList<StoreDTO>();
+		entities.forEach(entity -> dtos.add(mapper.map(entity, StoreDTO.class)));
+		StoreResponse result = new StoreResponse();
+		result.setStores(dtos);
+		result.setTotalPage(page.getTotalPages());
+		result.setSize(page.getSize());
+		result.setPage(pageable.getPageNumber());
+		return result;
 	}
 
 }
