@@ -1,0 +1,53 @@
+<template>
+  <div class="admin">
+    <div class="background"></div>
+    <side-bar />
+    <navbar />
+    <div class="section">
+      <slot></slot>
+    </div>
+  </div>
+</template>
+
+<script>
+import * as Constants from '../../../common/Constants';
+import LoginCommand from '../../../command/LoginCommand'
+import SideBar from '../common/SideBar.vue';
+import Navbar from '../../common/common/Navbar.vue'
+
+export default {
+  name: Constants.COMPONENT_NAME_ADMIN,
+
+  components: {
+    SideBar,
+    Navbar
+  },
+
+  methods: {
+
+    async authenticated () {
+      const isAuth = await LoginCommand.authenticated(this.$store);
+      if (isAuth != null && isAuth.roleName == Constants.ROLE.ROLE_ADMIN) {
+        console.log(isAuth);
+      } else {
+        this.$router.push({path: '/login'})
+      }
+    }
+  },
+
+  created(){
+    this.authenticated();
+  }
+};
+</script>
+
+<style>
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #f4f6f9;
+}
+</style>

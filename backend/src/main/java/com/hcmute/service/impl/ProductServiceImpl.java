@@ -97,6 +97,14 @@ public class ProductServiceImpl implements ProductService{
 	public int countItem() {
 		return (int)productRepository.count();
 	}
+	
+
+	@Override
+	public int countByCategoryCode(String categoryCode) {
+		CategoryEntity category = categoryRepository.findOneByCode(categoryCode);
+		List<ProductEntity> entities = productRepository.findByCategoryId(category.getId());
+		return entities.size();
+	}
 
 	@Override
 	public ProductResponse findByStoreCodeAndKeyword(String storeCode, String keyword, Pageable pageable) {

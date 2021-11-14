@@ -48,6 +48,11 @@ const SystemModule = {
             change_password: false
           }
         }
+      },
+      menuStaff: {
+        product: {
+          value: false
+        }
       }
     };
   },

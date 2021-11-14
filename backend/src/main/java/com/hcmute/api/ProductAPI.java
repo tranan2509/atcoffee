@@ -58,6 +58,11 @@ public class ProductAPI {
 		return ResponseEntity.ok(productService.findOneByCode(code));
 	}
 	
+	@GetMapping(value = "/api/info/product/count", params = "category")
+	public ResponseEntity<Integer> countByCategoryCode(@RequestParam(name = "category") String categoryCode) {
+		return ResponseEntity.ok(productService.countByCategoryCode(categoryCode));
+	}
+	
 	@GetMapping("/api/info/product") 
 	public ResponseEntity<ProductResponse> findAll(@RequestParam(name = "page", defaultValue = "1") int page,
 			@RequestParam(name = "size") int size, @RequestParam(name = "store", required = false) String storeCode,

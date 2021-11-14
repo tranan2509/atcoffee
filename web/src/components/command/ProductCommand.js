@@ -52,6 +52,12 @@ var ProductCommand = {
       return res.products;
     }
     return null;
+  },
+
+  async countByCategoryCode(categoryCode) {
+    const url = `${Constants.HOSTNAME_DEFAULT}/api/info/product/count?category=${categoryCode}`;
+    let res = await ConnectServer.getData(url);
+    return res;
   }
 }
 

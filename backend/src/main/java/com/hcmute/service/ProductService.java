@@ -11,6 +11,7 @@ public interface ProductService {
 	ProductDTO save(ProductDTO dto);
 	ProductDTO findOne(long id);
 	ProductDTO findOneByCode(String code);
+	int countByCategoryCode(String categoryCode);
 	List<ProductDTO> findAll();
 	ProductResponse  findAll(Pageable pageable);
 	ProductResponse  findByKeyword(String keyword, Pageable pageable);

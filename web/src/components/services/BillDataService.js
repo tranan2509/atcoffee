@@ -27,8 +27,10 @@ var BillDataService = {
     const dbRef = ref(database);
     get(child(dbRef, `${collectionName}/${id}`)).then((snapshot) => {
       if (snapshot.exists()) {
+        // TODO: process has data
         console.log(snapshot.val());
       } else {
+        // TODO: process no data
         console.log("No data available");
       }
     }).catch((error) => {
