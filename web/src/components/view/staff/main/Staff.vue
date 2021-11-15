@@ -12,11 +12,11 @@
 <script>
 import * as Constants from '../../../common/Constants';
 import LoginCommand from '../../../command/LoginCommand'
-import SideBar from '../../common/common/SideBar.vue';
+import SideBar from '../common/SideBar';
 import Navbar from '../../common/common/Navbar.vue'
 
 export default {
-  name: Constants.PAGE_SIZE_STAFF,
+  name: Constants.COMPONENT_NAME_STAFF,
 
   components: {
     SideBar,

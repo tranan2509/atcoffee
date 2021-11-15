@@ -30,25 +30,28 @@ var ProductCommand = {
     return null;
   },
 
-  async fineAll(page, size, store) {
-    const url =  `${Constants.HOSTNAME_DEFAULT}/api/info/product?page=${page}&size=${size}`;
+  async fineAll(page, size, store = null) {
+    const url = `${Constants.HOSTNAME_DEFAULT}/api/info/product?page=${page}&size=${size}`;
     let res = await ConnectServer.getData(url);
     if (res != null) {
-      store.commit(MutationsName.MUTATION_NAME_SET_PRODUCTS, res.products);
-      store.commit(MutationsName.MUTATION_NAME_SET_TOTAL_PAGE_PRODUCT, res.totalPage);
-      store.commit(MutationsName.MUTATION_NAME_SET_CURRENT_PAGE_PRODUCT, 1);
+      store != null ? store.commit(MutationsName.MUTATION_NAME_SET_PRODUCTS, res.products) : '';
+      store != null ? store.commit(MutationsName.MUTATION_NAME_SET_TOTAL_PAGE_PRODUCT, res.totalPage) : '';
+      store != null ? store.commit(MutationsName.MUTATION_NAME_SET_CURRENT_PAGE_PRODUCT, 1) : '';
       return res.products;
     }
     return null;
   },
 
-  async findAllByOrder(page, size, storeCode, categoryCode, keyword, store) {
+  async findAllByOrder(page, size, storeCode, categoryCode, keyword, store = null) {
     const url =  `${Constants.HOSTNAME_DEFAULT}/api/info/product?page=${page}&size=${size}&store=${storeCode}&category=${categoryCode}&keyword=${keyword}`;
     let res = await ConnectServer.getData(url);
+
+    console.log('res', res);
     if (res != null) {
-      store.commit(MutationsName.MUTATION_NAME_SET_PRODUCTS, res.products);
-      store.commit(MutationsName.MUTATION_NAME_SET_TOTAL_PAGE_PRODUCT, res.totalPage);
-      store.commit(MutationsName.MUTATION_NAME_SET_SORT_PRODUCT, {page, store: storeCode, category: categoryCode, keyword, totalPage: res.totalPage});
+      console.log('res', res);
+      store != null ? store.commit(MutationsName.MUTATION_NAME_SET_PRODUCTS, res.products) : '';
+      store != null ? store.commit(MutationsName.MUTATION_NAME_SET_TOTAL_PAGE_PRODUCT, res.totalPage) : '';
+      store != null ? store.commit(MutationsName.MUTATION_NAME_SET_SORT_PRODUCT, {page, store: storeCode, category: categoryCode, keyword, totalPage: res.totalPage}) : '';
       return res.products;
     }
     return null;
