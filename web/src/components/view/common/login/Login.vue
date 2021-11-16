@@ -123,7 +123,7 @@ export default {
       const auth = await LoginCommand.authenticated(this.$store);
       if (auth && auth.roleName === Constants.ROLE.ROLE_ADMIN){
         this.$router.push({path: '/admin'});
-      } else if (auth && auth.roleName === Constants.ROLE.ROLE_ADMIN) {
+      } else if (auth && auth.roleName === Constants.ROLE.ROLE_STAFF) {
         this.$router.push({path: '/staff'});
       }
     },

@@ -1,6 +1,6 @@
 <template>
   <div class="col-lg-2 col-md-6 col-sm-6 col-12 col-custom">
-    <div class="card card-product-1">
+    <div class="card card-product-1" @click="handleShowSelect">
       <div class="card-icon">
         <img :src="product.image"/>
       </div>
@@ -20,18 +20,51 @@
         </div>
       </div>
     </div>
+    <select-popup :isSelectPopup="isSelectPopup" :quantity="quantity" class="select-popup-item"
+    @handleHide="handleHideSelect" @handleChange="handleChangeQuantity" @handleSubmit="handleSubmit"></select-popup>
   </div>
 </template>
 
 <script>
 import * as Constants from '../../../common/Constants'
+import SelectPopup from '../popup/SelectPopup.vue'
 
 export default {
   name: Constants.COMPONENT_NAME_PRODUCTS_ITEM,
 
   props: ['product'],
 
+  components: {
+    SelectPopup
+  },
+
+  data(){
+    return {
+      isSelectPopup: false,
+      quantity: 1
+    }
+  },
+
   methods: {
+
+    handleHideSelect() {
+      this.isSelectPopup = false;
+      this.quantity = 1;
+    },
+
+    handleShowSelect() {
+      this.isSelectPopup = true;
+    },
+
+    handleChangeQuantity(quantity) {
+      this.quantity = quantity;
+    },
+
+    handleSubmit() {
+      //TODO: submit quantity to bill
+      this.handleHideSelect();
+    },
+
     formatPrice(price) {
       return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(price)
     },
@@ -45,6 +78,7 @@ export default {
 
 <style>
 .col-lg-2.col-custom {
+  position: relative;
   cursor: pointer;
   flex: 0 0 20%;
   /* max-width: auto; */
@@ -133,4 +167,9 @@ export default {
   transform: rotateZ(45deg);
 }
 
+.select-popup-item {
+  position: absolute;
+  top: -20px;
+  right: 40px;
+}
 </style>

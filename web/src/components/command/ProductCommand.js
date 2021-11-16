@@ -45,10 +45,7 @@ var ProductCommand = {
   async findAllByOrder(page, size, storeCode, categoryCode, keyword, store = null) {
     const url =  `${Constants.HOSTNAME_DEFAULT}/api/info/product?page=${page}&size=${size}&store=${storeCode}&category=${categoryCode}&keyword=${keyword}`;
     let res = await ConnectServer.getData(url);
-
-    console.log('res', res);
     if (res != null) {
-      console.log('res', res);
       store != null ? store.commit(MutationsName.MUTATION_NAME_SET_PRODUCTS, res.products) : '';
       store != null ? store.commit(MutationsName.MUTATION_NAME_SET_TOTAL_PAGE_PRODUCT, res.totalPage) : '';
       store != null ? store.commit(MutationsName.MUTATION_NAME_SET_SORT_PRODUCT, {page, store: storeCode, category: categoryCode, keyword, totalPage: res.totalPage}) : '';
