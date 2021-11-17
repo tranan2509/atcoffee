@@ -8,6 +8,11 @@
             <input class="form-control" type="number" min="1" :value="quantity"/>
             <button class="btn btn-outline-info" @click.prevent="handlePlusQuantity"><i class="fas fa-plus"></i></button>
           </div>
+          <div class="row-custom">
+            <div class="chip-size" :class="size == 'S' ? 'active' : ''" @click="handleChangeSize('S')">S</div>
+            <div class="chip-size" :class="size == 'M' ? 'active' : ''" @click="handleChangeSize('M')">M</div>
+            <div class="chip-size" :class="size == 'L' ? 'active' : ''" @click="handleChangeSize('L')">L</div>
+          </div>
           <div class="action">
             <input type="submit" value="Thêm" class="btn btn-outline-success"/>
           </div>
@@ -25,7 +30,7 @@ import vClickOutside from 'click-outside-vue3'
 export default {
   name: Constants.COMPONENT_NAME_SELECT_POPUP,
 
-  props: ['quantity', 'isSelectPopup'],
+  props: ['quantity', 'size', 'isSelectPopup'],
 
   directives: {
       clickOutside: vClickOutside.directive
@@ -47,6 +52,10 @@ export default {
     handlePlusQuantity() {
       var quantity = this.quantity + 1;
       this.$emit('handleChange', quantity);
+    },
+
+    handleChangeSize(size) {
+      this.$emit('handleChangeSize', size);
     },
 
     handleSubmit() {
@@ -145,6 +154,31 @@ hr {
   border: 0.5px solid #ccc;
   margin-top: 0px;
   margin-bottom: 0;
+}
+
+.chip-size {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  text-align: center;
+  border: 1px solid #ffa500;
+  border-radius: 4px;
+  height: 34px;
+  margin: 0px 4px;
+  transition: all .3s;
+}
+
+.chip-size:nth-child(2) {
+  width: 50px !important;
+  margin: 0;
+}
+
+.chip-size.active {
+  background: #ffa500;
+  color: #fff;
+  font-weight: bold;
 }
 
 .action {

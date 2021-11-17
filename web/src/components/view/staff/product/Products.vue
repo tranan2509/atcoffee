@@ -14,6 +14,9 @@
     <div class="section-body">
       <products-item></products-item>
     </div>
+    <div class="popup">
+      <cart-popup :isCartPopup="isCartPopup"></cart-popup>
+    </div>
   </staff>
 </template>
 
@@ -22,6 +25,7 @@ import * as Constants from '../../../common/Constants'
 import Staff from '../main/Staff.vue'
 import SectionHeader from '../../common/common/SectionHeader.vue'
 import ProductsItem from '../common/ProductsItem.vue'
+import CartPopup from '../popup/CartPopup.vue'
 
 export default {
   name: Constants.COMPONENT_NAME_PRODUCTS_STAFF,
@@ -29,12 +33,14 @@ export default {
   components: {
     Staff,
     SectionHeader,
-    ProductsItem
+    ProductsItem,
+    CartPopup
   },
 
   data() {
     return {
-      title: 'Danh sách sản phẩm '
+      title: 'Danh sách sản phẩm ',
+      isCartPopup: true
     }
   }
 }

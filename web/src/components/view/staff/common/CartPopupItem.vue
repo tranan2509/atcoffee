@@ -1,22 +1,22 @@
 <template>
-  <div class="col-lg-2 col-md-6 col-sm-6 col-12 col-custom">
+  <div class="col-custom">
     <div class="card card-product-1" @click="handleShowSelect">
+      <div class="card-check">
+        <input type="checkbox"/>
+      </div>
       <div class="card-icon">
-        <img :src="product.image"/>
+        <img :src="'https://res.cloudinary.com/tranan2509/image/upload/v1635663070/bigz85fkvyomeq2tcnr0.jpg'"/>
       </div>
       <div class="card-wrap">
         <div class="card-header">
-          <h4>{{product.name}}</h4>
+          <h4>Name name name name</h4>
         </div>
-        <div class="card-body" v-if="product.discount == 0">
-          {{formatPrice(product.sizes[0].price)}}
-        </div>
-        <div class="card-body flex" v-else>
-          <div id="triangle-right">
-              <span>{{product.discount}}%</span>
-          </div>
-          <span v-html="processPrice(product.sizes[0].price)"></span>
-          {{formatPrice(product.sizes[0].price * (1 - product.discount / 100))}}
+        <div class="card-body flex">
+          <!-- {{formatPrice(product.sizes[0].price)}} -->
+          <span>25.000d</span> &emsp;
+          <span> x2</span> &emsp;
+          <span> M</span>
+          <span class="flex-1 text-right"> 50.000d</span>
         </div>
       </div>
     </div>
@@ -30,9 +30,9 @@ import * as Constants from '../../../common/Constants'
 import SelectPopup from '../popup/SelectPopup.vue'
 
 export default {
-  name: Constants.COMPONENT_NAME_PRODUCTS_ITEM,
+  name: Constants.COMPONENT_NAME_CART_POPUP_ITEM,
 
-  props: ['product'],
+  props: ['cart'],
 
   components: {
     SelectPopup
@@ -82,11 +82,10 @@ export default {
 }
 </script>
 
-<style>
-.col-lg-2.col-custom {
+<style scoped>
+.col-custom {
   position: relative;
   cursor: pointer;
-  flex: 0 0 20%;
   /* max-width: auto; */
   min-width: 280px;
 }
@@ -96,11 +95,20 @@ export default {
   width: 100%;
 }
 
-.card.card-product-1 .card-icon{
+.card.card-product-1 .card-check {
+  float: left;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  width: 24px;
+  margin-left: 4px;
+}
 
-  width: 80px;
-  height: 80px;
-  margin: 10px;
+.card.card-product-1 .card-icon{
+  width: 40px;
+  height: 40px;
+  margin: 4px;
   border-radius: 3px;
   text-align: center;
   float: left;
@@ -108,8 +116,8 @@ export default {
 }
 
 .card.card-product-1 .card-icon img {
-  width: 80px;
-  height: 80px;
+  width: 40px;
+  height: 40px;
   object-fit: cover;
   border-radius: 3px;
   margin-left: 0px;
@@ -120,14 +128,14 @@ export default {
   height: auto;
   min-height: auto;
   display: block;
-  padding-top: 25px;
+  padding-top: 4px;
   padding-bottom: 4px;
 }
 
 .card.card-product-1 .card-header h4 {
   margin-bottom: 0px;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 13px;
   letter-spacing: .5px;
   line-height: 1.2;
   color: #37A372;
@@ -138,7 +146,7 @@ export default {
   color: #34395e;
   padding-bottom: 0px;
   padding-top: 0px;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .card.card-product-1 .card-body.flex {
@@ -177,5 +185,14 @@ export default {
   position: absolute;
   top: -20px;
   right: 40px;
+}
+
+.flex-1 {
+  flex: 1 !important;
+}
+
+.text-right {
+  text-align: right;
+  padding-right: 20px;
 }
 </style>
