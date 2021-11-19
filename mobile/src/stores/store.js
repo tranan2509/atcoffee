@@ -1,7 +1,7 @@
-import themeReducer from './themeReducer';
 import {applyMiddleware, createStore} from 'redux';
 import thunk from 'redux-thunk';
+import {rootReducer} from '../reducer/rootReducer';
 
-const store = createStore(themeReducer, applyMiddleware(thunk));
+const store = createStore(rootReducer, applyMiddleware(thunk));
 
 export default store;

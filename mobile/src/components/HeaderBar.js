@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import {SIZES, COLORS, FONTS, icons} from '../constants';
 import {connect} from 'react-redux';
-import {toggleTheme} from '../stores/themeAction';
+import {toggleTheme} from '../appTheme/themeAction';
 
 const HeaderBar = ({appTheme, toggleTheme}) => {
   function toggleThemeHandler() {
@@ -134,8 +134,8 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    appTheme: state.appTheme,
-    error: state.error,
+    appTheme: state.themeReducer,
+    //error: state.error,
   };
 }
 

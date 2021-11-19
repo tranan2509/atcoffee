@@ -591,10 +591,10 @@ const OrderDetail = ({navigation, appTheme, route}) => {
             justifyContent: 'center',
             alignItems: 'center',
             width: SIZES.width * 0.4,
-            //backgroundColor: COLORS.white,
+            backgroundColor: appTheme.textColor,
           }}>
-          <Text style={{color: 'white', ...FONTS.h3}}>Tổng tiền: </Text>
-          <Text style={{color: 'white', ...FONTS.h3}}>10000000$</Text>
+          <Text style={{color: COLORS.gray, ...FONTS.h3}}>Tổng tiền: </Text>
+          <Text style={{color: COLORS.gray, ...FONTS.h3}}>10000000$</Text>
         </View>
         {/* Thêm vào giỏ */}
         <TouchableOpacity
@@ -614,8 +614,8 @@ const OrderDetail = ({navigation, appTheme, route}) => {
 
 function mapStateToProps(state) {
   return {
-    appTheme: state.appTheme,
-    error: state.error,
+    appTheme: state.themeReducer,
+    //error: state.error,
   };
 }
 

@@ -1,5 +1,5 @@
-import * as themeActionTypes from "./themeAction";
-import { selectedTheme } from "../constants";
+import * as themeActionTypes from './themeAction';
+import {selectedTheme} from '../constants';
 
 const initialState = {
   appTheme: selectedTheme,
@@ -27,4 +27,4 @@ const themeReducer = (state = initialState, action) => {
   }
 };
 
-export default themeReducer;
+export {themeReducer};

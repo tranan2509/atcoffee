@@ -13,9 +13,16 @@ import {
 import {Header, TabButton} from '../../components';
 import {dummyData, COLORS, SIZES, FONTS, icons, images} from '../../constants';
 import {connect} from 'react-redux';
+import * as locationActionsCreator from './action';
+import {bindActionCreators} from 'redux';
 
-const Location = ({navigation, appTheme}) => {
+const Location = ({navigation, themeState, locationState, locationActions}) => {
   const [selectedTab, setSelectedTab] = React.useState(0);
+
+  //get location
+  React.useEffect(() => {
+    locationActions.getAllLocation();
+  }, []);
 
   function renderTopBarSection() {
     return (
@@ -94,7 +101,7 @@ const Location = ({navigation, appTheme}) => {
           marginTop: SIZES.radius,
           paddingHorizontal: SIZES.radius,
         }}
-        data={dummyData.locations}
+        data={locationState.allLocation}
         keyExtractor={item => item.id}
         showsVerticalScrollIndicator={false}
         keyboardDismissMode="on-drag"
@@ -106,7 +113,7 @@ const Location = ({navigation, appTheme}) => {
                 borderRadius: SIZES.radius * 2,
                 paddingHorizontal: SIZES.padding,
                 paddingVertical: SIZES.radius,
-                backgroundColor: appTheme.cardBackgroundColor,
+                backgroundColor: themeState.appTheme.cardBackgroundColor,
               }}
               onPress={() =>
                 navigation.navigate('Order', {selectedLocation: item})
@@ -116,10 +123,15 @@ const Location = ({navigation, appTheme}) => {
                 style={{
                   flexDirection: 'row',
                 }}>
-                <Text style={{flex: 1, color: appTheme.textColor, ...FONTS.h2}}>
-                  {item.title}
+                <Text
+                  style={{
+                    flex: 1,
+                    color: themeState.appTheme.textColor,
+                    ...FONTS.h2,
+                  }}>
+                  {item.name}
                 </Text>
-                <Image
+                {/* <Image
                   source={
                     item.bookmarked ? icons.bookmarkFilled : icons.bookmark
                   }
@@ -128,7 +140,7 @@ const Location = ({navigation, appTheme}) => {
                     width: 20,
                     tintColor: item.bookmarked ? COLORS.red2 : COLORS.white,
                   }}
-                />
+                /> */}
               </View>
               {/* Address */}
               <View
@@ -138,7 +150,7 @@ const Location = ({navigation, appTheme}) => {
                 }}>
                 <Text
                   style={{
-                    color: appTheme.textColor,
+                    color: themeState.appTheme.textColor,
                     ...FONTS.body3,
                     lineHeight: 21,
                   }}>
@@ -152,11 +164,11 @@ const Location = ({navigation, appTheme}) => {
                 }}>
                 <Text
                   style={{
-                    color: appTheme.textColor,
+                    color: themeState.appTheme.textColor,
                     ...FONTS.body5,
                     lineHeight: 16,
                   }}>
-                  {item.operation_hours}
+                  {item.timeOpen} - {item.timeClose}
                 </Text>
               </View>
               {/* Services */}
@@ -168,7 +180,7 @@ const Location = ({navigation, appTheme}) => {
                 {/* Pick up */}
                 <View
                   style={{
-                    borderColor: appTheme.textColor,
+                    borderColor: themeState.appTheme.textColor,
                     borderWidth: 1,
                     borderRadius: 20,
                     paddingHorizontal: SIZES.radius,
@@ -176,7 +188,7 @@ const Location = ({navigation, appTheme}) => {
                   }}>
                   <Text
                     style={{
-                      color: appTheme.textColor,
+                      color: themeState.appTheme.textColor,
                       ...FONTS.body3,
                     }}>
                     Pick up
@@ -185,7 +197,7 @@ const Location = ({navigation, appTheme}) => {
                 {/* Delivery */}
                 <View
                   style={{
-                    borderColor: appTheme.textColor,
+                    borderColor: themeState.appTheme.textColor,
                     borderWidth: 1,
                     borderRadius: 20,
                     paddingHorizontal: SIZES.radius,
@@ -194,7 +206,7 @@ const Location = ({navigation, appTheme}) => {
                   }}>
                   <Text
                     style={{
-                      color: appTheme.textColor,
+                      color: themeState.appTheme.textColor,
                       ...FONTS.body3,
                     }}>
                     Delivery
@@ -215,7 +227,7 @@ const Location = ({navigation, appTheme}) => {
       <View
         style={{
           flex: 1,
-          backgroundColor: appTheme.backgroundColor,
+          backgroundColor: themeState.appTheme.backgroundColor,
           marginTop: -20,
           borderTopLeftRadius: SIZES.radius * 2,
           borderTopRightRadius: SIZES.radius * 2,
@@ -237,13 +249,16 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    appTheme: state.appTheme,
-    error: state.error,
+    themeState: state.themeReducer,
+    //error: state.error,
+    locationState: state.locationReducer,
   };
 }
 
 function mapDispatchToProp(dispatch) {
-  return {};
+  return {
+    locationActions: bindActionCreators(locationActionsCreator, dispatch),
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProp)(Location);

@@ -20,6 +20,7 @@ import {
 } from '../../constants';
 import {connect} from 'react-redux';
 import {HeaderBar, CustomButton} from '../../components';
+import database from '@react-native-firebase/database';
 
 const promoTabs = constants.promoTabs.map(promoTab => ({
   ...promoTab,
@@ -149,6 +150,18 @@ const Home = ({navigation, appTheme}) => {
       offset: promoTabIndex * SIZES.width,
     });
   });
+  // React.useEffect(() => {
+  //   const newReference = database().ref('/users').push();
+
+  //   console.log('Auto generated key: ', newReference.key);
+
+  //   newReference
+  //     .set({
+  //       age: 32,
+  //     })
+  //     .then(() => console.log('Data updated.'));
+  // }, []);
+
   //console.log(promoTabs);
   function renderAvailableRewards() {
     return (
@@ -366,8 +379,8 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    appTheme: state.appTheme,
-    error: state.error,
+    appTheme: state.themeReducer,
+    //error: state.error,
   };
 }
 
