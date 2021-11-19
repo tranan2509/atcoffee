@@ -1,19 +1,19 @@
 <template>
   <admin>
     <section-header :title="title">
-        <div class="breadcrumb-item active">
-          <router-link to="/admin">Trang chủ</router-link>
-        </div>
-        <div class="breadcrumb-item active">
-          <router-link to="">Sản phẩm</router-link>
-        </div>
-        <div class="breadcrumb-item">
-          Danh sách sản phẩm
-        </div>
-      </section-header>
-      <div class="section-body">
-        <table-products></table-products>
+      <div class="breadcrumb-item active">
+        <router-link to="/admin">Trang chủ</router-link>
       </div>
+      <div class="breadcrumb-item active">
+        <router-link to="">Sản phẩm</router-link>
+      </div>
+      <div class="breadcrumb-item">
+        Danh sách sản phẩm
+      </div>
+    </section-header>
+    <div class="section-body">
+      <table-products></table-products>
+    </div>
   </admin>
 </template>
 

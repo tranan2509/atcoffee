@@ -50,8 +50,22 @@ const SystemModule = {
         }
       },
       menuStaff: {
+        dashboard: {
+          value: false,
+          submenu: {
+            general: false,
+            ecommerce: false
+          }
+        },
         product: {
           value: false
+        },
+        profile: {
+          value: false,
+          submenu: {
+            profile: false,
+            change_password: false
+          }
         }
       }
     };
@@ -60,6 +74,9 @@ const SystemModule = {
   getters: {
     menu(state) {
       return state.menu;
+    },
+    menuStaff(state) {
+      return state.menuStaff;
     }
   },
 
@@ -67,9 +84,20 @@ const SystemModule = {
     [MutationsName.MUTATION_NAME_RESET_MENU] (state) {
       Object.keys(state.menu).forEach(key => {
         state.menu[key].value = false;
-        if (state.menu[key].menu != null) {
+        if (state.menu[key].submenu != null) {
           Object.keys(state.menu[key].submenu).forEach(subkey => {
             state.menu[key].submenu[subkey] = false;
+          })
+        } 
+      })
+    },
+
+    [MutationsName.MUTATION_NAME_RESET_MENU_STAFF] (state) {
+      Object.keys(state.menuStaff).forEach(key => {
+        state.menuStaff[key].value = false;
+        if (state.menuStaff[key].submenu != null) {
+          Object.keys(state.menuStaff[key].submenu).forEach(subkey => {
+            state.menuStaff[key].submenu[subkey] = false;
           })
         } 
       })

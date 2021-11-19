@@ -353,8 +353,10 @@ form .form-group {
 }
 
 .form-group-horizontal .chip {
+  display: inline-block;
+  white-space: nowrap;
   height: 32px;
-  min-width: 120px;
+  min-inline-size: auto;
   padding: 5px 20px;
   border: 1px solid var(--primary);
   border-radius: 50px;

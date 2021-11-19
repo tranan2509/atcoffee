@@ -130,7 +130,7 @@ public class ProductServiceImpl implements ProductService{
 
 	@Override
 	public ProductResponse findByKeyword(String keyword, Pageable pageable) {
-		Page<ProductEntity> page = productRepository.findByNameContainingOrCodeContaining(keyword, keyword, pageable);
+		Page<ProductEntity> page = productRepository.findByNameContainingOrCodeContainingAndState(keyword, keyword, true, pageable);
 		return resultResponse(page, pageable);
 	}
 	

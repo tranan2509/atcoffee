@@ -16,9 +16,13 @@ import CategoryInfo from '../components/view/admin/category/CategoryInfo.vue'
 import Profile from '../components/view/admin/profile/Profile.vue'
 import ChangePassword from '../components/view/admin/profile/ChangePassword.vue'
 import Error from '../components/view/admin/error/Error.vue'
+/**Staff Components */
+import DashBoardStaff from '../components/view/staff/dashboard/Dashboard.vue'
+import ProductsStaff from '../components/view/staff/product/Products.vue'
 
 const routes = [
   {path: '/login', component: Login, meta: {title: 'A&T Coffee | Đăng nhập'}},
+  /**Admin URL */
   {path: '/admin', name: 'admin', component: DashBoard, meta: {title: 'A&T Coffee | Trang chủ'}},
   {path: '/admin/statistics', name: 'statistics', component: Statistics, meta: {title: 'A&T Coffee | Thống kê'}},
   {path: '/admin/products', name: 'products', component: Products, meta: {title: 'A&T Coffee | Danh sách sản phẩm'}},
@@ -35,6 +39,10 @@ const routes = [
   {path: '/admin/category-info', name: 'category-info', component: CategoryInfo, meta: {title: 'A&T Coffee | Thông tin loại sản phẩm'}},
   {path: '/admin/profile', name: 'profile', component: Profile, meta: {title: 'A&T Coffee | Thông tin cá nhân'}},
   {path: '/admin/profile/change-password', name: 'change-password', component: ChangePassword, meta: {title: 'A&T Coffee | Đổi mật khẩu'}},
+  /**Staff URL */
+  {path: '/staff', name: 'dashboard-staff', component: DashBoardStaff, meta: {title: 'A&T Coffee | Trang chủ'}},
+  {path: '/staff/products', name: 'products-staff', component: ProductsStaff, meta: {title: 'A&T Coffee | Danh sách sản phẩm'}},
+
   {path: '/:pathMatch(.*)', component: Error, meta: {title: 'A&T Coffee | Lỗi'}},
 ]
 
