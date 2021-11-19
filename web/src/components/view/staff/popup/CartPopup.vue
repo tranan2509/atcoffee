@@ -5,26 +5,36 @@
         <div class="dropdown-header">
           Giỏ hàng
           <div class="float-right">
-            <a>Làm sạch giỏ hàng</a>
+            <a @click="handleRemoveCarts">Làm sạch giỏ hàng</a>
           </div>
         </div>
         <!-- List item -->
-        <div class="carts">
-          <cart-popup-item></cart-popup-item>
+        <div class="carts" v-if="$store.getters.carts.length">
+          <cart-popup-item v-for="(cart, index) in $store.getters.carts" :key="index"
+            :cart="cart"
+          ></cart-popup-item>
+        </div>
+        <div class="carts empty" v-else>
+          Chưa có sản phẩm nào được chọn
+        </div>
+        <div class="dropdown-header dropdown-custom">
+          <button class="btn btn-outline-success">Thanh toán</button>
         </div>
       </div>
-      <div class="icons" v-if="!isShowCart" :class="isShowCart ? 'none' : ''">
-         <b-icon-basket2-fill @click="handleShowCart"></b-icon-basket2-fill>
+      <div class="icons" @click="handleShowCart" v-if="!isShowCart" :class="isShowCart ? 'none' : ''">
+         <b-icon-basket2-fill></b-icon-basket2-fill>
       </div>
-      <div class="icons" :class="isShowCart ? 'active' : 'none'">
-         <b-icon-x @click="handleHideCart"></b-icon-x>
+      <div class="icons" @click="handleHideCart" :class="isShowCart ? 'active' : 'none'">
+         <b-icon-x></b-icon-x>
       </div>
+      <div class="count">{{$store.getters.carts.length}}</div>
     </div>
   </div>
 </template>
 
 <script>
 import * as Constants from '../../../common/Constants'
+import * as MutationsName from '../../../common/MutationsName'
 import CartPopupItem from '../common/CartPopupItem.vue'
 import {BIconBasket2Fill, BIconX} from 'bootstrap-icons-vue'
 import vClickOutside from 'click-outside-vue3'
@@ -73,6 +83,10 @@ export default {
 
     handleSubmit() {
       this.$emit('handleSubmit');
+    },
+
+    handleRemoveCarts() {
+      this.$store.commit(MutationsName.MUTATION_NAME_SET_CARTS, []);
     },
 
     handleHide() {
@@ -181,6 +195,19 @@ export default {
   opacity: 1;
 }
 
+.carts {
+  transition: all .3s;
+}
+
+.carts.empty {
+  transition: all .3s;
+  text-align: center;
+  margin: 20px 0px 24px 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #777;
+}
+
 hr {
   width: 100%;
   border: 0.5px solid #ccc;
@@ -196,7 +223,8 @@ hr {
 
 .dropdown-header {
   font-weight: bold;
-  padding-bottom: 12px;
+  padding-bottom: 16px;
+  margin-top: 8px;
 }
 
 .dropdown-header .float-right a{
@@ -216,6 +244,40 @@ hr {
 
 .float-right {
   float: right !important;
+}
+
+.dropdown-header.dropdown-custom {
+  padding: 0px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  height: 48px !important;
+  margin-bottom: 8px;
+}
+
+.dropdown-header.dropdown-custom button{
+  padding: 4px 16px !important;
+  margin: 0 auto;
+}
+
+
+.count {
+  position: absolute;
+  top: -30px;
+  right: -30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fda427;
+  font-size: 13px;
+  padding: 2px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-weight: 600;
+  color: #fff;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+  transition: all .3s;
 }
 
 input::-webkit-outer-spin-button,

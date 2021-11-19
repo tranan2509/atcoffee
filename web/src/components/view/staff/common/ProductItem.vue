@@ -27,6 +27,7 @@
 
 <script>
 import * as Constants from '../../../common/Constants'
+import * as MutationsName from '../../../common/MutationsName'
 import SelectPopup from '../popup/SelectPopup.vue'
 
 export default {
@@ -67,7 +68,18 @@ export default {
     },
 
     handleSubmit() {
-      //TODO: submit quantity to bill
+      var price = this.size == 'S' ? this.product.sizes[0].price : this.size == 'M' ? this.product.sizes[1].price : this.product.sizes[2].price;
+      var amount = price * this.quantity * (1 - this.product.discount / 100);
+      var cart = {
+        productId: this.product.id,
+        quantity: this.quantity,
+        size: this.size,
+        price: price,
+        amount: amount,
+        discount: this.product.discount,
+        description: '',
+      };
+      this.$store.commit(MutationsName.MUTATION_NAME_ADD_CART, cart);
       this.handleHideSelect();
     },
 

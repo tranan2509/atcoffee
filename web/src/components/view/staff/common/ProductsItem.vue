@@ -7,6 +7,7 @@
 <script>
 import * as Constants from '../../../common/Constants'
 import ProductCommand from '../../../command/ProductCommand'
+import StoreCommand from '../../../command/StoreCommand'
 import CategoryCommand from '../../../command/CategoryCommand'
 import ProductItem from './ProductItem.vue'
 
@@ -21,6 +22,7 @@ export default {
     return {
       products: [],
       category: {},
+      stroe: {},
       value: {
         countProducts: 0
       }
@@ -38,6 +40,11 @@ export default {
       await this.countProductsByCategoryCode(this.category.code);
     },
 
+    async loadData() {
+      await this.loadStore(this.$store.getters.user.storeId);
+      await this.loadProducts();
+    },
+
     async loadCategoryById(id) {
       this.category = await CategoryCommand.findOne(id);
     },
@@ -48,14 +55,18 @@ export default {
       return result;
     },
 
+    async loadStore(id) {
+      this.store = await StoreCommand.findOne(id);
+    },
+
     async loadProducts() {
-      this.products = await ProductCommand.findAllByOrder(1, 100, '', '', '');
+      this.products = await ProductCommand.findAllByOrder(1, 100, this.store.code, '', '');
     }
   },
 
   created() {
     // this.init();
-    this.loadProducts();
+    this.loadData();
   }
 }
 </script>

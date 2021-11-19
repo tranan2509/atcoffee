@@ -1,33 +1,33 @@
 <template>
   <div class="col-custom">
     <div class="card card-product-1" @click="handleShowSelect">
-      <div class="card-check">
-        <input type="checkbox"/>
-      </div>
       <div class="card-icon">
-        <img :src="'https://res.cloudinary.com/tranan2509/image/upload/v1635663070/bigz85fkvyomeq2tcnr0.jpg'"/>
+        <img :src="product.image"/>
       </div>
       <div class="card-wrap">
         <div class="card-header">
-          <h4>Name name name name</h4>
+          <h4>{{product.name}}</h4>
         </div>
         <div class="card-body flex">
-          <!-- {{formatPrice(product.sizes[0].price)}} -->
-          <span>25.000d</span> &emsp;
-          <span> x2</span> &emsp;
-          <span> M</span>
-          <span class="flex-1 text-right"> 50.000d</span>
+          <span>{{formatPrice(cart.price)}}</span> &emsp;
+          <span>x{{cart.quantity}}</span> &emsp;
+          <span>{{cart.size}}</span>&emsp;
+          <span v-if="cart.discount > 0" class="discount">-{{cart.discount}}%</span>
+          <span class="flex-1 text-right"> {{formatPrice(cart.amount)}}</span>
         </div>
       </div>
     </div>
-    <select-popup :isSelectPopup="isSelectPopup" :quantity="quantity" :size="size" class="select-popup-item"
-    @handleHide="handleHideSelect" @handleChange="handleChangeQuantity" @handleChangeSize="handleChangeSize" @handleSubmit="handleSubmit"></select-popup>
+    <select-cart-popup :isSelectCartPopup="isSelectCartPopup" :quantity="quantity" :size="size" class="select-popup-item"
+    @handleHide="handleHideSelect" @handleChange="handleChangeQuantity" @handleChangeSize="handleChangeSize" 
+    @handleRemove="handleRemove" @handleSubmit="handleSubmit"></select-cart-popup>
   </div>
 </template>
 
 <script>
 import * as Constants from '../../../common/Constants'
-import SelectPopup from '../popup/SelectPopup.vue'
+import * as MutationsName from '../../../common/MutationsName'
+import ProductCommand from '../../../command/ProductCommand'
+import SelectCartPopup from '../popup/SelectCartPopup.vue'
 
 export default {
   name: Constants.COMPONENT_NAME_CART_POPUP_ITEM,
@@ -35,27 +35,28 @@ export default {
   props: ['cart'],
 
   components: {
-    SelectPopup
+    SelectCartPopup
   },
 
   data(){
     return {
-      isSelectPopup: false,
+      isSelectCartPopup: false,
+      product: {},
       quantity: 1,
       size: 'S'
     }
   },
-
+  
   methods: {
 
     handleHideSelect() {
-      this.isSelectPopup = false;
-      this.quantity = 1;
-      this.size = 'S';
+      this.isSelectCartPopup = false;
+      this.quantity = this.cart.quantity;
+      this.size = this.cart.size;
     },
 
     handleShowSelect() {
-      this.isSelectPopup = true;
+      this.isSelectCartPopup = true;
     },
 
     handleChangeQuantity(quantity) {
@@ -66,9 +67,18 @@ export default {
       this.size = size;
     },
 
+    handleRemove() {
+      this.$store.commit(MutationsName.MUTATION_NAME_REMOVE_CART, this.cart);
+      this.isSelectCartPopup = false;
+    },
+
     handleSubmit() {
-      //TODO: submit quantity to bill
-      this.handleHideSelect();
+      var preCart = {...this.cart};
+      var price = this.size == 'S' ? this.product.sizes[0].price : this.size == 'M' ? this.product.sizes[1].price : this.product.sizes[2].price;
+      var amount = price * this.quantity * (1 - this.product.discount / 100);
+      var nextCart = {...this.cart, size: this.size, quantity: this.quantity, price, amount};
+      this.$store.commit(MutationsName.MUTATION_NAME_UPDATE_CART, {preCart, nextCart});
+      this.isSelectCartPopup = false;
     },
 
     formatPrice(price) {
@@ -77,7 +87,24 @@ export default {
 
     processPrice(price) {
       return `<span class="decoration-line">${this.formatPrice(price)}</span>`
+    },
+
+    async loadProduct() {
+      this.product = await ProductCommand.findOne(this.cart.productId);
     }
+  },
+
+  renderTriggered({key, target}) {
+    if (key == 'isSelectCartPopup' && target.isSelectCartPopup) {
+      this.quantity = this.cart.quantity;
+      this.size = this.cart.size;
+    }
+  },
+
+  created() {
+    this.quantity = this.cart.quantity;
+    this.size = this.cart.size;
+    this.loadProduct();
   }
 }
 </script>
@@ -88,11 +115,14 @@ export default {
   cursor: pointer;
   /* max-width: auto; */
   min-width: 280px;
+  transition: all .3s;
 }
 
 .card.card-product-1 {
   display: inline-block;
   width: 100%;
+  margin-bottom: 12px;
+  padding-left: 8px;
 }
 
 .card.card-product-1 .card-check {
@@ -183,7 +213,7 @@ export default {
 
 .select-popup-item {
   position: absolute;
-  top: -20px;
+  top: -60px;
   right: 40px;
 }
 

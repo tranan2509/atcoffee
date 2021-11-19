@@ -7,7 +7,7 @@
           data-toggle="dropdown" aria-expanded="false">
           <i class="far fa-bell" @click="handleShowNotification(navbar)"></i>
         </router-link>
-        <div class="dropdown-menu dropdown-list dropdown-menu-right show" v-if="navbar.notification" v-click-outside="handleHideNotification">
+        <div class="dropdown-menu dropdown-list dropdown-menu-right transition show" v-if="navbar.notification" v-click-outside="handleHideNotification">
           <div class="dropdown-header">
             Thông báo
             <div class="float-right">
@@ -36,7 +36,7 @@
         </div>
         
       </li>
-      <li class="dropdown" v-click-outside="handleHide">
+      <li class="dropdown transition" v-click-outside="handleHide">
         <router-link to="" class="nav-link dropdown-toggle nav-link-lg nav-link-user" data-toggle="dropdown" aria-expanded="false" @click="handleShow(navbar)">
           <img :src="this.$store.getters.user.image" alt="avatar" class="rounded-circle mr-1">
           <div class="d-sm-none d-lg-inline-block">
@@ -125,13 +125,13 @@ export default {
 
     addBill() {
       var bill = {
-        id: 0,
+        id: '',
         amount: 80000,
         price: 100000,
         discount: 20,
         address: 'HCM City',
         status: 'REQUEST',
-        staffId: '',
+        staffId: '',  
         customerId: 1,
         rewardId: '',
         promotionId: '',
@@ -144,6 +144,7 @@ export default {
             quantity: 4,
             amount: 80000,
             price: 20000,
+            size: 'S',
             discount: 0,
             description: 'Khong duong',
             productId: 1,
@@ -488,6 +489,10 @@ a.dropdown-item {
 
 .dropdown-list .dropdown-footer i{
   color: var(--primary);
+}
+
+.dropdown-menu.transition {
+  transition: all .3s;
 }
 
 .text-center {

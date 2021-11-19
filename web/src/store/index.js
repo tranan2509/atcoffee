@@ -9,6 +9,7 @@ import StoreModule from "./modules/StoreModule";
 import RoleModule from "./modules/RoleModule";
 import ProductModule from './modules/ProductModule'
 import BillModule from "./modules/BillModule";
+import CartModule from "./modules/CartModule";
 
 const store = createStore({
   plugins: [createPersistedState()],
@@ -19,7 +20,8 @@ const store = createStore({
     StoreModule,
     RoleModule,
     ProductModule,
-    BillModule
+    BillModule,
+    CartModule
   },
 });
 
