@@ -1,5 +1,11 @@
 package com.hcmute.service;
 
-public interface CartService {
+import java.util.List;
 
+import com.hcmute.dto.CartDTO;
+
+public interface CartService {
+	CartDTO save(CartDTO cartDTO);
+	List<CartDTO> findByCustomerId(Long id);
+	void delete(Long id);
 }

@@ -60,6 +60,9 @@ const SystemModule = {
         product: {
           value: false
         },
+        payment: {
+          value: false
+        },
         profile: {
           value: false,
           submenu: {

@@ -1,7 +1,11 @@
 package com.hcmute.api;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,5 +27,15 @@ public class TypeAPI {
 		UserDTO user = ConstantsUtil.userDTO;
 		dto = typeService.save(dto);
 		return ResponseEntity.ok(new TypeResponse(dto, user));
+	}
+	
+	@GetMapping("/api/info/type")
+	public ResponseEntity<List<TypeDTO>> findAll() {
+		return ResponseEntity.ok(typeService.findAll());
+	}
+	
+	@GetMapping("/api/info/type/{id}")
+	public ResponseEntity<TypeDTO> findOne(@PathVariable(name = "id") Long id) {
+		return ResponseEntity.ok(typeService.findOne(id));
 	}
 }

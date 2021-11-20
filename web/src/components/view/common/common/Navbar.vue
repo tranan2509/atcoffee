@@ -32,20 +32,18 @@
               <i class="fas fa-chevron-right"></i>
             </router-link>
           </div>
-          <!-- <div id="ascrail2002" class="nicescroll-rails nicescroll-rails-vr" style="width: 9px; z-index: 1000; cursor: default; position: absolute; top: 58px; left: 341px; height: 350px; opacity: 0.3; display: block;"><div style="position: relative; top: 0px; float: right; width: 7px; height: 306px; background-color: rgb(66, 66, 66); border: 1px solid rgb(255, 255, 255); background-clip: padding-box; border-radius: 5px;" class="nicescroll-cursors"></div></div> -->
         </div>
-        
       </li>
       <li class="dropdown transition" v-click-outside="handleHide">
         <router-link to="" class="nav-link dropdown-toggle nav-link-lg nav-link-user" data-toggle="dropdown" aria-expanded="false" @click="handleShow(navbar)">
-          <img :src="this.$store.getters.user.image" alt="avatar" class="rounded-circle mr-1">
+          <img :src="$store.getters.user != null ? $store.getters.user.image : ''" alt="avatar" class="rounded-circle mr-1">
           <div class="d-sm-none d-lg-inline-block">
-            {{this.$store.getters.user.name}}
+            {{$store.getters.user != null ? $store.getters.user.name : ''}}
           </div>
         </router-link>
         <div class="dropdown-menu dropdown-menu-right" :class="navbar.dropdown ? 'show' : ''">
           <div class="dropdown-title">Thông tin</div>
-            <router-link to="/admin/profile" class="dropdown-item has-icon">
+            <router-link :to="$route.path.includes('admin') ? '/admin/profile' : '/staff/profile'" class="dropdown-item has-icon">
               <i class="far fa-user"></i> Hồ sơ
             </router-link>
             <router-link to="/admin" class="dropdown-item has-icon">
@@ -115,7 +113,7 @@ export default {
     },
 
     handleLogout() {
-      let isLogout = LoginCommand.logout(this.$store);
+      let isLogout = LoginCommand.logout(this.$store);      
       isLogout ? this.$router.push({path: '/login'}) : '';
     },
 

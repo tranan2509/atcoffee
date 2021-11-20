@@ -44,7 +44,7 @@ const LoginCommand = {
     try{
 
       const url = '/api/user/authenticate';
-      const res = await ConnectServer.getData(url);
+      const res = await ConnectServer.getData(url);      
       if (res != null) {
         store.commit(MutationsName.AUTHENTICATED, res);
         return res;

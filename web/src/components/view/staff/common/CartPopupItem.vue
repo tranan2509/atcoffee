@@ -1,6 +1,6 @@
 <template>
   <div class="col-custom">
-    <div class="card card-product-1" @click="handleShowSelect">
+    <div class="card card-product-1" :class="$route.path.includes('payment') ? 'payment' : ''" @click="handleShowSelect">
       <div class="card-icon">
         <img :src="product.image"/>
       </div>
@@ -125,16 +125,6 @@ export default {
   padding-left: 8px;
 }
 
-.card.card-product-1 .card-check {
-  float: left;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 48px;
-  width: 24px;
-  margin-left: 4px;
-}
-
 .card.card-product-1 .card-icon{
   width: 40px;
   height: 40px;
@@ -191,26 +181,6 @@ export default {
   margin-right: 8px;
 }
 
-#triangle-right {
-  position: absolute;
-  top: 0px;
-  right: 0px;
-	width: 0;
-  height: 0;
-  border-top-right-radius: .25rem;
-  border-top: 40px solid orange;
-  border-left: 40px solid transparent;
-}
-
-#triangle-right span {
-  position: absolute;
-  font-size: 14px;
-  top: -36px;
-  right: 0px;
-  color: #fff;
-  transform: rotateZ(45deg);
-}
-
 .select-popup-item {
   position: absolute;
   top: -60px;
@@ -225,4 +195,48 @@ export default {
   text-align: right;
   padding-right: 20px;
 }
+
+.card.card-product-1.payment {
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 12px;
+  padding-left: 8px;
+}
+
+.card.card-product-1.payment .card-icon{
+  width: 60px;
+  height: 60px;
+  margin: 4px;
+  border-radius: 3px;
+  text-align: center;
+  float: left;
+  margin-right: 15px;
+}
+
+.card.card-product-1.payment .card-icon img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 3px;
+  margin-left: 0px;
+}
+
+.card.card-product-1.payment .card-header {
+  border-color: transparent;
+  height: auto;
+  min-height: auto;
+  display: block;
+  padding-top: 12px;
+  padding-bottom: 4px;
+}
+
+.card.card-product-1.payment .card-header h4 {
+  margin-bottom: 0px;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: .5px;
+  line-height: 1.2;
+  color: #37A372;
+}
+
 </style>

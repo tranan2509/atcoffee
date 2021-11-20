@@ -13,6 +13,7 @@ import com.hcmute.entity.UserEntity;
 
 public interface UserRepository extends JpaRepository<UserEntity, Long>{
 	UserEntity findOneByUsername(String username);
+	UserEntity findOneByCode(String code);
 	UserEntity findOneByEmail(String email);
 	UserEntity findOneByUsernameAndPassword(String username, String password);
 	List<UserEntity> findByUsernameOrCodeOrEmailOrPhoneOrIdentityCard(String username, String code, String email, String phone, String identityCard);

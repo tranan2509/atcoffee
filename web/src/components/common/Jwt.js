@@ -15,7 +15,6 @@ const JWT = {
    * @returns
    */
   getJWT: () => {
-
     const jwt = localStorage.getItem(Constants.JWT_NAME);
     return jwt;
   },
@@ -25,7 +24,6 @@ const JWT = {
    * @returns
    */
    getBearerJWT: () => {
-
     const jwt = `Bearer ${localStorage.getItem(Constants.JWT_NAME)}`;
     return jwt;
   },

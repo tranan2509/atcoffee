@@ -16,6 +16,7 @@ public class BillDetailEntity extends BaseEntity implements Serializable {
 	private String description;
 	private float amount;
 	private float price;
+	private String size;
 	private int discount;		
 
 	@ManyToOne
@@ -60,6 +61,14 @@ public class BillDetailEntity extends BaseEntity implements Serializable {
 
 	public void setPrice(float price) {
 		this.price = price;
+	}
+
+	public String getSize() {
+		return size;
+	}
+
+	public void setSize(String size) {
+		this.size = size;
 	}
 
 	public int getDiscount() {
