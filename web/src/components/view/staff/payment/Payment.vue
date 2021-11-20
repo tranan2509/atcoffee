@@ -4,18 +4,15 @@
       <div class="breadcrumb-item active">
         <router-link to="/staff">Trang chủ</router-link>
       </div>
-      <div class="breadcrumb-item active">
-        <router-link to="">Sản phẩm</router-link>
-      </div>
       <div class="breadcrumb-item">
-        Danh sách sản phẩm
+        Thanh toán
       </div>
     </section-header>
     <div class="section-body">
-      <products-item></products-item>
+      <customer-payment-info @handleChangeUser="handleChangeUser"></customer-payment-info>
+      <cart-info :user="customer"></cart-info>
     </div>
     <div class="popup">
-      <cart-popup :isCartPopup="isCartPopup"></cart-popup>
     </div>
   </staff>
 </template>
@@ -24,23 +21,30 @@
 import * as Constants from '../../../common/Constants'
 import Staff from '../main/Staff.vue'
 import SectionHeader from '../../common/common/SectionHeader.vue'
-import ProductsItem from '../common/ProductsItem.vue'
-import CartPopup from '../popup/CartPopup.vue'
+import CustomerPaymentInfo from '../common/CustomerPaymentInfo.vue'
+import CartInfo from '../common/CartInfo.vue'
 
 export default {
-  name: Constants.COMPONENT_NAME_PRODUCTS_STAFF,
+  name: Constants.COMPONENT_NAME_PAYMENT_STAFF,
 
   components: {
     Staff,
     SectionHeader,
-    ProductsItem,
-    CartPopup
+    CustomerPaymentInfo,
+    CartInfo
   },
 
   data() {
     return {
-      title: 'Danh sách sản phẩm ',
-      isCartPopup: true
+      title: 'Thanh toán',
+      customer: null
+    }
+  },
+
+  methods: {
+
+    handleChangeUser(customer) {
+      this.customer = customer;
     }
   }
 }

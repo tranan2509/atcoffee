@@ -44,6 +44,12 @@ public class UserAPI {
 	public ResponseEntity<UserDTO> findOneByUsername(@RequestParam(name = "username") String username){
 		return ResponseEntity.ok(userService.findOneByUsername(username));
 	}
+	
+
+	@GetMapping(value = "/api/staff/user", params = "code")
+	public ResponseEntity<UserDTO> findOneByCode(@RequestParam(name = "code") String code){
+		return ResponseEntity.ok(userService.findOneByCode(code));
+	}
 		
 	@GetMapping("/api/staff/user/{id}")
 	public ResponseEntity<UserDTO> findOne(@PathVariable(name = "id") Long id){
@@ -66,6 +72,25 @@ public class UserAPI {
 		userDTO = userService.save(userDTO);
 		return ResponseEntity.ok(userDTO);
 	}
+	
+	@PostMapping("/api/info/user")
+	public ResponseEntity<UserDTO> addCustomer(@RequestParam(value = "file", required = false) MultipartFile multipartFile,
+			@RequestParam("user") String userJson){
+		try {
+			UserDTO user = objectMapper.readValue(userJson, UserDTO.class);	
+			if (multipartFile != null) {
+				Map r = this.cloudinary.uploader().upload(multipartFile.getBytes(),
+		                  ObjectUtils.asMap("resource_type", "auto"));
+				String img = (String) r.get("secure_url");
+				user.setImage(img);
+			}
+			user.setRoleName(ConstantsUtil.ROLE_NAME_USER);
+			user = userService.save(user);
+			return ResponseEntity.ok(user);
+		} catch (Exception e) {
+			return ResponseEntity.ok(null);
+		}
+	} 
 	
 	@PostMapping("/api/admin/user")
 	public ResponseEntity<UserDTO> add(@RequestParam(value = "file", required = false) MultipartFile multipartFile,

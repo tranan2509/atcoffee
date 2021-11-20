@@ -5,6 +5,7 @@ public class BillDetailDTO {
 	private String description;
 	private float amount;
 	private float price;
+	private String size;
 	private int discount;
 	private Long billId;
 	private Long productId;
@@ -34,6 +35,13 @@ public class BillDetailDTO {
 	}
 	public void setPrice(float price) {
 		this.price = price;
+	}
+	
+	public String getSize() {
+		return size;
+	}
+	public void setSize(String size) {
+		this.size = size;
 	}
 	public int getDiscount() {
 		return discount;

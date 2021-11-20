@@ -42,6 +42,16 @@ const UserCommand = {
     return null;
   },
 
+  async findOneByCode(code, store = null) {
+    const url =  `${Constants.HOSTNAME_DEFAULT}/api/staff/user?code=${code}`;
+    let res = await ConnectServer.getData(url);
+    if (res != null) {
+      store != null ? store.commit(MutationsName.MUTATION_NAME_SET_USER, res) : null;
+      return res;
+    }
+    return null;
+  },
+
   async validate(username, code, email, phone, identityCard) {
     const url = `${Constants.HOSTNAME_DEFAULT}/api/admin/user/validate?username=${username}&code=${code}&email=${email}&phone=${phone}&identity-card=${identityCard}`;
     let res = await ConnectServer.getData(url);

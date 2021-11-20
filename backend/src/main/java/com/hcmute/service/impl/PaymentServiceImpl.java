@@ -33,6 +33,11 @@ public class PaymentServiceImpl implements PaymentService{
 		PaymentEntity entity = mapper.map(dto, PaymentEntity.class);
 		return mapper.map(paymentRepository.save(entity), PaymentDTO.class);
 	}
+
+	@Override
+	public PaymentDTO findOne(Long id) {
+		return mapper.map(paymentRepository.findOne(id), PaymentDTO.class);
+	}
 	
 	
 	

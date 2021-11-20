@@ -106,6 +106,11 @@ public class UserServiceImpl implements UserService{
 	public UserDTO findOneByUsername(String username) {
 		return mapper.map(userRepository.findOneByUsername(username), UserDTO.class);
 	}
+	
+	@Override
+	public UserDTO findOneByCode(String code) {
+		return mapper.map(userRepository.findOneByCode(code), UserDTO.class);
+	}
 
 	@Override
 	public UserDTO findOne(Long id) {

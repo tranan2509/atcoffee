@@ -109,8 +109,10 @@ export default {
     async login(username, password) {
       var params = {username, password};
       const result = await LoginCommand.login(params, this.$store);
-      if (result) {
+      if (result && result.user.roleName == Constants.ROLE.ROLE_ADMIN) {
         this.$router.push('/admin')
+      } else if (result && result.user.roleName == Constants.ROLE.ROLE_STAFF){
+        this.$router.push({path: '/staff'})
       } else {
         this.incorrect = true;
       }
@@ -120,10 +122,14 @@ export default {
      * Function: authenticated
      */
     async authenticated() {
+      const jwt = localStorage.getItem('jwt');
+      if (jwt == null){
+        return ;
+      }
       const auth = await LoginCommand.authenticated(this.$store);
-      if (auth && auth.roleName === Constants.ROLE.ROLE_ADMIN){
+      if (auth && auth.roleName == Constants.ROLE.ROLE_ADMIN){
         this.$router.push({path: '/admin'});
-      } else if (auth && auth.roleName === Constants.ROLE.ROLE_STAFF) {
+      } else if (auth && auth.roleName == Constants.ROLE.ROLE_STAFF) {
         this.$router.push({path: '/staff'});
       }
     },

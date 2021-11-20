@@ -22,7 +22,8 @@
                       <i class="fas fa-user-edit"></i>
                       Chỉnh sửa
                     </a>
-                    <router-link to="/admin/profile/change-password" class="dropdown-item has-icon" v-if="type == 'profile'">
+                    <router-link :to="$route.path.includes('admin') ? '/admin/profile/change-password' : '/staff/profile/change-password'"
+                     class="dropdown-item has-icon" v-if="type == 'profile'">
                       <i class="fas fa-lock"></i>
                       Đổi mật khẩu
                     </router-link>

@@ -49,6 +49,23 @@ public class UserDTO extends BaseDTO<UserDTO>{
 		this.roleName = roleName;
 		setState(true);
 	}
+	public UserDTO(String username, String password, String image, String name, String phone, String gender,
+			String email, String address, int accumulatedPoints, int currentPoints,  Long typeId, String roleName) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.image = image;
+		this.name = name;
+		this.phone = phone;
+		this.gender = gender;
+		this.email = email;
+		this.address = address;
+		this.accumulatedPoints = accumulatedPoints;
+		this.currentPoints = currentPoints;
+		this.typeId = typeId;
+		this.roleName = roleName;
+		setState(true);
+	}
 	public String getUsername() {
 		return username;
 	}

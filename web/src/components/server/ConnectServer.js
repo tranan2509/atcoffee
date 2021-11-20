@@ -27,7 +27,12 @@ const connect = {
      */
     postData: async (url, data) => {
       try {
-        let res = await instance.post(url, data);
+        let res = await instance.post(url, data, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': JWT.getBearerJWT()
+          }
+        });
         return res && res.data ? res.data : null;
       } catch (error) {
         return null;
@@ -42,7 +47,12 @@ const connect = {
      */
     putData: async (url, data) => {
       try{
-        let res = await instance.put(url, data);
+        let res = await instance.put(url, data, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': JWT.getBearerJWT()
+          }
+        });
         return res && res.data ? res.data : null;
       } catch(error) {
         return null;
@@ -71,12 +81,17 @@ const connect = {
      */
     getData: async (url) => {
       try{
-        let res = await instance.get(url);
+        let res = await instance.get(url, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': JWT.getBearerJWT()
+          }
+        });
         return res != null && res.data ? res.data : null;
       } catch (error) {
         return null;
       }
-    }
+    },
 
 }
 

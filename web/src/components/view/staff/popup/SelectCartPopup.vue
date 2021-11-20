@@ -192,6 +192,10 @@ hr {
   margin-top: 8px;
 }
 
+.action input[type="submit"] {
+  margin-right: 4px !important;
+}
+
 .action i {
   display: flex;
   align-items: center;
@@ -203,7 +207,7 @@ hr {
   border: 1px solid #f00;
   border-radius: 4px;
   height: 34px;
-  padding: 0 8px;
+  padding: 0 7px;
   transition: all .3s;
 }
 

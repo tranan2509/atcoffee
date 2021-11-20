@@ -28,6 +28,12 @@
           <span>Sản phẩm</span>
         </router-link>
       </li>
+       <li class="nav-item dropdown" :class="menuStaff.payment.value ? 'active' : ''">  
+        <router-link to="/staff/payment" class="nav-link" @click="handleDropdown(menuStaff.payment)">
+          <i class="fas fa-money-check-alt"></i>
+          <span>Thanh toán</span>
+        </router-link>
+      </li>
       <!-- <li class="nav-item dropdown" :class="menuStaff.category.value ? 'active' : ''">  
         <router-link to="/staff/categories?page=1" class="nav-link" @click="handleDropdown(menu.category)">
           <i class="fas fa-box-open"></i>
