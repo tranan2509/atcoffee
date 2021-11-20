@@ -11,14 +11,15 @@ import {
 } from 'react-native';
 import {SIZES, COLORS, FONTS, icons} from '../constants';
 import {connect} from 'react-redux';
-import {toggleTheme} from '../appTheme/themeAction';
+import * as themeActionsCreater from '../appTheme/themeAction';
+import {bindActionCreators} from 'redux';
 
-const HeaderBar = ({appTheme, toggleTheme}) => {
+const HeaderBar = ({themeState, themeActions}) => {
   function toggleThemeHandler() {
-    if (appTheme.name == 'light') {
-      toggleTheme('dark');
+    if (themeState.appTheme.name == 'light') {
+      themeActions.toggleTheme('dark');
     } else {
-      toggleTheme('light');
+      themeActions.toggleTheme('light');
     }
   }
   return (
@@ -65,7 +66,7 @@ const HeaderBar = ({appTheme, toggleTheme}) => {
               width: 40,
               alignItems: 'center',
               justifyContent: 'center',
-              ...(appTheme.name == 'light'
+              ...(themeState.appTheme.name == 'light'
                 ? styles.selectedLightModeStyle
                 : {}),
             }}>
@@ -85,7 +86,9 @@ const HeaderBar = ({appTheme, toggleTheme}) => {
               width: 40,
               alignItems: 'center',
               justifyContent: 'center',
-              ...(appTheme.name == 'dark' ? styles.selectedNightModeStyle : {}),
+              ...(themeState.appTheme.name == 'dark'
+                ? styles.selectedNightModeStyle
+                : {}),
             }}>
             <Image
               source={icons.night}
@@ -134,16 +137,14 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    appTheme: state.themeReducer,
+    themeState: state.themeReducer,
     //error: state.error,
   };
 }
 
 function mapDispatchToProp(dispatch) {
   return {
-    toggleTheme: themeType => {
-      return dispatch(toggleTheme(themeType));
-    },
+    themeActions: bindActionCreators(themeActionsCreater, dispatch),
   };
 }
 

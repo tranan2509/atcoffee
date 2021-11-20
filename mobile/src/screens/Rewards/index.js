@@ -4,7 +4,7 @@ import {HeaderBar, CustomButton} from '../../components';
 import {FONTS, COLORS, dummyData, SIZES, icons} from '../../constants';
 import {connect} from 'react-redux';
 
-const Rewards = ({navigation, appTheme}) => {
+const Rewards = ({navigation, themeState}) => {
   function renderRewardPointSection() {
     return (
       <View
@@ -23,7 +23,7 @@ const Rewards = ({navigation, appTheme}) => {
         </Text>
         <Text
           style={{
-            color: appTheme.textColor,
+            color: themeState.appTheme.textColor,
             marginTop: 10,
             width: SIZES.width * 0.6,
             textAlign: 'center',
@@ -102,7 +102,7 @@ const Rewards = ({navigation, appTheme}) => {
           marginBottom: SIZES.padding,
           paddingHorizontal: SIZES.padding,
         }}>
-        <Text style={{color: appTheme.textColor, ...FONTS.h2}}>
+        <Text style={{color: themeState.appTheme.textColor, ...FONTS.h2}}>
           Available Rewards
         </Text>
       </View>
@@ -119,7 +119,7 @@ const Rewards = ({navigation, appTheme}) => {
           marginTop: -25,
           borderTopLeftRadius: SIZES.radius * 2,
           borderTopRightRadius: SIZES.radius * 2,
-          backgroundColor: appTheme.backgroundColor,
+          backgroundColor: themeState.appTheme.backgroundColor,
         }}
         data={dummyData.availableRewards}
         keyExtractor={item => `${item.id}`}
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    appTheme: state.themeReducer,
+    themeState: state.themeReducer,
     //error: state.error,
   };
 }

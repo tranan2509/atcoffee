@@ -250,7 +250,6 @@ const styles = StyleSheet.create({
 function mapStateToProps(state) {
   return {
     themeState: state.themeReducer,
-    //error: state.error,
     locationState: state.locationReducer,
   };
 }

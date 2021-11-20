@@ -12,7 +12,7 @@ import {COLORS, FONTS, images, icons, SIZES, dummyData} from '../../constants';
 import {IconButton} from '../../components';
 import {connect} from 'react-redux';
 
-const OrderDetail = ({navigation, appTheme, route}) => {
+const OrderDetail = ({navigation, themeState, route}) => {
   const [selectedItem, setSelectedItem] = React.useState(null);
 
   const [selectedSize, setSelectedSize] = React.useState(32);
@@ -79,7 +79,7 @@ const OrderDetail = ({navigation, appTheme, route}) => {
         />
         {/* Image item */}
         <Image
-          source={selectedItem?.thumbnail}
+          source={{uri: selectedItem?.image}}
           resizeMode="contain"
           style={{
             width: SIZES.width * 0.7,
@@ -182,7 +182,7 @@ const OrderDetail = ({navigation, appTheme, route}) => {
         <View style={{}}>
           <Text
             style={{
-              color: appTheme.headerColor,
+              color: themeState.appTheme.headerColor,
               ...FONTS.h1,
               fontSize: 25,
             }}>
@@ -191,7 +191,7 @@ const OrderDetail = ({navigation, appTheme, route}) => {
           <Text
             style={{
               marginTop: SIZES.base,
-              color: appTheme.textColor,
+              color: themeState.appTheme.textColor,
               ...FONTS.body3,
             }}>
             {selectedItem?.description}
@@ -208,7 +208,7 @@ const OrderDetail = ({navigation, appTheme, route}) => {
           <Text
             style={{
               flex: 1,
-              color: appTheme.headerColor,
+              color: themeState.appTheme.headerColor,
               ...FONTS.h2,
               fontSize: 20,
             }}>
@@ -324,7 +324,7 @@ const OrderDetail = ({navigation, appTheme, route}) => {
             }}>
             <Text
               style={{
-                color: appTheme.headerColor,
+                color: themeState.appTheme.headerColor,
                 ...FONTS.h2,
                 fontSize: 20,
               }}>
@@ -408,7 +408,7 @@ const OrderDetail = ({navigation, appTheme, route}) => {
               <Text
                 style={{
                   textAlign: 'center',
-                  color: appTheme.headerColor,
+                  color: themeState.appTheme.headerColor,
                   ...FONTS.h2,
                   fontSize: 20,
                 }}>
@@ -481,7 +481,7 @@ const OrderDetail = ({navigation, appTheme, route}) => {
               <Text
                 style={{
                   textAlign: 'center',
-                  color: appTheme.headerColor,
+                  color: themeState.appTheme.headerColor,
                   ...FONTS.h2,
                   fontSize: 20,
                 }}>
@@ -555,7 +555,7 @@ const OrderDetail = ({navigation, appTheme, route}) => {
     <View
       style={{
         flex: 1,
-        backgroundColor: appTheme.backgroundColor,
+        backgroundColor: themeState.appTheme.backgroundColor,
       }}>
       <ScrollView
         contentContainerStyle={{
@@ -591,7 +591,7 @@ const OrderDetail = ({navigation, appTheme, route}) => {
             justifyContent: 'center',
             alignItems: 'center',
             width: SIZES.width * 0.4,
-            backgroundColor: appTheme.textColor,
+            backgroundColor: themeState.appTheme.textColor,
           }}>
           <Text style={{color: COLORS.gray, ...FONTS.h3}}>Tổng tiền: </Text>
           <Text style={{color: COLORS.gray, ...FONTS.h3}}>10000000$</Text>
@@ -614,7 +614,7 @@ const OrderDetail = ({navigation, appTheme, route}) => {
 
 function mapStateToProps(state) {
   return {
-    appTheme: state.themeReducer,
+    themeState: state.themeReducer,
     //error: state.error,
   };
 }

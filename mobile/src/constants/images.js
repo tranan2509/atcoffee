@@ -4,8 +4,8 @@ const background2 = require('../assets/images/background1.jpg');
 const background3 = require('../assets/images/background2.jpg');
 const background7 = require('../assets/images/background6.jpg');
 const logo = require('../assets/images/logo.png');
-const avatarFemale = require('../assets/images/avatarFemale.jpg');
-const avatarMale = require('../assets/images/avatarMale.jpg');
+const avatarFemale = require('../assets/images/avatarFemale.jpg'); //https://res.cloudinary.com/tranan2509/image/upload/v1637334237/fmale_hus1yd.jpg
+const avatarMale = require('../assets/images/avatarMale.jpg'); //https://res.cloudinary.com/tranan2509/image/upload/v1637334237/male_d5nb3t.jpg
 
 export default {
   strawberryBackground,

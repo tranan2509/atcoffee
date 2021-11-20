@@ -140,7 +140,7 @@ const Tabs = ({appTheme, scrollX, onPromoTabsPress}) => {
   );
 };
 
-const Home = ({navigation, appTheme}) => {
+const Home = ({navigation, themeState}) => {
   const scrollX = React.useRef(new Animated.Value(0)).current;
 
   const promoScrollViewRef = React.useRef();
@@ -261,7 +261,7 @@ const Home = ({navigation, appTheme}) => {
         }}>
         {/* Header - Tabs */}
         <Tabs
-          appTheme={appTheme}
+          appTheme={themeState.appTheme}
           scrollX={scrollX}
           onPromoTabsPress={onPromoTabsPress}
         />
@@ -311,7 +311,7 @@ const Home = ({navigation, appTheme}) => {
               <Text
                 style={{
                   marginTop: 3,
-                  color: appTheme.textColor,
+                  color: themeState.appTheme.textColor,
                   ...FONTS.body4,
                 }}>
                 {item.description}
@@ -357,7 +357,7 @@ const Home = ({navigation, appTheme}) => {
           marginTop: -25,
           borderTopLeftRadius: SIZES.radius * 2,
           borderTopRightRadius: SIZES.radius * 2,
-          backgroundColor: appTheme.backgroundColor,
+          backgroundColor: themeState.appTheme.backgroundColor,
         }}
         contentContainerStyle={{
           paddingBottom: 150,
@@ -379,7 +379,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    appTheme: state.themeReducer,
+    themeState: state.themeReducer,
     //error: state.error,
   };
 }

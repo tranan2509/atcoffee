@@ -4,7 +4,7 @@ import {HeaderBar, IconButton} from '../../components';
 import {SIZES, images, COLORS, FONTS, icons} from '../../constants';
 import {connect} from 'react-redux';
 
-const Profile = ({appTheme, navigation}) => {
+const Profile = ({themeState, navigation}) => {
   return (
     <View style={{flex: 1}}>
       <HeaderBar />
@@ -14,7 +14,7 @@ const Profile = ({appTheme, navigation}) => {
           marginTop: -25,
           borderTopLeftRadius: SIZES.radius * 2,
           borderTopRightRadius: SIZES.radius * 2,
-          backgroundColor: appTheme.backgroundColor,
+          backgroundColor: themeState.appTheme.backgroundColor,
         }}
         contentContainerStyle={{
           paddingBottom: 150,
@@ -44,7 +44,7 @@ const Profile = ({appTheme, navigation}) => {
         <View
           style={{
             backgroundColor:
-              appTheme.name == 'dark' ? COLORS.gray1 : COLORS.white,
+              themeState.appTheme.name == 'dark' ? COLORS.gray1 : COLORS.white,
             paddingTop: 5,
           }}>
           <View
@@ -56,7 +56,7 @@ const Profile = ({appTheme, navigation}) => {
             <Text
               style={{
                 paddingTop: 5,
-                color: appTheme.textColor,
+                color: themeState.appTheme.textColor,
                 ...FONTS.h3,
               }}>
               Giới thiệu
@@ -85,12 +85,12 @@ const Profile = ({appTheme, navigation}) => {
             }}>
             <IconButton
               icon={images.avatarFemale}
-              iconStyle={{tintColor: appTheme.textColor}}
+              iconStyle={{tintColor: themeState.appTheme.textColor}}
             />
             <Text
               style={{
                 paddingTop: 5,
-                color: appTheme.textColor,
+                color: themeState.appTheme.textColor,
                 ...FONTS.body3,
                 marginLeft: 10,
               }}>
@@ -106,12 +106,12 @@ const Profile = ({appTheme, navigation}) => {
             }}>
             <IconButton
               icon={icons.birthday}
-              iconStyle={{tintColor: appTheme.textColor}}
+              iconStyle={{tintColor: themeState.appTheme.textColor}}
             />
             <Text
               style={{
                 paddingTop: 5,
-                color: appTheme.textColor,
+                color: themeState.appTheme.textColor,
                 ...FONTS.body3,
                 marginLeft: 10,
               }}>
@@ -127,12 +127,12 @@ const Profile = ({appTheme, navigation}) => {
             }}>
             <IconButton
               icon={icons.gender}
-              iconStyle={{tintColor: appTheme.textColor}}
+              iconStyle={{tintColor: themeState.appTheme.textColor}}
             />
             <Text
               style={{
                 paddingTop: 5,
-                color: appTheme.textColor,
+                color: themeState.appTheme.textColor,
                 ...FONTS.body3,
                 marginLeft: 10,
               }}>
@@ -148,12 +148,12 @@ const Profile = ({appTheme, navigation}) => {
             }}>
             <IconButton
               icon={icons.phone}
-              iconStyle={{tintColor: appTheme.textColor}}
+              iconStyle={{tintColor: themeState.appTheme.textColor}}
             />
             <Text
               style={{
                 paddingTop: 5,
-                color: appTheme.textColor,
+                color: themeState.appTheme.textColor,
                 ...FONTS.body3,
                 marginLeft: 10,
               }}>
@@ -169,12 +169,12 @@ const Profile = ({appTheme, navigation}) => {
             }}>
             <IconButton
               icon={icons.address}
-              iconStyle={{tintColor: appTheme.textColor}}
+              iconStyle={{tintColor: themeState.appTheme.textColor}}
             />
             <Text
               style={{
                 paddingTop: 5,
-                color: appTheme.textColor,
+                color: themeState.appTheme.textColor,
                 ...FONTS.body3,
                 marginLeft: 10,
               }}>
@@ -190,12 +190,12 @@ const Profile = ({appTheme, navigation}) => {
             }}>
             <IconButton
               icon={icons.mail}
-              iconStyle={{tintColor: appTheme.textColor}}
+              iconStyle={{tintColor: themeState.appTheme.textColor}}
             />
             <Text
               style={{
                 paddingTop: 5,
-                color: appTheme.textColor,
+                color: themeState.appTheme.textColor,
                 ...FONTS.body3,
                 marginLeft: 10,
               }}>
@@ -210,17 +210,17 @@ const Profile = ({appTheme, navigation}) => {
             paddingTop: 20,
             paddingBottom: 20,
             backgroundColor:
-              appTheme.name == 'dark' ? COLORS.gray1 : COLORS.white,
+              themeState.appTheme.name == 'dark' ? COLORS.gray1 : COLORS.white,
             marginTop: 10,
           }}>
           <IconButton
             icon={icons.logout}
-            iconStyle={{tintColor: appTheme.textColor}}
+            iconStyle={{tintColor: themeState.appTheme.textColor}}
           />
           <Text
             style={{
               paddingTop: 5,
-              color: appTheme.textColor,
+              color: themeState.appTheme.textColor,
               ...FONTS.body3,
               marginLeft: 10,
             }}>
@@ -233,7 +233,7 @@ const Profile = ({appTheme, navigation}) => {
 };
 function mapStateToProps(state) {
   return {
-    appTheme: state.themeReducer,
+    themeState: state.themeReducer,
     //error: state.error,
   };
 }

@@ -13,30 +13,51 @@ import {
 import {IconButton, TabButton, VerticalTextButton} from '../../components';
 import {icons, COLORS, SIZES, FONTS, dummyData} from '../../constants';
 import Svg, {Circle} from 'react-native-svg';
-
+import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-const Order = ({navigation, appTheme, route}) => {
+import * as OrderActionsCreator from './action';
+
+const Order = ({navigation, themeState, route, orderActions, orderState}) => {
   const [selectedLocation, setSelectedLocation] = React.useState(null);
 
   const [selectedTab, setSelectedTab] = React.useState(0);
 
-  const [selectedCategory, setSelectedCategory] = React.useState('Milk Tea');
+  const [selectedCategory, setSelectedCategory] = React.useState('Nước ép');
 
   const [menu, setMenu] = React.useState(null);
 
   React.useEffect(() => {
     let {selectedLocation} = route.params;
     setSelectedLocation(selectedLocation);
+    orderActions.getAllCategories();
+    orderActions.getAllProducts(selectedLocation.code);
+
     //return () => console.log('cleanup');
   }, []);
-
+  //get categories
   React.useEffect(() => {
-    let menuList = dummyData.menuList.filter(
-      menuItem => menuItem.category == selectedCategory,
-    );
+    let {selectedLocation} = route.params;
+    let menuList = orderState.allProducts.filter(menuItem => {
+      console.log('ef', selectedCategory);
+      //console.log('ef1', menuItem.categories);
+      let cate = false;
+      let store = false;
+      menuItem.categories.forEach(cateItem => {
+        if (cateItem.name == selectedCategory) {
+          cate = true;
+        }
+      });
+      menuItem.stores.forEach(storeItem => {
+        if (storeItem.code == selectedLocation.code) {
+          store = true;
+        }
+      });
+      return cate && store;
+    });
+    console.log(menuList);
     setMenu(menuList);
   }, [selectedCategory]);
-
+  //console.log(menu);
   function renderHeaderSection() {
     return (
       <SafeAreaView
@@ -87,7 +108,7 @@ const Order = ({navigation, appTheme, route}) => {
               color: COLORS.primary,
               ...FONTS.body3,
             }}>
-            {selectedLocation?.title}
+            {selectedLocation?.name}
           </Text>
         </View>
       </SafeAreaView>
@@ -174,45 +195,25 @@ const Order = ({navigation, appTheme, route}) => {
             justifyContent: 'center',
             zIndex: 1,
           }}>
-          <VerticalTextButton
-            label="Snack"
-            selected={selectedCategory == 'Snack'}
-            onPress={() => setSelectedCategory('Snack')}
-          />
-          <VerticalTextButton
-            label="Coffee"
-            containerStyle={{
-              marginTop: 50,
+          <FlatList
+            data={orderState.allCategories}
+            keyExtractor={item => item.id}
+            showsVerticalScrollIndicator={false}
+            //keyboardDismissMode="on-drag"
+            renderItem={({item}) => {
+              return (
+                <VerticalTextButton
+                  label={item.name}
+                  containerStyle={{
+                    marginTop: 40,
+                    width: 80,
+                    marginBottom: 40,
+                  }}
+                  selected={selectedCategory == item.name}
+                  onPress={() => setSelectedCategory(item.name)}
+                />
+              );
             }}
-            selected={selectedCategory == 'Coffee'}
-            onPress={() => setSelectedCategory('Coffee')}
-          />
-          <VerticalTextButton
-            label="Smoothie"
-            containerStyle={{
-              marginTop: 70,
-              width: 100,
-            }}
-            selected={selectedCategory == 'Smoothie'}
-            onPress={() => setSelectedCategory('Smoothie')}
-          />
-          <VerticalTextButton
-            label="Special tea"
-            containerStyle={{
-              marginTop: 90,
-              width: 100,
-            }}
-            selected={selectedCategory == 'Specialtea'}
-            onPress={() => setSelectedCategory('Specialtea')}
-          />
-          <VerticalTextButton
-            label="Milk tea"
-            containerStyle={{
-              marginTop: 80,
-              width: 80,
-            }}
-            selected={selectedCategory == 'Milk Tea'}
-            onPress={() => setSelectedCategory('Milk Tea')}
           />
         </View>
         <Svg height="65" width="65" viewBox="0 0 65 65">
@@ -229,7 +230,7 @@ const Order = ({navigation, appTheme, route}) => {
       <View
         style={{
           flex: 1,
-          backgroundColor: appTheme.backgroundColor,
+          backgroundColor: themeState.appTheme.backgroundColor,
           // backgroundColor: 'red',
           marginTop: -45,
           borderTopLeftRadius: 40,
@@ -271,7 +272,7 @@ const Order = ({navigation, appTheme, route}) => {
                       alignItems: 'flex-end',
                       justifyContent: 'flex-end',
                     }}>
-                    {/* Thumbnail */}
+                    {/* Image */}
 
                     <View
                       style={{
@@ -287,7 +288,9 @@ const Order = ({navigation, appTheme, route}) => {
                         zIndex: 1,
                       }}>
                       <Image
-                        source={item.thumbnail}
+                        source={{
+                          uri: item.image,
+                        }}
                         resizeMode="contain"
                         style={{
                           width: 100,
@@ -322,7 +325,7 @@ const Order = ({navigation, appTheme, route}) => {
                           ...FONTS.h2,
                           fontSize: 18,
                         }}>
-                        {item.price}
+                        {item.sizes.price}
                       </Text>
                     </View>
                   </View>
@@ -344,13 +347,15 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    appTheme: state.themeReducer,
-    //error: state.error,
+    themeState: state.themeReducer,
+    orderState: state.orderReducer,
   };
 }
 
 function mapDispatchToProp(dispatch) {
-  return {};
+  return {
+    orderActions: bindActionCreators(OrderActionsCreator, dispatch),
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProp)(Order);

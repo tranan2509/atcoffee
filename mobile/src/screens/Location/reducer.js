@@ -8,7 +8,6 @@ const initialState = {
 const locationReducer = function (state = initialState, action) {
   switch (action.type) {
     case types.GET_LOCATION:
-      console.log('reducer', action.payload);
       return {
         ...state,
         allLocation: action.payload,
