@@ -216,8 +216,8 @@ input {
 }
 
 .card-header-form .btn {
-  padding-left: 13px !important;
-  padding-right: 13px !important;
+  padding: 3px 13px !important;
+  margin: 0px auto 0px 0 !important;
 }
 
 .btn-primary {

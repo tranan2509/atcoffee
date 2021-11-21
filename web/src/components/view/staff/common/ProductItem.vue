@@ -28,6 +28,7 @@
 <script>
 import * as Constants from '../../../common/Constants'
 import * as MutationsName from '../../../common/MutationsName'
+import CommonUtils from '../../../common/CommonUtils'
 import SelectPopup from '../popup/SelectPopup.vue'
 
 export default {
@@ -84,7 +85,7 @@ export default {
     },
 
     formatPrice(price) {
-      return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(price)
+      return CommonUtils.formatPrice(price);
     },
 
     processPrice(price) {

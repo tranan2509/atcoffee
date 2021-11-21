@@ -23,7 +23,7 @@
       </li>
       <li class="menu-header">QUẢN LÝ</li>
       <li class="nav-item dropdown" :class="menuStaff.product.value ? 'active' : ''">  
-        <router-link to="/staff/products?page=1" class="nav-link" @click="handleDropdown(menuStaff.product)">
+        <router-link to="/staff/products" class="nav-link" @click="handleDropdown(menuStaff.product)">
           <i class="fas fa-store"></i>
           <span>Sản phẩm</span>
         </router-link>
@@ -34,12 +34,6 @@
           <span>Thanh toán</span>
         </router-link>
       </li>
-      <!-- <li class="nav-item dropdown" :class="menuStaff.category.value ? 'active' : ''">  
-        <router-link to="/staff/categories?page=1" class="nav-link" @click="handleDropdown(menu.category)">
-          <i class="fas fa-box-open"></i>
-          <span>Loại sản phẩm</span>
-        </router-link>
-      </li> -->
       <li class="menu-header">HỒ SƠ</li>
       <li class="nav-item dropdown" :class="menuStaff.profile.value ? 'active' : ''">
         <router-link to="" class="nav-link has-dropdown" @click="handleDropdown(menuStaff.profile)">

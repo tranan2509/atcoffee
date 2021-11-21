@@ -80,6 +80,12 @@
           <span>Loại sản phẩm</span>
         </router-link>
       </li>
+      <li class="nav-item dropdown" :class="menu.promotion.value ? 'active' : ''">  
+        <router-link to="/admin/promotions?page=1" class="nav-link" @click="handleDropdown(menu.promotion)">
+          <i class="fas fa-percent"></i>
+          <span>Khuyến mãi</span>
+        </router-link>
+      </li>
       <li class="menu-header">HỒ SƠ</li>
       <li class="nav-item dropdown" :class="menu.profile.value ? 'active' : ''">
         <router-link to="" class="nav-link has-dropdown" @click="handleDropdown(menu.profile)">

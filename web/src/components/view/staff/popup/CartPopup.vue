@@ -18,7 +18,7 @@
           Chưa có sản phẩm nào được chọn
         </div>
         <div class="dropdown-header dropdown-custom">
-          <button class="btn btn-outline-success">Thanh toán</button>
+          <button class="btn btn-outline-success" @click="handlePayment">Thanh toán</button>
         </div>
       </div>
       <div class="icons" @click="handleShowCart" v-if="!isShowCart" :class="isShowCart ? 'none' : ''">
@@ -83,6 +83,10 @@ export default {
 
     handleSubmit() {
       this.$emit('handleSubmit');
+    },
+
+    handlePayment() {
+      this.$router.push({path: '/staff/payment'})
     },
 
     handleRemoveCarts() {

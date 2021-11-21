@@ -41,6 +41,9 @@ const SystemModule = {
         category: {
           value: false
         },
+        promotion: {
+          value: false
+        },
         profile: {
           value: false,
           submenu: {

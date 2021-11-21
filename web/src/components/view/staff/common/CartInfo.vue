@@ -63,6 +63,7 @@
 
 <script>
 import * as Constants from '../../../common/Constants'
+import CommonUtils from '../../../common/CommonUtils'
 import PaymentCommand from '../../../command/PaymentCommand'
 import CartPopupItem from './CartPopupItem.vue'
 
@@ -103,7 +104,7 @@ export default {
     },
 
     formatPrice(price) {
-      return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(price)
+      return CommonUtils.formatPrice(price);
     },
 
     async loadPayments() {
