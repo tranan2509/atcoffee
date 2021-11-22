@@ -65,7 +65,7 @@ public class ProductAPI {
 	
 	@GetMapping("/api/info/product") 
 	public ResponseEntity<ProductResponse> findAll(@RequestParam(name = "page", defaultValue = "1") int page,
-			@RequestParam(name = "size") int size, @RequestParam(name = "store", required = false) String storeCode,
+			@RequestParam(name = "size", defaultValue = "10000") int size, @RequestParam(name = "store", required = false) String storeCode,
 			@RequestParam(name="category", required = false) String categoryCode,
 			@RequestParam(name = "keyword", required = false) String keyword) {
 		

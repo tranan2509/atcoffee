@@ -26,6 +26,7 @@
 <script>
 import * as Constants from '../../../common/Constants'
 import * as MutationsName from '../../../common/MutationsName'
+import CommonUtils from '../../../common/CommonUtils'
 import ProductCommand from '../../../command/ProductCommand'
 import SelectCartPopup from '../popup/SelectCartPopup.vue'
 
@@ -82,7 +83,7 @@ export default {
     },
 
     formatPrice(price) {
-      return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(price)
+      return CommonUtils.formatPrice(price);
     },
 
     processPrice(price) {

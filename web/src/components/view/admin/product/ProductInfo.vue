@@ -49,7 +49,7 @@ export default {
 
   computed: {
     linkBackProducts() {
-       var sortProduct = this.$store.getters.sortProduct;
+      var sortProduct = this.$store.getters.sortProduct;
       var urlStore = '', urlCategory = '', urlKeyword = '';
       if (sortProduct.store != '') {
         urlStore += '&store=' + sortProduct.store;

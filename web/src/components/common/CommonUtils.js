@@ -36,7 +36,11 @@ const CommonUtils = {
   regexTime(time) {
     var regex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/
     return regex.test(time);
-  }
+  },
+
+  formatPrice(price) {
+    return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(price)
+  },
 }
 
 export default CommonUtils;

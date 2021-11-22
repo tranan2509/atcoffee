@@ -142,7 +142,7 @@ export default {
     },  
 
     formatPrice(price) {
-      return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(price)
+      return CommonUtils.formatPrice(price);
     },
 
     handleLock(isLock) {
@@ -401,22 +401,8 @@ input[type="number"] {
   text-align: right;
 }
 
-.img-content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-}
-
-.img-content img{
-  width: 400px;
-  height: 400px;
-  overflow: hidden;
+.info-basic img{
   object-fit: cover;
-  cursor: pointer;
-  border-radius: 4px;
-  margin-top: 8px;
 }
 
 .alert.alert-danger {

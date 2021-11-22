@@ -6,7 +6,7 @@ import java.util.Date;
 
 import javax.persistence.Temporal;
 
-public class PromotionDTO {
+public class PromotionDTO extends BaseDTO<PromotionDTO>{
 	private String code;
 	private String name;
 	private String image;
@@ -21,9 +21,11 @@ public class PromotionDTO {
 	public PromotionDTO() {
 		super();
 	}
+	@Override
 	public String getCode() {
 		return code;
 	}
+	@Override
 	public void setCode(String code) {
 		this.code = code;
 	}

@@ -29,8 +29,12 @@ public class TypeServiceImpl implements TypeService{
 
 	@Override
 	public TypeDTO findOne(Long id) {
-		// TODO Auto-generated method stub
 		return mapper.map(typeRepository.findOne(id), TypeDTO.class);
+	}
+	
+	@Override
+	public TypeDTO findOneByCode(String code) {
+		return mapper.map(typeRepository.findOneByCode(code), TypeDTO.class);
 	}
 
 	@Override

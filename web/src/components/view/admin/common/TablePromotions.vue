@@ -3,33 +3,22 @@
     <div class="col-12">
       <div class="card">
         <div class="card-header">
-          <h4>Danh sách nhân viên</h4>
+          <h4>Danh sách khuyến mãi</h4>
           <div class="card-header-form flex-row">
-            <div class="form-group">
-              <select v-model="storeSelected" class="form-custom" @change="handleChangeStore">
-                <option value="ALL">Tất cả các cửa hàng</option>
-                <option v-for="store in this.$store.getters.stores" :key="store.id"
-                  :value="store.code">
-                  {{store.address}}
-                </option>
-              </select>
-            </div>
-            <div class="empty-space"></div>
-            <div class="form-group">
-              <select v-model="roleSelected" class="form-custom" @change="handleChangeRole">
-                <option value="ALL">Tất cả các quyền</option>
-                <option v-for="role in this.$store.getters.roles" :key="role.id"
-                  :value="role.name">
-                  {{role.name}}
-                </option>
-              </select>
-            </div>
             <div class="empty-space"></div>
             <div class="form-group">
               <select v-model="stateSelected" class="form-custom" @change="handleChangeState">
-                <option value="ALL">Tất cả trạng thái</option>
-                <option value="active">Đang kích hoạt</option>
-                <option value="lock">Đã khóa</option>
+                <option value="ALL">Tất cả các trạng thái</option>
+                <option value="active">Đang hoạt động</option>
+                <option value="expired">Đã hết hạn</option>
+                <option value="upcoming">Sắp tới</option>
+              </select>
+            </div>
+            <div class="empty-space"></div>
+            <div class="form-group">
+              <select v-model="objectSelected" class="form-custom" @change="handleChangeObject">
+                <option value="ALL">Tất cả các đối tượng</option>
+                <option v-for="type in $store.getters.types" :key="type.code" :value="type.code">{{type.name}}</option>
               </select>
             </div>
             <div class="empty-space"></div>
@@ -41,6 +30,8 @@
                 </div>
               </div>
             </form>
+            <div class="empty-space"></div>
+            <button class="btn btn-success btn-medium" @click.capture="handleAdd">Thêm</button>
           </div>
         </div>
         <div class="card-body p-0">
@@ -51,69 +42,60 @@
                   <th class="text-center">SST</th>
                   <th class="text-center">Mã</th>
                   <th class="text-center">Tên</th>
-                  <th class="text-center">Hình ảnh</th>
-                  <th class="text-center">Email</th>
-                  <th class="text-center">SDT</th>
-                  <th class="text-center">CMND/CCCD</th>
+                  <th class="text-center">Đối tượng từ</th>
+                  <th class="text-center">Mức giảm giá</th>
+                  <th class="text-center">Ngày bắt đầu</th>
+                  <th class="text-center">Ngày kết thúc</th>
+                  <th class="text-center">Điều kiện</th>
                   <th class="text-center">Trạng thái</th>
                   <th class="text-center">Chi tiết</th>
                 </tr>
-                <tr v-for="(user, index) in users" :key="user.id">
+                <tr v-for="(promotion, index) in this.$store.getters.promotions" :key="promotion.id">
                   <td class="text-center">{{number(index)}}</td>
-                  <td class="text-center">{{user.code}}</td>
-                  <td class="text-center">{{user.name}}</td>
+                  <td class="text-center">{{promotion.code}}</td>
+                  <td class="text-center">{{promotion.name}}</td>
+                  <td class="text-center">{{processObject(promotion.object)}}</td>
+                  <td class="text-center">{{promotion.discount}}%</td>
+                  <td class="text-center">{{formatDate(promotion.startDate)}}</td>
+                  <td class="text-center">{{formatDate(promotion.endDate)}}</td>
+                  <td class="text-center">{{formatPrice(promotion.proviso)}}</td>
                   <td class="text-center">
-                    <img :src="user.image" alt="image" @click="handleViewImage(user.image)">
+                    <i class="fas fa-circle" :class="promotion.state ? 'active' : 'inactive'"></i>
                   </td>
-                  <td class="text-center">{{user.email}}</td>
-                  <td class="text-center">{{user.phone}}</td>
-                  <td class="text-center">{{user.identityCard}}</td>
-                  <td class="text-center">
-                    <i class="fas fa-circle" :class="user.state ? 'active' : 'inactive'"></i>
-                  </td>
-                  <td class="text-center"><i class="fas fa-info-circle" @click="handleInfo(user.id)"></i></td>
+                  <td class="text-center"><i class="fas fa-info-circle" @click="handleInfo(promotion.id)"></i></td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
-        <div class="card-footer text-right" v-if="this.$store.getters.sortUser.totalPage > 0">
-          <pagination :currentPage="currentPage" @handleChange="handleChangePage" :totalPage="this.$store.getters.sortUser.totalPage"/>
+        <div class="card-footer text-right" v-if="this.$store.getters.sortPromotion.totalPage > 0">
+          <pagination :currentPage="currentPage" @handleChange="handleChangePage" :totalPage="this.$store.getters.sortPromotion.totalPage"/>
         </div>
       </div>
     </div>
-    <view-image :isViewImage="isViewImage" :image="imageSelected" @handleHide="handleHideViewImage"></view-image>
   </div>
 </template>
 
 <script>
 import * as Constants from '../../../common/Constants'
-import * as MutationsName from '../../../common/MutationsName'
 import CommonUtils from '../../../common/CommonUtils'
-import RoleCommand from '../../../command/RoleCommand'
-import StoreCommand from '../../../command/StoreCommand'
-import UserCommand from '../../../command/UserCommand'
+import PromotionCommand from '../../../command/PromotionCommand'
 import Pagination from '../../common/common/Pagination.vue'
-import ViewImage from '../../common/popup/ViewImage.vue'
 
 export default {
-  name: Constants.COMPONENT_NAME_TABLE_STAFFS,
+  name: Constants.COMPONENT_NAME_TABLE_PROMOTIONS,
 
   components: {
-    Pagination,
-    ViewImage
+    Pagination
   },
 
   data() {
     return {
-      users: [],
+      promotions: [],
       currentPage: 1,
-      isViewImage: false,
-      imageSelected: '',
-      storeSelected: 'ALL',
-      roleSelected: 'ALL',
       stateSelected: 'ALL',
-      keyword: '',
+      objectSelected: '',
+      keyword: ''
     }
   },
 
@@ -128,137 +110,107 @@ export default {
       if (typeof this.keyword == 'undefined') {
         this.keyword = '';
       }
-      this.storeSelected = this.$route.query.store;
-      if (typeof this.storeSelected == 'undefined') {
-        this.storeSelected = 'ALL';
-      }
-      this.roleSelected = this.$route.query.role;
-      if (typeof this.roleSelected == 'undefined') {
-        this.roleSelected = 'ALL';
-      }
       this.stateSelected = this.$route.query.state;
       if (typeof this.stateSelected == 'undefined') {
         this.stateSelected = 'ALL';
       }
+      this.objectSelected = this.$route.query.object;
+      if (typeof this.objectSelected == 'undefined') {
+        this.objectSelected = 'ALL';
+      }
     },
-    
+
+    number(index){
+      return (this.currentPage - 1) * Constants.PAGE_SIZE_PROMOTION + index + 1;
+    },
+
+    formatDate(timeStamp) {
+      return CommonUtils.formatDate(new Date(timeStamp));
+    },
+
     formatPrice(price) {
       return CommonUtils.formatPrice(price);
     },
 
-    number(index){
-      return (this.currentPage - 1) * Constants.PAGE_SIZE_STAFF + index + 1;
-    },
-
     handleInfo(id){
-      this.$router.push({path: '/admin/staff-info', query: {id}});
+      this.$router.push({path: '/admin/promotion-info', query: {id}});
     },
 
     handleChangePage(page) {
       this.currentPage = page;
       const query = Object.assign({}, this.$route.query);
-      this.$router.push({path: '/admin/staffs', query: {...query, page: this.currentPage}});
-      this.loadStaffsBySort(this.currentPage, Constants.PAGE_SIZE_STAFF);
+      this.$router.push({path: '/admin/promotions', query: {...query, page: this.currentPage}});
+      this.loadPromotionsBySort(this.currentPage, Constants.PAGE_SIZE_PROMOTION);
     },
 
-    handleViewImage(image) {
-      this.isViewImage = true;
-      this.imageSelected = image;
-    },
-
-    handleHideViewImage(){
-      this.isViewImage = false;
-    },
-
-    handleSearch(){
+     handleSearch(){
       const query = Object.assign({}, this.$route.query);
       this.currentPage = 1;
       if (this.keyword.trim() == '') {
         delete query.keyword;
         this.$router.replace({ query });
       } else {
-        this.$router.push({path: '/admin/staffs', query: {...query, page: this.currentPage, keyword: this.keyword}});
+        this.$router.push({path: '/admin/promotions', query: {...query, page: this.currentPage, keyword: this.keyword}});
       }
-      this.loadStaffsBySort(this.currentPage, Constants.PAGE_SIZE_STAFF);
+      this.loadPromotionsBySort(this.currentPage, Constants.PAGE_SIZE_STAFF);
     },
-
-    handleChangeStore() {
-      const query = Object.assign({}, this.$route.query);
-      this.currentPage = 1;
-      if (this.storeSelected == 'ALL') {
-        delete query.store;
-        this.$router.replace({ query });
-      } else {
-        this.$router.push({path: '/admin/staffs', query: {...query, page: this.currentPage, store: this.storeSelected}});
-      }
-      this.currentPage = 1;
-      this.loadStaffsBySort(this.currentPage, Constants.PAGE_SIZE_STAFF);
-    }, 
-
-    handleChangeRole() {
-      const query = Object.assign({}, this.$route.query);
-      this.currentPage = 1;
-      if (this.roleSelected == 'ALL') {
-        delete query.role;
-         this.$router.replace({ query });
-      } else {
-        this.$router.push({path: '/admin/staffs', query: {...query, page: this.currentPage, role: this.roleSelected}});
-      }
-      this.currentPage = 1;
-      this.loadStaffsBySort(this.currentPage, Constants.PAGE_SIZE_STAFF);
-    },  
 
     handleChangeState() {
       const query = Object.assign({}, this.$route.query);
       this.currentPage = 1;
       if (this.stateSelected == 'ALL') {
         delete query.state;
-         this.$router.replace({ query });
+        this.$router.replace({ query });
       } else {
-        this.$router.push({path: '/admin/staffs', query: {...query, page: this.currentPage, state: this.stateSelected}});
+        this.$router.push({path: '/admin/promotions', query: {...query, page: this.currentPage, state: this.stateSelected}});
       }
       this.currentPage = 1;
-      this.loadStaffsBySort(this.currentPage, Constants.PAGE_SIZE_STAFF);
+      this.loadPromotionsBySort(this.currentPage, Constants.PAGE_SIZE_STAFF);
+    }, 
+
+    handleChangeObject() {
+      const query = Object.assign({}, this.$route.query);
+      this.currentPage = 1;
+      if (this.objectSelected == 'ALL') {
+        delete query.object;
+        this.$router.replace({ query });
+      } else {
+        this.$router.push({path: '/admin/promotions', query: {...query, page: this.currentPage, object: this.stateSelected}});
+      }
+      this.currentPage = 1;
+      this.loadPromotionsBySort(this.currentPage, Constants.PAGE_SIZE_STAFF);
+    }, 
+
+    handleAdd() {
+      this.$emit('handleAdd');
+    },
+
+    processObject(object) {
+      var type = this.$store.getters.types.find(item => item.code == object);
+      return type.name;
     },
 
     async loadData() {
-      await this.loadRoles();
-      await this.loadStores();
+      await this.loadPromotionsBySort(this.currentPage, Constants.PAGE_SIZE_PROMOTION);
     },
 
-    async loadStaffsBySort(page, size) {
-      var store = this.storeSelected == 'ALL' ? '' : this.storeSelected;
-      var role = this.roleSelected == 'ALL' ? '' : this.roleSelected;
-      var state = this.stateSelected == 'ALL' ? '' : this.stateSelected == 'active';
+    async loadPromotionsBySort(page, size) {
+      var state = this.stateSelected == 'ALL' ? '' : this.stateSelected;
+      var object = this.objectSelected == 'ALL' ? '' : this.objectSelected;
       var keyword = this.keyword;
-      this.users = await UserCommand.findAllByOrder(page, size, store, role, state, keyword, this.$store);
-    },
-
-    async loadRoles() {
-      let result = await RoleCommand.findAll(this.$store);
-      var roles = result.map(role => {
-        role.selected = false;
-        return role;
-      });
-      this.$store.commit(MutationsName.MUTATION_NAME_REMOVE_ROLE_BY_NAME, Constants.ROLE.ROLE_USER);
-      roles = roles.filter(role => role.name != Constants.ROLE.ROLE_USER);
-      return roles;
+      this.users = await PromotionCommand.findAllByOrder(page, size, state, object, keyword, this.$store);
     },
     
-    async loadStores() {
-      let result = await StoreCommand.findAll(this.$store);
-      var stores = result.map(store => {
-        store.selected = false;
-        return store;
-      });
-      return stores;
-    },
+    async loadPromotions(page, size) {
+      console.log(page, size);
+      let result = await PromotionCommand.findAll(this.$store);
+      this.promotions = result;
+    }
   },
 
   created(){
     this.init();
     this.loadData();
-    this.loadStaffsBySort(this.currentPage, Constants.PAGE_SIZE_STAFF);
   }
 }
 </script>
@@ -485,4 +437,9 @@ select.form-custom option {
 .fa-circle.inactive {
   color: #ccc;
 }
+
+.btn.btn-success.btn-medium {
+  width: 100px;
+}
+
 </style>

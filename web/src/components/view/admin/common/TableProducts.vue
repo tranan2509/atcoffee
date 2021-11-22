@@ -76,6 +76,7 @@
 
 <script>
 import * as Constants from '../../../common/Constants'
+import CommonUtils from '../../../common/CommonUtils'
 import ProductCommand from '../../../command/ProductCommand'
 import CategoryCommand from '../../../command/CategoryCommand'
 import StoreCommand from '../../../command/StoreCommand'
@@ -124,7 +125,7 @@ export default {
     },
     
     formatPrice(price) {
-      return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(price)
+      return CommonUtils.formatPrice(price);
     },
 
     number(index){
