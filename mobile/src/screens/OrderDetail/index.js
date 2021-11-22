@@ -11,11 +11,12 @@ import {
 import {COLORS, FONTS, images, icons, SIZES, dummyData} from '../../constants';
 import {IconButton} from '../../components';
 import {connect} from 'react-redux';
+import {formatMoney} from '../../common/format';
 
 const OrderDetail = ({navigation, themeState, route}) => {
   const [selectedItem, setSelectedItem] = React.useState(null);
 
-  const [selectedSize, setSelectedSize] = React.useState(32);
+  const [selectedSize, setSelectedSize] = React.useState('L');
 
   const [selectedMilkIndex, setSelectedMilkIndex] = React.useState(0);
 
@@ -24,14 +25,37 @@ const OrderDetail = ({navigation, themeState, route}) => {
 
   const [selectedIceLevel, setSelectedIceLevel] = React.useState(50);
 
-  const [amount, setAmount] = React.useState('1');
+  const [numberOrder, setNumberOrder] = React.useState(1);
 
   const [favorites, setFavorites] = React.useState(false);
 
+  const [amountMoney, setAmountMoney] = React.useState(0);
+
   React.useEffect(() => {
-    let {selectedItem} = route.params;
+    let {selectedItem} = route?.params;
     setSelectedItem(selectedItem);
+    amountMoneyHandler(selectedSize, numberOrder);
   }, []);
+
+  function amountMoneyHandler(size, total) {
+    setAmountMoney(
+      selectedItem?.sizes.filter(sizeItem => sizeItem.size == size)[0].price *
+        total *
+        (1 - selectedItem?.discount / 100),
+    );
+  }
+
+  function numberOrderHandler(action) {
+    let total = 0;
+    if (action == '+') {
+      total = numberOrder + 1;
+      setNumberOrder(total);
+    } else if (action == '-' && numberOrder > 0) {
+      total = numberOrder - 1;
+      setNumberOrder(total);
+    }
+    amountMoneyHandler(selectedSize, total);
+  }
 
   function milkButtonHandler(action) {
     if (action == 'next' && selectedMilkIndex < dummyData.milkList.length - 1) {
@@ -87,7 +111,7 @@ const OrderDetail = ({navigation, themeState, route}) => {
             marginBottom: 20,
           }}
         />
-        {/* Amount */}
+        {/* numberOrder */}
         <View
           style={{
             position: 'absolute',
@@ -106,8 +130,7 @@ const OrderDetail = ({navigation, themeState, route}) => {
               borderTopLeftRadius: 25,
               borderBottomLeftRadius: 25,
             }}
-            // onPress={() => editOrder("-", item.menuId, item.price)}
-          >
+            onPress={() => numberOrderHandler('-')}>
             <Text style={{...FONTS.body1}}>-</Text>
           </TouchableOpacity>
           <View
@@ -120,8 +143,8 @@ const OrderDetail = ({navigation, themeState, route}) => {
             {/* <Text style={{ ...FONTS.h2 }}>{getOrderQty(item.menuId)}</Text> */}
             <TextInput
               style={{...FONTS.h2}}
-              value={amount}
-              onChangeText={setAmount}
+              value={numberOrder.toString()}
+              onChangeText={setNumberOrder}
             />
           </View>
 
@@ -134,8 +157,7 @@ const OrderDetail = ({navigation, themeState, route}) => {
               borderTopRightRadius: 25,
               borderBottomRightRadius: 25,
             }}
-            // onPress={() => editOrder("+", item.menuId, item.price)}
-          >
+            onPress={() => numberOrderHandler('+')}>
             <Text style={{...FONTS.body1}}>+</Text>
           </TouchableOpacity>
         </View>
@@ -212,7 +234,7 @@ const OrderDetail = ({navigation, themeState, route}) => {
               ...FONTS.h2,
               fontSize: 20,
             }}>
-            Pick A Size
+            Size
           </Text>
 
           {/* Cup1 */}
@@ -220,14 +242,18 @@ const OrderDetail = ({navigation, themeState, route}) => {
             style={{
               flex: 1,
               flexDirection: 'row',
-              marginRight: 50,
+              marginRight: 100,
             }}>
             <TouchableOpacity
               style={{
                 alignItems: 'center',
                 justifyContent: 'flex-end',
+                marginRight: 15,
               }}
-              onPress={() => setSelectedSize(10)}>
+              onPress={() => {
+                setSelectedSize('S');
+                amountMoneyHandler('S', numberOrder);
+              }}>
               <ImageBackground
                 source={icons.coffee_cup}
                 style={{
@@ -237,25 +263,54 @@ const OrderDetail = ({navigation, themeState, route}) => {
                   justifyContent: 'center',
                 }}
                 imageStyle={{
-                  tintColor: selectedSize == 10 ? COLORS.primary : COLORS.gray2,
+                  tintColor:
+                    selectedSize == 'S' ? COLORS.primary : COLORS.gray2,
                 }}>
-                <Text style={{color: COLORS.white, ...FONTS.body3}}>10oz</Text>
+                <Text style={{color: COLORS.white, ...FONTS.body3}}>S</Text>
               </ImageBackground>
               <Text
-                style={{
-                  marginTop: 3,
-                  color: COLORS.white,
-                  ...FONTS.body3,
-                }}>
-                $4.50
+                style={
+                  selectedItem?.discount
+                    ? {
+                        marginTop: 3,
+                        color: COLORS.lightYellow,
+                        textDecorationLine: 'line-through',
+                        textDecorationStyle: 'solid',
+                        ...FONTS.body3,
+                      }
+                    : {
+                        marginTop: 3,
+                        color: COLORS.white,
+
+                        ...FONTS.body3,
+                      }
+                }>
+                {formatMoney(selectedItem?.sizes[0].price)}
               </Text>
+              {selectedItem?.discount ? (
+                <Text
+                  style={{
+                    marginTop: 3,
+                    color: COLORS.white,
+                    ...FONTS.body3,
+                  }}>
+                  {formatMoney(
+                    selectedItem?.sizes[0].price *
+                      (1 - selectedItem?.discount / 100),
+                  )}
+                </Text>
+              ) : null}
             </TouchableOpacity>
+            {/* Cup2 */}
             <TouchableOpacity
               style={{
                 alignItems: 'center',
                 justifyContent: 'flex-end',
               }}
-              onPress={() => setSelectedSize(20)}>
+              onPress={() => {
+                setSelectedSize('M');
+                amountMoneyHandler('M', numberOrder);
+              }}>
               <ImageBackground
                 source={icons.coffee_cup}
                 style={{
@@ -265,27 +320,55 @@ const OrderDetail = ({navigation, themeState, route}) => {
                   justifyContent: 'center',
                 }}
                 imageStyle={{
-                  tintColor: selectedSize == 20 ? COLORS.primary : COLORS.gray2,
+                  tintColor:
+                    selectedSize == 'M' ? COLORS.primary : COLORS.gray2,
                 }}>
-                <Text style={{color: COLORS.white, ...FONTS.body3}}>20oz</Text>
+                <Text style={{color: COLORS.white, ...FONTS.body3}}>M</Text>
               </ImageBackground>
               <Text
-                style={{
-                  marginTop: 3,
-                  color: COLORS.white,
-                  ...FONTS.body3,
-                }}>
-                $4.50
+                style={
+                  selectedItem?.discount
+                    ? {
+                        marginTop: 3,
+                        color: COLORS.lightYellow,
+                        textDecorationLine: 'line-through',
+                        textDecorationStyle: 'solid',
+                        ...FONTS.body3,
+                      }
+                    : {
+                        marginTop: 3,
+                        color: COLORS.white,
+
+                        ...FONTS.body3,
+                      }
+                }>
+                {formatMoney(selectedItem?.sizes[1].price)}
               </Text>
+              {selectedItem?.discount ? (
+                <Text
+                  style={{
+                    marginTop: 3,
+                    color: COLORS.white,
+                    ...FONTS.body3,
+                  }}>
+                  {formatMoney(
+                    selectedItem?.sizes[1].price *
+                      (1 - selectedItem?.discount / 100),
+                  )}
+                </Text>
+              ) : null}
             </TouchableOpacity>
 
-            {/* Cup2 */}
+            {/* Cup3 */}
             <TouchableOpacity
               style={{
                 alignItems: 'center',
                 justifyContent: 'flex-end',
               }}
-              onPress={() => setSelectedSize(32)}>
+              onPress={() => {
+                setSelectedSize('L');
+                amountMoneyHandler('L', numberOrder);
+              }}>
               <ImageBackground
                 source={icons.coffee_cup}
                 style={{
@@ -295,18 +378,43 @@ const OrderDetail = ({navigation, themeState, route}) => {
                   justifyContent: 'center',
                 }}
                 imageStyle={{
-                  tintColor: selectedSize == 32 ? COLORS.primary : COLORS.gray2,
+                  tintColor:
+                    selectedSize == 'L' ? COLORS.primary : COLORS.gray2,
                 }}>
-                <Text style={{color: COLORS.white, ...FONTS.body3}}>32oz</Text>
+                <Text style={{color: COLORS.white, ...FONTS.body3}}>L</Text>
               </ImageBackground>
               <Text
-                style={{
-                  marginTop: 3,
-                  color: COLORS.white,
-                  ...FONTS.body3,
-                }}>
-                $5.00
+                style={
+                  selectedItem?.discount
+                    ? {
+                        marginTop: 3,
+                        color: COLORS.lightYellow,
+                        textDecorationLine: 'line-through',
+                        textDecorationStyle: 'solid',
+                        ...FONTS.body3,
+                      }
+                    : {
+                        marginTop: 3,
+                        color: COLORS.white,
+
+                        ...FONTS.body3,
+                      }
+                }>
+                {formatMoney(selectedItem?.sizes[2].price)}
               </Text>
+              {selectedItem?.discount ? (
+                <Text
+                  style={{
+                    marginTop: 3,
+                    color: COLORS.white,
+                    ...FONTS.body3,
+                  }}>
+                  {formatMoney(
+                    selectedItem?.sizes[2].price *
+                      (1 - selectedItem?.discount / 100),
+                  )}
+                </Text>
+              ) : null}
             </TouchableOpacity>
           </View>
         </View>
@@ -328,7 +436,7 @@ const OrderDetail = ({navigation, themeState, route}) => {
                 ...FONTS.h2,
                 fontSize: 20,
               }}>
-              Milk
+              Sữa
             </Text>
             <View
               style={{
@@ -412,7 +520,7 @@ const OrderDetail = ({navigation, themeState, route}) => {
                   ...FONTS.h2,
                   fontSize: 20,
                 }}>
-                Sweetness
+                Đường
               </Text>
               <View
                 style={{
@@ -485,7 +593,7 @@ const OrderDetail = ({navigation, themeState, route}) => {
                   ...FONTS.h2,
                   fontSize: 20,
                 }}>
-                Ice
+                Đá
               </Text>
               <View
                 style={{
@@ -549,8 +657,6 @@ const OrderDetail = ({navigation, themeState, route}) => {
       </View>
     );
   }
-
-  //console.log(selectedMilkIndex);
   return (
     <View
       style={{
@@ -582,7 +688,8 @@ const OrderDetail = ({navigation, themeState, route}) => {
             justifyContent: 'center',
             alignItems: 'center',
             //borderRadius: 20,
-          }}>
+          }}
+          onPress={() => navigation.navigate('Cart')}>
           <Text style={{color: 'white', ...FONTS.h3}}>Mua ngay</Text>
         </TouchableOpacity>
         {/* Tổng */}
@@ -593,8 +700,10 @@ const OrderDetail = ({navigation, themeState, route}) => {
             width: SIZES.width * 0.4,
             backgroundColor: themeState.appTheme.textColor,
           }}>
-          <Text style={{color: COLORS.gray, ...FONTS.h3}}>Tổng tiền: </Text>
-          <Text style={{color: COLORS.gray, ...FONTS.h3}}>10000000$</Text>
+          <Text style={{color: COLORS.gray, ...FONTS.h3}}>Tổng tiền:</Text>
+          <Text style={{color: COLORS.gray, ...FONTS.h3}}>
+            {formatMoney(amountMoney)}
+          </Text>
         </View>
         {/* Thêm vào giỏ */}
         <TouchableOpacity

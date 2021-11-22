@@ -16,46 +16,53 @@ import Svg, {Circle} from 'react-native-svg';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as OrderActionsCreator from './action';
+import {formatMoney} from '../../common/format';
 
 const Order = ({navigation, themeState, route, orderActions, orderState}) => {
   const [selectedLocation, setSelectedLocation] = React.useState(null);
 
   const [selectedTab, setSelectedTab] = React.useState(0);
 
-  const [selectedCategory, setSelectedCategory] = React.useState('Nước ép');
+  const [selectedCategory, setSelectedCategory] = React.useState('');
 
   const [menu, setMenu] = React.useState(null);
 
   React.useEffect(() => {
     let {selectedLocation} = route.params;
     setSelectedLocation(selectedLocation);
+    //get categories
     orderActions.getAllCategories();
+    //get products
     orderActions.getAllProducts(selectedLocation.code);
-
     //return () => console.log('cleanup');
   }, []);
-  //get categories
+
   React.useEffect(() => {
     let {selectedLocation} = route.params;
-    let menuList = orderState.allProducts.filter(menuItem => {
-      console.log('ef', selectedCategory);
-      //console.log('ef1', menuItem.categories);
-      let cate = false;
-      let store = false;
-      menuItem.categories.forEach(cateItem => {
-        if (cateItem.name == selectedCategory) {
-          cate = true;
-        }
+    if (selectedCategory == '') {
+      setMenu(orderState.allProducts);
+    } else {
+      let menuList = orderState.allProducts.filter(menuItem => {
+        let cate = false;
+        let store = false;
+        menuItem.categories.forEach(cateItem => {
+          if (cateItem.name == selectedCategory) {
+            cate = true;
+          }
+        });
+        menuItem.stores.forEach(storeItem => {
+          if (storeItem.code == selectedLocation.code) {
+            store = true;
+          }
+        });
+        // console.log(
+        //   menuItem.sizes.filter(sizeItem => sizeItem.size == 'S')[0].price,
+        // );
+        return cate && store;
       });
-      menuItem.stores.forEach(storeItem => {
-        if (storeItem.code == selectedLocation.code) {
-          store = true;
-        }
-      });
-      return cate && store;
-    });
-    console.log(menuList);
-    setMenu(menuList);
+      //console.log(menuList);
+      setMenu(menuList);
+    }
   }, [selectedCategory]);
   //console.log(menu);
   function renderHeaderSection() {
@@ -156,26 +163,6 @@ const Order = ({navigation, themeState, route, orderActions, orderState}) => {
             onPress={() => setSelectedTab(2)}
           />
         </View>
-
-        {/* Order Number */}
-
-        <View
-          style={{
-            width: 35,
-            height: 35,
-            borderRadius: 10,
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: COLORS.primary,
-          }}>
-          <Text
-            style={{
-              color: COLORS.white,
-              ...FONTS.h3,
-            }}>
-            0
-          </Text>
-        </View>
       </View>
     );
   }
@@ -214,6 +201,17 @@ const Order = ({navigation, themeState, route, orderActions, orderState}) => {
                 />
               );
             }}
+          />
+          <VerticalTextButton
+            label="Tất cả"
+            containerStyle={{
+              marginTop: 40,
+              width: 80,
+              marginBottom: 40,
+              marginLeft: 10,
+            }}
+            selected={selectedCategory == ''}
+            onPress={() => setSelectedCategory('')}
           />
         </View>
         <Svg height="65" width="65" viewBox="0 0 65 65">
@@ -319,14 +317,39 @@ const Order = ({navigation, themeState, route, orderActions, orderState}) => {
                         }}>
                         {item.name}
                       </Text>
-                      <Text
-                        style={{
-                          color: COLORS.lightYellow,
-                          ...FONTS.h2,
-                          fontSize: 18,
-                        }}>
-                        {item.sizes.price}
-                      </Text>
+                      <View style={{flexDirection: 'row'}}>
+                        <Text
+                          style={{
+                            color: COLORS.lightYellow,
+                            ...FONTS.h2,
+                            fontSize: 18,
+                          }}>
+                          {formatMoney(
+                            item.sizes.filter(
+                              sizeItem => sizeItem.size == 'S',
+                            )[0].price,
+                          )}{' '}
+                        </Text>
+                        <View
+                          style={{
+                            height: 40,
+                            width: 40,
+                            borderRadius: 20,
+                            backgroundColor: COLORS.red,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginLeft: 30,
+                          }}>
+                          <Text
+                            style={{
+                              color: COLORS.lightYellow,
+                              ...FONTS.h2,
+                              fontSize: 18,
+                            }}>
+                            {item.discount ? -item.discount + '%' : null}
+                          </Text>
+                        </View>
+                      </View>
                     </View>
                   </View>
                 </TouchableWithoutFeedback>
