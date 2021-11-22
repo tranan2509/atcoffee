@@ -57,15 +57,15 @@ public class CategoryAPI {
 	
 	@GetMapping(value = "/api/info/category", params = "list")
 	public ResponseEntity<List<CategoryDTO>> findAll() {
-		List<CategoryDTO> dtos = categoryService.findAll();
+		List<CategoryDTO> dtos = categoryService.findByState(true);
 		return ResponseEntity.ok(dtos);
 	}
 	
 	@GetMapping(value = "/api/info/category", params = {"page", "size"})
 	public ResponseEntity<CategoryResponse> findAll(@RequestParam(name = "page", defaultValue = "1") int page,
-			@RequestParam(name = "size") int size){
+			@RequestParam(name = "size") int size, @RequestParam(name = "state", defaultValue = "true", required = false) Boolean state){
 		Pageable pageable = new PageRequest(page - 1, size);
-		return ResponseEntity.ok(categoryService.findAll(pageable));
+		return ResponseEntity.ok(categoryService.findByState(state, pageable));
 	}
 	
 }

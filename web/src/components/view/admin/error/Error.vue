@@ -2,7 +2,7 @@
   <div class="error">
     <img src="../../../../assets/images/page_not_found.svg"/>
     <p>Không thể tìm thấy trang bạn đang tìm kiếm. </p>
-    <router-link to="/admin">Quay lại trang chủ</router-link>
+    <router-link to="/login">Quay lại trang đăng nhập</router-link>
   </div>
 </template>
 

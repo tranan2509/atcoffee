@@ -11,9 +11,9 @@
                     <i class="fas fa-edit"></i>
                     Chỉnh sửa
                   </a>
-                  <router-link to="" class="dropdown-item has-icon">
-                    <i class="fas fa-lock"></i>
-                    Ngừng sử dụng
+                  <router-link to="" class="dropdown-item has-icon" @click="handleLock(category.state)">
+                    <i class="far fa-trash-alt"></i>
+                    {{category.state ? 'Xóa mã loại sản phẩm' : ''}}
                   </router-link>
                 </div>
               </div>

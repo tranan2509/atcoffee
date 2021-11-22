@@ -281,6 +281,7 @@ export default {
 
     async loadCategories() {
       let result = await CategoryCommand.findAll(this.$store);
+      result = result.filter(category => category.state);
       this.categories = result.map(category => {
         category.selected = false;
         return category;
@@ -290,6 +291,7 @@ export default {
     
     async loadStores() {
       let result = await StoreCommand.findAll(this.$store);
+      result = result.filter(store => store.state);
       this.stores = result.map(store => {
         store.selected = false;
         return store;

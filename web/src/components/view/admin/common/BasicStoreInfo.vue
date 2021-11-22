@@ -11,9 +11,9 @@
                     <i class="fas fa-edit"></i>
                     Chỉnh sửa
                   </a>
-                  <router-link to="" class="dropdown-item has-icon">
-                    <i class="fas fa-lock"></i>
-                    Ngừng hoạt động
+                  <router-link to="" class="dropdown-item has-icon" @click="handleLock(store.state)">
+                   <i class="far fa-trash-alt"></i>
+                    {{store.state ? 'Ngừng hoạt động' : ''}}
                   </router-link>
                 </div>
               </div>

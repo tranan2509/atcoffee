@@ -89,6 +89,8 @@ export default {
 
     async getProductById(id) {
       this.product = await ProductCommand.findOne(id);
+      this.product.categories = this.product.categories.filter(item => item.state);
+      this.product.stores = this.product.stores.filter(item => item.state);
     }
   },
 

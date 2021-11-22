@@ -74,7 +74,7 @@ var BillDataService = {
   update(bill, store) {
     const startCountRef = ref(database, `${collectionName}/${bill.id}`);
     set(startCountRef, bill);
-    store.commit(MutationsName.MUTATION_NAME_SET_BILL, bill);
+    store.commit(MutationsName.MUTATION_NAME_UPDATE_BILL, bill);
   },
 
   remove(id, store) {

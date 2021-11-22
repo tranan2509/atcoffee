@@ -13,4 +13,6 @@ public interface CategoryService {
 	CategoryDTO findOneByCode(String code);
 	List<CategoryDTO> findAll();
 	CategoryResponse findAll(Pageable pageable);
+	List<CategoryDTO> findByState(Boolean state);
+	CategoryResponse findByState(Boolean state, Pageable pageable);
 }

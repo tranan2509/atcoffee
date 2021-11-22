@@ -38,20 +38,32 @@
               </div>
               <div class="row-custom">
                 <span>Mã giảm giá</span>
-                <input type="text" class="form-control" v-model="promotion" @input="handleChangePromotion">
+                <div class="row-custom">
+                  <div class="position" v-if="promotionCode != ''">
+                    <div class="tooltip-custom show" :class="this.errorPromotionCode.length < 10 ? 'success' : ''">
+                      <span>{{this.errorPromotionCode}}</span>
+                    </div>
+                    <i class="far fa-check-circle" v-if="verifyPromotion"></i>
+                    <i class="fas fa-exclamation-circle" v-else></i>
+                  </div>
+                  <input type="text" class="form-control" v-model="promotionCode" @input="handleChangePromotion">
+                </div>
               </div>
               <div class="row-custom">
                 <span>Sử dụng điểm</span>
                 <div class="row-custom-2">
                   <span>{{user != null ? user.currentPoints : 0}}</span>
-                  <input type="checkbox" v-model="isUsePoint">
+                  <input type="checkbox" v-model="isUsePoint" :disabled="user == null" @change="handleChangePoint">
                 </div>
               </div>
               <div class="row-custom">
                 <span>Phương thức thanh toán</span>
-                <select v-model="payment" class="form-control">
-                  <option v-for="item in payments" :value="item.code" :key="item.code">{{item.name}}</option>
+                <select v-model="paymentId" class="form-control">
+                  <option v-for="item in payments" :value="item.id" :key="item.id">{{item.name}}</option>
                 </select>
+              </div>
+              <div class="row-custom">
+                <input type="button" class="btn btn-success" value="Thanh toán" @click="handlePayment">
               </div>
             </div>
           </div>
@@ -65,6 +77,10 @@
 import * as Constants from '../../../common/Constants'
 import CommonUtils from '../../../common/CommonUtils'
 import PaymentCommand from '../../../command/PaymentCommand'
+import PromotionCommand from '../../../command/PromotionCommand'
+import BillCommand from '../../../command/BillCommand'
+import StoreCommand from '../../../command/StoreCommand'
+import TypeCommand from '../../../command/TypeCommand'
 import CartPopupItem from './CartPopupItem.vue'
 
 export default {
@@ -79,10 +95,16 @@ export default {
   data() {
     return {
       payments: [],
-      payment: 'CASH',
+      paymentId: 1,
       isUsePoint: false,
-      promotion: '',
-      discount: 0
+      promotionCode: '',
+      promotion: null,
+      discountPromotion: 0,
+      point: 0,
+      types: [],
+      errorPromotionCode: '',
+      verifyPromotion: false,
+      store: {}
     }
   },
 
@@ -95,25 +117,107 @@ export default {
       });
       return total;
     },
+
+    discount() {
+      return this.discountPromotion + this.point;
+    }
+
   },
 
   methods: {
 
-    handleChangePromotion() {
-      this.promotion = this.promotion.toUpperCase();
+    async handleChangePromotion() {
+      this.promotionCode = this.promotionCode.toUpperCase();
+      this.promotion = await PromotionCommand.findOneByCode(this.promotionCode);
+      this.verifyPromotion = this.vetifyPromotionCode(this.promotion);
+    },
+
+    handleChangePoint() {
+      this.point = 0;
+      if (!this.isUsePoint) {
+        return;
+      }
+      if (this.amount - this.discountPromotion > this.user.currentPoints) {
+        this.point = this.user.currentPoints;
+      } else {
+        this.point = this.user.currentPoints - (this.amount + this.discountPromotion);
+      }
+    },
+
+    async handlePayment() {
+      var userId = this.user == null ? 9 : this.user.id;
+      var bill = {
+        amount: this.amount - this.discount,
+        price: this.amount,
+        discount: this.discountPromotion,
+        point: this.point,
+        address: this.store.address,
+        status: Constants.STATUS_BILL.COMPLETED,
+        rewardId: 0,
+        promotionId: this.vetifyPromotionCode(this.promotion) ? this.promotion.id : 0,
+        paymentId: this.paymentId,
+        storeId: this.store.id,
+        staffId: this.$store.getters.user.id,
+        customerId: userId,
+        billDetails: this.$store.getters.carts,
+        state: true
+      }
+      let result = await BillCommand.save(bill);
+      console.log('result', result);
+      // console.log(bill);
+    },
+
+    vetifyPromotionCode(promotion){
+      this.discountPromotion = 0;
+      if (promotion == null || typeof promotion == 'undefined') {
+        this.errorPromotionCode = `Mã khuyến mãi không tồn tại!`;
+        return false;
+      }
+      var now = new Date();
+      var nowStr = CommonUtils.formatDateReverse(now);
+      now = new Date(nowStr);
+      if (now < new Date(promotion.startDate)) {
+        this.errorPromotionCode = `Mã khuyến mãi sẽ được áp dụng từ ngày ${CommonUtils.formatDate(new Date(promotion.startDate))}!`;
+        return false;
+      } else if (now > new Date(promotion.endDate)) {
+        this.errorPromotionCode = `Mã khuyến mãi đã hết hạng từ ngày ${CommonUtils.formatDate(new Date(promotion.endDate))}!`;
+        return false;
+      }
+      var type = this.types.find(item => item.code == promotion.object);      
+      if ((this.user == null && type.id > 1) || (this.user != null && this.user.typeId < type.id)) {
+        this.errorPromotionCode = `Mã khuyến mãi chỉ áp dụng từ người dùng hạng ${type.name} trở lên!`;
+        return false;
+      }
+      if (this.amount < promotion.proviso) {
+        this.errorPromotionCode = `Mã khuyến mãi áp dụng đơn hàng tối thiểu ${promotion.proviso}!`;
+        return false;
+      }
+      this.errorPromotionCode = `-${promotion.discount}%`;
+      this.discountPromotion = promotion.discount * this.amount / 100;
+      return true;
     },
 
     formatPrice(price) {
       return CommonUtils.formatPrice(price);
     },
 
+    async loadTypes() {
+      this.types = await TypeCommand.findAll();
+    },
+
     async loadPayments() {
       this.payments = await PaymentCommand.findAll();
+    },
+
+    async loadStore() {
+      this.store = await StoreCommand.findOne(this.$store.getters.user.storeId);
     }
   },
 
   created() {
     this.loadPayments();
+    this.loadTypes();
+    this.loadStore();
   }
 }
 </script>
@@ -138,7 +242,7 @@ export default {
   font-size: 16px;
 }
 
-.row-custom input {
+.row-custom input[type="text"] {
   text-align: right;
   padding: 2px 4px !important;
   max-width: 150px !important;
@@ -156,8 +260,9 @@ export default {
 }
 
 .row-custom-2 span {
-  font-size: 16px;
+  font-size: 16px !important;
   margin-right: 8px;
+  color: #000 !important;
   font-weight: 500 !important;
 }
 
@@ -166,5 +271,53 @@ export default {
   height: 24px;
   border: 0.5px solid #444 !important;
   border-radius: 50%;
+}
+
+.row-custom i {
+  font-size: 20px;
+  display: flex;
+  height: 100%;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+}
+
+.far.fa-check-circle {
+  color: var(--primary);
+}
+
+.fas.fa-exclamation-circle {
+  color: red;
+}
+
+.position {
+  position: relative;
+}
+
+.tooltip-custom.show {
+  position: absolute;
+  right: 6px;
+  bottom: 28px;
+  width: 200px;
+  z-index: 50;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.1) ;
+}
+
+.tooltip-custom.show.success{
+  width: auto;
+}
+
+.tooltip-custom.show.success span {
+  color: green;
+  font-weight: bold;
+}
+
+.tooltip-custom.show span {
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: #000;
 }
 </style>

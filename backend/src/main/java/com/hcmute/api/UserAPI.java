@@ -78,6 +78,10 @@ public class UserAPI {
 			@RequestParam("user") String userJson){
 		try {
 			UserDTO user = objectMapper.readValue(userJson, UserDTO.class);	
+			user.setState(true);
+			user.setAccumulatedPoints(0);
+			user.setCurrentPoints(0);
+			user.setTypeId(1L);
 			if (multipartFile != null) {
 				Map r = this.cloudinary.uploader().upload(multipartFile.getBytes(),
 		                  ObjectUtils.asMap("resource_type", "auto"));
@@ -91,6 +95,27 @@ public class UserAPI {
 			return ResponseEntity.ok(null);
 		}
 	} 
+	
+	@PutMapping("/api/info/user")
+	public ResponseEntity<UserDTO> updateCustomer(@RequestParam(value = "file", required = false) MultipartFile multipartFile,
+			@RequestParam("user") String userJson){
+		try {
+			UserDTO user = objectMapper.readValue(userJson, UserDTO.class);	
+			if (multipartFile != null) {
+				Map r = this.cloudinary.uploader().upload(multipartFile.getBytes(),
+		                  ObjectUtils.asMap("resource_type", "auto"));
+				String img = (String) r.get("secure_url");
+				user.setImage(img);
+			}
+			user.setRoleName(ConstantsUtil.ROLE_NAME_USER);
+			user = userService.save(user);
+			return ResponseEntity.ok(user);
+		} catch (Exception e) {
+			return ResponseEntity.ok(null);
+		}
+	} 
+	
+	
 	
 	@PostMapping("/api/admin/user")
 	public ResponseEntity<UserDTO> add(@RequestParam(value = "file", required = false) MultipartFile multipartFile,

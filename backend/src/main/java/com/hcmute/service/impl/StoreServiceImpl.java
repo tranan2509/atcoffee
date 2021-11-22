@@ -52,9 +52,23 @@ public class StoreServiceImpl implements StoreService {
 		return dtos;
 	}
 	
+	@Override 
+	public List<StoreDTO> findByState(Boolean state) {
+		List<StoreDTO> dtos = new ArrayList<StoreDTO>();
+		List<StoreEntity> entities = storeRepository.findByState(state);
+		entities.forEach(entity -> dtos.add(mapper.map(entity, StoreDTO.class)));
+		return dtos;
+	}
+	
 	@Override
 	public StoreResponse findAll(Pageable pageable) {
 		Page<StoreEntity> page = storeRepository.findAll(pageable);
+		return resultResponse(page, pageable);
+	}
+	
+	@Override
+	public StoreResponse findByState(Boolean state, Pageable pageable) {
+		Page<StoreEntity> page = storeRepository.findByState(state, pageable);
 		return resultResponse(page, pageable);
 	}
 	

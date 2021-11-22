@@ -13,5 +13,7 @@ public interface StoreService {
 	StoreDTO findOne(Long id);
 	StoreDTO findOneByCode(String code);
 	List<StoreDTO> findAll();
+	List<StoreDTO> findByState(Boolean state);
 	StoreResponse findAll(Pageable pageable);
+	StoreResponse findByState(Boolean state, Pageable pageable);
 }

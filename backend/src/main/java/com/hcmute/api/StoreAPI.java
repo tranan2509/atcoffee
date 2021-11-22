@@ -37,16 +37,17 @@ public class StoreAPI {
 		return ResponseEntity.ok(storeService.findOneByCode(code));
 	}
 	
-	@GetMapping("/api/info/store")
+	@GetMapping(value = "/api/info/store")
 	public ResponseEntity<List<StoreDTO>> findAll(){
-		return ResponseEntity.ok(storeService.findAll());
+		return ResponseEntity.ok(storeService.findByState(true));
 	}
 	
 	@GetMapping(value = "/api/info/store", params = {"page", "size"})
 	public ResponseEntity<StoreResponse> findAll(@RequestParam(name = "page", defaultValue = "1") int page,
-			@RequestParam(name = "size") int size){
+			@RequestParam(name = "size") int size,
+			@RequestParam(name = "state", defaultValue = "true", required = false) Boolean state){
 		Pageable pageable = new PageRequest(page - 1, size);
-		return ResponseEntity.ok(storeService.findAll(pageable));
+		return ResponseEntity.ok(storeService.findByState(state, pageable));
 	}
 	
 	@PostMapping("/api/admin/store")

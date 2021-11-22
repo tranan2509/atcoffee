@@ -96,13 +96,6 @@ public class PromotionAPI {
 		return ResponseEntity.ok(result);
 	}
 	
-//	@GetMapping(value = "/api/info/promotion", params = {"page", "size"})
-//	public ResponseEntity<PromotionResponse>findAll(@RequestParam (name = "page", defaultValue = "1", required = false) int page,
-//			@RequestParam(name = "size") int size) {
-//		Pageable pageable = new PageRequest(page - 1, size);
-//		return ResponseEntity.ok(promotionService.findAll(pageable));
-//	}
-	
 	@GetMapping(value = "/api/info/promotion", params = {"code"})
 	public ResponseEntity<PromotionDTO>findOneByCode(@RequestParam (name = "code") String code) {
 		return ResponseEntity.ok(promotionService.findOneByCode(code));

@@ -67,12 +67,13 @@ public class ProductAPI {
 	public ResponseEntity<ProductResponse> findAll(@RequestParam(name = "page", defaultValue = "1") int page,
 			@RequestParam(name = "size", defaultValue = "10000") int size, @RequestParam(name = "store", required = false) String storeCode,
 			@RequestParam(name="category", required = false) String categoryCode,
-			@RequestParam(name = "keyword", required = false) String keyword) {
+			@RequestParam(name = "keyword", required = false) String keyword,
+			@RequestParam(name = "state", required = false, defaultValue = "true") Boolean state) {
 		
 		ProductResponse result  = new ProductResponse();
 		Pageable pageable = new PageRequest(page - 1, size);
 		if (storeCode == "" && categoryCode == "" && keyword == "") {
-			result = productService.findAll(pageable);
+			result = productService.findByState(state, pageable);
 		} else {
 			if (storeCode != "" && categoryCode != "") {
 				result = productService.findByStoreCodeAndCategoryCodeAndKeyword(storeCode, categoryCode, keyword, pageable);
