@@ -8,7 +8,7 @@ import {
   ScrollView,
   Dimensions,
   KeyboardAvoidingView,
-  TouchableOpacity,
+  Switch,
 } from 'react-native';
 import {images} from '../../constants';
 import Animated, {
@@ -22,10 +22,16 @@ import Animated, {
   withDelay,
 } from 'react-native-reanimated';
 import {TapGestureHandler} from 'react-native-gesture-handler';
+import * as SignInActionsCreator from './action';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 
-const SignIn = ({navigation}) => {
+const SignIn = ({navigation, signInActions, signInState}) => {
   const {width, height} = Dimensions.get('window');
   const opacityButton = useSharedValue(1);
+  const [phone, setPhone] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [rememberMe, setRememberMe] = React.useState(true);
 
   const gestureHandler = useAnimatedGestureHandler({
     onEnd: _ => {
@@ -128,6 +134,19 @@ const SignIn = ({navigation}) => {
     };
   });
 
+  function login() {
+    if (phone && password) {
+      signInActions.signIn(phone, password);
+      if (signInState.user != []) {
+        () => navigation.navigate('Home');
+      } else {
+        alert('Thất bại');
+      }
+    } else {
+      alert('Nhập đầy đủ thông tin');
+    }
+  }
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -180,36 +199,58 @@ const SignIn = ({navigation}) => {
             </TapGestureHandler>
             {/* Sign In */}
             <TextInput
-              placeholder="Phone Number"
+              placeholder="Số điện thoại"
               style={styles.textInput}
               placeholderTextColor="black"
+              onChangeText={setPhone}
+              value={phone}
             />
             <TextInput
-              placeholder="Password"
+              placeholder="Mật khẩu"
               style={styles.textInput}
               placeholderTextColor="black"
               secureTextEntry={true}
+              onChangeText={setPassword}
+              value={password}
             />
-            <TapGestureHandler
-              onHandlerStateChange={() => navigation.navigate('SignUp')}>
-              <View
-                style={{
-                  alignItems: 'flex-end',
-                  marginHorizontal: 20,
-                  marginVertical: 5,
-                }}>
-                <Text
+            <View style={{flexDirection: 'row'}}>
+              <View style={{paddingHorizontal: '5%', flexDirection: 'row'}}>
+                <Switch
+                  trackColor={{false: '#f4f3f4', true: '#35C677'}}
+                  thumbColor={true ? '#ffffff' : '#6e7376'}
+                  //onValueChange={this.updateTheme}
+                  value={true}
+                />
+                <Text style={{paddingTop: '2%', paddingLeft: '2%'}}>
+                  Nhớ tài khoản
+                </Text>
+              </View>
+              <TapGestureHandler
+                onHandlerStateChange={() => navigation.navigate('SignUp')}>
+                <View
                   style={{
-                    fontStyle: 'italic',
-                    textDecorationLine: 'underline',
+                    alignItems: 'flex-end',
+                    marginHorizontal: '5%',
+                    marginVertical: '2%',
+                    marginLeft: '20%',
                   }}>
-                  Forgot your password?
+                  <Text
+                    style={{
+                      fontStyle: 'italic',
+                      textDecorationLine: 'underline',
+                    }}>
+                    Quên mật khẩu?
+                  </Text>
+                </View>
+              </TapGestureHandler>
+            </View>
+            <TapGestureHandler onHandlerStateChange={login}>
+              <View style={styles.button}>
+                <Text style={{fontSize: 20, fontWeight: 'bold'}}>
+                  Đăng nhập
                 </Text>
               </View>
             </TapGestureHandler>
-            <View style={styles.button}>
-              <Text style={{fontSize: 20, fontWeight: 'bold'}}>SIGN IN</Text>
-            </View>
             <View
               style={{
                 alignItems: 'center',
@@ -220,14 +261,14 @@ const SignIn = ({navigation}) => {
               <TapGestureHandler
                 onHandlerStateChange={() => navigation.navigate('SignUp')}>
                 <Animated.View style={{flexDirection: 'row'}}>
-                  <Text style={{fontStyle: 'italic'}}>New user?</Text>
+                  <Text style={{fontStyle: 'italic'}}>Tài khoản mới?</Text>
                   <Text
                     style={{
                       fontStyle: 'italic',
                       textDecorationLine: 'underline',
                       paddingLeft: 3,
                     }}>
-                    Sign Up
+                    Đăng ký
                   </Text>
                 </Animated.View>
               </TapGestureHandler>
@@ -282,4 +323,16 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignIn;
+function mapStateToProps(state) {
+  return {
+    signInState: state.signUpReducer,
+  };
+}
+
+function mapDispatchToProp(dispatch) {
+  return {
+    signInActions: bindActionCreators(SignInActionsCreator, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProp)(SignIn);

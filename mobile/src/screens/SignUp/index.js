@@ -18,16 +18,28 @@ import Animated, {
   Extrapolate,
   withDelay,
 } from 'react-native-reanimated';
-import {images} from '../../constants';
-import {RadioButton} from '../../components';
+import {images, icons} from '../../constants';
+import {RadioButton, IconButton} from '../../components';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import * as SignUpActionsCreator from './action';
 
-const SignUp = ({navigation}) => {
+const SignUp = ({navigation, signUpActions, signUpState}) => {
   const {width, height} = Dimensions.get('window');
   const opacityForm = useSharedValue(0);
   const [selectedMale, setSelectedMale] = React.useState(false);
   const [selectedFemale, setSelectedFemale] = React.useState(false);
   const [selectedOther, setSelectedOther] = React.useState(false);
-
+  const [hide, setHide] = React.useState(true);
+  const [name, setName] = React.useState('');
+  const [phone, setPhone] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [passwordConfirm, setPasswordConfirm] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [address, setAddress] = React.useState('');
+  React.useEffect(() => {
+    console.log(signUpState);
+  });
   React.useEffect(() => {
     opacityForm.value = withDelay(
       500,
@@ -69,6 +81,28 @@ const SignUp = ({navigation}) => {
     };
   });
 
+  function signUpHandler() {
+    if (name && phone && password && passwordConfirm && email && address) {
+      if (selectedMale || selectedFemale || selectedOther) {
+        if (password === passwordConfirm) {
+          if (selectedMale) {
+            signUpActions.signUp(name, 'Nam', phone, email, password, address);
+          } else if (selectedFemale) {
+            signUpActions.signUp(name, 'Nữ', phone, email, password, address);
+          } else {
+            signUpActions.signUp(name, 'Khác', phone, email, password, address);
+          }
+        } else {
+          alert('Mật khẩu và Nhập lại mật khẩu không giống nhau');
+        }
+      } else {
+        alert('Chọn giới tính');
+      }
+    } else {
+      alert('Điền tất cả các trường');
+    }
+  }
+
   return (
     <View
       style={[
@@ -105,27 +139,45 @@ const SignUp = ({navigation}) => {
             />
           </View>
           <TextInput
-            placeholder="Name"
+            placeholder="Họ và tên"
             style={styles.textInput}
             placeholderTextColor="black"
+            onChangeText={setName}
+            value={name}
           />
           <TextInput
-            placeholder="Phone Number"
+            placeholder="Số điện thoại"
             style={styles.textInput}
             placeholderTextColor="black"
+            onChangeText={setPhone}
+            value={phone}
           />
-          <TextInput
-            placeholder="Password"
-            style={styles.textInput}
-            placeholderTextColor="black"
-            secureTextEntry={true}
-          />
-          <TextInput
-            placeholder="Confirm Password"
-            style={styles.textInput}
-            placeholderTextColor="black"
-            secureTextEntry={true}
-          />
+          <View style={[styles.textInput, {flexDirection: 'row'}]}>
+            <IconButton
+              icon={hide ? icons.hidden : icons.password_eye}
+              onPress={() => setHide(!hide)}
+            />
+            <TextInput
+              placeholder="Mật khẩu"
+              placeholderTextColor="black"
+              secureTextEntry={hide}
+              onChangeText={setPassword}
+              value={password}
+            />
+          </View>
+          <View style={[styles.textInput, {flexDirection: 'row'}]}>
+            <IconButton
+              icon={hide ? icons.hidden : icons.password_eye}
+              onPress={() => setHide(!hide)}
+            />
+            <TextInput
+              placeholder="Nhập lại mật khẩu"
+              placeholderTextColor="black"
+              secureTextEntry={hide}
+              onChangeText={setPasswordConfirm}
+              value={passwordConfirm}
+            />
+          </View>
           <View style={{flexDirection: 'row'}}>
             <TapGestureHandler
               onHandlerStateChange={() => {
@@ -175,15 +227,25 @@ const SignUp = ({navigation}) => {
             placeholder="Email"
             style={styles.textInput}
             placeholderTextColor="black"
+            onChangeText={setEmail}
+            value={email}
           />
           <TextInput
-            placeholder="Address"
+            placeholder="Địa chỉ"
             style={styles.textInput}
             placeholderTextColor="black"
+            onChangeText={setAddress}
+            value={address}
           />
-          <View style={styles.button}>
-            <Text style={{fontSize: 20, fontWeight: 'bold'}}>SIGN UP</Text>
-          </View>
+          <TapGestureHandler
+            onHandlerStateChange={() => {
+              signUpHandler();
+              //navigation.navigate('SignIn')
+            }}>
+            <View style={styles.button}>
+              <Text style={{fontSize: 20, fontWeight: 'bold'}}>Đăng ký</Text>
+            </View>
+          </TapGestureHandler>
           <View
             style={{
               alignItems: 'center',
@@ -193,16 +255,14 @@ const SignUp = ({navigation}) => {
             <TapGestureHandler
               onHandlerStateChange={() => navigation.navigate('SignIn')}>
               <View style={{flexDirection: 'row'}}>
-                <Text style={{fontStyle: 'italic'}}>
-                  Already have an account?
-                </Text>
+                <Text style={{fontStyle: 'italic'}}>Đã có tài khoản?</Text>
                 <Text
                   style={{
                     fontStyle: 'italic',
                     textDecorationLine: 'underline',
                     paddingLeft: 3,
                   }}>
-                  Sign In
+                  Đăng ký
                 </Text>
               </View>
             </TapGestureHandler>
@@ -249,4 +309,16 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignUp;
+function mapStateToProps(state) {
+  return {
+    signUpState: state.signUpReducer,
+  };
+}
+
+function mapDispatchToProp(dispatch) {
+  return {
+    signUpActions: bindActionCreators(SignUpActionsCreator, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProp)(SignUp);

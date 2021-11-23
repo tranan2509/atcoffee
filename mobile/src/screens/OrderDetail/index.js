@@ -35,7 +35,7 @@ const OrderDetail = ({navigation, themeState, route}) => {
     let {selectedItem} = route?.params;
     setSelectedItem(selectedItem);
     amountMoneyHandler(selectedSize, numberOrder);
-  }, []);
+  }, [amountMoney]);
 
   function amountMoneyHandler(size, total) {
     setAmountMoney(

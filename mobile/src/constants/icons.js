@@ -25,7 +25,8 @@ const birthday = require('../assets/icons/birthday.png');
 const gender = require('../assets/icons/gender.png');
 const address = require('../assets/icons/address.png');
 const phone = require('../assets/icons/phone.png');
-
+const password_eye = require('../assets/icons/password_eye.png');
+const hidden = require('../assets/icons/hidden.png');
 export default {
   add,
   bookmark,
@@ -54,4 +55,6 @@ export default {
   birthday,
   mail,
   phone,
+  password_eye,
+  hidden,
 };
