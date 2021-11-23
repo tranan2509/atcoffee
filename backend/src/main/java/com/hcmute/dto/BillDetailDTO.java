@@ -1,6 +1,6 @@
 package com.hcmute.dto;
 
-public class BillDetailDTO {
+public class BillDetailDTO extends BaseDTO<BillDetailDTO>{
 	private int quantity;
 	private String description;
 	private float amount;

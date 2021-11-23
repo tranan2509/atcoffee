@@ -72,15 +72,14 @@ export default {
     },
 
     async handleLock(isLock) {
-      console.log(isLock);
-      //TODO: lock category
-      // let result = await StoreCommand.findOne(this.categoryId);
-      // result['state'] = !isLock;
-      // this.$router.push({path: '/admin/staff-info', query: {id: this.categoryId}});
-      // this.formData = new FormData();
-      // this.formData.append('user', JSON.stringify(result));
-      // await StoreCommand.save(this.formData);
-      // await this.getCategoryById(this.categoryId);
+      let result = await CategoryCommand.findOne(this.categoryId);
+      result['state'] = !isLock;
+      this.formData = new FormData();
+      this.formData.append('category', JSON.stringify(result));
+      await CategoryCommand.save(this.formData);
+      let query = {};
+      query.page = this.$store.getters.sortCategory.page;
+      this.$router.push({path: '/admin/categories', query: query});
     },
 
     async handleDone() {

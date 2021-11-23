@@ -52,8 +52,22 @@ public class CategoryServiceImpl implements CategoryService{
 	}
 	
 	@Override
+	public List<CategoryDTO> findByState(Boolean state) {
+		List<CategoryDTO> dtos = new ArrayList<CategoryDTO>();
+		List<CategoryEntity> entities = categoryRepository.findByState(state);
+		entities.forEach(entity -> dtos.add(mapper.map(entity, CategoryDTO.class)));
+		return dtos;
+	}
+	
+	@Override
 	public CategoryResponse findAll(Pageable pageable) {
 		Page<CategoryEntity> page = categoryRepository.findAll(pageable);
+		return resultResponse(page, pageable);
+	}
+	
+	@Override
+	public CategoryResponse findByState(Boolean state, Pageable pageable) {
+		Page<CategoryEntity> page = categoryRepository.findByState(state, pageable);
 		return resultResponse(page, pageable);
 	}
 	

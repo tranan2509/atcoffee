@@ -97,7 +97,6 @@ public class ProductServiceImpl implements ProductService{
 	public int countItem() {
 		return (int)productRepository.count();
 	}
-	
 
 	@Override
 	public int countByCategoryCode(String categoryCode) {
@@ -106,6 +105,12 @@ public class ProductServiceImpl implements ProductService{
 		return entities.size();
 	}
 
+	@Override
+	public ProductResponse findByState(Boolean state, Pageable pageable) {
+		Page<ProductEntity> page = productRepository.findByState(state, pageable);
+		return resultResponse(page, pageable);
+	}
+	
 	@Override
 	public ProductResponse findByStoreCodeAndKeyword(String storeCode, String keyword, Pageable pageable) {
 		StoreEntity store = storeRepository.findOneByCode(storeCode);
@@ -145,5 +150,4 @@ public class ProductServiceImpl implements ProductService{
 		result.setPage(pageable.getPageNumber());
 		return result;
 	}
-
 }

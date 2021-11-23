@@ -1,9 +1,13 @@
 package com.hcmute.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BillDTO extends BaseDTO<BillDTO>{
 	private float amount;
 	private float price;
 	private int discount;
+	private int point;
 	private String address; 
 	private String status;
 	private Long rewardId;
@@ -12,6 +16,7 @@ public class BillDTO extends BaseDTO<BillDTO>{
 	private Long staffId;
 	private Long customerId;
 	private Long storeId;
+	private List<BillDetailDTO> billDetails = new ArrayList<BillDetailDTO>();
 	
 	public BillDTO() {
 		super();
@@ -27,6 +32,13 @@ public class BillDTO extends BaseDTO<BillDTO>{
 	}
 	public void setPrice(float price) {
 		this.price = price;
+	}
+	
+	public int getPoint() {
+		return point;
+	}
+	public void setPoint(int point) {
+		this.point = point;
 	}
 	public String getAddress() {
 		return address;
@@ -83,5 +95,12 @@ public class BillDTO extends BaseDTO<BillDTO>{
 	public void setStoreId(Long storeId) {
 		this.storeId = storeId;
 	}
+	public List<BillDetailDTO> getBillDetails() {
+		return billDetails;
+	}
+	public void setBillDetails(List<BillDetailDTO> billDetails) {
+		this.billDetails = billDetails;
+	}
+	
 	
 }

@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.hcmute.entity.ProductEntity;
 
 public interface ProductRepository extends JpaRepository<ProductEntity, Long>{
+	Page<ProductEntity> findByState(Boolean state, Pageable pageable);
 	Page<ProductEntity> findByNameContainingOrCodeContainingAndState(String name, String code, Boolean state, Pageable pageable);
 	@Query("select p from ProductEntity p left join p.categories as s where s.id = ?1 AND p.state = 1")
 	List<ProductEntity> findByCategoryId(Long categoryId);

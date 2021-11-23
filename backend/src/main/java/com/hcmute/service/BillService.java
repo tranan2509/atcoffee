@@ -1,5 +1,7 @@
 package com.hcmute.service;
 
-public interface BillService {
+import com.hcmute.dto.BillDTO;
 
+public interface BillService {
+	BillDTO save(BillDTO billDTO);
 }
