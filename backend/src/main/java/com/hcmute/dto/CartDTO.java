@@ -3,6 +3,7 @@ package com.hcmute.dto;
 public class CartDTO extends BaseDTO<CartDTO>{
 	private int quantity;
 	private String description;
+	private String size;
 	private long productId;
 	private long customerId;
 	private long storeId;
@@ -30,6 +31,13 @@ public class CartDTO extends BaseDTO<CartDTO>{
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public String getSize() {
+		return size;
+	}
+	public void setSize(String size) {
+		this.size = size;
 	}
 	public long getProductId() {
 		return productId;
