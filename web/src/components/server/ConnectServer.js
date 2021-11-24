@@ -74,6 +74,15 @@ const connect = {
       }
     },
 
+    getDataInfo: async (url) => {
+      try {
+        let res = await instanceLogin.get(url);
+        return res != null && res.data ? res.data : null;
+      } catch (error) {
+        return null;
+      }
+    },
+
     /**
      * Function: getData
      * @param {*} url 

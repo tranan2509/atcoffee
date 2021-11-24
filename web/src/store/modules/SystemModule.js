@@ -66,6 +66,9 @@ const SystemModule = {
         payment: {
           value: false
         },
+        order: {
+          value: false,
+        },
         profile: {
           value: false,
           submenu: {

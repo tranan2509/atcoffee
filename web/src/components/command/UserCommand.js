@@ -56,6 +56,15 @@ const UserCommand = {
     const url = `${Constants.HOSTNAME_DEFAULT}/api/admin/user/validate?username=${username}&code=${code}&email=${email}&phone=${phone}&identity-card=${identityCard}`;
     let res = await ConnectServer.getData(url);
     return res;
+  },
+
+  async resetPassword(email) {
+    const url = `${Constants.HOSTNAME_DEFAULT}/api/info/reset-password?email=${email}`;
+    console.log("🚀 ~ file: UserCommand.js ~ line 63 ~ resetPassword ~ url", url)
+    
+    let res = await ConnectServer.getDataInfo(url);
+    console.log('res', res);
+    return res;
   }
 }
 
