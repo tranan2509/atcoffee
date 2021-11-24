@@ -33,3 +33,29 @@ export const addToCart = product => {
     }
   };
 };
+
+export const updateCart = product => {
+  return async dispatch => {
+    try {
+      const res = await apiServer.put('/api/user/cart', product);
+      dispatch({type: UPDATE_CART, payload: res.data});
+    } catch (err) {
+      console.log('This is error in action update cart', err);
+      dispatch({type: ERROR_CART, error: err});
+    }
+  };
+};
+
+export const deleteCart = () => {
+  return async dispatch => {
+    try {
+    } catch (err) {}
+  };
+};
+
+export const deleteAllCart = () => {
+  return async dispatch => {
+    try {
+    } catch (err) {}
+  };
+};

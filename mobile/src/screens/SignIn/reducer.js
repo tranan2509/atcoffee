@@ -1,7 +1,7 @@
 import * as types from './action';
 
 const initialState = {
-  user: [],
+  data: {},
   error: '',
 };
 
@@ -10,7 +10,7 @@ const signInReducer = function (state = initialState, action) {
     case types.SIGN_IN:
       return {
         ...state,
-        user: action.payload,
+        data: action.payload,
       };
     case types.ERROR_SIGN_IN:
       return {

@@ -41,6 +41,10 @@ const SignIn = ({navigation, signInActions, signInState}) => {
       });
     },
   });
+  // React.useEffect(() => {
+  //   console.log('user', signInState);
+  //   //console.log('user', signInState);
+  // }, [signInState]);
 
   //   React.useEffect(() => {
   //     opacityButton.value = withTiming(0, {
@@ -325,7 +329,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    signInState: state.signUpReducer,
+    signInState: state.signInReducer,
   };
 }
 

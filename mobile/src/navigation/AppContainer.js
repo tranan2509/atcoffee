@@ -12,8 +12,8 @@ const AppContainer = () => {
       screenOptions={{
         headerShown: false,
       }}>
-      <AppContainerStack.Screen name="Main" component={Tabs} />
       <AppContainerStack.Screen name="SignIn" component={SignInNavigator} />
+      <AppContainerStack.Screen name="Main" component={Tabs} />
       <AppContainerStack.Screen name="SignUp" component={SignUpNavigator} />
       <AppContainerStack.Screen name="Notification" component={Notification} />
       <AppContainerStack.Screen name="Location" component={Location} />

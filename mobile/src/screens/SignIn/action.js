@@ -10,7 +10,6 @@ export const signIn = (username, password) => {
         username,
         password,
       };
-      console.log(user);
       const res = await apiServer.post('/api/authenticate', user);
       dispatch({type: SIGN_IN, payload: res.data});
     } catch (err) {
