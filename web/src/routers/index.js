@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import Login from '../components/view/common/login/Login.vue'
+import ForgotPassword from '../components/view/common/login/ForgotPassword.vue'
+/**Admin Components */
 import DashBoard from '../components/view/admin/dashboard/Dashboard.vue'
 import Statistics from '../components/view/admin/statistics/Statistics'
 import Products from '../components/view/admin/product/Products.vue'
@@ -22,11 +24,13 @@ import Error from '../components/view/admin/error/Error.vue'
 import DashBoardStaff from '../components/view/staff/dashboard/Dashboard.vue'
 import ProductsStaff from '../components/view/staff/product/Products.vue'
 import PaymentStaff from '../components/view/staff/payment/Payment.vue'
+import OrderStaff from '../components/view/staff/order/Order.vue'
 import ProfileStaff from '../components/view/staff/profile/Profile.vue'
 import ChangePasswordStaff from '../components/view/staff/profile/ChangePassword.vue'
 
 const routes = [
   {path: '/login', component: Login, meta: {title: 'A&T Coffee | Đăng nhập'}},
+  {path: '/forgot-password', component: ForgotPassword, meta: {title: 'A&T Coffee | Quên mật khẩu'}},
   /**Admin URL */
   {path: '/admin', name: 'admin', component: DashBoard, meta: {title: 'A&T Coffee | Trang chủ'}},
   {path: '/admin/statistics', name: 'statistics', component: Statistics, meta: {title: 'A&T Coffee | Thống kê'}},
@@ -50,6 +54,7 @@ const routes = [
   {path: '/staff', name: 'dashboard-staff', component: DashBoardStaff, meta: {title: 'A&T Coffee | Trang chủ'}},
   {path: '/staff/products', name: 'products-staff', component: ProductsStaff, meta: {title: 'A&T Coffee | Danh sách sản phẩm'}},
   {path: '/staff/payment', name: 'payment-staff', component: PaymentStaff, meta: {title: 'A&T Coffee | Thanh toán'}},
+  {path: '/staff/order', name: 'order-staff', component: OrderStaff, meta: {title: 'A&T Coffee | Đơn hàng'}},
   {path: '/staff/profile', name: 'profile-staff', component: ProfileStaff, meta: {title: 'A&T Coffee | Thông tin cá nhân'}},
   {path: '/staff/profile/change-password', name: 'change-password-staff', component: ChangePasswordStaff, meta: {title: 'A&T Coffee | Đổi mật khẩu'}},
 

@@ -146,7 +146,10 @@ export default {
 
     async handlePayment() {
       var userId = this.user == null ? 9 : this.user.id;
+      var now = new Date();
+      let code = `BI${now.getTime().toString().slice(5)}`;
       var bill = {
+        code,
         amount: this.amount - this.discount,
         price: this.amount,
         discount: this.discountPromotion,
@@ -159,7 +162,10 @@ export default {
         storeId: this.store.id,
         staffId: this.$store.getters.user.id,
         customerId: userId,
-        billDetails: this.$store.getters.carts,
+        billDetails: this.$store.getters.carts.map((cart, index) => {
+          cart.code = `${code}D${index + 1}`;
+          return cart;
+        }),
         state: true
       }
       let result = await BillCommand.save(bill);

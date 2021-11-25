@@ -28,10 +28,16 @@
           <span>Sản phẩm</span>
         </router-link>
       </li>
-       <li class="nav-item dropdown" :class="menuStaff.payment.value ? 'active' : ''">  
+      <li class="nav-item dropdown" :class="menuStaff.payment.value ? 'active' : ''">  
         <router-link to="/staff/payment" class="nav-link" @click="handleDropdown(menuStaff.payment)">
           <i class="fas fa-money-check-alt"></i>
           <span>Thanh toán</span>
+        </router-link>
+      </li>
+      <li class="nav-item dropdown" :class="menuStaff.order.value ? 'active' : ''">  
+        <router-link to="/staff/order" class="nav-link" @click="handleDropdown(menuStaff.order)">
+          <i class="fas fa-layer-group"></i>
+          <span>Đơn hàng</span>
         </router-link>
       </li>
       <li class="menu-header">HỒ SƠ</li>

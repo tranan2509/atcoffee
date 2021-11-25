@@ -39,6 +39,7 @@ export default {
   visibility: hidden;
   opacity: 0;
   transform: scale(1.2);
+  z-index: 1000;
 }
 
 .open-popup {
