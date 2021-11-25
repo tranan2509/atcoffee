@@ -58,5 +58,12 @@ public class CartServiceImpl implements CartService{
 	public void delete(Long id) {
 		cartRespository.delete(id);
 	}
+
+	@Override
+	public boolean deleteByUserId(Long userId) {
+		UserEntity customer = userRepository.findOne(userId);
+		long count = cartRespository.deleteByCustomer(customer);
+		return count > 0;
+	}
 	
 }

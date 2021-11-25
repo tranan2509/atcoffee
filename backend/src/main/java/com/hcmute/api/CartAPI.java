@@ -37,8 +37,13 @@ public class CartAPI {
 	}
 	
 	@DeleteMapping(value = "/api/user/cart", params = {"cartId"}) 
-	public ResponseEntity<Boolean> update(@RequestParam(name = "cartId") Long cartId) {
+	public ResponseEntity<Boolean> deleteById(@RequestParam(name = "cartId") Long cartId) {
 		cartService.delete(cartId);
 		return ResponseEntity.ok(true);
+	}
+	
+	@DeleteMapping(value = "/api/user/cart", params = {"userId"}) 
+	public ResponseEntity<Boolean> deleteByUserId(@RequestParam(name = "userId") Long userId) {
+		return ResponseEntity.ok(cartService.deleteByUserId(userId));
 	}
 }
