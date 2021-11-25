@@ -27,6 +27,8 @@ const address = require('../assets/icons/address.png');
 const phone = require('../assets/icons/phone.png');
 const password_eye = require('../assets/icons/password_eye.png');
 const hidden = require('../assets/icons/hidden.png');
+const deleted = require('../assets/icons/delete.png');
+const edited = require('../assets/icons/edit.png');
 export default {
   add,
   bookmark,
@@ -57,4 +59,6 @@ export default {
   phone,
   password_eye,
   hidden,
+  deleted,
+  edited,
 };

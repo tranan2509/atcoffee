@@ -25,13 +25,17 @@ import {TapGestureHandler} from 'react-native-gesture-handler';
 import * as SignInActionsCreator from './action';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import LoadingModal from '../../modal/LoadingModal';
 
 const SignIn = ({navigation, signInActions, signInState}) => {
   const {width, height} = Dimensions.get('window');
   const opacityButton = useSharedValue(1);
   const [phone, setPhone] = React.useState('');
   const [password, setPassword] = React.useState('');
-  const [rememberMe, setRememberMe] = React.useState(true);
+  const [rememberMe, setRememberMe] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const [token, setToken] = React.useState('');
 
   const gestureHandler = useAnimatedGestureHandler({
     onEnd: _ => {
@@ -41,10 +45,43 @@ const SignIn = ({navigation, signInActions, signInState}) => {
       });
     },
   });
-  // React.useEffect(() => {
-  //   console.log('user', signInState);
-  //   //console.log('user', signInState);
-  // }, [signInState]);
+
+  const autoLogin = async () => {
+    if (!token) {
+      const jwt = await AsyncStorage.getItem('token');
+      setToken(jwt);
+    }
+  };
+  React.useEffect(() => {
+    rememberMeHandler();
+    autoLogin();
+    if (loading) {
+      setLoading(false);
+    }
+    return () => setLoading(false);
+  }, []);
+  React.useEffect(() => {
+    if (token) {
+      setLoading(true);
+      signInActions.authenticated();
+    }
+    if (loading) {
+      setLoading(false);
+    }
+    return () => setLoading(false);
+  }, [token]);
+  const rememberMeHandler = async () => {
+    const _username = await AsyncStorage.getItem('username');
+    const _password = await AsyncStorage.getItem('password');
+    const _remember = await AsyncStorage.getItem('remember');
+    if (_remember == 'true') {
+      setPhone(_username);
+      setPassword(_password);
+      setRememberMe(true);
+    } else {
+      setRememberMe(false);
+    }
+  };
 
   //   React.useEffect(() => {
   //     opacityButton.value = withTiming(0, {
@@ -138,18 +175,30 @@ const SignIn = ({navigation, signInActions, signInState}) => {
     };
   });
 
-  function login() {
+  const toggleSwitch = () => {
+    setRememberMe(previousState => !previousState);
+    async () => await AsyncStorage.setItem('remember', `${!previousState}`);
+  };
+
+  const login = async () => {
     if (phone && password) {
-      signInActions.signIn(phone, password);
-      if (signInState.user != []) {
-        () => navigation.navigate('Home');
+      setLoading(true);
+      await signInActions.signIn(phone, password);
+      if (rememberMe) {
+        await AsyncStorage.setItem('username', phone);
+        await AsyncStorage.setItem('password', password);
+        await AsyncStorage.setItem('remember', 'true');
+        //console.log('item', true);
       } else {
-        alert('Thất bại');
+        await AsyncStorage.setItem('username', '');
+        await AsyncStorage.setItem('password', '');
+        await AsyncStorage.setItem('remember', 'false');
+        //console.log('item', false);
       }
     } else {
       alert('Nhập đầy đủ thông tin');
     }
-  }
+  };
 
   return (
     <KeyboardAvoidingView
@@ -221,9 +270,9 @@ const SignIn = ({navigation, signInActions, signInState}) => {
               <View style={{paddingHorizontal: '5%', flexDirection: 'row'}}>
                 <Switch
                   trackColor={{false: '#f4f3f4', true: '#35C677'}}
-                  thumbColor={true ? '#ffffff' : '#6e7376'}
-                  //onValueChange={this.updateTheme}
-                  value={true}
+                  thumbColor={rememberMe ? '#ffffff' : '#6e7376'}
+                  onValueChange={toggleSwitch}
+                  value={rememberMe}
                 />
                 <Text style={{paddingTop: '2%', paddingLeft: '2%'}}>
                   Nhớ tài khoản
@@ -280,6 +329,7 @@ const SignIn = ({navigation, signInActions, signInState}) => {
           </Animated.View>
         </View>
       </ScrollView>
+      <LoadingModal visible={loading} />
     </KeyboardAvoidingView>
   );
 };

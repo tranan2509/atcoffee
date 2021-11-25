@@ -5,15 +5,18 @@ import {images, COLORS, SIZES, icons, FONTS} from '../../constants';
 import {connect} from 'react-redux';
 
 const Cart = ({themeState, navigation, cartState, locationState}) => {
+  const [count, setCount] = React.useState(0);
+  const [payment, setPayment] = React.useState('');
+  const [discount, setdiscount] = React.useState(false);
+  React.useEffect(() => {
+    locationState.cart?.map(item => setCount(count + item.quantity));
+  }, [locationState]);
   return (
     <View style={{flex: 1}}>
       <Header title="Giỏ hàng" navigation={navigation} />
       <ScrollView
         style={{
           flex: 1,
-          //marginTop: -25,
-          //borderTopLeftRadius: SIZES.radius * 2,
-          //borderTopRightRadius: SIZES.radius * 2,
           backgroundColor: themeState.appTheme.backgroundColor,
         }}
         contentContainerStyle={{
@@ -38,7 +41,7 @@ const Cart = ({themeState, navigation, cartState, locationState}) => {
                 color: themeState.appTheme.textColor,
                 ...FONTS.h2,
               }}>
-              {cartState.delivery ? 'Giao đến' : 'Tự đến lấy'}
+              {cartState.delivery ? 'Giao tận nơi' : 'Tự đến lấy'}
             </Text>
             <TouchableOpacity
               style={{flex: 1, marginTop: '2%'}}
@@ -125,7 +128,7 @@ const Cart = ({themeState, navigation, cartState, locationState}) => {
                   flexDirection: 'row',
                 }}>
                 <IconButton
-                  icon={icons.logout}
+                  icon={icons.edited}
                   iconStyle={{tintColor: themeState.appTheme.textColor}}
                 />
                 <View>
@@ -217,41 +220,54 @@ const Cart = ({themeState, navigation, cartState, locationState}) => {
               </View>
             </View>
           </View>
-          <View style={{paddingHorizontal: 20, paddingTop: 10}}>
+          <View style={{paddingHorizontal: 20, paddingTop: 15}}>
             <View
               style={{
                 borderBottomColor: themeState.appTheme.textColor,
                 borderBottomWidth: 0.5,
                 flexDirection: 'row',
-                paddingBottom: 15,
+                paddingBottom: 20,
               }}>
               <View>
                 <Text
                   style={{
-                    paddingTop: 5,
                     color: COLORS.blueLight,
                     ...FONTS.body3,
                   }}>
                   Khuyến mãi
                 </Text>
-                <Text
-                  style={{
-                    color: themeState.appTheme.textColor,
-                    ...FONTS.body4,
-                  }}>
-                  Giảm 20k đơn từ 89k
-                </Text>
+                {discount ? (
+                  <Text
+                    style={{
+                      color: themeState.appTheme.textColor,
+                      ...FONTS.body4,
+                    }}>
+                    Giảm 20k đơn từ 89k
+                  </Text>
+                ) : null}
               </View>
-              <View style={{flex: 1}}>
-                <Text
-                  style={{
-                    alignSelf: 'flex-end',
-                    paddingTop: 15,
-                    color: themeState.appTheme.textColor,
-                    ...FONTS.body3,
-                  }}>
-                  50000
-                </Text>
+              <View style={{flex: 1, justifyContent: 'center'}}>
+                {!discount ? (
+                  <Image
+                    source={icons.rightArrow}
+                    style={{
+                      alignSelf: 'flex-end',
+                      //paddingTop: 9,
+                      height: 10,
+                      width: 10,
+                      tintColor: themeState.appTheme.textColor,
+                    }}
+                  />
+                ) : (
+                  <Text
+                    style={{
+                      alignSelf: 'flex-end',
+                      color: themeState.appTheme.textColor,
+                      ...FONTS.body3,
+                    }}>
+                    50000
+                  </Text>
+                )}
               </View>
             </View>
           </View>
@@ -290,7 +306,151 @@ const Cart = ({themeState, navigation, cartState, locationState}) => {
             </View>
           </View>
         </View>
+        {/* Method payment */}
+        <View
+          style={{
+            backgroundColor:
+              themeState.appTheme.name == 'dark' ? COLORS.gray1 : COLORS.white,
+            paddingTop: 5,
+            marginTop: 10,
+          }}>
+          <View
+            style={{
+              paddingHorizontal: 20,
+              flexDirection: 'row',
+              paddingBottom: 20,
+            }}>
+            <Text
+              style={{
+                paddingTop: 5,
+                color: themeState.appTheme.textColor,
+                ...FONTS.h2,
+              }}>
+              Thanh toán
+            </Text>
+          </View>
+          <View style={{paddingHorizontal: 20}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                paddingBottom: 15,
+              }}>
+              <View>
+                <Text
+                  style={{
+                    color: COLORS.blueLight,
+                    ...FONTS.body3,
+                  }}>
+                  {payment ? payment : 'Bấm chọn phương thức thanh toán'}
+                </Text>
+              </View>
+              <View style={{flex: 1, justifyContent: 'center'}}>
+                <Image
+                  source={icons.rightArrow}
+                  style={{
+                    alignSelf: 'flex-end',
+                    paddingTop: 5,
+                    height: 10,
+                    width: 10,
+                    tintColor: themeState.appTheme.textColor,
+                  }}
+                />
+              </View>
+            </View>
+          </View>
+        </View>
+        {/* delete */}
+        <View
+          style={{
+            backgroundColor:
+              themeState.appTheme.name == 'dark' ? COLORS.gray1 : COLORS.white,
+            paddingTop: 5,
+            marginTop: 10,
+          }}>
+          <View style={{paddingHorizontal: 20, paddingTop: 15}}>
+            <TouchableOpacity
+              style={{
+                flexDirection: 'row',
+                paddingBottom: 20,
+              }}>
+              <IconButton
+                icon={icons.deleted}
+                iconStyle={{tintColor: COLORS.red}}
+              />
+
+              <Text
+                style={{
+                  color: COLORS.red,
+                  ...FONTS.body3,
+                  marginLeft: 10,
+                }}>
+                Xóa đơn hàng
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </ScrollView>
+      <View
+        style={{
+          height: '10%',
+          width: '100%',
+          backgroundColor: COLORS.primary,
+          justifyContent: 'center',
+        }}>
+        <View style={{flexDirection: 'row'}}>
+          <View>
+            <Text
+              style={{
+                //paddingTop: 10,
+                color: themeState.appTheme.textColor,
+                ...FONTS.h3,
+                marginLeft: 20,
+              }}>
+              {cartState.delivery ? 'Giao tận nơi' : 'Tự đến lấy'}
+            </Text>
+            <Text
+              style={{
+                paddingTop: 5,
+                color: themeState.appTheme.textColor,
+                ...FONTS.h3,
+                marginLeft: 20,
+              }}>
+              500000
+            </Text>
+          </View>
+          <View>
+            <Text
+              style={{
+                //paddingTop: 10,
+                color: themeState.appTheme.textColor,
+                ...FONTS.h3,
+                marginLeft: 7,
+              }}>
+              - {count} sản phẩm
+            </Text>
+          </View>
+          <TouchableOpacity
+            style={{
+              flex: 1,
+              backgroundColor: COLORS.lightPurple,
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginLeft: 50,
+              borderRadius: 20,
+              marginRight: 10,
+              paddingRight: 28,
+            }}>
+            <Text
+              style={{
+                alignSelf: 'flex-end',
+                color: themeState.appTheme.textColor,
+                ...FONTS.h3,
+              }}>
+              Đặt hàng
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </View>
   );
 };

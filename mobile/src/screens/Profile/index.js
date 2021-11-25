@@ -3,8 +3,14 @@ import {View, Text, ScrollView, Image, TouchableOpacity} from 'react-native';
 import {HeaderBar, IconButton} from '../../components';
 import {SIZES, images, COLORS, FONTS, icons} from '../../constants';
 import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import * as signInActionsCreator from '../SignIn/action';
 
-const Profile = ({themeState, navigation}) => {
+const Profile = ({themeState, navigation, signInActions}) => {
+  const _logOut = callback => {
+    signInActions.logOut();
+    callback();
+  };
   return (
     <View style={{flex: 1}}>
       <HeaderBar />
@@ -203,7 +209,7 @@ const Profile = ({themeState, navigation}) => {
             </Text>
           </View>
         </View>
-        <View
+        <TouchableOpacity
           style={{
             paddingHorizontal: 20,
             flexDirection: 'row',
@@ -212,7 +218,8 @@ const Profile = ({themeState, navigation}) => {
             backgroundColor:
               themeState.appTheme.name == 'dark' ? COLORS.gray1 : COLORS.white,
             marginTop: 10,
-          }}>
+          }}
+          onPress={() => _logOut(() => navigation.push('SignIn'))}>
           <IconButton
             icon={icons.logout}
             iconStyle={{tintColor: themeState.appTheme.textColor}}
@@ -226,7 +233,7 @@ const Profile = ({themeState, navigation}) => {
             }}>
             Đăng xuất
           </Text>
-        </View>
+        </TouchableOpacity>
       </ScrollView>
     </View>
   );
@@ -239,7 +246,9 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProp(dispatch) {
-  return {};
+  return {
+    signInActions: bindActionCreators(signInActionsCreator, dispatch),
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProp)(Profile);
