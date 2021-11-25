@@ -92,6 +92,7 @@ const SignUp = ({navigation, signUpActions, signUpState}) => {
           } else {
             signUpActions.signUp(name, 'Khác', phone, email, password, address);
           }
+          () => navigation.navigate('SignIn');
         } else {
           alert('Mật khẩu và Nhập lại mật khẩu không giống nhau');
         }

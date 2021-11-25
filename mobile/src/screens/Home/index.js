@@ -21,6 +21,7 @@ import {
 import {connect} from 'react-redux';
 import {HeaderBar, CustomButton} from '../../components';
 import database from '@react-native-firebase/database';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const promoTabs = constants.promoTabs.map(promoTab => ({
   ...promoTab,
@@ -140,7 +141,7 @@ const Tabs = ({appTheme, scrollX, onPromoTabsPress}) => {
   );
 };
 
-const Home = ({navigation, themeState}) => {
+const Home = ({navigation, themeState, signInState}) => {
   const scrollX = React.useRef(new Animated.Value(0)).current;
 
   const promoScrollViewRef = React.useRef();
@@ -150,6 +151,18 @@ const Home = ({navigation, themeState}) => {
       offset: promoTabIndex * SIZES.width,
     });
   });
+
+  const setToken = async () => {
+    const token = await AsyncStorage.getItem('token');
+    if (!token) {
+      await AsyncStorage.setItem('token', signInState.data.jwt);
+    }
+  };
+
+  React.useEffect(() => {
+    setToken();
+    //console.log(signInState.data.jwt);
+  }, []);
   // React.useEffect(() => {
   //   const newReference = database().ref('/users').push();
 
@@ -380,7 +393,7 @@ const styles = StyleSheet.create({
 function mapStateToProps(state) {
   return {
     themeState: state.themeReducer,
-    //error: state.error,
+    signInState: state.signInReducer,
   };
 }
 
