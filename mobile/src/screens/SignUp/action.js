@@ -1,9 +1,18 @@
 import apiServer from '../../api/apiServer';
+import * as RootNavigation from '../../navigation/navigationRef';
 
 export const SIGN_UP = 'SIGN_UP';
 export const ERROR_SIGN_UP = 'ERROR_SIGN_UP';
 
-export const signUp = (name, gender, phone, email, password, address) => {
+export const signUp = (
+  name,
+  gender,
+  phone,
+  idCard,
+  email,
+  password,
+  address,
+) => {
   return async dispatch => {
     try {
       let image;
@@ -32,8 +41,8 @@ export const signUp = (name, gender, phone, email, password, address) => {
         email: email,
         address: address,
         dob: new Date(),
-        identityCard: 0,
-        storeId: 0,
+        identityCard: idCard,
+        storeId: 1,
         accumulatedPoints: 0,
         currentPoints: 0,
         typeId: 3,
@@ -43,9 +52,10 @@ export const signUp = (name, gender, phone, email, password, address) => {
 
       let data = new FormData();
       data.append('user', JSON.stringify(user));
-      console.log('user', user);
       const res = await apiServer.post('/api/info/user', data);
+      //console.log('user', res.data);
       dispatch({type: SIGN_UP, payload: res.data});
+      RootNavigation.navigate('SignIn');
     } catch (err) {
       console.log('This is error in action Sign Up', err);
       dispatch({type: ERROR_SIGN_UP, error: err});

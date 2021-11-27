@@ -6,6 +6,8 @@ import {
   TextInput,
   Image,
   Dimensions,
+  Alert,
+  ToastAndroid,
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {TapGestureHandler} from 'react-native-gesture-handler';
@@ -19,7 +21,7 @@ import Animated, {
   withDelay,
 } from 'react-native-reanimated';
 import {images, icons} from '../../constants';
-import {RadioButton, IconButton} from '../../components';
+import {RadioButton, IconButton, LoadingProcess} from '../../components';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as SignUpActionsCreator from './action';
@@ -37,9 +39,15 @@ const SignUp = ({navigation, signUpActions, signUpState}) => {
   const [passwordConfirm, setPasswordConfirm] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [address, setAddress] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
+  const [idCard, setIdCard] = React.useState('');
   React.useEffect(() => {
-    console.log(signUpState);
-  });
+    //console.log(signUpState);
+    if (loading) {
+      setLoading(false);
+    }
+    return () => setLoading(false);
+  }, []);
   React.useEffect(() => {
     opacityForm.value = withDelay(
       500,
@@ -82,25 +90,88 @@ const SignUp = ({navigation, signUpActions, signUpState}) => {
   });
 
   function signUpHandler() {
-    if (name && phone && password && passwordConfirm && email && address) {
+    if (
+      name &&
+      phone &&
+      password &&
+      passwordConfirm &&
+      email &&
+      address &&
+      idCard
+    ) {
       if (selectedMale || selectedFemale || selectedOther) {
         if (password === passwordConfirm) {
+          setLoading(true);
           if (selectedMale) {
-            signUpActions.signUp(name, 'Nam', phone, email, password, address);
+            signUpActions.signUp(
+              name,
+              'Nam',
+              phone,
+              idCard,
+              email,
+              password,
+              address,
+            );
+            ToastAndroid.show('Đăng ký thành công', ToastAndroid.LONG);
           } else if (selectedFemale) {
-            signUpActions.signUp(name, 'Nữ', phone, email, password, address);
+            signUpActions.signUp(
+              name,
+              'Nữ',
+              phone,
+              idCard,
+              email,
+              password,
+              address,
+            );
+            ToastAndroid.show('Đăng ký thành công', ToastAndroid.LONG);
           } else {
-            signUpActions.signUp(name, 'Khác', phone, email, password, address);
+            signUpActions.signUp(
+              name,
+              'Khác',
+              phone,
+              idCard,
+              email,
+              password,
+              address,
+            );
+            ToastAndroid.show('Đăng ký thành công!', ToastAndroid.LONG);
           }
-          () => navigation.navigate('SignIn');
         } else {
-          alert('Mật khẩu và Nhập lại mật khẩu không giống nhau');
+          Alert.alert(
+            'Thông báo',
+            'Mật khẩu và Nhập lại mật khẩu không giống nhau!',
+            [
+              {
+                text: 'Bỏ qua',
+                onPress: () => {},
+                style: 'cancel',
+              },
+              {text: 'OK', onPress: () => {}},
+            ],
+          );
+          //alert('Mật khẩu và Nhập lại mật khẩu không giống nhau');
         }
       } else {
-        alert('Chọn giới tính');
+        Alert.alert('Thông báo', 'Phải chọn giới tính!', [
+          {
+            text: 'Bỏ qua',
+            onPress: () => {},
+            style: 'cancel',
+          },
+          {text: 'OK', onPress: () => {}},
+        ]);
+        //alert('Chọn giới tính');
       }
     } else {
-      alert('Điền tất cả các trường');
+      Alert.alert('Thông báo', 'Phải điền tất cả các trường!', [
+        {
+          text: 'Bỏ qua',
+          onPress: () => {},
+          style: 'cancel',
+        },
+        {text: 'OK', onPress: () => {}},
+      ]);
+      //alert('Điền tất cả các trường');
     }
   }
 
@@ -133,8 +204,8 @@ const SignUp = ({navigation, signUpActions, signUpState}) => {
               source={images.logo}
               resizeMode="stretch"
               style={{
-                height: 200,
-                width: 200,
+                height: 150,
+                width: 150,
                 tintColor: 'rgba(0,0,0,2)',
               }}
             />
@@ -145,13 +216,23 @@ const SignUp = ({navigation, signUpActions, signUpState}) => {
             placeholderTextColor="black"
             onChangeText={setName}
             value={name}
+            //keyboardType="ascii-capable"
           />
           <TextInput
             placeholder="Số điện thoại"
             style={styles.textInput}
             placeholderTextColor="black"
+            keyboardType="number-pad"
             onChangeText={setPhone}
             value={phone}
+          />
+          <TextInput
+            placeholder="CMND/CCCD"
+            style={styles.textInput}
+            placeholderTextColor="black"
+            keyboardType="number-pad"
+            onChangeText={setIdCard}
+            value={idCard}
           />
           <View style={[styles.textInput, {flexDirection: 'row'}]}>
             <IconButton
@@ -186,7 +267,7 @@ const SignUp = ({navigation, signUpActions, signUpState}) => {
                 setSelectedFemale(false);
                 setSelectedOther(false);
               }}>
-              <View style={{width: width / 3.5, alignItems: 'flex-end'}}>
+              <View style={{width: width / 3.7, alignItems: 'flex-end'}}>
                 <RadioButton
                   style={{marginVertical: 5, backgroundColor: 'white'}}
                   selected={selectedMale}
@@ -223,11 +304,11 @@ const SignUp = ({navigation, signUpActions, signUpState}) => {
               </View>
             </TapGestureHandler>
           </View>
-
           <TextInput
             placeholder="Email"
             style={styles.textInput}
             placeholderTextColor="black"
+            keyboardType="email-address"
             onChangeText={setEmail}
             value={email}
           />
@@ -237,6 +318,7 @@ const SignUp = ({navigation, signUpActions, signUpState}) => {
             placeholderTextColor="black"
             onChangeText={setAddress}
             value={address}
+            //keyboardType="numeric"
           />
           <TapGestureHandler
             onHandlerStateChange={() => {
@@ -263,12 +345,17 @@ const SignUp = ({navigation, signUpActions, signUpState}) => {
                     textDecorationLine: 'underline',
                     paddingLeft: 3,
                   }}>
-                  Đăng ký
+                  Đăng nhập
                 </Text>
               </View>
             </TapGestureHandler>
           </View>
         </Animated.View>
+        {loading ? (
+          <View zIndex={1} style={{marginTop: -250, height: 350}}>
+            <LoadingProcess title="Đang tải ..." />
+          </View>
+        ) : null}
       </KeyboardAwareScrollView>
     </View>
   );

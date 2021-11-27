@@ -5,6 +5,7 @@ import TabButton from './TabButton';
 import VerticalTextButton from './VerticalTextButton';
 import Header from './Header';
 import RadioButton from './RadioButton';
+import LoadingProcess from './LoadingProcess';
 
 export {
   HeaderBar,
@@ -14,4 +15,5 @@ export {
   VerticalTextButton,
   Header,
   RadioButton,
+  LoadingProcess,
 };
