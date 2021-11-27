@@ -9,6 +9,8 @@ import {
   Dimensions,
   KeyboardAvoidingView,
   Switch,
+  ActivityIndicator,
+  Alert,
 } from 'react-native';
 import {images} from '../../constants';
 import Animated, {
@@ -26,7 +28,8 @@ import * as SignInActionsCreator from './action';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import LoadingModal from '../../modal/LoadingModal';
+import {COLORS} from '../../constants';
+import {LoadingProcess} from '../../components';
 
 const SignIn = ({navigation, signInActions, signInState}) => {
   const {width, height} = Dimensions.get('window');
@@ -196,7 +199,14 @@ const SignIn = ({navigation, signInActions, signInState}) => {
         //console.log('item', false);
       }
     } else {
-      alert('Nhập đầy đủ thông tin');
+      Alert.alert('Thông báo', 'Nhập đầy đủ thông tin!', [
+        {
+          text: 'Bỏ qua',
+          onPress: () => {},
+          style: 'cancel',
+        },
+        {text: 'OK', onPress: () => {}},
+      ]);
     }
   };
 
@@ -227,6 +237,8 @@ const SignIn = ({navigation, signInActions, signInState}) => {
             height: height / 2.3,
             justifyContent: 'center',
           }}>
+          {loading ? <LoadingProcess title="Đang tải ..." /> : null}
+
           <TapGestureHandler onHandlerStateChange={gestureHandler}>
             <Animated.View style={[styles.button, styleButtonOpacity]}>
               <Text style={{fontSize: 20, fontWeight: 'bold'}}>Welcome!!!</Text>
@@ -329,7 +341,7 @@ const SignIn = ({navigation, signInActions, signInState}) => {
           </Animated.View>
         </View>
       </ScrollView>
-      <LoadingModal visible={loading} />
+      {/* <LoadingModal visible={loading} /> */}
     </KeyboardAvoidingView>
   );
 };

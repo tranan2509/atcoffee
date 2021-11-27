@@ -8,7 +8,7 @@ const initialState = {
 const signUpReducer = function (state = initialState, action) {
   switch (action.type) {
     case types.SIGN_UP:
-      console.log('reducer', action.payload);
+      //console.log('reducer', action.payload);
       return {
         ...state,
         user: action.payload,

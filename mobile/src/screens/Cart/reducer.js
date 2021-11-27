@@ -3,6 +3,7 @@ import * as types from './action';
 const initialState = {
   cart: [],
   delivery: true,
+  payment: [],
   error: '',
 };
 
@@ -17,6 +18,21 @@ const cartReducer = function (state = initialState, action) {
       return {
         ...state,
         error: action.error,
+      };
+    case types.GET_PAYMENT:
+      return {
+        ...state,
+        payment: action.payload,
+      };
+    case types.DELETE_CART:
+      return {
+        ...state,
+        cart: state.cart.filter(cartItem => cartItem.id !== action.payload),
+      };
+    case types.DELETE_ALL_CART:
+      return {
+        ...state,
+        cart: [],
       };
     //case types.UPDATE_CART:
     // case types.ADD_TO_CART:

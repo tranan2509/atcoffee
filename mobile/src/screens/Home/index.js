@@ -20,7 +20,6 @@ import {
 } from '../../constants';
 import {connect} from 'react-redux';
 import {HeaderBar, CustomButton} from '../../components';
-import database from '@react-native-firebase/database';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const promoTabs = constants.promoTabs.map(promoTab => ({
