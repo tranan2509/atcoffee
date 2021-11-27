@@ -60,7 +60,7 @@ export default {
     },
 
     async loadProducts() {
-      this.products = await ProductCommand.findAllByOrder(1, 100, this.store.code, '', '');
+      this.products = await ProductCommand.findAllByOrder(1, 10000, this.store.code, '', '');
     }
   },
 

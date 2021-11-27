@@ -18,12 +18,13 @@
 
 <script>
 import * as Constants from '../../../common/Constants'
+import * as MutationsName from '../../../common/MutationsName'
 import Staff from '../main/Staff.vue'
 import SectionHeader from '../../common/common/SectionHeader.vue'
 import TableOrders from '../common/TableOrders.vue'
 
 export default {
-  name: Constants.COMPONENT_NAME_ORDER_STAFF,
+  name: Constants.COMPONENT_NAME_ORDERS_STAFF,
 
   components: {
     Staff,
@@ -41,6 +42,11 @@ export default {
   methods: {
 
     
+  },
+
+  created() {
+    this.$store.commit(MutationsName.MUTATION_NAME_RESET_MENU_STAFF);
+    this.$store.getters.menuStaff.order.value = true;
   }
 }
 </script>

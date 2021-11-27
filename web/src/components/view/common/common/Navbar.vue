@@ -11,17 +11,21 @@
           <div class="dropdown-header">
             Thông báo
             <div class="float-right">
-              <router-link to="">Đánh dấu đã đọc tất cả</router-link>
+              <!-- <router-link to="">Đánh dấu đã đọc tất cả</router-link> -->
             </div>
           </div>
           <div class="dropdown-list-content dropdown-list-icons" style="outline: currentcolor none medium;" tabindex="3">
             <router-link to="" class="dropdown-item" :class="!bill.read ? 'dropdown-item-unread' : ''"
-             v-for="bill in this.$store.getters.billsSortByCreatedDate" :key="bill.id" @click="handleReadBill(bill)">
+             v-for="bill in this.$store.getters.billsNotification" :key="bill.id" @click="handleReadBill(bill)">
               <div class="dropdown-item-icon bg-primary text-white">
                 <i class="fas fa-bell"></i>
               </div>
-              <div class="dropdown-item-desc">
-                Đơn hàng với ID {{bill.id}} được yêu cầu từ khách hàng{{bill.customerId}} vị trí ở {{bill.address}}
+              <div class="dropdown-item-desc" v-if="!bill.customerName">
+                Đơn hàng với ID {{bill.id}} được yêu cầu từ khách hàng tại quầy
+                <div class="time text-primary">{{fromNow(bill.createdDate)}}</div>
+              </div>
+              <div class="dropdown-item-desc" v-else>
+                Đơn hàng với ID {{bill.id}} được yêu cầu từ khách hàng {{bill.customerName}} vị trí ở {{bill.address}}
                 <div class="time text-primary">{{fromNow(bill.createdDate)}}</div>
               </div>
             </router-link>
@@ -110,6 +114,11 @@ export default {
     handleReadBill(bill) {
       bill.read = true;
       BillDataService.update(bill, this.$store);
+      if (!this.$route.path.includes('/order-info')) {
+        this.$router.push({path: '/staff/order-info', query: {code: bill.code}});
+      } else {
+        window.location.href = '/staff/order-info?code=' + bill.code;
+      }
     },
 
     handleLogout() {
@@ -120,39 +129,7 @@ export default {
     getBillsByStoreId() {
       BillDataService.findByStoreId(this.$store);
     },
-
-    addBill() {
-      var bill = {
-        id: '',
-        amount: 80000,
-        price: 100000,
-        discount: 20,
-        address: 'HCM City',
-        status: 'REQUEST',
-        staffId: '',  
-        customerId: 1,
-        rewardId: '',
-        promotionId: '',
-        paymentId: 1,
-        storeId: 1,
-        read: false,
-        createdDate: new Date().getTime(),
-        billDetails: [
-          {
-            quantity: 4,
-            amount: 80000,
-            price: 20000,
-            size: 'S',
-            discount: 0,
-            description: 'Khong duong',
-            productId: 1,
-            billId: ''
-          }
-        ]
-      }
-      BillDataService.save(bill);
-    }
-  },
+ },
 
   created(){
     this.getBillsByStoreId();

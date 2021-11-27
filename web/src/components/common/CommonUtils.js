@@ -33,6 +33,10 @@ const CommonUtils = {
     return date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
   },
 
+  formatDateTime(date) {
+    return `${('0' + date.getHours()).slice(-2)}:${('0' + date.getMinutes()).slice(-2)} ` + ('0' + date.getDate()).slice(-2) + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + date.getFullYear();
+  },
+
   regexTime(time) {
     var regex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/
     return regex.test(time);

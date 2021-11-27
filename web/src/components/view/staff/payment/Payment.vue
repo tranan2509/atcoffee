@@ -19,6 +19,7 @@
 
 <script>
 import * as Constants from '../../../common/Constants'
+import * as MutationsName from '../../../common/MutationsName'
 import Staff from '../main/Staff.vue'
 import SectionHeader from '../../common/common/SectionHeader.vue'
 import CustomerPaymentInfo from '../common/CustomerPaymentInfo.vue'
@@ -46,6 +47,11 @@ export default {
     handleChangeUser(customer) {
       this.customer = customer;
     }
+  },
+
+  created() {
+    this.$store.commit(MutationsName.MUTATION_NAME_RESET_MENU_STAFF);
+    this.$store.getters.menuStaff.payment.value = true;
   }
 }
 </script>

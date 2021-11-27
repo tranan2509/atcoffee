@@ -60,10 +60,7 @@ const UserCommand = {
 
   async resetPassword(email) {
     const url = `${Constants.HOSTNAME_DEFAULT}/api/info/reset-password?email=${email}`;
-    console.log("🚀 ~ file: UserCommand.js ~ line 63 ~ resetPassword ~ url", url)
-    
     let res = await ConnectServer.getDataInfo(url);
-    console.log('res', res);
     return res;
   }
 }

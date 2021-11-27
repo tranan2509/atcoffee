@@ -30,12 +30,16 @@
       <div class="count">{{$store.getters.carts.length}}</div>
     </div>
   </div>
+  <div class="popup">
+    <alert-popup :isAlertPopup="isAlertPopup" @handleHideAlert="handleHideAlert">{{msg}}</alert-popup>
+  </div>
 </template>
 
 <script>
 import * as Constants from '../../../common/Constants'
 import * as MutationsName from '../../../common/MutationsName'
 import CartPopupItem from '../common/CartPopupItem.vue'
+import AlertPopup from '../../common/popup/AlertPopup.vue'
 import {BIconBasket2Fill, BIconX} from 'bootstrap-icons-vue'
 import vClickOutside from 'click-outside-vue3'
 
@@ -50,6 +54,7 @@ export default {
 
   components: {
       CartPopupItem,
+      AlertPopup,
       BIconBasket2Fill,
       BIconX
   },
@@ -57,7 +62,9 @@ export default {
   data(){
     return {
       count: 0,
-      isShowCart: false
+      isShowCart: false,
+      isAlertPopup: false,
+      msg: ''
     }
   },
 
@@ -85,7 +92,16 @@ export default {
       this.$emit('handleSubmit');
     },
 
+    handleHideAlert() {
+      this.isAlertPopup = false;
+    },
+
     handlePayment() {
+      if (this.$store.getters.carts == null || this.$store.getters.carts.length == 0) {
+        this.isAlertPopup = true;
+        this.msg = 'Chưa có sản phẩm nào được chọn';
+        return;
+      }
       this.$router.push({path: '/staff/payment'})
     },
 

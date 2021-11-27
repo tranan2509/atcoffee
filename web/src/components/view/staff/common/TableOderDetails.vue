@@ -3,7 +3,7 @@
     <div class="col-12">
       <div class="card">
         <div class="card-header">
-          <h4>Danh sách đơn hàng</h4>
+          <h4>Danh sách chi tiết đơn hàng</h4>
         </div>
         <div class="card-body p-0">
           <div class="table-responsive">
@@ -12,20 +12,24 @@
                 <tr>
                   <th class="text-center">SST</th>
                   <th class="text-center">Mã</th>
-                  <th class="text-center">Tên khách hàng</th>
-                  <th class="text-center">Tên nhân viên</th>
-                  <th class="text-center">Tổng tiền</th>
-                  <th class="text-center">Trạng thái</th>
-                  <th class="text-center">Chi tiết</th>
+                  <th class="text-center">Tên sản phẩm</th>
+                  <th class="text-center">Kích thước</th>
+                  <th class="text-center">Giá bán</th>
+                  <th class="text-center">Số lượng</th>
+                  <th class="text-center">Giảm giá</th>
+                  <th class="text-center">Thành tiền</th>
+                  <th class="text-center">Ghi chú</th>
                 </tr>
-                <tr v-for="(bill, index) in this.$store.getters.bills" :key="bill.code">
+                <tr v-for="(billDetail, index) in this.$store.getters.bill.billDetails" :key="billDetail.code">
                   <td class="text-center">{{index + 1}}</td>
-                  <td class="text-center">{{bill.code}}</td>
-                  <td class="text-center">{{bill.customerName}}</td>
-                  <td class="text-center">{{bill.staffName}}</td>
-                  <td class="text-center">{{formatPrice(bill.amount)}}</td>
-                  <td class="text-center order" :class="colorStatus(bill.status)"><i class="fas fa-circle"></i> {{viStatus(bill.status)}}</td>
-                  <td class="text-center"><i class="fas fa-info-circle" @click="handleOrderInfo(bill.code)"></i></td>
+                  <td class="text-center">{{billDetail.code}}</td>
+                  <td class="text-center">{{billDetail.name}}</td>
+                  <td class="text-center">{{billDetail.size}}</td>
+                  <td class="text-center">{{formatPrice(billDetail.price)}}</td>
+                  <td class="text-center">{{billDetail.quantity}}</td>
+                  <td class="text-center">{{billDetail.discount}}%</td>
+                  <td class="text-center">{{formatPrice(billDetail.amount)}}</td>
+                  <td class="text-center">{{billDetail.description == '' ? 'Không có' : billDetail.description}}</td>
                 </tr>
               </tbody>
             </table>
@@ -46,7 +50,7 @@ import CommonUtils from '../../../common/CommonUtils'
 import BillDataService from '../../../services/BillDataService'
 
 export default {
-  name: Constants.COMPONENT_NAME_TABLE_ORDERS_STAFF,
+  name: Constants.COMPONENT_NAME_TABLE_ORDER_DETAILS_STAFF,
 
   components: {
     // Pagination
@@ -68,7 +72,7 @@ export default {
     },
 
     loadBills() {
-      BillDataService.findByStoreId(this.$store.getters.store.id, this.$store);
+      BillDataService.findAll(this.$store);
 
     },
 

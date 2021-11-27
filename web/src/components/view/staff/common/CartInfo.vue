@@ -26,7 +26,7 @@
             <div class="col-12 col">
               <div class="row-custom">
                 <span>Tổng tiền tạm tính</span>
-                <span>{{formatPrice(amount)}}</span>
+                <span>{{formatPrice(price)}}</span>
               </div>
               <div class="row-custom">
                 <span>Giảm giá</span>
@@ -34,7 +34,7 @@
               </div>
               <div class="row-custom">
                 <span>Tổng tiền</span>
-                <span>{{formatPrice(amount - discount)}}</span>
+                <span>{{formatPrice(price - discount)}}</span>
               </div>
               <div class="row-custom">
                 <span>Mã giảm giá</span>
@@ -70,18 +70,26 @@
         </div>
       </div>
     </div>
+    <div class="popup">
+      <alert-popup :isAlertPopup="isAlertPopup" @handleHideAlert="handleHideAlert">{{msg}}</alert-popup>
+      <spinner-success :isSpinner="isSpinnerSuccess" :src="src"></spinner-success>
+    </div>
   </div>
 </template>
 
 <script>
 import * as Constants from '../../../common/Constants'
+import * as MutationsName from '../../../common/MutationsName'
 import CommonUtils from '../../../common/CommonUtils'
 import PaymentCommand from '../../../command/PaymentCommand'
 import PromotionCommand from '../../../command/PromotionCommand'
-import BillCommand from '../../../command/BillCommand'
+// import BillCommand from '../../../command/BillCommand'
 import StoreCommand from '../../../command/StoreCommand'
 import TypeCommand from '../../../command/TypeCommand'
+import BillDataService from '../../../services/BillDataService'
 import CartPopupItem from './CartPopupItem.vue'
+import AlertPopup from '../../common/popup/AlertPopup.vue'
+import SpinnerSuccess from '../../common/popup/SpinnerSuccess.vue'
 
 export default {
   name: Constants.COMPONENT_NAME_CART_INFO_STAFF,
@@ -89,7 +97,9 @@ export default {
   props: ['user'],
 
   components: {
-    CartPopupItem
+    CartPopupItem,
+    AlertPopup,
+    SpinnerSuccess
   },
 
   data() {
@@ -104,16 +114,20 @@ export default {
       types: [],
       errorPromotionCode: '',
       verifyPromotion: false,
-      store: {}
+      store: {},
+      isAlertPopup: false,
+      msg: 'Chưa có sản phẩm nào được chọn',
+      isSpinnerSuccess: false,
+      src: ''
     }
   },
 
   computed: {
 
-    amount() {
+    price() {
       var total = 0;
       this.$store.getters.carts.forEach(cart => {
-        total += cart.amount;
+        total += cart.price;
       });
       return total;
     },
@@ -137,40 +151,65 @@ export default {
       if (!this.isUsePoint) {
         return;
       }
-      if (this.amount - this.discountPromotion > this.user.currentPoints) {
+      if (this.price - this.discountPromotion > this.user.currentPoints) {
         this.point = this.user.currentPoints;
       } else {
-        this.point = this.user.currentPoints - (this.amount + this.discountPromotion);
+        this.point = this.user.currentPoints - (this.price + this.discountPromotion);
       }
     },
 
+    handleHideAlert() {
+      this.isAlertPopup = false;
+    },
+
+    processSpinnerSuccess() {
+      this.isSpinnerSuccess = true;
+      this.src = 'https://res.cloudinary.com/tranan2509/image/upload/v1637987235/loading-success_fvohb1.gif';
+      setTimeout(()=> {
+        this.isSpinnerSuccess = false;
+        this.src = '';
+      }, 1000);
+    },
+
     async handlePayment() {
+
+      if (this.$store.getters.carts == null || this.$store.getters.carts.length == 0) {
+        this.isAlertPopup = true;
+        this.msg = 'Chưa có sản phẩm nào được chọn';
+        return;
+      }
       var userId = this.user == null ? 9 : this.user.id;
       var now = new Date();
-      let code = `BI${now.getTime().toString().slice(5)}`;
+      let code = `BI${now.getTime().toString().slice(2, 10)}`;
       var bill = {
         code,
-        amount: this.amount - this.discount,
-        price: this.amount,
+        amount: this.price - this.discount,
+        price: this.price,
         discount: this.discountPromotion,
         point: this.point,
         address: this.store.address,
-        status: Constants.STATUS_BILL.COMPLETED,
+        status: Constants.STATUS_BILL.PAID,
         rewardId: 0,
         promotionId: this.vetifyPromotionCode(this.promotion) ? this.promotion.id : 0,
+        promotionCode: this.promotionCode,
         paymentId: this.paymentId,
+        paymentName: this.payments.find(item => item.id = this.paymentId).name,
         storeId: this.store.id,
         staffId: this.$store.getters.user.id,
+        staffName: this.$store.getters.user.name,
         customerId: userId,
+        customerName: this.user == null ? '' : this.user.name,
         billDetails: this.$store.getters.carts.map((cart, index) => {
           cart.code = `${code}D${index + 1}`;
           return cart;
         }),
-        state: true
+        createdDate: new Date().getTime(),
+        state: true,
+        read: true
       }
-      let result = await BillCommand.save(bill);
-      console.log('result', result);
-      // console.log(bill);
+      BillDataService.save(bill);
+      this.$store.commit(MutationsName.MUTATION_NAME_SET_CARTS, []);
+      this.processSpinnerSuccess();
     },
 
     vetifyPromotionCode(promotion){
@@ -194,12 +233,12 @@ export default {
         this.errorPromotionCode = `Mã khuyến mãi chỉ áp dụng từ người dùng hạng ${type.name} trở lên!`;
         return false;
       }
-      if (this.amount < promotion.proviso) {
+      if (this.price < promotion.proviso) {
         this.errorPromotionCode = `Mã khuyến mãi áp dụng đơn hàng tối thiểu ${promotion.proviso}!`;
         return false;
       }
       this.errorPromotionCode = `-${promotion.discount}%`;
-      this.discountPromotion = promotion.discount * this.amount / 100;
+      this.discountPromotion = promotion.discount * this.price / 100;
       return true;
     },
 

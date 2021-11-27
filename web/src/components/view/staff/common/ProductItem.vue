@@ -72,6 +72,7 @@ export default {
       var price = this.size == 'S' ? this.product.sizes[0].price : this.size == 'M' ? this.product.sizes[1].price : this.product.sizes[2].price;
       var amount = price * this.quantity * (1 - this.product.discount / 100);
       var cart = {
+        name: this.product.name,
         productId: this.product.id,
         quantity: this.quantity,
         size: this.size,

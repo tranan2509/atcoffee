@@ -24,7 +24,8 @@ import Error from '../components/view/admin/error/Error.vue'
 import DashBoardStaff from '../components/view/staff/dashboard/Dashboard.vue'
 import ProductsStaff from '../components/view/staff/product/Products.vue'
 import PaymentStaff from '../components/view/staff/payment/Payment.vue'
-import OrderStaff from '../components/view/staff/order/Order.vue'
+import OrdersStaff from '../components/view/staff/order/Orders.vue'
+import OrderInfoStaff from '../components/view/staff/order/OrderInfo.vue'
 import ProfileStaff from '../components/view/staff/profile/Profile.vue'
 import ChangePasswordStaff from '../components/view/staff/profile/ChangePassword.vue'
 
@@ -54,7 +55,8 @@ const routes = [
   {path: '/staff', name: 'dashboard-staff', component: DashBoardStaff, meta: {title: 'A&T Coffee | Trang chủ'}},
   {path: '/staff/products', name: 'products-staff', component: ProductsStaff, meta: {title: 'A&T Coffee | Danh sách sản phẩm'}},
   {path: '/staff/payment', name: 'payment-staff', component: PaymentStaff, meta: {title: 'A&T Coffee | Thanh toán'}},
-  {path: '/staff/order', name: 'order-staff', component: OrderStaff, meta: {title: 'A&T Coffee | Đơn hàng'}},
+  {path: '/staff/orders', name: 'orders-staff', component: OrdersStaff, meta: {title: 'A&T Coffee | Đơn hàng'}},
+  {path: '/staff/order-info', name: 'order-info-staff', component: OrderInfoStaff, meta: {title: 'A&T Coffee | Chi tiết đơn hàng'}},
   {path: '/staff/profile', name: 'profile-staff', component: ProfileStaff, meta: {title: 'A&T Coffee | Thông tin cá nhân'}},
   {path: '/staff/profile/change-password', name: 'change-password-staff', component: ChangePasswordStaff, meta: {title: 'A&T Coffee | Đổi mật khẩu'}},
 

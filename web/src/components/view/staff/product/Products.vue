@@ -22,6 +22,7 @@
 
 <script>
 import * as Constants from '../../../common/Constants'
+import * as MutationsName from '../../../common/MutationsName'
 import Staff from '../main/Staff.vue'
 import SectionHeader from '../../common/common/SectionHeader.vue'
 import ProductsItem from '../common/ProductsItem.vue'
@@ -42,6 +43,11 @@ export default {
       title: 'Danh sách sản phẩm ',
       isCartPopup: true
     }
+  },
+
+  created() {
+    this.$store.commit(MutationsName.MUTATION_NAME_RESET_MENU_STAFF);
+    this.$store.getters.menuStaff.product.value = true;
   }
 }
 </script>

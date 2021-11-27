@@ -35,7 +35,7 @@
         </router-link>
       </li>
       <li class="nav-item dropdown" :class="menuStaff.order.value ? 'active' : ''">  
-        <router-link to="/staff/order" class="nav-link" @click="handleDropdown(menuStaff.order)">
+        <router-link to="/staff/orders" class="nav-link" @click="handleDropdown(menuStaff.order)">
           <i class="fas fa-layer-group"></i>
           <span>Đơn hàng</span>
         </router-link>

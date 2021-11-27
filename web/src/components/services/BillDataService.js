@@ -1,7 +1,7 @@
 import database from '../../configs/firebase'
-import {ref, set, onValue, get, child, remove, query, orderByChild, limitToLast, equalTo, push } from "firebase/database";
+import {ref, set, onValue, get, child, remove, query, orderByChild, /**limitToLast*/ equalTo, /**push*/ } from "firebase/database";
 import * as MutationsName from '../common/MutationsName'
-import * as Constants from '../common/Constants'
+// import * as Constants from '../common/Constants'
 
 const collectionName = 'bills';
 
@@ -9,8 +9,8 @@ var BillDataService = {
 
   save(bill) {
 
-    const newBillKey = push(child(ref(database), collectionName)).key;
-    bill.id = newBillKey
+    // const newBillKey = push(child(ref(database), collectionName)).key;
+    bill.id = bill.code;
     const startCountRef = ref(database, `${collectionName}/${bill.id}`);
     set(startCountRef, bill);
   },
@@ -19,7 +19,7 @@ var BillDataService = {
     const startCountRef = ref(database, `${collectionName}/${id}`);
     onValue(startCountRef, (snapshot) => {
       const data = snapshot.val();
-      store.commit(MutationsName.MUTATION_NAME_SET_BILLS, data);
+      store.commit(MutationsName.MUTATION_NAME_SET_BILL, data);
     })
   },
 
@@ -46,6 +46,7 @@ var BillDataService = {
       snapshot.forEach((childSnapshot) => {
         // const childKey = childSnapshot.key;
         const childData = childSnapshot.val();
+        
         bills.push(childData);
       });
       store.commit(MutationsName.MUTATION_NAME_SET_BILLS, bills);
@@ -56,7 +57,7 @@ var BillDataService = {
 
   findByStoreId(store) {
     const dbRef = ref(database, collectionName);
-    const lastBillsRef = query(dbRef, orderByChild('storeId'), equalTo(store.getters.user.storeId), limitToLast(Constants.LIMIT_NOTIFICATION_SHOW));
+    const lastBillsRef = query(dbRef, orderByChild('storeId'), equalTo(store.getters.user.storeId));
     onValue(lastBillsRef, (snapshot) => {
       let bills = [];
       snapshot.forEach((childSnapshot) => {
