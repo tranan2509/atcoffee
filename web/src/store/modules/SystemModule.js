@@ -44,6 +44,12 @@ const SystemModule = {
         promotion: {
           value: false
         },
+        reward: {
+          value: false
+        },
+        rate: {
+          value: false
+        },
         profile: {
           value: false,
           submenu: {

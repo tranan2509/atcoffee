@@ -7,6 +7,7 @@ import SystemModule from './modules/SystemModule'
 import CategoryModule from './modules/CategoryModule'
 import StoreModule from "./modules/StoreModule";
 import PromotionModule from "./modules/PromotionModule";
+import RewardCommand from "../components/command/RewardCommand";
 import RoleModule from "./modules/RoleModule";
 import ProductModule from './modules/ProductModule'
 import BillModule from "./modules/BillModule";
@@ -22,6 +23,7 @@ const store = createStore({
     CategoryModule,
     StoreModule,
     PromotionModule,
+    RewardCommand,
     RoleModule,
     ProductModule,
     BillModule,

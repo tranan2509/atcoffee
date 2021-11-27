@@ -45,7 +45,6 @@
                   <th class="text-center">Tên sản phẩm</th>
                   <th class="text-center">Hình ảnh</th>
                   <th class="text-center">Giá sản phẩm</th>
-                  <th class="text-center">Trạng thái</th>
                   <th class="text-center">Chi tiết</th>
                 </tr>
                 <tr v-for="(product, index) in products" :key="product.id">
@@ -56,9 +55,6 @@
                     <img :src="product.image" alt="image" @click="handleViewImage(product.image)">
                   </td>
                   <td class="text-center">{{formatPrice(product.sizes[1].price)}}</td>
-                  <td class="text-center">
-                    <i class="fas fa-circle" :class="product.state ? 'active' : 'inactive'"></i>
-                  </td>
                   <td class="text-center"><i class="fas fa-info-circle" @click="handleInfo(product.id)"></i></td>
                 </tr>
               </tbody>

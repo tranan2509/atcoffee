@@ -77,11 +77,11 @@ public class UserServiceImpl implements UserService{
 		if (userDTO.getStoreId() != null) {
 			storeEntity = storeRepository.findOne(userDTO.getStoreId());
 			typeEntity = null;
-		}else {
-			if (userDTO.getTypeId() != null) {
-				typeEntity = typeRepository.findOne(userDTO.getId());
-				storeEntity = null;
-			}
+		}
+		
+		if (userDTO.getTypeId() != null) {
+			typeEntity = typeRepository.findOne(userDTO.getId());
+			storeEntity = null;
 		}
 		
 		RoleEntity roleEntity = roleRepository.findOneByName(userDTO.getRoleName());

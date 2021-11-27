@@ -3,7 +3,7 @@
     <div class="col-12">
       <div class="card">
         <div class="card-header">
-          <h4>Danh sách khuyến mãi</h4>
+          <h4>Danh sách phần thưởng</h4>
           <div class="card-header-form flex-row">
             <div class="empty-space"></div>
             <div class="form-group">
@@ -40,25 +40,17 @@
               <tbody>
                 <tr>
                   <th class="text-center">SST</th>
-                  <th class="text-center">Mã</th>
                   <th class="text-center">Tên</th>
-                  <th class="text-center">Đối tượng từ</th>
-                  <th class="text-center">Mức giảm giá</th>
-                  <th class="text-center">Ngày bắt đầu</th>
-                  <th class="text-center">Ngày kết thúc</th>
-                  <th class="text-center">Điều kiện</th>
+                  <th class="text-center">Số điểm</th>
+                  <th class="text-center">Mức giảm</th>
                   <th class="text-center">Chi tiết</th>
                 </tr>
-                <tr v-for="(promotion, index) in this.$store.getters.promotions" :key="promotion.id">
+                <tr v-for="(reward, index) in this.$store.getters.rewards" :key="reward.id">
                   <td class="text-center">{{number(index)}}</td>
-                  <td class="text-center">{{promotion.code}}</td>
-                  <td class="text-center">{{promotion.name}}</td>
-                  <td class="text-center">{{processObject(promotion.object)}}</td>
-                  <td class="text-center">{{promotion.discount}}%</td>
-                  <td class="text-center">{{formatDate(promotion.startDate)}}</td>
-                  <td class="text-center">{{formatDate(promotion.endDate)}}</td>
-                  <td class="text-center">{{formatPrice(promotion.proviso)}}</td>
-                  <td class="text-center"><i class="fas fa-info-circle" @click="handleInfo(promotion.id)"></i></td>
+                  <td class="text-center">{{reward.name}}</td>
+                  <td class="text-center">{{reward.proviso}}</td>
+                  <td class="text-center">{{reward.redution}}</td>
+                  <td class="text-center"><i class="fas fa-info-circle" @click="handleInfo(reward.id)"></i></td>
                 </tr>
               </tbody>
             </table>
@@ -75,11 +67,12 @@
 <script>
 import * as Constants from '../../../common/Constants'
 import CommonUtils from '../../../common/CommonUtils'
+import RewardCommand from '../../../command/RewardCommand'
 import PromotionCommand from '../../../command/PromotionCommand'
 import Pagination from '../../common/common/Pagination.vue'
 
 export default {
-  name: Constants.COMPONENT_NAME_TABLE_PROMOTIONS,
+  name: Constants.COMPONENT_NAME_TABLE_REWARDS,
 
   components: {
     Pagination
@@ -197,245 +190,21 @@ export default {
       this.users = await PromotionCommand.findAllByOrder(page, size, state, object, keyword, this.$store);
     },
     
-    async loadPromotions(page, size) {
+    async loadRewards(page, size) {
       console.log(page, size);
-      let result = await PromotionCommand.findAll(this.$store);
+      let result = await RewardCommand.findAll(page, size,this.$store);
       this.promotions = result;
     }
   },
 
   created(){
     this.init();
-    this.loadData();
+    // this.loadData();
+    this.loadRewards(1, 10);
   }
 }
 </script>
 
 <style>
-
-.row {
-  display: flex;
-  flex-wrap: wrap;
-  margin-right: -15px;
-  margin-left: -15px;
-}
-
-.card {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.03);
-  background-color: #fff;
-  border-radius: 3px;
-  border: none !important;
-  position: relative;
-  margin-bottom: 30px;
-}
-
-.card .card-header {
-  border-bottom-color: #f9f9f9;
-  line-height: 30px;
-  align-self: center;
-  width: 100%;
-  min-height: 70px;
-  padding: 15px 25px;
-  display: flex;
-  align-items: center;
-  background: transparent;
-}
-
-.card .card-header h4 {
-  font-size: 16px;
-  line-height: 28px;
-  color: var(--primary);
-  padding-right: 10px;
-  margin-bottom: 0;
-  font-weight: 700;
-  margin-top: 0;
-  border-radius: 30px 0 0 30px !important;
-}
-
-.card .card-header .card-header-form {
-  margin-left: auto;
-}
-
-.input-group {
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
-  width: 100%;
-}
-
-.card .card-header .card-header-form .input-group .form-control {
-  border-radius: 30px 0 0 30px !important;
-}
-
-.card .card-header .form-control {
-  height: 31px;
-  font-size: 13px;
-}
-
-.form-control:not(.form-control-sm):not(.form-control-lg) {
-  padding: 10px 15px;
-}
-
-.input-group .form-control {
-  position: relative;
-  flex: 1 1 auto;
-  width: 1%;
-  margin-bottom: 0;
-}
-
-.input-group .form-control:focus {
-  border-radius: 1px;
-  box-shadow: none;
-  border-color: var(--primary);
-}
-
-.form-control { 
-  background: #fdfdfd;
-  border-color: #e4e6fc;
-  display: block;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #495057;
-  background-clip: padding-box;
-  border: 1px solid #ced4da;
-  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-}
-
-input {
-  overflow: visible;
-}
-
-.input-group .btn {
-  border-radius: 0 30px 30px 0 !important;
-  font-weight: 600;
-  line-height: 25px;
-  letter-spacing: .5px;
-  margin-top: -1px;
-  padding: 2px 15px;
-}
-
-.card-header-form .btn {
-  padding-left: 13px !important;
-  padding-right: 13px !important;
-}
-
-.btn-primary {
-  background: #7EBDA2 !important;
-  box-shadow: 0 2px 6px var(--lightGreen2) !important;
-  border-color: #7EBDA2 !important;
-  color: #fff;
-}
-
-
-.btn-primary:hover{
-  background-color: var(--primary) !important;
-  box-shadow: 0 2px 6px var(--lightGreen2) !important;
-  border-color: var(--primary) !important;
-}
-
-.card .card-body {
-  background: transparent;
-}
-
-.table-reponsive {
-  display: block;
-  width: 100%;
-}
-
-.table {
-  width: 100%;
-  color: inherit;
-  margin-bottom: 1rem;
-}
-
-.table tr td img {
-  height: 44px;
-  width: 44px;
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-table {
-  border-collapse:collapse;
-}
-
-.table-striped tbody tr:nth-of-type(2n+1) {
-  --bs-table-accent-bg: rgba(0, 0, 0, 0.03);
-}
-
-.table td, .table:not(.table-bordered) th {
-  border-top: none;
-}
-
-.table:not(.table-sm):not(.table-md):not(.dataTable) td, .table:not(.table-sm):not(.table-md):not(.dataTable) th {
-  padding: 0 25px;
-  height: 60px;
-  vertical-align: middle;
-}
-
-th {
-  text-align: center;
-}
-
-th, tr, td {
-  border: 1px solid #f6f6f6;
-}
-
-.card .card-footer {
-  background: transparent;
-  border: none;
-  padding: 20px 25px;
-  width: 100%;
-  text-align: right;
-}
-
-ul {
-  margin-top: 0;
-}
-
-ul:not(.list-unstyled) {
-  line-height: 28px;
-}
-
-.flex-row {
-  display: flex;
-  flex-direction: row !important;
-  flex-wrap: wrap;
-}
-
-select.form-custom {
-  height: 32px;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 2px 15px;
-  font-size: 13px;
-}
-
-select.form-custom option {
-  height: 32px;
-  padding: 4px 15px;
-}
-
-.empty-space {
-  width: 20px;
-}
-
-.fas.fa-circle {
-  font-size: 16px;
-}
-
-.fa-circle.active {
-  color: #5ad539;
-}
-
-.fa-circle.inactive {
-  color: #ccc;
-}
-
-.btn.btn-success.btn-medium {
-  width: 100px;
-}
 
 </style>

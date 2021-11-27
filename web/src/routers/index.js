@@ -17,6 +17,8 @@ import Categories from '../components/view/admin/category/Categories.vue'
 import CategoryInfo from '../components/view/admin/category/CategoryInfo.vue'
 import Promotions from '../components/view/admin/promotion/Promotions.vue'
 import PromotionInfo from '../components/view/admin/promotion/PromotionInfo.vue'
+import Rewards from '../components/view/admin/reward/Rewards.vue'
+
 import Profile from '../components/view/admin/profile/Profile.vue'
 import ChangePassword from '../components/view/admin/profile/ChangePassword.vue'
 import Error from '../components/view/admin/error/Error.vue'
@@ -49,6 +51,8 @@ const routes = [
   {path: '/admin/category-info', name: 'category-info', component: CategoryInfo, meta: {title: 'A&T Coffee | Thông tin loại sản phẩm'}},
   {path: '/admin/promotions', name: 'promotions', component: Promotions, meta: {title: 'A&T Coffee | Danh sách khuyến mãi'}},
   {path: '/admin/promotion-info', name: 'promotion-info', component: PromotionInfo, meta: {title: 'A&T Coffee | Thông tin khuyến mãi'}},
+  {path: '/admin/rewards', name: 'rewards', component: Rewards, meta: {title: 'A&T Coffee | Danh sách phần thưởng'}},
+
   {path: '/admin/profile', name: 'profile', component: Profile, meta: {title: 'A&T Coffee | Thông tin cá nhân'}},
   {path: '/admin/profile/change-password', name: 'change-password', component: ChangePassword, meta: {title: 'A&T Coffee | Đổi mật khẩu'}},
   /**Staff URL */

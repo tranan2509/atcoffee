@@ -86,6 +86,18 @@
           <span>Khuyến mãi</span>
         </router-link>
       </li>
+      <li class="nav-item dropdown" :class="menu.reward.value ? 'active' : ''">  
+        <router-link to="/admin/rewards?page=1" class="nav-link" @click="handleDropdown(menu.reward)">
+          <b-icon-bookmark-star-fill class="b-icon"></b-icon-bookmark-star-fill>
+          <span>Phần thưởng</span>
+        </router-link>
+      </li>
+      <li class="nav-item dropdown" :class="menu.rate.value ? 'active' : ''">  
+        <router-link to="/admin/rates?page=1" class="nav-link" @click="handleDropdown(menu.rate)">
+          <i class="fas fa-star-half-alt"></i>
+          <span>Đánh giá</span>
+        </router-link>
+      </li>
       <li class="menu-header">HỒ SƠ</li>
       <li class="nav-item dropdown" :class="menu.profile.value ? 'active' : ''">
         <router-link to="" class="nav-link has-dropdown" @click="handleDropdown(menu.profile)">
@@ -109,9 +121,14 @@
 <script>
 import * as Constants from "../../../common/Constants";
 import {mapGetters} from 'vuex'
+import {BIconBookmarkStarFill} from 'bootstrap-icons-vue'
 
 export default {
   name: Constants.COMPONENT_NAME_SIDE_BAR,
+
+  components: {
+    BIconBookmarkStarFill
+  },
 
   computed: {
     ...mapGetters(['menu'])
@@ -238,7 +255,7 @@ export default {
   margin: 0;
 }
 
-#sidebar-wrapper .sidebar-menu li a i {
+#sidebar-wrapper .sidebar-menu li a i, #sidebar-wrapper .sidebar-menu li a .b-icon{
   width: 28px;
   margin-right: 20px;
   text-align: center;

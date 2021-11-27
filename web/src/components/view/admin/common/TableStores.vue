@@ -19,7 +19,6 @@
                   <th class="text-center">Địa chỉ</th>
                   <th class="text-center">Thời gian mở cửa</th>
                   <th class="text-center">Thời gian đóng cửa</th>
-                  <th class="text-center">Trạng thái</th>
                   <th class="text-center">Chi tiết</th>
                 </tr>
                 <tr v-for="(store, index) in this.$store.getters.stores" :key="store.id">
@@ -29,9 +28,6 @@
                   <td class="text-center">{{store.address}}</td>
                   <td class="text-center">{{store.timeOpen}}</td>
                   <td class="text-center">{{store.timeClose}}</td>
-                  <td class="text-center">
-                    <i class="fas fa-circle" :class="store.state ? 'active' : 'inactive'"></i>
-                  </td>
                   <td class="text-center"><i class="fas fa-info-circle" @click="handleInfo(store.id)"></i></td>
                 </tr>
               </tbody>
