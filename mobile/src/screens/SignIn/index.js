@@ -30,8 +30,16 @@ import {bindActionCreators} from 'redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {COLORS} from '../../constants';
 import {LoadingProcess} from '../../components';
+import * as locationActionsCreator from '../Location/action';
+import * as OrderActionsCreator from '../Order/action';
 
-const SignIn = ({navigation, signInActions, signInState}) => {
+const SignIn = ({
+  navigation,
+  signInActions,
+  signInState,
+  orderActions,
+  locationActions,
+}) => {
   const {width, height} = Dimensions.get('window');
   const opacityButton = useSharedValue(1);
   const [phone, setPhone] = React.useState('');
@@ -56,11 +64,18 @@ const SignIn = ({navigation, signInActions, signInState}) => {
     }
   };
   React.useEffect(() => {
+    //remember me
     rememberMeHandler();
+    //login auto
     autoLogin();
     if (loading) {
       setLoading(false);
     }
+    //get location
+    locationActions.getAllLocation();
+    //get categories
+    orderActions.getAllCategories();
+    //clean
     return () => setLoading(false);
   }, []);
   React.useEffect(() => {
@@ -398,6 +413,8 @@ function mapStateToProps(state) {
 function mapDispatchToProp(dispatch) {
   return {
     signInActions: bindActionCreators(SignInActionsCreator, dispatch),
+    locationActions: bindActionCreators(locationActionsCreator, dispatch),
+    orderActions: bindActionCreators(OrderActionsCreator, dispatch),
   };
 }
 

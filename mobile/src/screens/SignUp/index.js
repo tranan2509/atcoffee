@@ -41,6 +41,7 @@ const SignUp = ({navigation, signUpActions, signUpState}) => {
   const [address, setAddress] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const [idCard, setIdCard] = React.useState('');
+  const [flag, setFlag] = React.useState(false);
   React.useEffect(() => {
     //console.log(signUpState);
     if (loading) {
@@ -89,70 +90,86 @@ const SignUp = ({navigation, signUpActions, signUpState}) => {
     };
   });
 
-  function signUpHandler() {
-    if (
-      name &&
-      phone &&
-      password &&
-      passwordConfirm &&
-      email &&
-      address &&
-      idCard
-    ) {
-      if (selectedMale || selectedFemale || selectedOther) {
-        if (password === passwordConfirm) {
-          setLoading(true);
-          if (selectedMale) {
-            signUpActions.signUp(
-              name,
-              'Nam',
-              phone,
-              idCard,
-              email,
-              password,
-              address,
-            );
-            ToastAndroid.show('Đăng ký thành công', ToastAndroid.LONG);
-          } else if (selectedFemale) {
-            signUpActions.signUp(
-              name,
-              'Nữ',
-              phone,
-              idCard,
-              email,
-              password,
-              address,
-            );
-            ToastAndroid.show('Đăng ký thành công', ToastAndroid.LONG);
+  const signUpHandler = async () => {
+    if (flag === false) {
+      if (
+        name &&
+        phone &&
+        password &&
+        passwordConfirm &&
+        email &&
+        address &&
+        idCard
+      ) {
+        if (selectedMale || selectedFemale || selectedOther) {
+          if (password === passwordConfirm) {
+            setLoading(true);
+            setFlag(true);
+            if (selectedMale) {
+              await signUpActions.signUp(
+                name,
+                'Nam',
+                phone,
+                idCard,
+                email,
+                password,
+                address,
+              );
+
+              ToastAndroid.show('Đăng ký thành công', ToastAndroid.LONG);
+            } else if (selectedFemale) {
+              await signUpActions.signUp(
+                name,
+                'Nữ',
+                phone,
+                idCard,
+                email,
+                password,
+                address,
+              );
+              //console.log('nữ');
+              ToastAndroid.show('Đăng ký thành công', ToastAndroid.LONG);
+            } else {
+              await signUpActions.signUp(
+                name,
+                'Khác',
+                phone,
+                idCard,
+                email,
+                password,
+                address,
+              );
+              //console.log('khác');
+              ToastAndroid.show('Đăng ký thành công!', ToastAndroid.LONG);
+            }
           } else {
-            signUpActions.signUp(
-              name,
-              'Khác',
-              phone,
-              idCard,
-              email,
-              password,
-              address,
+            Alert.alert(
+              'Thông báo',
+              'Mật khẩu và Nhập lại mật khẩu không giống nhau!',
+              [
+                {
+                  text: 'Bỏ qua',
+                  onPress: () => {},
+                  style: 'cancel',
+                },
+                {text: 'OK', onPress: () => {}},
+              ],
             );
-            ToastAndroid.show('Đăng ký thành công!', ToastAndroid.LONG);
+            //alert('Mật khẩu và Nhập lại mật khẩu không giống nhau');
           }
         } else {
-          Alert.alert(
-            'Thông báo',
-            'Mật khẩu và Nhập lại mật khẩu không giống nhau!',
-            [
-              {
-                text: 'Bỏ qua',
-                onPress: () => {},
-                style: 'cancel',
-              },
-              {text: 'OK', onPress: () => {}},
-            ],
-          );
-          //alert('Mật khẩu và Nhập lại mật khẩu không giống nhau');
+          Alert.alert('Thông báo', 'Phải chọn giới tính!', [
+            {
+              text: 'Bỏ qua',
+              onPress: () => {},
+              style: 'cancel',
+            },
+            {text: 'OK', onPress: () => {}},
+          ]);
+          //alert('Chọn giới tính');
         }
       } else {
-        Alert.alert('Thông báo', 'Phải chọn giới tính!', [
+        Alert.alert('Thông báo', 'Phải điền tất cả các trường!', [
           {
             text: 'Bỏ qua',
             onPress: () => {},
@@ -160,20 +177,10 @@ const SignUp = ({navigation, signUpActions, signUpState}) => {
           },
           {text: 'OK', onPress: () => {}},
         ]);
-        //alert('Chọn giới tính');
+        //alert('Điền tất cả các trường');
       }
-    } else {
-      Alert.alert('Thông báo', 'Phải điền tất cả các trường!', [
-        {
-          text: 'Bỏ qua',
-          onPress: () => {},
-          style: 'cancel',
-        },
-        {text: 'OK', onPress: () => {}},
-      ]);
-      //alert('Điền tất cả các trường');
     }
-  }
+  };
 
   return (
     <View
@@ -264,8 +271,12 @@ const SignUp = ({navigation, signUpActions, signUpState}) => {
             <TapGestureHandler
               onHandlerStateChange={() => {
                 setSelectedMale(true);
-                setSelectedFemale(false);
-                setSelectedOther(false);
+                if (selectedFemale) {
+                  setSelectedFemale(false);
+                }
+                if (selectedOther) {
+                  setSelectedOther(false);
+                }
               }}>
               <View style={{width: width / 3.7, alignItems: 'flex-end'}}>
                 <RadioButton
@@ -277,9 +288,13 @@ const SignUp = ({navigation, signUpActions, signUpState}) => {
             </TapGestureHandler>
             <TapGestureHandler
               onHandlerStateChange={() => {
-                setSelectedMale(false);
                 setSelectedFemale(true);
-                setSelectedOther(false);
+                if (selectedMale) {
+                  setSelectedMale(false);
+                }
+                if (selectedOther) {
+                  setSelectedOther(false);
+                }
               }}>
               <View style={{width: width / 4, alignItems: 'flex-end'}}>
                 <RadioButton
@@ -291,9 +306,13 @@ const SignUp = ({navigation, signUpActions, signUpState}) => {
             </TapGestureHandler>
             <TapGestureHandler
               onHandlerStateChange={() => {
-                setSelectedMale(false);
-                setSelectedFemale(false);
                 setSelectedOther(true);
+                if (selectedMale) {
+                  setSelectedMale(false);
+                }
+                if (selectedFemale) {
+                  setSelectedFemale(false);
+                }
               }}>
               <View style={{width: width / 4.5, alignItems: 'flex-end'}}>
                 <RadioButton
@@ -320,11 +339,7 @@ const SignUp = ({navigation, signUpActions, signUpState}) => {
             value={address}
             //keyboardType="numeric"
           />
-          <TapGestureHandler
-            onHandlerStateChange={() => {
-              signUpHandler();
-              //navigation.navigate('SignIn')
-            }}>
+          <TapGestureHandler onHandlerStateChange={signUpHandler}>
             <View style={styles.button}>
               <Text style={{fontSize: 20, fontWeight: 'bold'}}>Đăng ký</Text>
             </View>

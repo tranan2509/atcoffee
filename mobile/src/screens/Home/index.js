@@ -160,7 +160,7 @@ const Home = ({navigation, themeState, signInState}) => {
 
   React.useEffect(() => {
     setToken();
-    //console.log(signInState.data.jwt);
+    //console.log('user', signInState.data);
   }, []);
   // React.useEffect(() => {
   //   const newReference = database().ref('/users').push();

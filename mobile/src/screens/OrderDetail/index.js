@@ -7,13 +7,23 @@ import {
   ScrollView,
   ImageBackground,
   TextInput,
+  ToastAndroid,
 } from 'react-native';
 import {COLORS, FONTS, images, icons, SIZES, dummyData} from '../../constants';
-import {IconButton} from '../../components';
+import {IconButton, LoadingProcess} from '../../components';
 import {connect} from 'react-redux';
 import {formatMoney} from '../../common/format';
+import * as CartActionsCreator from '../Cart/action';
+import {bindActionCreators} from 'redux';
 
-const OrderDetail = ({navigation, themeState, route}) => {
+const OrderDetail = ({
+  navigation,
+  themeState,
+  route,
+  cartActions,
+  cartState,
+  userState,
+}) => {
   const [selectedItem, setSelectedItem] = React.useState(null);
 
   const [selectedSize, setSelectedSize] = React.useState('L');
@@ -31,12 +41,22 @@ const OrderDetail = ({navigation, themeState, route}) => {
 
   const [amountMoney, setAmountMoney] = React.useState(0);
 
+  const [selectedLocation, setSelectedLocation] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
+  const userInfo = userState.data.user ? userState.data.user : userState.data;
+  console.log('id', userState);
   React.useEffect(() => {
     let {selectedItem} = route?.params;
     setSelectedItem(selectedItem);
+    let {selectedLocation} = route?.params;
+    setSelectedLocation(selectedLocation);
     amountMoneyHandler(selectedSize, numberOrder);
+    if (loading) {
+      setLoading(false);
+    }
+    return () => setLoading(false);
   }, [amountMoney]);
-
+  console.log('item', selectedLocation);
   function amountMoneyHandler(size, total) {
     setAmountMoney(
       selectedItem?.sizes.filter(sizeItem => sizeItem.size == size)[0].price *
@@ -80,6 +100,116 @@ const OrderDetail = ({navigation, themeState, route}) => {
       setSelectedIceLevel(selectedIceLevel - 25);
     }
   }
+
+  React.useEffect(() => {
+    async () => await cartActions.getCart(userInfo.id);
+    if (loading) {
+      setLoading(false);
+    }
+    return () => setLoading(false);
+  }, []);
+
+  const checkProInCart = (size, productId, storeId, description) => {
+    //console.log('sizeeeeeeeeeeeeeeeee', size, productId, storeId);
+    //console.log('cartState dayyyyyyyyy', cartState);
+    const cartInfo = cartState.cart.find(
+      cartItem =>
+        cartItem.productId === productId &&
+        cartItem.storeId === storeId &&
+        cartItem.size === size &&
+        cartItem.description === description,
+    );
+    //console.log('inside checkkkkkkkkkkkkk ne', cartInfo);
+    if (cartInfo) {
+      return {id: cartInfo.id, quantity: cartInfo.quantity};
+    }
+    return false;
+  };
+
+  const dataItem = () => {
+    let customerId = userInfo.id;
+    let productId = selectedItem.id;
+    let storeId = selectedLocation.id;
+    let size = selectedSize;
+    let quantity = numberOrder;
+    let code = productId + size + '_' + storeId;
+    let milk = 'Sữa: ' + dummyData.milkList[selectedMilkIndex].name;
+    let sweet = 'đường: ' + selectedSweetnessLevel + '%';
+    let ice = 'đá: ' + selectedIceLevel + '%';
+    let description = milk + ', ' + sweet + ', ' + ice;
+    let state = true;
+    return {
+      customerId,
+      productId,
+      size,
+      description,
+      storeId,
+      quantity,
+      code,
+      state,
+    };
+  };
+  const updateCart = async data => {
+    //console.log('data updateeeeeeeee', data);
+    await cartActions.updateCart(data);
+  };
+  const addToCart = async data => {
+    await cartActions.addToCart(data);
+  };
+  const buyNowHandler = async callback => {
+    //await cartActions.getCart(userInfo.id);
+    setLoading(true);
+    var dataItems = dataItem();
+    const idCard = checkProInCart(
+      dataItems.size,
+      dataItems.productId,
+      dataItems.storeId,
+      dataItems.description,
+    );
+    if (idCard.id) {
+      let number = dataItems.quantity + idCard.quantity;
+      //console.log('quantityyyyyyy', number);
+      await updateCart({
+        ...dataItems,
+        id: idCard.id,
+        quantity: number,
+      });
+      await cartActions.getCart(userInfo.id);
+      callback();
+    } else {
+      await addToCart(dataItems);
+      await cartActions.getCart(userInfo.id);
+      callback();
+    }
+    setLoading(false);
+  };
+  const addToCartHandler = async () => {
+    //await cartActions.getCart(userInfo.id);
+    var dataItems = dataItem();
+    const idCard = checkProInCart(
+      dataItems.size,
+      dataItems.productId,
+      dataItems.storeId,
+      dataItems.description,
+    );
+    //console.log('checkkkkkkkkkkkkkkkkkkkkkkk', idCard);
+    if (idCard.id) {
+      let number = dataItems.quantity + idCard.quantity;
+      await updateCart({
+        ...dataItems,
+        id: idCard.id,
+        quantity: number,
+      });
+      ToastAndroid.show('Thêm sản phẩm thành công!', ToastAndroid.LONG);
+      await cartActions.getCart(userInfo.id);
+      //callback();
+    } else {
+      await addToCart(dataItems);
+      //callback();
+      ToastAndroid.show('Thêm sản phẩm thành công!', ToastAndroid.LONG);
+      await cartActions.getCart(userInfo.id);
+    }
+  };
 
   function renderHeaderSection() {
     return (
@@ -669,8 +799,14 @@ const OrderDetail = ({navigation, themeState, route}) => {
         }}>
         {/* Header */}
         {renderHeaderSection()}
+
         {/* Detail */}
         {renderDetailSection()}
+        {loading ? (
+          <View style={{marginTop: -250}} zIndex={1}>
+            <LoadingProcess title="Đang tải ..." />
+          </View>
+        ) : null}
       </ScrollView>
       <View
         style={{
@@ -679,7 +815,7 @@ const OrderDetail = ({navigation, themeState, route}) => {
           width: '100%',
           flexDirection: 'row',
         }}>
-        {/* Mua ngay */}
+        {/* Buy now */}
         <TouchableOpacity
           style={{
             backgroundColor: COLORS.primary,
@@ -689,7 +825,7 @@ const OrderDetail = ({navigation, themeState, route}) => {
             alignItems: 'center',
             //borderRadius: 20,
           }}
-          onPress={() => navigation.navigate('Cart')}>
+          onPress={() => buyNowHandler(() => navigation.navigate('Cart'))}>
           <Text style={{color: 'white', ...FONTS.h3}}>Mua ngay</Text>
         </TouchableOpacity>
         {/* Tổng */}
@@ -713,7 +849,8 @@ const OrderDetail = ({navigation, themeState, route}) => {
             width: SIZES.width * 0.3,
             justifyContent: 'center',
             alignItems: 'center',
-          }}>
+          }}
+          onPress={addToCartHandler}>
           <Text style={{color: 'white', ...FONTS.h3}}>Thêm vào giỏ</Text>
         </TouchableOpacity>
       </View>
@@ -724,12 +861,15 @@ const OrderDetail = ({navigation, themeState, route}) => {
 function mapStateToProps(state) {
   return {
     themeState: state.themeReducer,
-    //error: state.error,
+    cartState: state.cartReducer,
+    userState: state.signInReducer,
   };
 }
 
 function mapDispatchToProp(dispatch) {
-  return {};
+  return {
+    cartActions: bindActionCreators(CartActionsCreator, dispatch),
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProp)(OrderDetail);

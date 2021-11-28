@@ -34,7 +34,13 @@ const cartReducer = function (state = initialState, action) {
         ...state,
         cart: [],
       };
-    //case types.UPDATE_CART:
+    case types.UPDATE_CART:
+      return {
+        ...state,
+        cart: state.cart.map(cartItem =>
+          cartItem.id === action.payload.id ? action.payload : cartItem,
+        ),
+      };
     // case types.ADD_TO_CART:
     //   return {
     //     ...state,

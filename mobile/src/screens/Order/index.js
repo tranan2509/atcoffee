@@ -31,10 +31,12 @@ const Order = ({navigation, themeState, route, orderActions, orderState}) => {
     let {selectedLocation} = route.params;
     setSelectedLocation(selectedLocation);
     //get categories
-    orderActions.getAllCategories();
+    //orderActions.getAllCategories();
     //get products
-    orderActions.getAllProducts(selectedLocation.code);
+    //orderActions.getAllProducts(selectedLocation.code);
     //return () => console.log('cleanup');
+    setMenu(orderState.allProducts);
+    //console.log('allProducts', orderState.allProducts);
   }, []);
 
   React.useEffect(() => {
@@ -260,6 +262,7 @@ const Order = ({navigation, themeState, route, orderActions, orderState}) => {
                   onPress={() =>
                     navigation.navigate('OrderDetail', {
                       selectedItem: item,
+                      selectedLocation: selectedLocation,
                     })
                   }>
                   <View

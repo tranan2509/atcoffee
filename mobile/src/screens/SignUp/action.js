@@ -45,7 +45,7 @@ export const signUp = (
         storeId: 1,
         accumulatedPoints: 0,
         currentPoints: 0,
-        typeId: 3,
+        typeId: 1,
         roleName: 'USER',
         state: true,
       };

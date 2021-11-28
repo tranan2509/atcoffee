@@ -16,6 +16,7 @@ export const getCart = customerId => {
       const res = await apiServer.get(
         `/api/user/cart?customerId=${customerId}`,
       );
+      console.log('getcart', res.data);
       dispatch({type: GET_CART, payload: res.data});
     } catch (err) {
       console.log('This is error in action', err);
@@ -28,6 +29,7 @@ export const addToCart = product => {
   return async dispatch => {
     try {
       const res = await apiServer.post('/api/user/cart', product);
+      console.log('addcart', res.data);
       dispatch({type: ADD_TO_CART, payload: res.data});
     } catch (err) {
       console.log('This is error in action add cart', err);
@@ -40,6 +42,7 @@ export const updateCart = product => {
   return async dispatch => {
     try {
       const res = await apiServer.put('/api/user/cart', product);
+      console.log('updatecart', res.data);
       dispatch({type: UPDATE_CART, payload: res.data});
     } catch (err) {
       console.log('This is error in action update cart', err);

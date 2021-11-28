@@ -7,7 +7,14 @@ const initialState = {
 
 const signInReducer = function (state = initialState, action) {
   switch (action.type) {
-    case types.SIGN_IN || AUTO_SIGN_IN:
+    case types.SIGN_IN || types.AUTO_SIGN_IN:
+      // console.log('reducer');
+      return {
+        ...state,
+        data: action.payload,
+      };
+    case types.AUTO_SIGN_IN:
+      //console.log('reducer');
       return {
         ...state,
         data: action.payload,

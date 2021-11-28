@@ -15,14 +15,21 @@ import {dummyData, COLORS, SIZES, FONTS, icons, images} from '../../constants';
 import {connect} from 'react-redux';
 import * as locationActionsCreator from './action';
 import {bindActionCreators} from 'redux';
+import * as OrderActionsCreator from '../Order/action';
 
-const Location = ({navigation, themeState, locationState, locationActions}) => {
+const Location = ({
+  navigation,
+  themeState,
+  locationState,
+  locationActions,
+  orderActions,
+}) => {
   const [selectedTab, setSelectedTab] = React.useState(0);
 
   //get location
-  React.useEffect(() => {
-    locationActions.getAllLocation();
-  }, []);
+  // React.useEffect(() => {
+  //   locationActions.getAllLocation();
+  // }, []);
 
   function renderTopBarSection() {
     return (
@@ -115,9 +122,10 @@ const Location = ({navigation, themeState, locationState, locationActions}) => {
                 paddingVertical: SIZES.radius,
                 backgroundColor: themeState.appTheme.cardBackgroundColor,
               }}
-              onPress={() =>
-                navigation.navigate('Order', {selectedLocation: item})
-              }>
+              onPress={async () => {
+                await orderActions.getAllProducts(item.code);
+                navigation.navigate('Order', {selectedLocation: item});
+              }}>
               {/* Name & Bookmark */}
               <View
                 style={{
@@ -257,6 +265,7 @@ function mapStateToProps(state) {
 function mapDispatchToProp(dispatch) {
   return {
     locationActions: bindActionCreators(locationActionsCreator, dispatch),
+    orderActions: bindActionCreators(OrderActionsCreator, dispatch),
   };
 }
 
