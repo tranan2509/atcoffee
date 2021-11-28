@@ -53,7 +53,7 @@ const UserCommand = {
   },
 
   async validate(username, code, email, phone, identityCard) {
-    const url = `${Constants.HOSTNAME_DEFAULT}/api/admin/user/validate?username=${username}&code=${code}&email=${email}&phone=${phone}&identity-card=${identityCard}`;
+    const url = `${Constants.HOSTNAME_DEFAULT}/api/info/user/validate?username=${username}&code=${code}&email=${email}&phone=${phone}&identity-card=${identityCard}`;
     let res = await ConnectServer.getData(url);
     return res;
   },

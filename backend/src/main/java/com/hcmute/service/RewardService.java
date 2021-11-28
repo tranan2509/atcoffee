@@ -11,6 +11,8 @@ public interface RewardService {
 	
 	RewardDTO save(RewardDTO rewardDTO);
 	List<RewardDTO> findAll();
+	RewardDTO findOne(Long id);
 	RewardDTO findOneByCode(String code);
 	RewardResponse findAll(Pageable pageable);
+	RewardResponse findByKeywordAndState(String keyword, Boolean state, Pageable pageable);
 }

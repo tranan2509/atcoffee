@@ -196,12 +196,7 @@ export default {
       var keyword = this.keyword;
       this.users = await PromotionCommand.findAllByOrder(page, size, state, object, keyword, this.$store);
     },
-    
-    async loadPromotions(page, size) {
-      console.log(page, size);
-      let result = await PromotionCommand.findAll(this.$store);
-      this.promotions = result;
-    }
+  
   },
 
   created(){

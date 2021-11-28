@@ -185,7 +185,7 @@ export default {
         code,
         amount: this.price - this.discount,
         price: this.price,
-        discount: this.discountPromotion,
+        discount: this.discountPromotion, //this.promotion != null ? this.promotion.discount : 0,
         point: this.point,
         address: this.store.address,
         status: Constants.STATUS_BILL.PAID,

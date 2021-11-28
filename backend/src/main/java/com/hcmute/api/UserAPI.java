@@ -101,6 +101,7 @@ public class UserAPI {
 			@RequestParam("user") String userJson){
 		try {
 			UserDTO user = objectMapper.readValue(userJson, UserDTO.class);	
+			user.setState(true);
 			if (multipartFile != null) {
 				Map r = this.cloudinary.uploader().upload(multipartFile.getBytes(),
 		                  ObjectUtils.asMap("resource_type", "auto"));
@@ -135,7 +136,7 @@ public class UserAPI {
 		}
 	}
 	
-	@GetMapping("/api/admin/user/validate")
+	@GetMapping("/api/info/user/validate")
 	public ResponseEntity<List<UserDTO>> validate(@RequestParam(name = "username", required = false) String username, @RequestParam(name = "code", required = false) String code,
 			@RequestParam(name = "email", required = false) String email, @RequestParam(name = "phone", required = false) String phone, 
 			@RequestParam(name = "identity-card", required = false) String identityCard){
