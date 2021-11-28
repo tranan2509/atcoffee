@@ -65,9 +65,9 @@ public class PromotionServiceImpl implements PromotionService{
 	}
 
 	@Override
-	public PromotionResponse findByNameContainingOrCodeContainingAndState(String name, String code, Boolean state,
+	public PromotionResponse findByKeywordAndState(String keyword, Boolean state,
 			Pageable pageable) {
-		Page<PromotionEntity> page = promotionRepository.findByNameContainingOrCodeContainingAndState(name, code, state, pageable);
+		Page<PromotionEntity> page = promotionRepository.findByKeywordAndState(keyword, state, pageable);
 		return resultResponse(page, pageable);
 	}
 

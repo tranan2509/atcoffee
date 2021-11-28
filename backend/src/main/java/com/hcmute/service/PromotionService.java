@@ -15,7 +15,7 @@ public interface PromotionService {
 	List<PromotionDTO> findAll();
 	PromotionResponse findAll(Pageable pageable);
 	PromotionResponse findByState(Boolean state, Pageable pageable);
-	PromotionResponse findByNameContainingOrCodeContainingAndState(String name, String code, Boolean state, Pageable pageable);
+	PromotionResponse findByKeywordAndState(String keyword, Boolean state, Pageable pageable);
 	PromotionResponse findByObjectAndKeywordAndState(String object, String keyword, Boolean state, Pageable pageable);
 	PromotionResponse findByExpiredAndKeywordAndState(Date date, String keyword,Boolean state, Pageable pageable);
 	PromotionResponse findByActiveAndKeywordAndState(Date date, String keyword,Boolean state, Pageable pageable);

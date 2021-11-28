@@ -12,7 +12,8 @@ import com.hcmute.entity.PromotionEntity;
 public interface PromotionRepository extends JpaRepository<PromotionEntity, Long>{
 	PromotionEntity findOneByCode(String code);
 	Page<PromotionEntity> findByState(Boolean state, Pageable pageable);
-	Page<PromotionEntity> findByNameContainingOrCodeContainingAndState(String name, String code, Boolean state, Pageable pageable);
+	@Query("select p from PromotionEntity p where (p.name like %?1% OR p.code LIKE %?1%) AND p.state = ?2")
+	Page<PromotionEntity> findByKeywordAndState(String keyword, Boolean state, Pageable pageable);
 	@Query("select p from PromotionEntity p where p.object = ?1 AND (p.name like %?2% OR p.code LIKE %?2%) AND p.state = ?3")
 	Page<PromotionEntity> findByObjectAndKeywordAndState(String object, String keyword, Boolean state, Pageable pageable);
 	@Query("select p from PromotionEntity p where p.endDate < ?1 AND (p.name like %?2% OR p.code LIKE %?2%) AND p.state = ?3 ORDER BY endDate DESC")

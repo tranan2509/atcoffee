@@ -39,6 +39,14 @@ public class RewardServiceImpl implements RewardService{
 	}
 	
 	@Override
+	public List<RewardDTO> findByState(Boolean state) {
+		List<RewardEntity> entities = rewardRepository.findByState(state);
+		List<RewardDTO> dtos = new ArrayList<RewardDTO>();
+		entities.forEach(entity -> dtos.add(mapper.map(entity, RewardDTO.class)));
+		return dtos;
+	}
+	
+	@Override
 	public RewardDTO findOne(Long id) {
 		RewardEntity entity = rewardRepository.findOne(id);
 		return mapper.map(entity, RewardDTO.class);
@@ -58,7 +66,7 @@ public class RewardServiceImpl implements RewardService{
 	
 	@Override
 	public RewardResponse findByKeywordAndState(String keyword, Boolean state, Pageable pageable) {
-		Page<RewardEntity> page = rewardRepository.findByNameContainingOrCodeContainingAndState(keyword, keyword, state, pageable);
+		Page<RewardEntity> page = rewardRepository.findByKeywordAndState(keyword, state, pageable);
 		return resultResponse(page, pageable);
 	}
 	

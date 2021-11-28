@@ -90,7 +90,7 @@ public class PromotionAPI {
 			} else if (object != "") {
 				result = promotionService.findByObjectAndKeywordAndState(object, keyword, true, pageable);
 			} else {
-				result = promotionService.findByNameContainingOrCodeContainingAndState(keyword, keyword, true, pageable);
+				result = promotionService.findByKeywordAndState(keyword, true, pageable);
 			}
 		}
 		return ResponseEntity.ok(result);
