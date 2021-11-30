@@ -8,11 +8,7 @@ const SystemModule = {
     return {
       menu: {
         dashboard: {
-          value: false,
-          submenu: {
-            general: false,
-            ecommerce: false
-          }
+          value: false
         },
         layout: {
           value: false,
@@ -73,6 +69,9 @@ const SystemModule = {
           value: false
         },
         order: {
+          value: false,
+        },
+        notification: {
           value: false,
         },
         profile: {

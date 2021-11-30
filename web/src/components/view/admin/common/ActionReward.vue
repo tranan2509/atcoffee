@@ -18,7 +18,7 @@
                     </div>
                     <div class="info-group">
                       <label for="code">Tên phần thưởng</label>
-                      <input type="text" class="form-control" id="code" v-model="reward.name" required :readonly="this.$route.path.includes('reward-info')">
+                      <input type="text" class="form-control" id="code" v-model="reward.name" required>
                     </div>
                   </div>
                   <div class="line">
@@ -139,7 +139,7 @@ export default {
   },
 
   created(){
-    // this.loadData();
+    this.loadData();
   }
 }
 </script>

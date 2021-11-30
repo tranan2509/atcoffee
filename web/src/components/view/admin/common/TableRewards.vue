@@ -106,7 +106,7 @@ export default {
       } else {
         this.$router.push({path: '/admin/rewards', query: {...query, page: this.currentPage, keyword: this.keyword}});
       }
-      this.loadRewardsBySort(this.currentPage, Constants.PAGE_SIZE_STAFF);
+      this.loadRewardsBySort(this.currentPage, Constants.PAGE_SIZE_REWARD);
     },
 
     handleAdd() {

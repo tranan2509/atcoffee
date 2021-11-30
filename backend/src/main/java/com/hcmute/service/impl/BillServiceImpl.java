@@ -1,5 +1,7 @@
 package com.hcmute.service.impl;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,4 +84,34 @@ public class BillServiceImpl implements BillService{
 		return mapper.map(entity, BillDTO.class);
 	}
 
+	@Override
+	public BillDTO updateStatus(BillDTO billDTO) {
+		if (billDTO.getId() != null) {
+			BillEntity entity = billRepository.findOne(billDTO.getId());
+			entity.setStatus(billDTO.getStatus());
+			entity = billRepository.save(entity);
+			return mapper.map(entity, BillDTO.class);
+		}	
+		return null;
+	}
+	
+	@Override
+	public List<BillDTO> findByMonth(int month, int year) {
+		LocalDate startDate = LocalDate.of(year, month, 1);
+		LocalDate endDate = startDate.plusMonths(1).minusDays(1);
+		Date start = Date.valueOf(startDate);
+		Date end = Date.valueOf(endDate);
+		List<BillEntity> entities = billRepository.findByCreatedDateBetween(start, end);
+		List<BillDTO> dtos = new ArrayList<BillDTO>();
+		entities.forEach(entity -> dtos.add(mapper.map(entity, BillDTO.class)));
+		return dtos;
+	}
+
+	@Override
+	public List<BillDTO> findByBetweenDate(Date start, Date end) {
+		List<BillEntity> entities = billRepository.findByCreatedDateBetween(start, end);
+		List<BillDTO> dtos = new ArrayList<BillDTO>();
+		entities.forEach(entity -> dtos.add(mapper.map(entity, BillDTO.class)));
+		return dtos;
+	}
 }

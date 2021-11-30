@@ -7,19 +7,10 @@
     <ul class="sidebar-menu">
       <li class="menu-header">DASHBOARD</li>
       <li class="nav-item dropdown" :class="menu.dashboard.value ? 'active' : ''">
-        <router-link to="" class="nav-link has-dropdown" @click="handleDropdown(menu.dashboard)">
+        <router-link to="/admin" class="nav-link" @click="handleDropdown(menu.dashboard)">
           <i class="fas fa-fire"></i>
           <span>Dashboard</span>
-          <i class="fas fa-chevron-right"></i>
         </router-link>
-        <ul class="dropdown-menu" :class="menu.dashboard.value ? 'visible' : ''">
-          <li :class="menu.dashboard.submenu.general ? 'active': ''" @click="handleLink(menu.dashboard, 'general')">
-            <router-link to="/admin" class="nav-link">General Dashboard</router-link>
-          </li>
-          <li :class="menu.dashboard.submenu.ecommerce ? 'active': ''" @click="handleLink(menu.dashboard, 'ecommerce')">
-            <router-link to="/admin/statistics" class="nav-link">Ecommerce Dashboard</router-link>
-          </li>
-        </ul>
       </li>
       <li class="menu-header">STATER</li>
       <li class="nav-item dropdown" :class="menu.layout.value ? 'active' : ''">

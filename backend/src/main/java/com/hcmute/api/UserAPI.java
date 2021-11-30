@@ -1,5 +1,6 @@
 package com.hcmute.api;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -54,6 +55,14 @@ public class UserAPI {
 	@GetMapping("/api/staff/user/{id}")
 	public ResponseEntity<UserDTO> findOne(@PathVariable(name = "id") Long id){
 		return ResponseEntity.ok(userService.findOne(id));
+	}
+	
+	@GetMapping(value = "/api/staff/user/statistics", params = {"roleName", "startDate", "endDate"})
+	public ResponseEntity<List<UserDTO>> findByRoleNameCreatedDateBetween(@RequestParam(name = "roleName") String roleName,
+			@RequestParam(name = "startDate") Date startDate, 
+			@RequestParam(name = "endDate") Date endDate) {
+		
+		return ResponseEntity.ok(userService.findByRoleAndCreatedDateBetween(roleName, startDate, endDate));
 	}
 	
 	@PutMapping("/api/user/change-password")

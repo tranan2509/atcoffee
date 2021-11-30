@@ -1,5 +1,6 @@
 import * as MutationsName from "../../components/common/MutationsName";
 import * as Constants from '../../components/common/Constants'
+import CommonUtils from '../../components/common/CommonUtils'
 
 const BillModule = {
 
@@ -8,6 +9,13 @@ const BillModule = {
       billsNotification: null,
       bills: null,
       bill: null,
+      sortBill: {
+        page: 1,
+        totalPage: 0,
+        status: 'PAID',
+        keyword: ''
+      },
+      billCurrentPage: 1
     };
   },
 
@@ -38,6 +46,21 @@ const BillModule = {
 
     billsNotification(state) {
       return state.bills.slice(0, Constants.LIMIT_NOTIFICATION_SHOW);
+    },
+
+    sortBill(state) {
+      return state.sortBill;
+    },
+
+    billsPagination(state) {
+      var len = state.bills == null ? 0 : state.bills.length;
+      state.sortBill.totalPage = Math.ceil(len / Constants.PAGE_SIZE_ORDER);
+      return CommonUtils.paginate(state.bills, Constants.PAGE_SIZE_ORDER, state.sortBill.page);
+    },
+
+    billsTotalPage(state) {
+      var len = state.bills == null ? 0 : state.bills.length;
+      return Math.ceil(len / Constants.PAGE_SIZE_ORDER);
     }
   },
 
@@ -82,6 +105,14 @@ const BillModule = {
         }
         return item;
       });
+    },
+
+    [MutationsName.MUTATION_NAME_SET_BILL_CURRENT_PAGE](state, page) {
+      state.billCurrentPage = page;
+    },
+
+    [MutationsName.MUTATION_NAME_SET_SORT_BILL](state, sortBill) {
+      state.sortBill = sortBill;
     }
   },
 };

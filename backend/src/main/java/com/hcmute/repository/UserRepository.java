@@ -1,5 +1,6 @@
 package com.hcmute.repository;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -15,6 +16,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>{
 	UserEntity findOneByUsername(String username);
 	UserEntity findOneByCode(String code);
 	UserEntity findOneByEmail(String email);
+	List<UserEntity> findByRoleAndCreatedDateBetween(RoleEntity role, Date start, Date end);
 	UserEntity findOneByUsernameAndPassword(String username, String password);
 	List<UserEntity> findByUsernameOrCodeOrEmailOrPhoneOrIdentityCard(String username, String code, String email, String phone, String identityCard);
 	@Query("select u from UserEntity u WHERE "

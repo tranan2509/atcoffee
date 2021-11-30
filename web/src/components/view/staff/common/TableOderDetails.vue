@@ -3,7 +3,9 @@
     <div class="col-12">
       <div class="card">
         <div class="card-header">
-          <h4>Danh sách chi tiết đơn hàng</h4>
+          <h4>Danh sách chi tiết đơn hàng</h4> 
+          <div class="flex-1"></div>
+          <action-order :bill="$store.getters.bill"></action-order>
         </div>
         <div class="card-body p-0">
           <div class="table-responsive">
@@ -20,7 +22,7 @@
                   <th class="text-center">Thành tiền</th>
                   <th class="text-center">Ghi chú</th>
                 </tr>
-                <tr v-for="(billDetail, index) in this.$store.getters.bill.billDetails" :key="billDetail.code">
+                <tr v-for="(billDetail, index) in $store.getters.bill.billDetails" :key="billDetail.code">
                   <td class="text-center">{{index + 1}}</td>
                   <td class="text-center">{{billDetail.code}}</td>
                   <td class="text-center">{{billDetail.name}}</td>
@@ -35,9 +37,6 @@
             </table>
           </div>
         </div>
-        <!-- <div class="card-footer text-right" v-if="this.$store.getters.sortStore.totalPage > 0">
-          <pagination :currentPage="currentPage" @handleChange="handleChangePage" :totalPage="this.$store.getters.sortStore.totalPage"/>
-        </div> -->
       </div>
     </div>
   </div>
@@ -46,14 +45,13 @@
 <script>
 import * as Constants from '../../../common/Constants'
 import CommonUtils from '../../../common/CommonUtils'
-// import Pagination from '../../common/common/Pagination.vue'
-import BillDataService from '../../../services/BillDataService'
+import ActionOrder from './ActionOrder.vue'
 
 export default {
   name: Constants.COMPONENT_NAME_TABLE_ORDER_DETAILS_STAFF,
 
   components: {
-    // Pagination
+    ActionOrder
   },
 
   computed: {
@@ -69,11 +67,6 @@ export default {
 
     viStatus(status) {
       return Constants.STATUS_BILL_VI[status];
-    },
-
-    loadBills() {
-      BillDataService.findAll(this.$store);
-
     },
 
     formatPrice(price) {
