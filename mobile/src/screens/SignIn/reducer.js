@@ -13,6 +13,11 @@ const signInReducer = function (state = initialState, action) {
         ...state,
         data: action.payload,
       };
+    case types.GET_USER:
+      return {
+        ...state,
+        data: action.payload,
+      };
     case types.AUTO_SIGN_IN:
       //console.log('reducer');
       return {

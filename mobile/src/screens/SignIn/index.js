@@ -31,7 +31,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {COLORS} from '../../constants';
 import {LoadingProcess} from '../../components';
 import * as locationActionsCreator from '../Location/action';
-import * as OrderActionsCreator from '../Order/action';
+import * as orderActionsCreator from '../Order/action';
+import * as rewardActionsCreator from '../Rewards/action';
+import * as cartActionsCreator from '../Cart/action';
 
 const SignIn = ({
   navigation,
@@ -39,6 +41,8 @@ const SignIn = ({
   signInState,
   orderActions,
   locationActions,
+  rewardActions,
+  cartActions,
 }) => {
   const {width, height} = Dimensions.get('window');
   const opacityButton = useSharedValue(1);
@@ -75,6 +79,12 @@ const SignIn = ({
     locationActions.getAllLocation();
     //get categories
     orderActions.getAllCategories();
+    //get promotion
+    rewardActions.getPromotion();
+    //get method delivery
+    cartActions.getPayment();
+    //get rewards
+    rewardActions.getReward();
     //clean
     return () => setLoading(false);
   }, []);
@@ -414,7 +424,9 @@ function mapDispatchToProp(dispatch) {
   return {
     signInActions: bindActionCreators(SignInActionsCreator, dispatch),
     locationActions: bindActionCreators(locationActionsCreator, dispatch),
-    orderActions: bindActionCreators(OrderActionsCreator, dispatch),
+    orderActions: bindActionCreators(orderActionsCreator, dispatch),
+    rewardActions: bindActionCreators(rewardActionsCreator, dispatch),
+    cartActions: bindActionCreators(cartActionsCreator, dispatch),
   };
 }
 

@@ -96,7 +96,7 @@ public class UserAPI {
 		}
 	} 
 	
-	@PutMapping("/api/info/user")
+	@PutMapping(value = "/api/info/user")
 	public ResponseEntity<UserDTO> updateCustomer(@RequestParam(value = "file", required = false) MultipartFile multipartFile,
 			@RequestParam("user") String userJson){
 		try {

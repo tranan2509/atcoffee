@@ -29,6 +29,10 @@ const password_eye = require('../assets/icons/password_eye.png');
 const hidden = require('../assets/icons/hidden.png');
 const deleted = require('../assets/icons/delete.png');
 const edited = require('../assets/icons/edit.png');
+const checkbox = require('../assets/icons/checkbox.png');
+const uncheckbox = require('../assets/icons/uncheckbox.png');
+const promotion = require('../assets/icons/promotion.png');
+const resetpassword = require('../assets/icons/resetpass.png');
 export default {
   add,
   bookmark,
@@ -61,4 +65,8 @@ export default {
   hidden,
   deleted,
   edited,
+  checkbox,
+  uncheckbox,
+  promotion,
+  resetpassword,
 };

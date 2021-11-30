@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService{
 		}
 		
 		if (userDTO.getTypeId() != null) {
-			typeEntity = typeRepository.findOne(userDTO.getId());
+			typeEntity = typeRepository.findOne(userDTO.getTypeId());
 			storeEntity = null;
 		}
 		

@@ -5,6 +5,8 @@ import {orderReducer} from '../screens/Order/reducer';
 import {signUpReducer} from '../screens/SignUp/reducer';
 import {signInReducer} from '../screens/SignIn/reducer';
 import {cartReducer} from '../screens/Cart/reducer';
+import {rewardReducer} from '../screens/Rewards/reducer';
+import {profileReducer} from '../screens/Profile/reducer';
 
 // const rootReducer = (state, action) => {
 //     // when a logout action is dispatched it will reset redux state
@@ -28,6 +30,8 @@ const rootReducer = combineReducers({
   signUpReducer,
   signInReducer,
   cartReducer,
+  rewardReducer,
+  profileReducer,
 });
 
 export {rootReducer};

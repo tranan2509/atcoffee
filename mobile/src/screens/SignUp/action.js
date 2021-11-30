@@ -40,7 +40,7 @@ export const signUp = (
         gender: gender,
         email: email,
         address: address,
-        dob: new Date(),
+        dob: new Date().getDate(),
         identityCard: idCard,
         storeId: 1,
         accumulatedPoints: 0,

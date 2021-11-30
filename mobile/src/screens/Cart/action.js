@@ -1,4 +1,5 @@
 import apiServer from '../../api/apiServer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const ADD_TO_CART = 'ADD_TO_CART';
 export const UPDATE_CART = 'UPDATE_CART';
@@ -7,8 +8,8 @@ export const DELETE_ALL_CART = 'DELETE_ALL_CART';
 export const GET_CART = 'GET_CART';
 export const ERROR_CART = 'ERROR_CART';
 export const GET_METHOD_DELIVERY = 'GET_METHOD_DELIVERY';
-export const GET_PROMOTION = 'GET_PROMOTION';
 export const GET_PAYMENT = 'GET_PAYMENT';
+export const ADD_ADDRESS = 'ADD_ADDRESS';
 
 export const getCart = customerId => {
   return async dispatch => {
@@ -19,7 +20,7 @@ export const getCart = customerId => {
       console.log('getcart', res.data);
       dispatch({type: GET_CART, payload: res.data});
     } catch (err) {
-      console.log('This is error in action', err);
+      console.log('This is error in action get cart', err);
       dispatch({type: ERROR_CART, error: err});
     }
   };
@@ -92,15 +93,22 @@ export const getPayment = () => {
   };
 };
 
-export const getPromotion = () => {
+export const getDelivery = () => {
   return async dispatch => {
     try {
-      const res = await apiServer.get(`/api/info/promotion?list=true`);
-      console.log(res.data);
-      dispatch({type: GET_PROMOTION, payload: res.data});
+      const res = await AsyncStorage.getItem('delivery');
+      if ((res = 'true')) {
+        dispatch({type: GET_PAYMENT, payload: true});
+      } else {
+        dispatch({type: GET_PAYMENT, payload: false});
+      }
     } catch (err) {
-      console.log('This is error in action get promotion', err);
+      console.log('This is error in action get delivery', err);
       dispatch({type: ERROR_CART, error: err});
     }
   };
+};
+
+export const addAddress = address => {
+  return async dispatch => {};
 };

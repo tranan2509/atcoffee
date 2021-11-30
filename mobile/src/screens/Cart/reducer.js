@@ -41,6 +41,11 @@ const cartReducer = function (state = initialState, action) {
           cartItem.id === action.payload.id ? action.payload : cartItem,
         ),
       };
+    case types.GET_METHOD_DELIVERY:
+      return {
+        ...state,
+        delivery: action.payload,
+      };
     // case types.ADD_TO_CART:
     //   return {
     //     ...state,

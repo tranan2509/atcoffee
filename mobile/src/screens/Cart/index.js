@@ -10,13 +10,17 @@ const Cart = ({
   navigation,
   cartState,
   locationState,
-  customerState,
+  signInState,
 }) => {
   const [count, setCount] = React.useState(0);
   const [payment, setPayment] = React.useState('');
   const [discount, setdiscount] = React.useState(false);
   const [amount, setAmount] = React.useState(0);
   const [amountDiscount, setAmountDiscount] = React.useState(0);
+  const [selectedLocation, setSelectedLocation] = React.useState(0);
+  const userInfo = signInState.data.user
+    ? signInState.data.user
+    : signInState.data;
   React.useEffect(() => {
     locationState.cart?.map(item => setCount(count + item.quantity));
   }, [locationState]);
@@ -26,15 +30,13 @@ const Cart = ({
 
     console.log('Auto generated key: ', newReference.key);
     let now = new Date();
-    const customerInfo = customerState.data.user
-      ? customerState.data.user
-      : customerState.data;
+
     let code = `BI${now.getTime().toString().slice(5)}`;
     newReference
       .set({
-        address: customerInfo.address,
+        address: userInfo.address,
         amount,
-        customerId: customerInfo.id,
+        customerId: userInfo.id,
         code,
         discount: amountDiscount,
         id: newReference.key,
@@ -76,8 +78,7 @@ const Cart = ({
             </Text>
             <TouchableOpacity
               style={{flex: 1, marginTop: '2%'}}
-              //onPress={() => navigation.navigate('Information')}
-            >
+              onPress={() => navigation.navigate('Address')}>
               <Text
                 style={{
                   paddingTop: 5,
@@ -108,7 +109,7 @@ const Cart = ({
                 ...FONTS.body3,
                 marginLeft: 10,
               }}>
-              {cartState.delivery ? 'address' : 'store'}
+              {cartState.delivery ? userInfo.address : 'store'}
             </Text>
           </TouchableOpacity>
         </View>
@@ -491,7 +492,8 @@ function mapStateToProps(state) {
     themeState: state.themeReducer,
     cartState: state.cartReducer,
     locationState: state.locationReducer,
-    customerState: state.signInReducer,
+    orderState: state.orderReducer,
+    signInState: state.signInReducer,
   };
 }
 

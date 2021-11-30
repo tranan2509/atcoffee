@@ -14,7 +14,7 @@ import {connect} from 'react-redux';
 import * as themeActionsCreater from '../appTheme/themeAction';
 import {bindActionCreators} from 'redux';
 
-const HeaderBar = ({themeState, themeActions}) => {
+const HeaderBar = ({themeState, themeActions, userInfo}) => {
   function toggleThemeHandler() {
     if (themeState.appTheme.name == 'light') {
       themeActions.toggleTheme('dark');
@@ -36,14 +36,14 @@ const HeaderBar = ({themeState, themeActions}) => {
               color: COLORS.white,
               ...FONTS.h2,
             }}>
-            Wendy,
+            {userInfo.name},
           </Text>
           <Text
             style={{
               color: COLORS.white,
               ...FONTS.h2,
             }}>
-            Welcome back!!!
+            Chào mừng tình yêu!!!
           </Text>
         </View>
 

@@ -15,6 +15,7 @@ import Svg, {Path} from 'react-native-svg';
 import RewardsStackNavigator from './RewardsNavigator';
 import HomeStackNavigation from './HomeNavigator';
 import ProfileStackNavigator from './ProfileNavigator';
+import LocationStackNavigator from './LocationNavigator';
 
 import {COLORS, SIZES, icons} from '../constants';
 
@@ -161,7 +162,7 @@ const Tabs = () => {
 
       <Tab.Screen
         name="AddOrder"
-        component={RewardsStackNavigator}
+        component={LocationStackNavigator}
         options={{
           tabBarIcon: ({focused}) => (
             <Image

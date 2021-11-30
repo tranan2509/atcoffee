@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">DrinkApp</string>
-    <string name="default_notification_channel_id">xfone-channel-id</string>
+    <string name="default_notification_channel_id">at-channel-id</string>
 </resources>

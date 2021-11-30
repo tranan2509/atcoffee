@@ -5,6 +5,7 @@ export const SIGN_IN = 'SIGN_IN';
 export const AUTO_SIGN_IN = 'AUTO_SIGN_IN';
 export const ERROR_SIGN_IN = 'ERROR_SIGN_IN';
 export const LOG_OUT = 'LOG_OUT';
+export const GET_USER = 'GET_USER';
 
 export const signIn = (username, password) => {
   return async dispatch => {
@@ -30,6 +31,19 @@ export const authenticated = () => {
       dispatch({type: AUTO_SIGN_IN, payload: res.data});
       //console.log(res.data);
       RootNavigation.navigate('Main');
+    } catch (err) {
+      console.log('This is error in action Sign In', err);
+      dispatch({type: ERROR_SIGN_IN, error: err});
+    }
+  };
+};
+
+export const getUser = username => {
+  return async dispatch => {
+    try {
+      const res = await apiServer.get(`/api/info/user?username=${username}`);
+      dispatch({type: GET_USER, payload: res.data});
+      console.log(res.data);
     } catch (err) {
       console.log('This is error in action Sign In', err);
       dispatch({type: ERROR_SIGN_IN, error: err});

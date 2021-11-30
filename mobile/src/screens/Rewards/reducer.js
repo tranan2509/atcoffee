@@ -1,24 +1,30 @@
 import * as types from './action';
 
 const initialState = {
-  allLocation: [],
+  allPromotions: [],
+  allRewards: [],
   error: '',
 };
 
-const locationReducer = function (state = initialState, action) {
+const rewardReducer = function (state = initialState, action) {
   switch (action.type) {
-    case types.GET_LOCATION:
+    case types.GET_PROMOTION:
       return {
         ...state,
-        allLocation: action.payload,
+        allPromotions: action.payload,
       };
     case types.ERROR_LOCATION:
       return {
         ...state,
         error: action.error,
       };
+    case types.GET_REWARDS:
+      return {
+        ...state,
+        allRewards: action.payload,
+      };
     default:
       return state;
   }
 };
-export {locationReducer};
+export {rewardReducer};

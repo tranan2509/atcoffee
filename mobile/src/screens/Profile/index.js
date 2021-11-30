@@ -5,15 +5,29 @@ import {SIZES, images, COLORS, FONTS, icons} from '../../constants';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as signInActionsCreator from '../SignIn/action';
+import {formatDate} from '../../common/format';
 
-const Profile = ({themeState, navigation, signInActions}) => {
+const Profile = ({
+  themeState,
+  navigation,
+  signInActions,
+  signInState,
+  profileState,
+}) => {
   const _logOut = callback => {
     signInActions.logOut();
     callback();
   };
+  const userInfo = signInState.data.user
+    ? signInState.data.user
+    : signInState.data;
+
+  // React.useEffect(() => {
+  //   console.log('userInfo', signInState);
+  // });
   return (
     <View style={{flex: 1}}>
-      <HeaderBar />
+      <HeaderBar userInfo={userInfo} />
       <ScrollView
         style={{
           flex: 1,
@@ -40,9 +54,15 @@ const Profile = ({themeState, navigation, signInActions}) => {
               backgroundColor: COLORS.white,
               padding: 10,
               marginBottom: 10,
+              justifyContent: 'center',
+              alignItems: 'center',
             }}>
             <Image
-              source={images.avatarFemale}
+              source={
+                userInfo.gender == 'Khác'
+                  ? icons.profile
+                  : {uri: userInfo.image}
+              }
               style={{height: 70, width: 70}}
             />
           </View>
@@ -90,7 +110,13 @@ const Profile = ({themeState, navigation, signInActions}) => {
               paddingBottom: 20,
             }}>
             <IconButton
-              icon={images.avatarFemale}
+              icon={
+                userInfo.gender == 'Nữ'
+                  ? images.avatarFemale
+                  : userInfo.gender == 'Nam'
+                  ? images.avatarMale
+                  : icons.profile
+              }
               iconStyle={{tintColor: themeState.appTheme.textColor}}
             />
             <Text
@@ -100,7 +126,7 @@ const Profile = ({themeState, navigation, signInActions}) => {
                 ...FONTS.body3,
                 marginLeft: 10,
               }}>
-              Nguyễn Thị Minh Thư
+              {userInfo.name}
             </Text>
           </View>
           {/* Birthday */}
@@ -121,7 +147,7 @@ const Profile = ({themeState, navigation, signInActions}) => {
                 ...FONTS.body3,
                 marginLeft: 10,
               }}>
-              10/02/2000
+              {formatDate(userInfo.dob)}
             </Text>
           </View>
           {/* Gender */}
@@ -142,7 +168,7 @@ const Profile = ({themeState, navigation, signInActions}) => {
                 ...FONTS.body3,
                 marginLeft: 10,
               }}>
-              Nữ
+              {userInfo.gender}
             </Text>
           </View>
           {/* Phone number */}
@@ -163,7 +189,7 @@ const Profile = ({themeState, navigation, signInActions}) => {
                 ...FONTS.body3,
                 marginLeft: 10,
               }}>
-              0346279377
+              {userInfo.phone}
             </Text>
           </View>
           {/* address */}
@@ -184,7 +210,7 @@ const Profile = ({themeState, navigation, signInActions}) => {
                 ...FONTS.body3,
                 marginLeft: 10,
               }}>
-              2/5 đường 68 phường Hiệp Phú quận 9
+              {userInfo.address}
             </Text>
           </View>
           {/* Email */}
@@ -205,10 +231,36 @@ const Profile = ({themeState, navigation, signInActions}) => {
                 ...FONTS.body3,
                 marginLeft: 10,
               }}>
-              minhthuthum@gmail.com
+              {userInfo.email}
             </Text>
           </View>
         </View>
+        {/* reset password */}
+        <TouchableOpacity
+          style={{
+            paddingHorizontal: 20,
+            flexDirection: 'row',
+            paddingTop: 20,
+            paddingBottom: 20,
+            backgroundColor:
+              themeState.appTheme.name == 'dark' ? COLORS.gray1 : COLORS.white,
+            marginTop: 10,
+          }}
+          onPress={() => _logOut(() => navigation.push('SignIn'))}>
+          <IconButton
+            icon={icons.resetpassword}
+            iconStyle={{tintColor: themeState.appTheme.textColor}}
+          />
+          <Text
+            style={{
+              paddingTop: 5,
+              color: themeState.appTheme.textColor,
+              ...FONTS.body3,
+              marginLeft: 10,
+            }}>
+            Đổi mật khẩu
+          </Text>
+        </TouchableOpacity>
         <TouchableOpacity
           style={{
             paddingHorizontal: 20,
@@ -241,7 +293,8 @@ const Profile = ({themeState, navigation, signInActions}) => {
 function mapStateToProps(state) {
   return {
     themeState: state.themeReducer,
-    //error: state.error,
+    signInState: state.signInReducer,
+    profileState: state.profileReducer,
   };
 }
 

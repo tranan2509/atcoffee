@@ -21,6 +21,8 @@ import {
 import {connect} from 'react-redux';
 import {HeaderBar, CustomButton} from '../../components';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as cartActionsCreator from '../Cart/action';
+import {bindActionCreators} from 'redux';
 
 const promoTabs = constants.promoTabs.map(promoTab => ({
   ...promoTab,
@@ -140,7 +142,7 @@ const Tabs = ({appTheme, scrollX, onPromoTabsPress}) => {
   );
 };
 
-const Home = ({navigation, themeState, signInState}) => {
+const Home = ({navigation, themeState, signInState, cartActions}) => {
   const scrollX = React.useRef(new Animated.Value(0)).current;
 
   const promoScrollViewRef = React.useRef();
@@ -157,10 +159,14 @@ const Home = ({navigation, themeState, signInState}) => {
       await AsyncStorage.setItem('token', signInState.data.jwt);
     }
   };
-
+  const userInfo = signInState.data.user
+    ? signInState.data.user
+    : signInState.data;
   React.useEffect(() => {
     setToken();
     //console.log('user', signInState.data);
+    //get cart
+    cartActions.getCart(userInfo.id);
   }, []);
   // React.useEffect(() => {
   //   const newReference = database().ref('/users').push();
@@ -361,7 +367,7 @@ const Home = ({navigation, themeState, signInState}) => {
 
   return (
     <View style={styles.container}>
-      <HeaderBar />
+      <HeaderBar userInfo={userInfo} />
 
       <ScrollView
         style={{
@@ -397,7 +403,9 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProp(dispatch) {
-  return {};
+  return {
+    cartActions: bindActionCreators(cartActionsCreator, dispatch),
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProp)(Home);
