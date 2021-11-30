@@ -17,7 +17,6 @@
       <div class="section-body">
         <basic-category-info :category="category" @handleEdit="handleEdit" @handleLock="handleLock" v-if="!isEdit"></basic-category-info>
         <action-category v-if="isEdit" @handleCancel="handleCancel" @handleDone="handleDone"></action-category>
-        <category-statistics/>
       </div>
   </admin>
 </template>
@@ -30,7 +29,6 @@ import Admin from '../main/Admin.vue'
 import SectionHeader from '../../common/common/SectionHeader.vue'
 import BasicCategoryInfo from '../common/BasicCategoryInfo.vue'
 import ActionCategory from '../common/ActionCategory.vue'
-import CategoryStatistics from '../common/CategoryStatistics.vue'
 
 export default {
   name: Constants.COMPONENT_NAME_STAFF_INFO,
@@ -40,7 +38,6 @@ export default {
     SectionHeader,
     BasicCategoryInfo,
     ActionCategory,
-    CategoryStatistics
   },
 
   data() {

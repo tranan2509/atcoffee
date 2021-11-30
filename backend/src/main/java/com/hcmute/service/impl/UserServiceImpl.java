@@ -1,5 +1,6 @@
 package com.hcmute.service.impl;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -121,6 +122,16 @@ public class UserServiceImpl implements UserService{
 	public List<UserDTO> findAll() {
 		List<UserDTO> dtos = new ArrayList<UserDTO>();
 		List<UserEntity> entities = userRepository.findAll();
+		entities.forEach(entity -> dtos.add(mapper.map(entity, UserDTO.class)));
+		return dtos;
+	}
+	
+	@Override
+	public List<UserDTO> findByRoleAndCreatedDateBetween(String roleName, Date start, Date end) {
+		
+		RoleEntity role = roleRepository.findOneByName(roleName);
+		List<UserDTO> dtos = new ArrayList<UserDTO>();
+		List<UserEntity> entities = userRepository.findByRoleAndCreatedDateBetween(role, start, end);
 		entities.forEach(entity -> dtos.add(mapper.map(entity, UserDTO.class)));
 		return dtos;
 	}

@@ -10,8 +10,8 @@ var BillDataService = {
   save(bill) {
 
     // const newBillKey = push(child(ref(database), collectionName)).key;
-    bill.id = bill.code;
-    const startCountRef = ref(database, `${collectionName}/${bill.id}`);
+    // bill.id = bill.id?? bill.code;
+    const startCountRef = ref(database, `${collectionName}/${bill.code}`);
     set(startCountRef, bill);
   },
 
@@ -72,16 +72,16 @@ var BillDataService = {
   },
 
   //Need review
-  update(bill, store) {
-    const startCountRef = ref(database, `${collectionName}/${bill.id}`);
+  update(bill, store = null) {
+    const startCountRef = ref(database, `${collectionName}/${bill.code}`);
     set(startCountRef, bill);
-    store.commit(MutationsName.MUTATION_NAME_UPDATE_BILL, bill);
+    store != null ? store.commit(MutationsName.MUTATION_NAME_UPDATE_BILL, bill) : '';
   },
 
-  remove(id, store) {
+  remove(id, store = null) {
     const startCountRef = ref(database, `${collectionName}/${id}`);
     remove(startCountRef, id);
-    store.commit(MutationsName.MUTATION_NAME_REMOVE_BILL, id);
+    store != null ? store.commit(MutationsName.MUTATION_NAME_REMOVE_BILL, id) : '';
   },
 
 

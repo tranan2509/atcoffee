@@ -49,7 +49,7 @@
                   <input type="text" class="form-control" v-model="promotionCode" @input="handleChangePromotion">
                 </div>
               </div>
-              <div class="row-custom">
+              <div class="row-custom" v-if="false">
                 <span>Sử dụng điểm</span>
                 <div class="row-custom-2">
                   <span>{{user != null ? user.currentPoints : 0}}</span>
@@ -83,6 +83,7 @@ import * as MutationsName from '../../../common/MutationsName'
 import CommonUtils from '../../../common/CommonUtils'
 import PaymentCommand from '../../../command/PaymentCommand'
 import PromotionCommand from '../../../command/PromotionCommand'
+import BillCommand from '../../../command/BillCommand'
 // import BillCommand from '../../../command/BillCommand'
 import StoreCommand from '../../../command/StoreCommand'
 import TypeCommand from '../../../command/TypeCommand'
@@ -127,7 +128,7 @@ export default {
     price() {
       var total = 0;
       this.$store.getters.carts.forEach(cart => {
-        total += cart.price;
+        total += cart.amount;
       });
       return total;
     },
@@ -187,7 +188,7 @@ export default {
         price: this.price,
         discount: this.discountPromotion, //this.promotion != null ? this.promotion.discount : 0,
         point: this.point,
-        address: this.store.address,
+        address: '',
         status: Constants.STATUS_BILL.PAID,
         rewardId: 0,
         promotionId: this.vetifyPromotionCode(this.promotion) ? this.promotion.id : 0,
@@ -207,9 +208,18 @@ export default {
         state: true,
         read: true
       }
-      BillDataService.save(bill);
-      this.$store.commit(MutationsName.MUTATION_NAME_SET_CARTS, []);
-      this.processSpinnerSuccess();
+     
+      let result = await BillCommand.save(bill);
+      if (result != null) {
+        bill.id = result.id;
+        BillDataService.save(bill);
+        this.$store.commit(MutationsName.MUTATION_NAME_SET_CARTS, []);
+        this.processSpinnerSuccess();
+      } else {
+        this.isAlertPopup = true;
+        this.msg = 'Thanh toán không thành công!';
+        return;
+      }
     },
 
     vetifyPromotionCode(promotion){

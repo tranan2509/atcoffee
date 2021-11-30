@@ -35,9 +35,15 @@
         </router-link>
       </li>
       <li class="nav-item dropdown" :class="menuStaff.order.value ? 'active' : ''">  
-        <router-link to="/staff/orders" class="nav-link" @click="handleDropdown(menuStaff.order)">
+        <router-link to="/staff/orders?page=1" class="nav-link" @click="handleDropdown(menuStaff.order)">
           <i class="fas fa-layer-group"></i>
           <span>Đơn hàng</span>
+        </router-link>
+      </li>
+      <li class="nav-item dropdown" :class="menuStaff.notification.value ? 'active' : ''">  
+        <router-link to="/staff/notifications?page=1" class="nav-link" @click="handleDropdown(menuStaff.notification)">
+          <i class="fas fa-bell"></i>
+          <span>Thông báo</span>
         </router-link>
       </li>
       <li class="menu-header">HỒ SƠ</li>

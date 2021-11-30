@@ -20,7 +20,7 @@
               <div class="dropdown-item-icon bg-primary text-white">
                 <i class="fas fa-bell"></i>
               </div>
-              <div class="dropdown-item-desc" v-if="!bill.customerName">
+              <div class="dropdown-item-desc" v-if="!bill.address">
                 Đơn hàng với ID {{bill.id}} được yêu cầu từ khách hàng tại quầy
                 <div class="time text-primary">{{fromNow(bill.createdDate)}}</div>
               </div>

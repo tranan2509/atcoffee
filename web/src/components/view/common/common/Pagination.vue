@@ -56,10 +56,6 @@ export default {
       }
       return result;
     },
-
-    // lastItemPagination() {
-    //   return this.$store.getters.totalPageProduct;
-    // }
   },
   methods: {
     handleChangePage(type) {

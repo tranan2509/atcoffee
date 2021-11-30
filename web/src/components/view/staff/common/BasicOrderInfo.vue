@@ -22,7 +22,7 @@
                   </div>
                   <div class="info-group flex-1">
                     <label>Trạng thái</label>
-                    <span>{{$store.getters.bill.status}}</span>
+                    <span :class="$store.getters.bill.status.toLowerCase()" class="bold">{{viStatus($store.getters.bill.status)}}</span>
                   </div>
                 </div>
                  <div class="line">
@@ -93,12 +93,17 @@ export default {
   },
 
   methods: {
+
     formatPrice(price) {
       return CommonUtils.formatPrice(price);
     },
 
     formatDate(timeStamp) {
       return CommonUtils.formatDateTime(new Date(timeStamp));
+    },
+
+    viStatus(status) {
+      return Constants.STATUS_BILL_VI[status];
     },
   },
 
@@ -109,4 +114,7 @@ export default {
 
 <style>
 
+.bold {
+  font-weight: bold;
+}
 </style>

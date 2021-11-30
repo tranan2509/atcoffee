@@ -1,6 +1,7 @@
 import ConnectServer from "../server/ConnectServer";
 import * as Constants from '../common/Constants';
 import * as MutationsName from '../common/MutationsName'
+import CommonUtils from "../common/CommonUtils";
 
 const UserCommand = {
 
@@ -47,6 +48,37 @@ const UserCommand = {
     let res = await ConnectServer.getData(url);
     if (res != null) {
       store != null ? store.commit(MutationsName.MUTATION_NAME_SET_USER, res) : null;
+      return res;
+    }
+    return null;
+  },
+
+  async findByDateBetweenOfMonth(roleName, month, year, store = null) {
+    let start = `${year}-${('0' + month).slice(-2)}-01`;
+    let endDate = new Date(year, month, 0);
+    let end = CommonUtils.formatDateReverse(endDate);
+    let result = await this.findByRoleNameCreatedDateBetween(roleName, start, end, store);
+    return result;
+  },
+
+  async findByDateBetweenOfWeek(roleName, date, store = null) {
+
+    let selectedDate = new Date(date);
+    let dateOfWeek = selectedDate.getDay();
+    let startDate = selectedDate.setDate(selectedDate.getDate() - dateOfWeek);
+    let endDate = selectedDate.setDate(selectedDate.getDate() + 6 - dateOfWeek);
+    
+    let start = CommonUtils.formatDateReverse(new Date(startDate));
+    let end = CommonUtils.formatDateReverse(new Date(endDate));
+    let result = await this.findByRoleNameCreatedDateBetween(roleName, start, end, store);
+    return result;
+  },
+
+  async findByRoleNameCreatedDateBetween(roleName, startDate, endDate, store = null) {
+    const url =  `${Constants.HOSTNAME_DEFAULT}/api/staff/user/statistics?roleName=${roleName}&startDate=${startDate}&endDate=${endDate}`;
+    let res = await ConnectServer.getData(url);
+    if (res != null) {
+      store != null ? store.commit(MutationsName.MUTATION_NAME_SET_USERS, res) : null;
       return res;
     }
     return null;

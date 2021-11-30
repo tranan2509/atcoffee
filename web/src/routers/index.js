@@ -18,6 +18,7 @@ import CategoryInfo from '../components/view/admin/category/CategoryInfo.vue'
 import Promotions from '../components/view/admin/promotion/Promotions.vue'
 import PromotionInfo from '../components/view/admin/promotion/PromotionInfo.vue'
 import Rewards from '../components/view/admin/reward/Rewards.vue'
+import RewardInfo from '../components/view/admin/reward/RewardInfo.vue'
 
 import Profile from '../components/view/admin/profile/Profile.vue'
 import ChangePassword from '../components/view/admin/profile/ChangePassword.vue'
@@ -28,6 +29,7 @@ import ProductsStaff from '../components/view/staff/product/Products.vue'
 import PaymentStaff from '../components/view/staff/payment/Payment.vue'
 import OrdersStaff from '../components/view/staff/order/Orders.vue'
 import OrderInfoStaff from '../components/view/staff/order/OrderInfo.vue'
+import NotificationsStaff from '../components/view/staff/notification/Notifications.vue'
 import ProfileStaff from '../components/view/staff/profile/Profile.vue'
 import ChangePasswordStaff from '../components/view/staff/profile/ChangePassword.vue'
 
@@ -52,6 +54,7 @@ const routes = [
   {path: '/admin/promotions', name: 'promotions', component: Promotions, meta: {title: 'A&T Coffee | Danh sách khuyến mãi'}},
   {path: '/admin/promotion-info', name: 'promotion-info', component: PromotionInfo, meta: {title: 'A&T Coffee | Thông tin khuyến mãi'}},
   {path: '/admin/rewards', name: 'rewards', component: Rewards, meta: {title: 'A&T Coffee | Danh sách phần thưởng'}},
+  {path: '/admin/reward-info', name: 'reward-info', component: RewardInfo, meta: {title: 'A&T Coffee | Thông tin phần thưởng'}},
 
   {path: '/admin/profile', name: 'profile', component: Profile, meta: {title: 'A&T Coffee | Thông tin cá nhân'}},
   {path: '/admin/profile/change-password', name: 'change-password', component: ChangePassword, meta: {title: 'A&T Coffee | Đổi mật khẩu'}},
@@ -61,6 +64,7 @@ const routes = [
   {path: '/staff/payment', name: 'payment-staff', component: PaymentStaff, meta: {title: 'A&T Coffee | Thanh toán'}},
   {path: '/staff/orders', name: 'orders-staff', component: OrdersStaff, meta: {title: 'A&T Coffee | Đơn hàng'}},
   {path: '/staff/order-info', name: 'order-info-staff', component: OrderInfoStaff, meta: {title: 'A&T Coffee | Chi tiết đơn hàng'}},
+  {path: '/staff/notifications', name: 'notification-staff', component: NotificationsStaff, meta: {title: 'A&T Coffee | Danh sách thông báo'}},
   {path: '/staff/profile', name: 'profile-staff', component: ProfileStaff, meta: {title: 'A&T Coffee | Thông tin cá nhân'}},
   {path: '/staff/profile/change-password', name: 'change-password-staff', component: ChangePasswordStaff, meta: {title: 'A&T Coffee | Đổi mật khẩu'}},
 

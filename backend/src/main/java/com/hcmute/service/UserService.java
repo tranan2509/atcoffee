@@ -1,5 +1,6 @@
 package com.hcmute.service;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,7 @@ public interface UserService extends UserDetailsService{
 	UserDTO findOne(Long id);
 	List<UserDTO> validate(String username, String code, String email, String phone, String identityCard);
 	List<UserDTO> findAll();
+	List<UserDTO> findByRoleAndCreatedDateBetween(String roleName, Date start, Date end);
 	UserResponse findByKeyword(String keyword, Pageable pageable);
 	UserResponse findByStoreCodeAndKeyword(String storeCode,  String keyword, Pageable pageable);
 	UserResponse findByRoleNameAndKeyword(String roleName,  String keyword, Pageable pageable);
