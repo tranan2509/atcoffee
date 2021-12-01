@@ -54,6 +54,7 @@ export const getUser = username => {
 export const logOut = () => {
   return async dispatch => {
     await AsyncStorage.removeItem('token');
+    await AsyncStorage.removeItem('delivery');
     dispatch({
       type: LOG_OUT,
     });

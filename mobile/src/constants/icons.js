@@ -33,6 +33,7 @@ const checkbox = require('../assets/icons/checkbox.png');
 const uncheckbox = require('../assets/icons/uncheckbox.png');
 const promotion = require('../assets/icons/promotion.png');
 const resetpassword = require('../assets/icons/resetpass.png');
+const cart = require('../assets/icons/cart.png');
 export default {
   add,
   bookmark,
@@ -69,4 +70,5 @@ export default {
   uncheckbox,
   promotion,
   resetpassword,
+  cart,
 };

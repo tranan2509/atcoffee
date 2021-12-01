@@ -14,7 +14,13 @@ import {connect} from 'react-redux';
 import * as themeActionsCreater from '../appTheme/themeAction';
 import {bindActionCreators} from 'redux';
 
-const HeaderBar = ({themeState, themeActions, userInfo}) => {
+const HeaderBar = ({
+  themeState,
+  themeActions,
+  userInfo,
+  navigation,
+  amountProduct,
+}) => {
   function toggleThemeHandler() {
     if (themeState.appTheme.name == 'light') {
       themeActions.toggleTheme('dark');
@@ -107,17 +113,38 @@ const HeaderBar = ({themeState, themeActions, userInfo}) => {
           paddingHorizontal: 40,
           //backgroundColor: COLORS.primary,
           //borderRadius: 20,
-        }}>
+        }}
+        onPress={() => navigation.navigate('Cart')}>
+        <View
+          zIndex={1}
+          style={{
+            height: 25,
+            width: 25,
+            backgroundColor: COLORS.red,
+            borderRadius: 10,
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: -18,
+          }}>
+          <Text
+            style={{
+              color: COLORS.black,
+              ...FONTS.body5,
+            }}>
+            {amountProduct}
+          </Text>
+        </View>
         <View
           style={{
             height: 40,
             width: 40,
             backgroundColor: COLORS.primary,
-            borderRadius: 40,
+            borderRadius: 20,
             justifyContent: 'center',
             alignItems: 'center',
+            marginTop: -8,
           }}>
-          <Image source={icons.bell} style={{height: 30, width: 30}} />
+          <Image source={icons.cart} style={{height: 30, width: 30}} />
         </View>
       </TouchableOpacity>
     </View>

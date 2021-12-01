@@ -15,6 +15,7 @@ import {formatDate} from '../../common/format';
 import {bindActionCreators} from 'redux';
 import * as profileActionsCreators from './action';
 import * as signInActionsCreator from '../SignIn/action';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const Information = ({
   navigation,
@@ -38,10 +39,10 @@ const Information = ({
   const [email, setEmail] = React.useState(userInfo.email);
   const [address, setAddress] = React.useState(userInfo.address);
   const [birthday, setBirthday] = React.useState(userInfo.dob);
-  const onConfirm = date => {
+  const onConfirm = async date => {
+    await hideDatePicker();
     setYourDob(formatDate(date));
     setBirthday(date);
-    hideDatePicker();
   };
   const showDateTimePicker = () => {
     setDob(true);
@@ -92,7 +93,14 @@ const Information = ({
     callback();
   };
   return (
-    <View style={{flex: 1}}>
+    <KeyboardAwareScrollView
+      style={{flex: 1}}
+      extraHeight={120}
+      enableAutomaticScroll={true}
+      extraScrollHeight={120}
+      enableOnAndroid={true}
+      keyboardShouldPersistTaps={'handled'}
+      enableResetScrollToCoords={false}>
       <Header title="Thông tin cá nhân" navigation={navigation} button="Lưu" />
       <ScrollView
         style={{
@@ -173,7 +181,7 @@ const Information = ({
           }}>
           <TextInput
             value={identityCard}
-            onTextChange={setIdentityCard}
+            onChangeText={setIdentityCard}
             style={{fontSize: 15, color: 'black'}}
           />
         </View>
@@ -276,7 +284,7 @@ const Information = ({
           }}>
           <TextInput
             value={phone}
-            onTextChange={setPhone}
+            onChangeText={setPhone}
             style={{fontSize: 15, color: 'black'}}
           />
         </View>
@@ -297,7 +305,7 @@ const Information = ({
           }}>
           <TextInput
             value={address}
-            onTextChange={setAddress}
+            onChangeText={setAddress}
             style={{fontSize: 15, color: 'black'}}
           />
         </View>
@@ -318,7 +326,7 @@ const Information = ({
           }}>
           <TextInput
             value={email}
-            onTextChange={setEmail}
+            onChangeText={setEmail}
             style={{fontSize: 15, color: 'black'}}
           />
         </View>
@@ -330,7 +338,7 @@ const Information = ({
           isVisible={dob}
         />
       </ScrollView>
-    </View>
+    </KeyboardAwareScrollView>
   );
 };
 function mapStateToProps(state) {

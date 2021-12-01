@@ -10,6 +10,10 @@ export const ERROR_CART = 'ERROR_CART';
 export const GET_METHOD_DELIVERY = 'GET_METHOD_DELIVERY';
 export const GET_PAYMENT = 'GET_PAYMENT';
 export const ADD_ADDRESS = 'ADD_ADDRESS';
+export const GET_ADDRESS = 'GET_ADDRESS';
+export const UPDATE_DELIVERY = 'UPDATE_DELIVERY';
+export const GET_DELIVERY = 'GET_DELIVERY';
+export const UPDATE_STATE_PRODUCT_IN_CART = 'UPDATE_STATE_PRODUCT_IN_CART';
 
 export const getCart = customerId => {
   return async dispatch => {
@@ -93,14 +97,24 @@ export const getPayment = () => {
   };
 };
 
+export const updateDelivery = shipping => {
+  return async dispatch => {
+    console.log('update delivery', `${shipping}`);
+    await AsyncStorage.setItem('delivery', `${shipping}`);
+    console.log('update delivery', `${shipping}`);
+    dispatch({type: UPDATE_DELIVERY, payload: shipping});
+  };
+};
+
 export const getDelivery = () => {
   return async dispatch => {
     try {
       const res = await AsyncStorage.getItem('delivery');
-      if ((res = 'true')) {
-        dispatch({type: GET_PAYMENT, payload: true});
+      console.log('delivery', res);
+      if (res == 'true') {
+        dispatch({type: GET_DELIVERY, payload: true});
       } else {
-        dispatch({type: GET_PAYMENT, payload: false});
+        dispatch({type: GET_DELIVERY, payload: false});
       }
     } catch (err) {
       console.log('This is error in action get delivery', err);
@@ -109,6 +123,42 @@ export const getDelivery = () => {
   };
 };
 
+export const updateStateProductInCart = (id, state) => {
+  return dispatch => {
+    console.log('action', id, state);
+    dispatch({type: UPDATE_STATE_PRODUCT_IN_CART, payload: {id, state}});
+  };
+};
+
 export const addAddress = address => {
-  return async dispatch => {};
+  return async dispatch => {
+    const countAddress = await AsyncStorage.getItem('address');
+    let amountAddress = parseInt(countAddress);
+    amountAddress = amountAddress + 1;
+    await AsyncStorage.setItem('address', `${amountAddress}`);
+    await AsyncStorage.setItem(`address${amountAddress}`, address);
+    dispatch({type: ADD_ADDRESS, payload: address});
+  };
+};
+
+export const getAddress = () => {
+  return async dispatch => {
+    const countAddress = await AsyncStorage.getItem('address');
+    let amountAddress = parseInt(countAddress);
+    let allAddress = [];
+    //fix
+    allAddress = {...allAddress, amountAddress};
+    if (amountAddress > 0) {
+      while (amountAddress) {
+        const addressShipping = await AsyncStorage.getItem(
+          `address${amountAddress}`,
+        );
+        let title = `address${amountAddress}`;
+        let address = {[title]: addressShipping};
+        amountAddress = amountAddress - 1;
+        allAddress = [...allAddress, address];
+      }
+    }
+    dispatch({type: GET_ADDRESS, payload: allAddress});
+  };
 };

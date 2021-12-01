@@ -223,12 +223,24 @@ const promos = [
   },
 ];
 
+const methodShipping = [
+  {
+    id: 1,
+    name: 'Giao tận nơi',
+  },
+  {
+    id: 2,
+    name: 'Tự đến lấy',
+  },
+];
+
 const dummyData = {
   availableRewards,
   locations,
   menuList,
   milkList,
   promos,
+  methodShipping,
 };
 
 export default dummyData;

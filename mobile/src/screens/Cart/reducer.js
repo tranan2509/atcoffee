@@ -4,6 +4,8 @@ const initialState = {
   cart: [],
   delivery: true,
   payment: [],
+  amountAddress: 0,
+  address: {},
   error: '',
 };
 
@@ -18,6 +20,20 @@ const cartReducer = function (state = initialState, action) {
       return {
         ...state,
         error: action.error,
+      };
+    case types.GET_ADDRESS:
+      console.log('state', state);
+      return {
+        ...state,
+        amountAddress: action.payload.amountAddress,
+        address: action.payload.address,
+      };
+    case types.ADD_ADDRESS:
+      let title = `address${state.amountAddress + 1}`;
+      return {
+        ...state,
+        amountAddress: state.amountAddress + 1,
+        address: [...state.address, {[title]: action.payload}],
       };
     case types.GET_PAYMENT:
       return {
@@ -46,12 +62,28 @@ const cartReducer = function (state = initialState, action) {
         ...state,
         delivery: action.payload,
       };
-    // case types.ADD_TO_CART:
-    //   return {
-    //     ...state,
-    //     cart: action.payload,
-    //   };
-
+    case types.GET_DELIVERY:
+      console.log('reducer get delivery', action.payload);
+      return {
+        ...state,
+        delivery: action.payload,
+      };
+    case types.UPDATE_DELIVERY:
+      console.log('reducer update delivery', action.payload);
+      return {
+        ...state,
+        delivery: action.payload,
+      };
+    case types.UPDATE_STATE_PRODUCT_IN_CART:
+      console.log('reducer state', action.payload);
+      return {
+        ...state,
+        cart: state.cart.map(cartItem =>
+          cartItem.id === action.payload.id
+            ? {...cartItem, state: !action.payload.state}
+            : cartItem,
+        ),
+      };
     default:
       return state;
   }

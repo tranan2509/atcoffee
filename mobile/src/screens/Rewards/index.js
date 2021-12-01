@@ -4,10 +4,11 @@ import {HeaderBar, CustomButton} from '../../components';
 import {FONTS, COLORS, dummyData, SIZES, icons} from '../../constants';
 import {connect} from 'react-redux';
 
-const Rewards = ({navigation, themeState, signInState}) => {
+const Rewards = ({navigation, themeState, signInState, cartState}) => {
   const userInfo = signInState.data.user
     ? signInState.data.user
     : signInState.data;
+  const amountProduct = cartState.cart.length;
   function renderRewardPointSection() {
     return (
       <View
@@ -114,7 +115,11 @@ const Rewards = ({navigation, themeState, signInState}) => {
   return (
     <View style={styles.container}>
       {/* Header */}
-      <HeaderBar userInfo={userInfo} />
+      <HeaderBar
+        userInfo={userInfo}
+        navigation={navigation}
+        amountProduct={amountProduct}
+      />
 
       {/* Details */}
       <FlatList
@@ -176,6 +181,7 @@ function mapStateToProps(state) {
     themeState: state.themeReducer,
     //error: state.error,
     signInState: state.signInReducer,
+    cartState: state.cartReducer,
   };
 }
 

@@ -142,7 +142,13 @@ const Tabs = ({appTheme, scrollX, onPromoTabsPress}) => {
   );
 };
 
-const Home = ({navigation, themeState, signInState, cartActions}) => {
+const Home = ({
+  navigation,
+  themeState,
+  signInState,
+  cartActions,
+  cartState,
+}) => {
   const scrollX = React.useRef(new Animated.Value(0)).current;
 
   const promoScrollViewRef = React.useRef();
@@ -367,7 +373,11 @@ const Home = ({navigation, themeState, signInState, cartActions}) => {
 
   return (
     <View style={styles.container}>
-      <HeaderBar userInfo={userInfo} />
+      <HeaderBar
+        userInfo={userInfo}
+        navigation={navigation}
+        amountProduct={cartState.cart.length}
+      />
 
       <ScrollView
         style={{
@@ -399,6 +409,7 @@ function mapStateToProps(state) {
   return {
     themeState: state.themeReducer,
     signInState: state.signInReducer,
+    cartState: state.cartReducer,
   };
 }
 

@@ -2,18 +2,18 @@ import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
 import {Location, Order, OrderDetail, Cart} from '../screens';
 
-const ProfileStack = createStackNavigator();
+const LocationStack = createStackNavigator();
 const LocationStackNavigator = () => {
   return (
-    <ProfileStack.Navigator
+    <LocationStack.Navigator
       screenOptions={{
         headerShown: false,
       }}>
-      <ProfileStack.Screen name="Location" component={Location} />
-      <ProfileStack.Screen name="Order" component={Order} />
+      <LocationStack.Screen name="Location1" component={Location} />
+      {/* <ProfileStack.Screen name="Order" component={Order} />
       <ProfileStack.Screen name="OrderDetail" component={OrderDetail} />
-      <ProfileStack.Screen name="Cart" component={Cart} />
-    </ProfileStack.Navigator>
+      <ProfileStack.Screen name="Cart" component={Cart} /> */}
+    </LocationStack.Navigator>
   );
 };
 

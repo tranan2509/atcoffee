@@ -23,13 +23,20 @@ const Location = ({
   locationState,
   locationActions,
   orderActions,
+  cartState,
+  route,
 }) => {
   const [selectedTab, setSelectedTab] = React.useState(0);
+  const [stateMethod, setStateMethod] = React.useState(true);
 
-  //get location
-  // React.useEffect(() => {
-  //   locationActions.getAllLocation();
-  // }, []);
+  React.useEffect(() => {
+    let stateNow = route.params?.stateNow;
+    console.log('state now', stateNow);
+    console.log('state now', route);
+    if (stateNow) {
+      setStateMethod(false);
+    }
+  }, []);
 
   function renderTopBarSection() {
     return (
@@ -114,17 +121,13 @@ const Location = ({
         keyboardDismissMode="on-drag"
         renderItem={({item}) => {
           return (
-            <TouchableOpacity
+            <View
               style={{
                 marginBottom: SIZES.radius,
                 borderRadius: SIZES.radius * 2,
                 paddingHorizontal: SIZES.padding,
                 paddingVertical: SIZES.radius,
                 backgroundColor: themeState.appTheme.cardBackgroundColor,
-              }}
-              onPress={async () => {
-                await orderActions.getAllProducts(item.code);
-                navigation.navigate('Order', {selectedLocation: item});
               }}>
               {/* Name & Bookmark */}
               <View
@@ -186,42 +189,53 @@ const Location = ({
                   marginTop: SIZES.base,
                 }}>
                 {/* Pick up */}
-                <View
-                  style={{
-                    borderColor: themeState.appTheme.textColor,
-                    borderWidth: 1,
-                    borderRadius: 20,
-                    paddingHorizontal: SIZES.radius,
-                    paddingVertical: 5,
-                  }}>
-                  <Text
+                {stateMethod && (
+                  <TouchableOpacity
                     style={{
-                      color: themeState.appTheme.textColor,
-                      ...FONTS.body3,
+                      borderColor: themeState.appTheme.textColor,
+                      borderWidth: 1,
+                      borderRadius: 20,
+                      paddingHorizontal: SIZES.radius,
+                      paddingVertical: 5,
+                    }}
+                    onPress={async () => {
+                      await orderActions.getAllProducts(item.code);
+                      navigation.navigate('Order', {selectedLocation: item});
                     }}>
-                    Pick up
-                  </Text>
-                </View>
+                    <Text
+                      style={{
+                        color: themeState.appTheme.textColor,
+                        ...FONTS.body3,
+                      }}>
+                      Đặt hàng
+                    </Text>
+                  </TouchableOpacity>
+                )}
                 {/* Delivery */}
-                <View
-                  style={{
-                    borderColor: themeState.appTheme.textColor,
-                    borderWidth: 1,
-                    borderRadius: 20,
-                    paddingHorizontal: SIZES.radius,
-                    paddingVertical: 5,
-                    marginLeft: 5,
-                  }}>
-                  <Text
+                {!stateMethod && (
+                  <TouchableOpacity
                     style={{
-                      color: themeState.appTheme.textColor,
-                      ...FONTS.body3,
-                    }}>
-                    Delivery
-                  </Text>
-                </View>
+                      borderColor: themeState.appTheme.textColor,
+                      borderWidth: 1,
+                      borderRadius: 20,
+                      paddingHorizontal: SIZES.radius,
+                      paddingVertical: 5,
+                      marginLeft: 5,
+                    }}
+                    onPress={() =>
+                      navigation.navigate('Cart', {selectedItem: item})
+                    }>
+                    <Text
+                      style={{
+                        color: themeState.appTheme.textColor,
+                        ...FONTS.body3,
+                      }}>
+                      Nhận hàng
+                    </Text>
+                  </TouchableOpacity>
+                )}
               </View>
-            </TouchableOpacity>
+            </View>
           );
         }}
       />
@@ -230,7 +244,7 @@ const Location = ({
   return (
     <View style={styles.container}>
       {/* Header */}
-      <Header title="Location" navigation={navigation} />
+      <Header title="Cửa hàng" navigation={navigation} />
       {/* Detail */}
       <View
         style={{
@@ -259,6 +273,7 @@ function mapStateToProps(state) {
   return {
     themeState: state.themeReducer,
     locationState: state.locationReducer,
+    cartState: state.cartReducer,
   };
 }
 

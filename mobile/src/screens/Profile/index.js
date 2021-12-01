@@ -13,6 +13,7 @@ const Profile = ({
   signInActions,
   signInState,
   profileState,
+  cartState,
 }) => {
   const _logOut = callback => {
     signInActions.logOut();
@@ -27,7 +28,11 @@ const Profile = ({
   // });
   return (
     <View style={{flex: 1}}>
-      <HeaderBar userInfo={userInfo} />
+      <HeaderBar
+        userInfo={userInfo}
+        navigation={navigation}
+        amountProduct={cartState.cart.length}
+      />
       <ScrollView
         style={{
           flex: 1,
@@ -295,6 +300,7 @@ function mapStateToProps(state) {
     themeState: state.themeReducer,
     signInState: state.signInReducer,
     profileState: state.profileReducer,
+    cartState: state.cartReducer,
   };
 }
 

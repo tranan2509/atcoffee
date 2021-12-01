@@ -83,8 +83,12 @@ const SignIn = ({
     rewardActions.getPromotion();
     //get method delivery
     cartActions.getPayment();
+    //get method delivery
+    cartActions.getDelivery();
     //get rewards
     rewardActions.getReward();
+    //get addressShipping
+    //cartActions.getAddress();
     //clean
     return () => setLoading(false);
   }, []);
