@@ -33,7 +33,8 @@ public class BillAPI {
 	
 	@GetMapping(value = "/api/staff/bill/statistics", params = {"startDate", "endDate"})
 	public ResponseEntity<List<BillDTO>> findByDate(@RequestParam(name = "startDate") Date startDate, 
-			@RequestParam(name = "endDate") Date endDate) {
-		return ResponseEntity.ok(billService.findByBetweenDate(startDate, endDate));
+			@RequestParam(name = "endDate") Date endDate,
+			@RequestParam(name = "status", required = false, defaultValue = "COMPLETED") String status) {
+		return ResponseEntity.ok(billService.findByBetweenDate(startDate, endDate, status));
 	}
 }

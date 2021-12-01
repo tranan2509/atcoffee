@@ -94,22 +94,13 @@ public class BillServiceImpl implements BillService{
 		}	
 		return null;
 	}
-	
-	@Override
-	public List<BillDTO> findByMonth(int month, int year) {
-		LocalDate startDate = LocalDate.of(year, month, 1);
-		LocalDate endDate = startDate.plusMonths(1).minusDays(1);
-		Date start = Date.valueOf(startDate);
-		Date end = Date.valueOf(endDate);
-		List<BillEntity> entities = billRepository.findByCreatedDateBetween(start, end);
-		List<BillDTO> dtos = new ArrayList<BillDTO>();
-		entities.forEach(entity -> dtos.add(mapper.map(entity, BillDTO.class)));
-		return dtos;
-	}
 
 	@Override
-	public List<BillDTO> findByBetweenDate(Date start, Date end) {
-		List<BillEntity> entities = billRepository.findByCreatedDateBetween(start, end);
+	public List<BillDTO> findByBetweenDate(Date start, Date end, String status) {
+		
+		LocalDate endLocalDate = end.toLocalDate();
+		end = Date.valueOf(endLocalDate.plusDays(1));
+		List<BillEntity> entities = billRepository.findByCreatedDateBetweenAndStatus(start, end, status);
 		List<BillDTO> dtos = new ArrayList<BillDTO>();
 		entities.forEach(entity -> dtos.add(mapper.map(entity, BillDTO.class)));
 		return dtos;
