@@ -65,7 +65,7 @@ export default {
   margin-bottom: 0px;
   font-weight: 600;
   font-size: 13px;
-  margin-top: 12px;
+  margin-top: 10px;
   letter-spacing: .5px;
   line-height: 1.2;
   color: #98a6ad;

@@ -8,6 +8,5 @@ import com.hcmute.dto.BillDTO;
 public interface BillService {
 	BillDTO save(BillDTO billDTO);
 	BillDTO updateStatus(BillDTO billDTO);
-	List<BillDTO> findByMonth(int month, int year);
-	List<BillDTO> findByBetweenDate(Date start, Date end);
+	List<BillDTO> findByBetweenDate(Date start, Date end, String status);
 }

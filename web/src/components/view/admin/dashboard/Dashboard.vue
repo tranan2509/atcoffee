@@ -3,6 +3,7 @@
     <section-header :title="title">
     </section-header>
     <dashboard-statistics></dashboard-statistics>
+    <revenue-dashboard></revenue-dashboard>
   </admin>
 </template>
 
@@ -12,6 +13,7 @@ import * as Constants from '../../../common/Constants';
 import * as MutationsName from '../../../common/MutationsName'
 import SectionHeader from '../../common/common/SectionHeader.vue'
 import DashboardStatistics from '../common/DashboardStatistics.vue'
+import RevenueDashboard from '../common/RevenueDashboard.vue'
 
 export default {
   name: Constants.COMPONENT_NAME_DASHBOARD,
@@ -19,13 +21,15 @@ export default {
   components: {
     Admin,
     SectionHeader,
-    DashboardStatistics
-
+    DashboardStatistics,
+    RevenueDashboard
   },
 
   data() {
     return {
-      title: 'Trang chủ'
+      title: 'Trang chủ',
+
+      
     }
   },
 

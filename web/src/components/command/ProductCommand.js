@@ -43,6 +43,9 @@ var ProductCommand = {
   },
 
   async findAllByOrder(page, size, storeCode, categoryCode, keyword, store = null) {
+    storeCode = storeCode == null ? '' : storeCode;
+    categoryCode = categoryCode == null ? '' : categoryCode;
+    keyword = keyword == null ? '' : keyword;
     const url =  `${Constants.HOSTNAME_DEFAULT}/api/info/product?page=${page}&size=${size}&store=${storeCode}&category=${categoryCode}&keyword=${keyword}`;
     let res = await ConnectServer.getData(url);
     if (res != null) {
