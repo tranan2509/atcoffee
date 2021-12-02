@@ -46,6 +46,11 @@ public class UserAPI {
 		return ResponseEntity.ok(userService.findOneByUsername(username));
 	}
 	
+	@GetMapping(value = "/api/admin/user", params = "list")
+	public ResponseEntity<List<UserDTO>> findAll(){
+		return ResponseEntity.ok(userService.findAll());
+	}
+	
 
 	@GetMapping(value = "/api/staff/user", params = "code")
 	public ResponseEntity<UserDTO> findOneByCode(@RequestParam(name = "code") String code){

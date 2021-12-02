@@ -7,13 +7,18 @@ const BillModule = {
   state() {
     return {
       billsNotification: null,
-      bills: null,
+      bills: [],
       bill: null,
       sortBill: {
         page: 1,
         totalPage: 0,
         status: 'PAID',
-        keyword: ''
+        type: '',
+        keyword: '',
+        start: '',
+        end: '',
+        selectedDate: '',
+        storeId: null
       },
       billCurrentPage: 1
     };
@@ -41,11 +46,11 @@ const BillModule = {
     },
 
     billsUnread(state) {
-      return state.bills.filter(bill => !bill.read);
+      return state.bills != null ? state.bills.filter(bill => !bill.read) : [];
     },
 
     billsNotification(state) {
-      return state.bills.slice(0, Constants.LIMIT_NOTIFICATION_SHOW);
+      return state.bills != null ? state.bills.slice(0, Constants.LIMIT_NOTIFICATION_SHOW) : [];
     },
 
     sortBill(state) {
@@ -55,7 +60,7 @@ const BillModule = {
     billsPagination(state) {
       var len = state.bills == null ? 0 : state.bills.length;
       state.sortBill.totalPage = Math.ceil(len / Constants.PAGE_SIZE_ORDER);
-      return CommonUtils.paginate(state.bills, Constants.PAGE_SIZE_ORDER, state.sortBill.page);
+      return state.bills != null ? CommonUtils.paginate(state.bills, Constants.PAGE_SIZE_ORDER, state.sortBill.page) : [];
     },
 
     billsTotalPage(state) {

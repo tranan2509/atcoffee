@@ -2,7 +2,7 @@
   <div class="navbar-bg"></div>  
   <nav class="navbar navbar-expand-lg main-navbar">
     <ul class="navbar-nav navbar-right">
-      <li class="dropdown dropdown-list-toggle">
+      <li class="dropdown dropdown-list-toggle" v-if="$store.getters.user != null && $store.getters.user.roleName == 'STAFF'">
          <router-link to="" class="nav-link notification-toggle nav-link-lg" :class="this.$store.getters.billsUnread.length > 0 ? 'beep' : ''"
           data-toggle="dropdown" aria-expanded="false">
           <i class="far fa-bell" @click="handleShowNotification(navbar)"></i>
@@ -16,7 +16,7 @@
           </div>
           <div class="dropdown-list-content dropdown-list-icons" style="outline: currentcolor none medium;" tabindex="3">
             <router-link to="" class="dropdown-item" :class="!bill.read ? 'dropdown-item-unread' : ''"
-             v-for="bill in this.$store.getters.billsNotification" :key="bill.id" @click="handleReadBill(bill)">
+             v-for="bill in $store.getters.billsNotification" :key="bill.id" @click="handleReadBill(bill)">
               <div class="dropdown-item-icon bg-primary text-white">
                 <i class="fas fa-bell"></i>
               </div>
@@ -56,7 +56,7 @@
             <router-link to="/admin" class="dropdown-item has-icon">
               <i class="fas fa-cog"></i> Cài đặt
             </router-link>  
-            <div class="dropdown-divider"></div>
+              <div class="dropdown-divider"></div>
             <router-link to="" class="dropdown-item has-icon text-danger" @click.prevent="handleLogout">
               <i class="fas fa-sign-out-alt"></i> Đăng xuất
             </router-link>
@@ -90,6 +90,13 @@ export default {
   },
 
   methods: {
+
+    init() {
+      
+      if(this.$store.getters.user.roleName != Constants.ROLE.ROLE_USER) {
+        this.getBillsByStoreId();
+      }
+    },
 
     fromNow(timeStamp) {
       return CommonUtils.fromNow(timeStamp);
@@ -132,8 +139,7 @@ export default {
  },
 
   created(){
-    this.getBillsByStoreId();
-    // this.addBill();
+    this.init();
   }
 }
 </script>

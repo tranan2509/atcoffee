@@ -101,7 +101,7 @@ export default {
       let data = [];
       let len = new Date().getDate();
       for (let day = 0; day < len; day ++) {
-        if (parseInt(dataPre[0].createdDate.slice(-2)) == day + 1) {
+        if (dataPre[0] != null && parseInt(dataPre[0].createdDate.slice(-2)) == day + 1) {
           let bill = dataPre.shift();
           data.push(bill.amount / 1000);
         } else {

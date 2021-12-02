@@ -179,9 +179,9 @@ export default {
         this.msg = 'Chưa có sản phẩm nào được chọn';
         return;
       }
-      var userId = this.user == null ? 9 : this.user.id;
+      var userId = this.user == null ? 1 : this.user.id;
       var now = new Date();
-      let code = `BI${now.getTime().toString().slice(2, 10)}`;
+      let code = `BI${now.getTime().toString().slice(1, 9)}`;
       var bill = {
         code,
         amount: this.price - this.discount,

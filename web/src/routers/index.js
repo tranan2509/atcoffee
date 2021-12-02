@@ -19,6 +19,9 @@ import Promotions from '../components/view/admin/promotion/Promotions.vue'
 import PromotionInfo from '../components/view/admin/promotion/PromotionInfo.vue'
 import Rewards from '../components/view/admin/reward/Rewards.vue'
 import RewardInfo from '../components/view/admin/reward/RewardInfo.vue'
+/**Statistics */
+import OrderStatistics from '../components/view/admin/statistics/OrderStatistics.vue'
+import OrderInfoStatistics from '../components/view/admin/statistics/OrderInfoStatistics.vue'
 
 import Profile from '../components/view/admin/profile/Profile.vue'
 import ChangePassword from '../components/view/admin/profile/ChangePassword.vue'
@@ -55,6 +58,10 @@ const routes = [
   {path: '/admin/promotion-info', name: 'promotion-info', component: PromotionInfo, meta: {title: 'A&T Coffee | Thông tin khuyến mãi'}},
   {path: '/admin/rewards', name: 'rewards', component: Rewards, meta: {title: 'A&T Coffee | Danh sách phần thưởng'}},
   {path: '/admin/reward-info', name: 'reward-info', component: RewardInfo, meta: {title: 'A&T Coffee | Thông tin phần thưởng'}},
+  /**Statistics */
+  {path: '/admin/statistics/orders', name: 'order-statistics', component: OrderStatistics, meta: {title: 'A&T Coffee | Thống kê đơn hàng'}},
+  {path: '/admin/statistics/order-info', name: 'order-info-statistics', component: OrderInfoStatistics, meta: {title: 'A&T Coffee | Chi tiết đơn hàng'}},
+
 
   {path: '/admin/profile', name: 'profile', component: Profile, meta: {title: 'A&T Coffee | Thông tin cá nhân'}},
   {path: '/admin/profile/change-password', name: 'change-password', component: ChangePassword, meta: {title: 'A&T Coffee | Đổi mật khẩu'}},

@@ -4,18 +4,6 @@
       <div class="card">
         <div class="card-header">
           <h4>Danh sách đơn hàng</h4>
-          <!-- <div class="card-header-form flex-row">
-            <div class="form-group">
-              <select v-model="status" class="form-custom" @change="handleChangeStore">
-                <option value="">Tất cả các trạng thái</option>
-                <option value="REQUESTED">Đã yêu cầu</option>
-                <option value="APPROVED">Đã duyệt</option>
-                <option value="DELIVERING">Đang giao</option>
-                <option value="COMPLETED">Đã hoàn thành</option>
-                <option value="CANCELED">Đã hủy</option>
-              </select>
-            </div>
-          </div> -->
         </div>
         <div class="card-body p-0">
           <div class="table-responsive">
@@ -85,20 +73,10 @@ export default {
     },
 
     billsPagination() {
-      // this.$store.commit(MutationsName.MUTATION_NAME_SET_SORT_BILL, {...this.$store.getters.sortBill, status: this.status, page: this.currentPage});
-      // if (this.$store.getters.sortBill.status != '') {
-      //   let bills = this.$store.getters.bills.filter(item => item.status == this.$store.getters.sortBill.status);
-      //   return CommonUtils.paginate(bills, Constants.PAGE_SIZE_ORDER, this.currentPage);
-      // } 
       return this.$store.getters.billsPagination;
     },
 
     totalPage() {
-      // this.$store.commit(MutationsName.MUTATION_NAME_SET_SORT_BILL, {...this.$store.getters.sortBill, status: this.status, page: this.currentPage});
-      // if (this.$store.getters.sortBill.status != '') {
-      //   let bills = this.$store.getters.bills.filter(item => item.status == this.$store.getters.sortBill.status);
-      //   return bills != null ? Math.ceil(bills.length / Constants.PAGE_SIZE_ORDER) : 0;
-      // } 
       return this.$store.getters.sortBill.totalPage;
     }
   },
@@ -146,7 +124,10 @@ export default {
     },
 
     handleOrderInfo(billCode) {
-      this.$router.push({path: '/staff/order-info', query: {code: billCode}});
+      var path = this.$store.getters.user.roleName == Constants.ROLE.ROLE_ADMIN ? '/admin/statistics/order-info' : '/staff/order-info';
+      console.log("🚀 ~ file: TableOrders.vue ~ line 138 ~ handleOrderInfo ~ path", path)
+      
+      this.$router.push({path: path, query: {code: billCode}});
     }
   },
 

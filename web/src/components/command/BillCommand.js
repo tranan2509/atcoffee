@@ -35,16 +35,32 @@ const BillCommand = {
   },
 
   async findByDateBetweenOfWeek(date) {
-
     let selectedDate = new Date(date);
     let dateOfWeek = selectedDate.getDay();
     let startDate = selectedDate.setDate(selectedDate.getDate() - dateOfWeek);
-    let endDate = selectedDate.setDate(selectedDate.getDate() + 6 - dateOfWeek);
-    
+    let endDate = selectedDate.setDate(selectedDate.getDate() + 6);
     let start = CommonUtils.formatDateReverse(new Date(startDate));
     let end = CommonUtils.formatDateReverse(new Date(endDate));
     let result = await this.findByDateBetween(start, end);
     return result;
+  },
+
+  async findByOrder(start, end, storeId, keyword, status, page, size, store = null) {
+    let path = `?keyword=${keyword}&status=${status}&page=${page}&size=${size}`;
+    if (storeId != null && storeId > 0) {
+      path += `&storeId=${storeId}`;
+    }
+    if ((start != null && start !='') && (end != null && end != '')) {
+      path += `&start=${start}&end=${end}`;
+    }
+    const url = `${Constants.HOSTNAME_DEFAULT}/api/admin/bill/statistics` + path;    
+    let res = await ConnectServer.getData(url);
+    if (res != null) {
+      store.commit(MutationsName.MUTATION_NAME_SET_BILLS, res.bills);
+      var sortBill = store.getters.sortBill;
+      store.commit(MutationsName.MUTATION_NAME_SET_SORT_BILL, {...sortBill, page, storeId, keyword, totalPage: res.totalPage});
+      return res.bills;
+    }
   }
 }
 

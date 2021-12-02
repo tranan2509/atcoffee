@@ -10,13 +10,6 @@ const SystemModule = {
         dashboard: {
           value: false
         },
-        layout: {
-          value: false,
-          submenu: {
-            default: false,
-            ecommerce: false
-          }
-        },
         product: {
           value: false,
           submenu: {
@@ -46,6 +39,9 @@ const SystemModule = {
         rate: {
           value: false
         },
+        order_statistics: {
+          value: false
+        }, 
         profile: {
           value: false,
           submenu: {

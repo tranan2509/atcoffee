@@ -7,8 +7,11 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.hcmute.api.response.BillResponse;
 import com.hcmute.dto.BillDTO;
 import com.hcmute.dto.BillDetailDTO;
 import com.hcmute.entity.BillDetailEntity;
@@ -104,5 +107,49 @@ public class BillServiceImpl implements BillService{
 		List<BillDTO> dtos = new ArrayList<BillDTO>();
 		entities.forEach(entity -> dtos.add(mapper.map(entity, BillDTO.class)));
 		return dtos;
+	}
+
+	@Override
+	public BillResponse findByKeywordAndStatus(String keyword, String status, Pageable pageable) {
+		Page<BillEntity> page = billRepository.findByKeywordAndStatus(keyword, status, pageable);
+		return resultResponse(page, pageable);
+	}
+	
+	@Override
+	public BillResponse findByStoreIdAndKeywordAndStatus(Long storeId, String keyword, String status, Pageable pageable) {
+		StoreEntity store = storeRepository.findOne(storeId);
+		Page<BillEntity> page = billRepository.findByStoreAndKeywordAndStatus(store, keyword, status, pageable);
+		return resultResponse(page, pageable);
+	}
+	
+	@Override
+	public BillResponse findByModifiedDateAndKeywordAndStatus(Date start, Date end, String keyword, String status,
+			Pageable pageable) {
+		LocalDate endLocalDate = end.toLocalDate();
+		end = Date.valueOf(endLocalDate.plusDays(1));
+		Page<BillEntity> page = billRepository.findByModifiedDateBewteenAndKeywordAndStatus(start, end, keyword, status, pageable);
+		return resultResponse(page, pageable);
+	}
+	
+	@Override
+	public BillResponse findByModifiedDateAndStoreIdAndKeywordAndStatus(Date start, Date end, Long storeId,
+			String keyword, String status, Pageable pageable) {
+		LocalDate endLocalDate = end.toLocalDate();
+		end = Date.valueOf(endLocalDate.plusDays(1));
+		StoreEntity store = storeRepository.findOne(storeId);
+		Page<BillEntity> page = billRepository.findByModifiedDateBewteenAndStoreAndKeywordAndStatus(start, end, store, keyword, status, pageable);
+		return resultResponse(page, pageable);
+	}
+	
+	public BillResponse resultResponse(Page<BillEntity> page, Pageable pageable) {
+		List<BillEntity> entities = page.getContent();
+		List<BillDTO> dtos = new ArrayList<BillDTO>();
+		entities.forEach(entity -> dtos.add(mapper.map(entity, BillDTO.class)));
+		BillResponse result = new BillResponse();
+		result.setBills(dtos);
+		result.setTotalPage(page.getTotalPages());
+		result.setSize(page.getSize());
+		result.setPage(pageable.getPageNumber());
+		return result;
 	}
 }

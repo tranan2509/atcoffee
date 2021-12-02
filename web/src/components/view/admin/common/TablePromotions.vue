@@ -64,7 +64,7 @@
             </table>
           </div>
         </div>
-        <div class="card-footer text-right" v-if="this.$store.getters.sortPromotion.totalPage > 0">
+        <div class="card-footer text-right" v-if="this.$store.getters.sortPromotion.totalPage > 1">
           <pagination :currentPage="currentPage" @handleChange="handleChangePage" :totalPage="this.$store.getters.sortPromotion.totalPage"/>
         </div>
       </div>

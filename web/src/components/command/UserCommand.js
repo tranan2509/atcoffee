@@ -22,12 +22,22 @@ const UserCommand = {
     return null;
   },
 
-  async findAllByOrder(page, size, storeCode, roleName, state, keyword, store) {
+  async findAll(store = null) {
+    const url =  `${Constants.HOSTNAME_DEFAULT}/api/admin/user?list`;
+    let res = await ConnectServer.getData(url);
+    if (res != null) {
+      store != null ? store.commit(MutationsName.MUTATION_NAME_SET_USERS, res) : '';
+      return res;
+    }
+    return null;
+  },
+
+  async findAllByOrder(page, size, storeCode, roleName, state, keyword, store = null) {
     const url =  `${Constants.HOSTNAME_DEFAULT}/api/admin/user?page=${page}&size=${size}&store=${storeCode}&role=${roleName}&state=${state}&keyword=${keyword}`;
     let res = await ConnectServer.getData(url);
     if (res != null) {
-      store.commit(MutationsName.MUTATION_NAME_SET_USERS, res.users);
-      store.commit(MutationsName.MUTATION_NAME_SET_SORT_USER, {page, store: storeCode, role: roleName, state: state, keyword, totalPage: res.totalPage});
+      store != null ? store.commit(MutationsName.MUTATION_NAME_SET_USERS, res.users) : '';
+      store != null ? store.commit(MutationsName.MUTATION_NAME_SET_SORT_USER, {page, store: storeCode, role: roleName, state: state, keyword, totalPage: res.totalPage}) : '';
       return res.users;
     }
     return null;

@@ -12,22 +12,6 @@
           <span>Dashboard</span>
         </router-link>
       </li>
-      <li class="menu-header">STATER</li>
-      <li class="nav-item dropdown" :class="menu.layout.value ? 'active' : ''">
-        <router-link to="" class="nav-link has-dropdown" @click="handleDropdown(menu.layout)">
-          <i class="fas fa-fire"></i>
-          <span>Layout</span>
-          <i class="fas fa-chevron-right"></i>
-        </router-link>
-        <ul class="dropdown-menu" :class="menu.layout.value ? 'visible' : ''">
-          <li :class="menu.layout.submenu.default ? 'active': ''">
-            <router-link to="/admin/statistics" class="nav-link">Default Layout</router-link>
-          </li>
-          <li :class="menu.layout.submenu.advance ? 'active': ''">
-            <router-link to="#" class="nav-link">Advance Layout</router-link>
-          </li>
-        </ul>
-      </li>
       <li class="menu-header">QUẢN LÝ</li>
       <li class="nav-item dropdown" :class="menu.product.value ? 'active' : ''">
         <router-link to="" class="nav-link has-dropdown" @click="handleDropdown(menu.product)">
@@ -87,6 +71,13 @@
         <router-link to="/admin/rates?page=1" class="nav-link" @click="handleDropdown(menu.rate)">
           <i class="fas fa-star-half-alt"></i>
           <span>Đánh giá</span>
+        </router-link>
+      </li>
+      <li class="menu-header">THỐNG KÊ</li>
+      <li class="nav-item dropdown" :class="menu.order_statistics.value ? 'active' : ''">  
+        <router-link to="/admin/statistics/orders?page=1" class="nav-link" @click="handleDropdown(menu.order_statistics)">
+          <i class="fas fa-layer-group"></i>
+          <span>Đơn hàng</span>
         </router-link>
       </li>
       <li class="menu-header">HỒ SƠ</li>

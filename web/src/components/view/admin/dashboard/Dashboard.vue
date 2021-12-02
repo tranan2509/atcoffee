@@ -41,7 +41,6 @@ export default {
 
     this.$store.commit(MutationsName.MUTATION_NAME_RESET_MENU);
     this.$store.getters.menu.dashboard.value = true;
-    this.$store.getters.menu.dashboard.submenu.general = true;
 
   }
 };
