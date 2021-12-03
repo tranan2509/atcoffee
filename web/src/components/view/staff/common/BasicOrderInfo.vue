@@ -35,7 +35,7 @@
                     <span>{{formatPrice($store.getters.bill.discount)}}</span>
                   </div>
                   <div class="info-group flex-1">
-                    <label>Điểm sử dụng</label>
+                    <label>Điểm nhận được</label>
                     <span>{{$store.getters.bill.point}}</span>
                   </div>
                   <div class="info-group flex-1">
