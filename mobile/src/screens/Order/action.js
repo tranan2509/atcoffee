@@ -20,10 +20,19 @@ export function getAllCategories() {
 
 export function getAllProducts(storeCode) {
   return async dispatch => {
+    //console.log('action 1');
     try {
-      const res = await apiServer.get(
-        `/api/info/product??page=1&size=1000&store=${storeCode}&category&keyword`,
-      );
+      let res;
+      if (storeCode != '') {
+        res = await apiServer.get(
+          `/api/info/product??page=1&size=1000&store=${storeCode}&category&keyword`,
+        );
+      } else {
+        //console.log('action');
+        res = await apiServer.get(
+          `/api/info/product??page=1&size=1000&store&category&keyword`,
+        );
+      }
       dispatch({type: GET_PRODUCTS, payload: res.data.products});
     } catch (err) {
       console.log('This is error in order-pro', err);

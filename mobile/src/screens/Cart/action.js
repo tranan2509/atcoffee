@@ -14,6 +14,13 @@ export const GET_ADDRESS = 'GET_ADDRESS';
 export const UPDATE_DELIVERY = 'UPDATE_DELIVERY';
 export const GET_DELIVERY = 'GET_DELIVERY';
 export const UPDATE_STATE_PRODUCT_IN_CART = 'UPDATE_STATE_PRODUCT_IN_CART';
+export const USE_CODE_DISCOUNT = 'USE_CODE_DISCOUNT';
+
+export const useCodeDiscount = code => {
+  return dispatch => {
+    dispatch({type: USE_CODE_DISCOUNT, payload: code});
+  };
+};
 
 export const getCart = customerId => {
   return async dispatch => {

@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   Alert,
+  ToastAndroid,
 } from 'react-native';
 import {Header, IconButton} from '../../components';
 import {images, COLORS, SIZES, icons, FONTS, dummyData} from '../../constants';
@@ -13,7 +14,9 @@ import {connect} from 'react-redux';
 import database from '@react-native-firebase/database';
 import {Picker} from '@react-native-picker/picker';
 import * as cartActionsCreator from './action';
+import * as orderActionsCreator from '../Order/action';
 import {bindActionCreators} from 'redux';
+import {formatMoney} from '../../common/format';
 const Cart = ({
   themeState,
   navigation,
@@ -22,53 +25,78 @@ const Cart = ({
   signInState,
   cartActions,
   orderState,
+  orderActions,
 }) => {
-  const [count, setCount] = React.useState(0);
-  const [payment, setPayment] = React.useState('');
-  const [discount, setdiscount] = React.useState(false);
+  const [discount, setDiscount] = React.useState(0);
   const [amount, setAmount] = React.useState(0);
-  const [amountDiscount, setAmountDiscount] = React.useState(0);
+  const [amountWithoutDiscount, setAmountWithoutDiscount] = React.useState(0);
   const [selectedLocation, setSelectedLocation] = React.useState(null);
   const [methodShipping, setMethodShipping] = React.useState(
     dummyData.methodShipping[0].name,
   );
+  const [methodPayment, setMethodPayment] = React.useState(
+    cartState.payment[0].name,
+  );
+  const [loading, setLoading] = React.useState(false);
+  //const [itemCart, setItemCart] = React.useState([]);
+  const [orderNumber, setOrderNumber] = React.useState(0);
   const userInfo = signInState.data.user
     ? signInState.data.user
     : signInState.data;
+  let storeId = cartState.cart[0]?.storeId;
+  let product = cartState.cart?.filter(item => item.storeId != storeId)[0];
 
-  React.useEffect(() => {
-    locationState.cart?.map(item => setCount(count + item.quantity));
-  }, [locationState]);
-
-  const orderHandler = () => {
-    const newReference = database().ref('/bills').push();
-
-    console.log('Auto generated key: ', newReference.key);
+  const orderHandler = async () => {
     let now = new Date();
+    let code = `BI${now.getTime().toString().slice(1, 9)}`;
 
-    let code = `BI${now.getTime().toString().slice(5)}`;
-    newReference
+    database()
+      .ref(`/bills/${code}`)
       .set({
-        address: userInfo.address,
-        amount,
+        address: cartState.delivery
+          ? userInfo.address
+          : selectedLocation?.address,
+        amount: amount - discount,
+        code: code,
+        createdDate: new Date(),
         customerId: userInfo.id,
-        code,
-        discount: amountDiscount,
-        id: newReference.key,
-        //paymentId:
+        customerName: userInfo.name,
+        discount: amountWithoutDiscount - (amount - discount),
+        paymentId: methodPayment,
+        point: Math.floor((amount - discount) / 1000),
+        price: amount,
+        promotionCode: cartState.codeDiscount?.redution
+          ? ''
+          : cartState.codeDiscount.code,
+        read: false,
+        rewardId: cartState.codeDiscount?.redution
+          ? cartState.codeDiscount.id
+          : '',
+        staffId: '',
+        staffName: '',
+        state: true,
+        status: 'PAID',
+        storeId: storeId,
+        billDetails: cartState.cart.map((item, index) => ({
+          ...item,
+          code: code + `D${index + 1}`,
+        })),
       })
-      .then(() => console.log('Data updated.'));
-  };
+      .then(() => console.log('Data set.'));
 
-  React.useEffect(() => {
-    //console.log('cart', cartState);
+    cartState.cart.forEach(async item => await cartActions.deleteCart(item.id));
+    await cartActions.getCart(userInfo.id);
+    //console.log('cart', cartState.cart);
+    ToastAndroid.show('Đặt hàng thành công!', ToastAndroid.LONG);
+  };
+  console.log('cart', cartState);
+  const checkAddressHandler = () => {
     if (!cartState.delivery) {
       setMethodShipping(dummyData.methodShipping[1].name);
     }
-
     if (!cartState.delivery) {
-      let storeId = cartState.cart[0].storeId;
-      let product = cartState.cart.filter(item => item.storeId != storeId)[0];
+      //let storeId = cartState.cart[0].storeId;
+      //let product = cartState.cart.filter(item => item.storeId != storeId)[0];
       if (product) {
         Alert.alert(
           'Thông báo',
@@ -88,15 +116,58 @@ const Cart = ({
         );
       }
     }
-  }, []);
+  };
+
+  //get total number order
+  const getTotalNumberOrder = () => {
+    if (cartState.cart[0]) {
+      let total = cartState.cart.reduce(
+        (previousValue, currentValue) => previousValue + currentValue.quantity,
+        0,
+      );
+      setOrderNumber(total);
+    }
+  };
+
+  //get cart item info
+  // const getCartItemInfoHandler = () => {
+  //   //console.log('info', orderState.allProducts);
+  //   let cartInfo = [];
+  //   if (orderState.allProducts[0]) {
+  //     cartState.cart.forEach(item => {
+  //       //console.log('item', item);
+  //       let productInfo = orderState.allProducts?.find(pro => {
+  //         //console.log('productInfo', pro);
+  //         return pro.id == item.productId;
+  //       });
+  //       //console.log('product', productInfo);
+  //       cartInfo = [...cartInfo, productInfo];
+  //     });
+  //   }
+  //   setItemCart(cartInfo);
+  // };
 
   React.useEffect(() => {
-    console.log('cart state', cartState);
-  });
+    checkAddressHandler();
+    getTotalNumberOrder();
+    //getCartItemInfoHandler();
+    amountMoney();
+    return () => cartActions.useCodeDiscount({});
+  }, [cartState.cart]);
+  console.log('code', cartState.codeDiscount);
+  React.useEffect(() => {
+    console.log('code in useEffet', cartState.codeDiscount);
+
+    if (cartState.codeDiscount?.redution) {
+      setDiscount(cartState.codeDiscount.redution);
+    } else if (cartState.codeDiscount?.discount) {
+      setDiscount((amount * cartState.codeDiscount?.discount) / 100);
+    } else {
+      setDiscount(0);
+    }
+  }, [cartState.codeDiscount]);
 
   const getDeliveryHandler = async method => {
-    // console.log('delivery', cartState.delivery);
-    console.log('name', method);
     if (method == dummyData.methodShipping[0].name && !cartState.delivery) {
       //console.log('delivery');
       await cartActions.updateDelivery(!cartState.delivery);
@@ -105,8 +176,6 @@ const Cart = ({
       method == dummyData.methodShipping[1].name &&
       cartState.delivery
     ) {
-      let storeId = cartState.cart[0].storeId;
-      let product = cartState.cart.filter(item => item.storeId != storeId)[0];
       if (product) {
         Alert.alert(
           'Thông báo',
@@ -129,7 +198,7 @@ const Cart = ({
       }
     }
   };
-  console.log('name', selectedLocation?.address);
+  //console.log('name', selectedLocation?.address);
   const changeAddressHandler = () => {
     console.log('method', methodShipping);
     if (methodShipping == dummyData.methodShipping[0].name) {
@@ -139,6 +208,34 @@ const Cart = ({
     //   navigation.navigate('Location', {stateNow: true});
     // }
   };
+
+  const amountMoney = () => {
+    let total = 0;
+    let amountWithoutDiscount = 0;
+    cartState.cart.forEach(cartItem => {
+      total =
+        total +
+        orderState.allProducts
+          .filter(pro => pro.id == cartItem.productId)[0]
+          .sizes.filter(sizeItem => sizeItem.size == cartItem.size)[0].price *
+          cartItem.quantity *
+          (1 -
+            orderState.allProducts.filter(
+              product => product.id == cartItem.productId,
+            )[0].discount /
+              100);
+      amountWithoutDiscount =
+        amountWithoutDiscount +
+        orderState.allProducts
+          .filter(pro => pro.id == cartItem.productId)[0]
+          .sizes.filter(sizeItem => sizeItem.size == cartItem.size)[0].price *
+          cartItem.quantity;
+    });
+    setAmount(total);
+    setAmountWithoutDiscount(amountWithoutDiscount);
+    //return formatMoney(total);
+  };
+  //console.log('amount without discount', amountDiscount);
   return (
     <View style={{flex: 1}}>
       <Header title="Giỏ hàng" navigation={navigation} />
@@ -159,7 +256,7 @@ const Cart = ({
           {/* Delivery */}
           <View
             style={{
-              paddingHorizontal: 20,
+              paddingHorizontal: 10,
               flexDirection: 'row',
               paddingBottom: 20,
             }}>
@@ -170,7 +267,6 @@ const Cart = ({
                 color: themeState.appTheme.textColor,
                 width: '50%',
               }}
-              zIndex={1}
               mode="dropdown"
               selectedValue={methodShipping}
               onValueChange={(itemValue, itemIndex) => {
@@ -186,7 +282,7 @@ const Cart = ({
             </Picker>
             {cartState.delivery && (
               <TouchableOpacity
-                style={{flex: 1, marginTop: '2%'}}
+                style={{flex: 1, marginTop: '2%', paddingRight: 10}}
                 onPress={changeAddressHandler}>
                 <Text
                   style={{
@@ -285,35 +381,42 @@ const Cart = ({
                       ...FONTS.body3,
                       marginLeft: 10,
                     }}>
-                    số lượng x Tên sản phẩm
+                    {item.quantity} x{' '}
+                    {
+                      orderState.allProducts.filter(
+                        cartItem => cartItem.id == item.productId,
+                      )[0].name
+                    }{' '}
+                    x{' '}
+                    {formatMoney(
+                      orderState.allProducts
+                        .filter(cartItem => cartItem.id == item.productId)[0]
+                        .sizes.filter(sizeItem => sizeItem.size == item.size)[0]
+                        .price * item.quantity,
+                    )}
                   </Text>
                   <Text
                     style={{
                       color: themeState.appTheme.textColor,
-                      ...FONTS.body3,
+                      ...FONTS.body5,
                       marginLeft: 10,
                     }}>
-                    size, description
+                    ĐCCH:{' '}
+                    {
+                      orderState.allProducts
+                        .filter(cartItem => cartItem.id == item.productId)[0]
+                        .stores.filter(
+                          storeItem => storeItem.id == item.storeId,
+                        )[0].address
+                    }
                   </Text>
                   <Text
                     style={{
                       color: themeState.appTheme.textColor,
-                      ...FONTS.body3,
+                      ...FONTS.body5,
                       marginLeft: 10,
                     }}>
-                    size, description
-                  </Text>
-                </View>
-                <View style={{flex: 1}}>
-                  <Text
-                    style={{
-                      alignSelf: 'flex-end',
-                      color: themeState.appTheme.textColor,
-                      ...FONTS.body3,
-                      //marginRight: 5,
-                      marginTop: 30,
-                    }}>
-                    50000
+                    Size: {item.size}, {item.description}
                   </Text>
                 </View>
                 <View style={{flex: 1}}>
@@ -380,7 +483,40 @@ const Cart = ({
                     color: themeState.appTheme.textColor,
                     ...FONTS.body3,
                   }}>
-                  50000
+                  {formatMoney(amountWithoutDiscount)}
+                </Text>
+              </View>
+            </View>
+          </View>
+          <View
+            style={{
+              paddingHorizontal: 20,
+              paddingTop: 15,
+            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                paddingBottom: 20,
+                borderBottomColor: themeState.appTheme.textColor,
+                borderBottomWidth: 0.5,
+              }}>
+              <Text
+                style={{
+                  paddingTop: 5,
+                  color: themeState.appTheme.textColor,
+                  ...FONTS.body3,
+                }}>
+                Giảm giá
+              </Text>
+              <View style={{flex: 1}}>
+                <Text
+                  style={{
+                    alignSelf: 'flex-end',
+                    paddingTop: 5,
+                    color: themeState.appTheme.textColor,
+                    ...FONTS.body3,
+                  }}>
+                  {formatMoney(amountWithoutDiscount - amount)}
                 </Text>
               </View>
             </View>
@@ -393,26 +529,29 @@ const Cart = ({
                 flexDirection: 'row',
                 paddingBottom: 20,
               }}>
-              <View>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('PromoAvai', {total: amount})
+                }>
                 <Text
                   style={{
                     color: COLORS.blueLight,
                     ...FONTS.body3,
                   }}>
-                  Khuyến mãi
+                  Mã khuyến mãi
                 </Text>
-                {discount ? (
+                {cartState.codeDiscount?.id ? (
                   <Text
                     style={{
                       color: themeState.appTheme.textColor,
                       ...FONTS.body4,
                     }}>
-                    Giảm 20k đơn từ 89k
+                    {cartState.codeDiscount?.name}
                   </Text>
                 ) : null}
-              </View>
+              </TouchableOpacity>
               <View style={{flex: 1, justifyContent: 'center'}}>
-                {!discount ? (
+                {!cartState.codeDiscount?.id ? (
                   <Image
                     source={icons.rightArrow}
                     style={{
@@ -430,7 +569,7 @@ const Cart = ({
                       color: themeState.appTheme.textColor,
                       ...FONTS.body3,
                     }}>
-                    50000
+                    {formatMoney(discount)}
                   </Text>
                 )}
               </View>
@@ -465,7 +604,7 @@ const Cart = ({
                     color: themeState.appTheme.textColor,
                     ...FONTS.body3,
                   }}>
-                  50000
+                  {formatMoney(amount - discount)}
                 </Text>
               </View>
             </View>
@@ -481,7 +620,7 @@ const Cart = ({
           }}>
           <View
             style={{
-              paddingHorizontal: 20,
+              //paddingHorizontal: 20,
               flexDirection: 'row',
               paddingBottom: 20,
             }}>
@@ -490,38 +629,45 @@ const Cart = ({
                 paddingTop: 5,
                 color: themeState.appTheme.textColor,
                 ...FONTS.h2,
+                paddingHorizontal: 20,
               }}>
               Thanh toán
             </Text>
           </View>
-          <View style={{paddingHorizontal: 20}}>
-            <View
+          <View>
+            <Picker
+              zIndex={1}
+              dropdownIconColor={COLORS.white}
               style={{
-                flexDirection: 'row',
-                paddingBottom: 15,
+                backgroundColor: COLORS.transparent,
+                color: themeState.appTheme.textColor,
+                marginLeft: 5,
+                width: '100%',
+              }}
+              mode="dropdown"
+              selectedValue={cartState.payment[0].name}
+              onValueChange={(itemValue, itemIndex) => {
+                if (itemValue !== cartState.payment[0].name) {
+                  Alert.alert(
+                    'Thông báo',
+                    'Hiện tại chỉ thanh toán với tiền mặt!',
+                    [
+                      {
+                        text: 'Bỏ qua',
+                        onPress: () => {},
+                        style: 'cancel',
+                      },
+                      {text: 'OK', onPress: () => {}},
+                    ],
+                  );
+                }
               }}>
-              <View>
-                <Text
-                  style={{
-                    color: COLORS.blueLight,
-                    ...FONTS.body3,
-                  }}>
-                  {payment ? payment : 'Bấm chọn phương thức thanh toán'}
-                </Text>
-              </View>
-              <View style={{flex: 1, justifyContent: 'center'}}>
-                <Image
-                  source={icons.rightArrow}
-                  style={{
-                    alignSelf: 'flex-end',
-                    paddingTop: 5,
-                    height: 10,
-                    width: 10,
-                    tintColor: themeState.appTheme.textColor,
-                  }}
-                />
-              </View>
-            </View>
+              {cartState.payment.map((item, index) => {
+                return (
+                  <Picker.Item label={item.name} value={item.name} key={item} />
+                );
+              })}
+            </Picker>
           </View>
         </View>
         {/* delete */}
@@ -580,7 +726,7 @@ const Cart = ({
                 ...FONTS.h3,
                 marginLeft: 20,
               }}>
-              500000
+              {formatMoney(amount - discount)}
             </Text>
           </View>
           <View>
@@ -591,7 +737,7 @@ const Cart = ({
                 ...FONTS.h3,
                 marginLeft: 7,
               }}>
-              - {count} sản phẩm
+              - {orderNumber} sản phẩm
             </Text>
           </View>
           <TouchableOpacity
@@ -604,7 +750,8 @@ const Cart = ({
               borderRadius: 20,
               marginRight: 10,
               paddingRight: 28,
-            }}>
+            }}
+            onPress={orderHandler}>
             <Text
               style={{
                 alignSelf: 'flex-end',
@@ -633,6 +780,7 @@ function mapStateToProps(state) {
 function mapDispatchToProp(dispatch) {
   return {
     cartActions: bindActionCreators(cartActionsCreator, dispatch),
+    orderActions: bindActionCreators(orderActionsCreator, dispatch),
   };
 }
 

@@ -6,6 +6,7 @@ const initialState = {
   payment: [],
   amountAddress: 0,
   address: {},
+  codeDiscount: {},
   error: '',
 };
 
@@ -83,6 +84,11 @@ const cartReducer = function (state = initialState, action) {
             ? {...cartItem, state: !action.payload.state}
             : cartItem,
         ),
+      };
+    case types.USE_CODE_DISCOUNT:
+      return {
+        ...state,
+        codeDiscount: action.payload,
       };
     default:
       return state;

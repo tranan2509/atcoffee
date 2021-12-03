@@ -89,6 +89,10 @@ const SignIn = ({
     rewardActions.getReward();
     //get addressShipping
     //cartActions.getAddress();
+    //get all products
+    orderActions.getAllProducts('');
+    //get all Type
+    signInActions.getType();
     //clean
     return () => setLoading(false);
   }, []);

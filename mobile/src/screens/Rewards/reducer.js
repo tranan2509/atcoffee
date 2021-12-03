@@ -9,6 +9,7 @@ const initialState = {
 const rewardReducer = function (state = initialState, action) {
   switch (action.type) {
     case types.GET_PROMOTION:
+      console.log('reducer');
       return {
         ...state,
         allPromotions: action.payload,
@@ -19,6 +20,7 @@ const rewardReducer = function (state = initialState, action) {
         error: action.error,
       };
     case types.GET_REWARDS:
+      console.log('reducer');
       return {
         ...state,
         allRewards: action.payload,

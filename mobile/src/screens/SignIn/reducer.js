@@ -2,6 +2,7 @@ import * as types from './action';
 
 const initialState = {
   data: {},
+  allType: [],
   error: '',
 };
 
@@ -33,6 +34,11 @@ const signInReducer = function (state = initialState, action) {
       return {
         data: {},
         err: '',
+      };
+    case types.GET_TYPE:
+      return {
+        ...state,
+        allType: action.payload,
       };
     default:
       return state;

@@ -8,7 +8,7 @@ export const getPromotion = () => {
   return async dispatch => {
     try {
       const res = await apiServer.get(`/api/info/promotion?list=true`);
-      console.log(res.data);
+      //console.log(res.data);
       dispatch({type: GET_PROMOTION, payload: res.data});
     } catch (err) {
       console.log('This is error in action get promotion', err);
@@ -21,7 +21,7 @@ export const getReward = () => {
   return async dispatch => {
     try {
       const res = await apiServer.get(`/api/info/reward`);
-      console.log(res.data);
+      //console.log(res.data);
       dispatch({type: GET_REWARDS, payload: res.data});
     } catch (err) {
       console.log('This is error in action get rewards', err);
