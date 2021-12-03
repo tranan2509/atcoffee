@@ -23,6 +23,7 @@ const OrderDetail = ({
   cartActions,
   cartState,
   userState,
+  orderState,
 }) => {
   const [selectedItem, setSelectedItem] = React.useState(null);
 
@@ -44,7 +45,7 @@ const OrderDetail = ({
   const [selectedLocation, setSelectedLocation] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const userInfo = userState.data.user ? userState.data.user : userState.data;
-  console.log('id', userState);
+  console.log('all pro', orderState.allProducts);
   React.useEffect(() => {
     let {selectedItem} = route?.params;
     setSelectedItem(selectedItem);
@@ -56,7 +57,7 @@ const OrderDetail = ({
     }
     return () => setLoading(false);
   }, [amountMoney]);
-  console.log('item', selectedLocation);
+  // console.log('item', selectedLocation);
   function amountMoneyHandler(size, total) {
     setAmountMoney(
       selectedItem?.sizes.filter(sizeItem => sizeItem.size == size)[0].price *
@@ -863,6 +864,7 @@ function mapStateToProps(state) {
     themeState: state.themeReducer,
     cartState: state.cartReducer,
     userState: state.signInReducer,
+    orderState: state.orderReducer,
   };
 }
 

@@ -46,13 +46,24 @@ const Cart = ({
   let storeId = cartState.cart[0]?.storeId;
   let product = cartState.cart?.filter(item => item.storeId != storeId)[0];
 
+  const getProName = pro => {
+    return orderState.allProducts.find(item => item.id == pro.productId).name;
+  };
+
+  const getProPrice = pro => {
+    return orderState.allProducts
+      .find(item => item.id == pro.productId)
+      .sizes.find(sizeItem => sizeItem.size == pro.size).price;
+  };
+  const getProDiscount = pro => {
+    return orderState.allProducts.find(item => item.id == pro.productId)
+      .discount;
+  };
+
   const orderHandler = async () => {
     let now = new Date();
     let code = `BI${now.getTime().toString().slice(1, 9)}`;
-    console.log(
-      'all pro',
-      orderState.allProducts.filter(item => item.storeId != storeId),
-    );
+    //console.log('all pro', getProName(cartState.cart[0]));
     database()
       .ref(`/bills/${code}`)
       .set({
@@ -88,32 +99,22 @@ const Cart = ({
         billDetails: cartState.cart.map((item, index) => ({
           ...item,
           code: code + `D${index + 1}`,
-          name: orderState.allProducts?.filter(
-            pro => pro.id == item.productId,
-          )[0].name,
-          price: orderState.allProducts
-            ?.filter(pro => pro.id == item.productId)[0]
-            .sizes.filter(sizeItem => sizeItem.size == item.size)[0].price,
-          discount: orderState.allProducts?.filter(
-            pro => pro.id == item.productId,
-          )[0].discount,
+          name: getProName(item),
+          price: getProPrice(item),
+          discount: getProDiscount(item),
           amount:
-            orderState.allProducts
-              ?.filter(pro => pro.id == item.productId)[0]
-              .sizes.filter(sizeItem => sizeItem.size == item.size)[0].price *
+            getProPrice(item) *
             item.quantity *
-            (1 -
-              orderState.allProducts?.filter(
-                pro => (pro.id = item.productId),
-              )[0].discount /
-                100),
+            (1 - getProDiscount(item) / 100),
         })),
       })
       .then(() => console.log('Data set.'));
 
-    cartState.cart.forEach(async item => await cartActions.deleteCart(item.id));
+    await cartState.cart.forEach(
+      async item => await cartActions.deleteCart(item.id),
+    );
     await cartActions.getCart(userInfo.id);
-    setOrderNumber(0);
+    getTotalNumberOrder();
     ToastAndroid.show('Đặt hàng thành công!', ToastAndroid.LONG);
   };
   //console.log('cart', cartState.payment[0].name);
@@ -227,7 +228,7 @@ const Cart = ({
   };
   //console.log('name', selectedLocation?.address);
   const changeAddressHandler = () => {
-    console.log('method', methodShipping);
+    //console.log('method', methodShipping);
     if (methodShipping == dummyData.methodShipping[0].name) {
       navigation.navigate('Address');
     }
@@ -411,13 +412,13 @@ const Cart = ({
                     {item.quantity} x{' '}
                     {
                       orderState.allProducts.filter(
-                        cartItem => cartItem.id == item.productId,
+                        pro => pro.id == item.productId,
                       )[0].name
                     }{' '}
                     x{' '}
                     {formatMoney(
                       orderState.allProducts
-                        .filter(cartItem => cartItem.id == item.productId)[0]
+                        .filter(pro => pro.id == item.productId)[0]
                         .sizes.filter(sizeItem => sizeItem.size == item.size)[0]
                         .price * item.quantity,
                     )}

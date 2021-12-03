@@ -23,7 +23,9 @@ const Order = ({navigation, themeState, route, orderActions, orderState}) => {
 
   const [selectedTab, setSelectedTab] = React.useState(0);
 
-  const [selectedCategory, setSelectedCategory] = React.useState('');
+  const [selectedCategory, setSelectedCategory] = React.useState(
+    orderState.allCategories[0].name,
+  );
 
   const [menu, setMenu] = React.useState(null);
 
@@ -40,20 +42,18 @@ const Order = ({navigation, themeState, route, orderActions, orderState}) => {
   }, []);
 
   React.useEffect(() => {
-    let {selectedLocation} = route.params;
-    if (selectedCategory == '') {
-      setMenu(orderState.allProducts);
-    } else {
-      let menuList = orderState.allProducts.filter(
-        pro =>
-          1 &&
-          pro.categories.filter(
-            menuItem => menuItem.name == selectedCategory,
-          )[0],
-      );
-      //console.log(menuList);
-      setMenu(menuList);
-    }
+    //let {selectedLocation} = route.params;
+    // if (selectedCategory == '') {
+    //   setMenu(orderState.allProducts);
+    // } else {
+    let menuList = orderState.allProducts.filter(
+      pro =>
+        1 &&
+        pro.categories.filter(menuItem => menuItem.name == selectedCategory)[0],
+    );
+    //console.log(menuList);
+    setMenu(menuList);
+    // }
   }, [selectedCategory]);
   //console.log(menu);
   function renderHeaderSection() {
@@ -192,17 +192,6 @@ const Order = ({navigation, themeState, route, orderActions, orderState}) => {
                 />
               );
             }}
-          />
-          <VerticalTextButton
-            label="Tất cả"
-            containerStyle={{
-              marginTop: 40,
-              width: 80,
-              marginBottom: 40,
-              marginLeft: 10,
-            }}
-            selected={selectedCategory == ''}
-            onPress={() => setSelectedCategory('')}
           />
         </View>
         <Svg height="65" width="65" viewBox="0 0 65 65">
