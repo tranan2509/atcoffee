@@ -21,17 +21,17 @@
                 <i class="fas fa-bell"></i>
               </div>
               <div class="dropdown-item-desc" v-if="!bill.address">
-                Đơn hàng với ID {{bill.id}} được yêu cầu từ khách hàng tại quầy
+                Đơn hàng với ID {{bill.code}} được yêu cầu từ khách hàng tại quầy
                 <div class="time text-primary">{{fromNow(bill.createdDate)}}</div>
               </div>
               <div class="dropdown-item-desc" v-else>
-                Đơn hàng với ID {{bill.id}} được yêu cầu từ khách hàng {{bill.customerName}} vị trí ở {{bill.address}}
+                Đơn hàng với ID {{bill.code}} được yêu cầu từ khách hàng {{bill.customerName}} vị trí ở {{bill.address}}
                 <div class="time text-primary">{{fromNow(bill.createdDate)}}</div>
               </div>
             </router-link>
           </div>
           <div class="dropdown-footer text-center">
-            <router-link to="">
+            <router-link to="/staff/notifications?page=1">
               Xem tất cả
               <i class="fas fa-chevron-right"></i>
             </router-link>
@@ -50,12 +50,12 @@
             <router-link :to="$route.path.includes('admin') ? '/admin/profile' : '/staff/profile'" class="dropdown-item has-icon">
               <i class="far fa-user"></i> Hồ sơ
             </router-link>
-            <router-link to="/admin" class="dropdown-item has-icon">
+            <!-- <router-link to="/admin" class="dropdown-item has-icon">
               <i class="fas fa-bolt"></i> Hoạt động
             </router-link>
             <router-link to="/admin" class="dropdown-item has-icon">
               <i class="fas fa-cog"></i> Cài đặt
-            </router-link>  
+            </router-link>   -->
               <div class="dropdown-divider"></div>
             <router-link to="" class="dropdown-item has-icon text-danger" @click.prevent="handleLogout">
               <i class="fas fa-sign-out-alt"></i> Đăng xuất

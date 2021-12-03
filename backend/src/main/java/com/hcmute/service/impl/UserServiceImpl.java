@@ -35,6 +35,7 @@ import com.hcmute.repository.TypeRepository;
 import com.hcmute.repository.UserRepository;
 import com.hcmute.service.MailService;
 import com.hcmute.service.UserService;
+import com.hcmute.util.ConstantsUtil;
 import com.hcmute.util.PasswordUtil;
 
 @Service
@@ -179,7 +180,9 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public UserResponse findByKeyword(String keyword, Pageable pageable) {
-		Page<UserEntity> page = userRepository.findByKeyword(keyword, pageable);
+		RoleEntity admin = roleRepository.findOneByName(ConstantsUtil.ROLE_NAME_ADMIN);
+		RoleEntity staff = roleRepository.findOneByName(ConstantsUtil.ROLE_NAME_STAFF);
+		Page<UserEntity> page = userRepository.findByKeyword(keyword, admin, staff, pageable);
 		return resultResponse(page, pageable);
 	}
 
@@ -199,7 +202,9 @@ public class UserServiceImpl implements UserService{
 	
 	@Override
 	public UserResponse findByStateAndKeyword(Boolean state, String keyword, Pageable pageable) {
-		Page<UserEntity> page =  userRepository.findByStateAndKeyword(state, keyword, pageable);
+		RoleEntity admin = roleRepository.findOneByName(ConstantsUtil.ROLE_NAME_ADMIN);
+		RoleEntity staff = roleRepository.findOneByName(ConstantsUtil.ROLE_NAME_STAFF);
+		Page<UserEntity> page =  userRepository.findByStateAndKeyword(state, keyword, admin, staff, pageable);
 		return resultResponse(page, pageable);
 	}
 

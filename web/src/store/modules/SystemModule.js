@@ -42,6 +42,9 @@ const SystemModule = {
         order_statistics: {
           value: false
         }, 
+        staff_statistics: {
+          value: false
+        },
         profile: {
           value: false,
           submenu: {

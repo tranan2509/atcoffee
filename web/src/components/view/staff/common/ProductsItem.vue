@@ -1,6 +1,11 @@
 <template>
-  <div class="row">
-    <product-item v-for="product in products" :key="product.id" :product="product"/>
+  <div>
+    <div class="col"  v-for="(line_products, index) in lines_products" :key="index">
+      <div class="title-products">{{this.categories[index].name}}</div>
+      <div class="row">
+        <product-item v-for="product in line_products" :key="product.id" :product="product"/>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -20,8 +25,10 @@ export default {
 
   data() {
     return {
+      lines_products: [],
       products: [],
       category: {},
+      categories: [],
       stroe: {},
       value: {
         countProducts: 0
@@ -42,7 +49,24 @@ export default {
 
     async loadData() {
       await this.loadStore(this.$store.getters.user.storeId);
+      await this.loadCategories();
       await this.loadProducts();
+      this.processLinesProducts();
+    },
+
+    processLinesProducts() {
+      this.lines_products = [];
+      for (var index = 0; index < this.categories.length; index++) {
+        var line_products = this.products.filter(item => {
+          for (var j = 0; j < item.categories.length; j++) {
+            if (item.categories[j].id == this.categories[index].id) {
+              return true;
+            }
+          }
+          return false;
+        })
+        this.lines_products.push(line_products);
+      }
     },
 
     async loadCategoryById(id) {
@@ -61,7 +85,11 @@ export default {
 
     async loadProducts() {
       this.products = await ProductCommand.findAllByOrder(1, 10000, this.store.code, '', '');
-    }
+    },
+
+    async loadCategories() {
+      this.categories = await CategoryCommand.findAll();
+    },
   },
 
   created() {
@@ -72,5 +100,10 @@ export default {
 </script>
 
 <style>
-
+.title-products {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #5c5c5c;
+}
 </style>

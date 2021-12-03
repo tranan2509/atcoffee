@@ -21,6 +21,7 @@ import com.hcmute.entity.ProductEntity;
 import com.hcmute.entity.PromotionEntity;
 import com.hcmute.entity.RewardEntity;
 import com.hcmute.entity.StoreEntity;
+import com.hcmute.entity.TypeEntity;
 import com.hcmute.entity.UserEntity;
 import com.hcmute.repository.BillDetailRepository;
 import com.hcmute.repository.BillRepository;
@@ -29,8 +30,10 @@ import com.hcmute.repository.ProductRepository;
 import com.hcmute.repository.PromotionRepository;
 import com.hcmute.repository.RewardRepository;
 import com.hcmute.repository.StoreRepository;
+import com.hcmute.repository.TypeRepository;
 import com.hcmute.repository.UserRepository;
 import com.hcmute.service.BillService;
+import com.hcmute.util.ConstantsUtil;
 
 @Service
 public class BillServiceImpl implements BillService{
@@ -53,6 +56,8 @@ public class BillServiceImpl implements BillService{
 	private PaymentRepository paymentRepository;
 	@Autowired
 	private BillDetailRepository billDetailRepository;
+	@Autowired
+	private TypeRepository typeRepository;
 
 	@Override
 	public BillDTO save(BillDTO billDTO) {
@@ -89,12 +94,32 @@ public class BillServiceImpl implements BillService{
 
 	@Override
 	public BillDTO updateStatus(BillDTO billDTO) {
+		
+		if (billDTO.getId() == null) {
+			billDTO = this.save(billDTO);
+		}
 		if (billDTO.getId() != null) {
 			BillEntity entity = billRepository.findOne(billDTO.getId());
 			entity.setStatus(billDTO.getStatus());
 			entity = billRepository.save(entity);
+			if (entity.getStatus().equals(ConstantsUtil.STATUS_COMPLETED)) {
+				UserEntity user = userRepository.findOne(billDTO.getCustomerId());
+				int newPoint = (int)(billDTO.getAmount() * ConstantsUtil.POINTS_REFUND);
+				user.setAccumulatedPoints(user.getAccumulatedPoints() + newPoint);
+				user.setCurrentPoints(user.getCurrentPoints() + newPoint);
+				List<TypeEntity> types = typeRepository.findAll();
+				int points = user.getAccumulatedPoints();
+				if (points <= types.get(0).getPoint()) {
+					user.setType(types.get(0));
+				} else if (points > types.get(0).getPoint() && points <= types.get(1).getPoint()) {
+					user.setType(types.get(1));
+				} else {
+					user.setType(types.get(2));
+				}
+				userRepository.save(user);
+			}
 			return mapper.map(entity, BillDTO.class);
-		}	
+		}
 		return null;
 	}
 

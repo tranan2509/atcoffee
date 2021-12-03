@@ -5,7 +5,7 @@
         <router-link to="/admin">Trang chủ</router-link>
       </div>
       <div class="breadcrumb-item active">
-        <router-link :to="backToStatistics">Đơn hàng</router-link>
+        <router-link :to="backToStatistics">Danh sách đơn hàng</router-link>
       </div>
       <div class="breadcrumb-item">
         Chi tiết đơn hàng
