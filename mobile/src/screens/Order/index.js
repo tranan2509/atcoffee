@@ -44,24 +44,13 @@ const Order = ({navigation, themeState, route, orderActions, orderState}) => {
     if (selectedCategory == '') {
       setMenu(orderState.allProducts);
     } else {
-      let menuList = orderState.allProducts.filter(menuItem => {
-        let cate = false;
-        let store = false;
-        menuItem.categories.forEach(cateItem => {
-          if (cateItem.name == selectedCategory) {
-            cate = true;
-          }
-        });
-        menuItem.stores.forEach(storeItem => {
-          if (storeItem.code == selectedLocation.code) {
-            store = true;
-          }
-        });
-        // console.log(
-        //   menuItem.sizes.filter(sizeItem => sizeItem.size == 'S')[0].price,
-        // );
-        return cate && store;
-      });
+      let menuList = orderState.allProducts.filter(
+        pro =>
+          1 &&
+          pro.categories.filter(
+            menuItem => menuItem.name == selectedCategory,
+          )[0],
+      );
       //console.log(menuList);
       setMenu(menuList);
     }

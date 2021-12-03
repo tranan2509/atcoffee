@@ -49,7 +49,10 @@ const Cart = ({
   const orderHandler = async () => {
     let now = new Date();
     let code = `BI${now.getTime().toString().slice(1, 9)}`;
-
+    console.log(
+      'all pro',
+      orderState.allProducts.filter(item => item.storeId != storeId),
+    );
     database()
       .ref(`/bills/${code}`)
       .set({
@@ -58,7 +61,7 @@ const Cart = ({
           : selectedLocation?.address,
         amount: amount - discount,
         code: code,
-        createdDate: new Date(),
+        createdDate: new Date().getTime(),
         customerId: userInfo.id,
         customerName: userInfo.name,
         discount: amountWithoutDiscount - (amount - discount),
@@ -67,13 +70,16 @@ const Cart = ({
         paymentName: methodPayment,
         point: Math.floor((amount - discount) / 1000),
         price: amount,
+        promotionId: cartState.codeDiscount?.discount
+          ? cartState.codeDiscount.id
+          : 0,
         promotionCode: cartState.codeDiscount?.discount
           ? cartState.codeDiscount.code
           : '',
         read: false,
         rewardId: cartState.codeDiscount?.redution
           ? cartState.codeDiscount.id
-          : '',
+          : 0,
         staffId: '',
         staffName: '',
         state: true,
@@ -82,6 +88,25 @@ const Cart = ({
         billDetails: cartState.cart.map((item, index) => ({
           ...item,
           code: code + `D${index + 1}`,
+          name: orderState.allProducts?.filter(
+            pro => pro.id == item.productId,
+          )[0].name,
+          price: orderState.allProducts
+            ?.filter(pro => pro.id == item.productId)[0]
+            .sizes.filter(sizeItem => sizeItem.size == item.size)[0].price,
+          discount: orderState.allProducts?.filter(
+            pro => pro.id == item.productId,
+          )[0].discount,
+          amount:
+            orderState.allProducts
+              ?.filter(pro => pro.id == item.productId)[0]
+              .sizes.filter(sizeItem => sizeItem.size == item.size)[0].price *
+            item.quantity *
+            (1 -
+              orderState.allProducts?.filter(
+                pro => (pro.id = item.productId),
+              )[0].discount /
+                100),
         })),
       })
       .then(() => console.log('Data set.'));
@@ -406,7 +431,7 @@ const Cart = ({
                     ĐCCH:{' '}
                     {
                       orderState.allProducts
-                        .filter(cartItem => cartItem.id == item.productId)[0]
+                        ?.filter(cartItem => cartItem.id == item.productId)[0]
                         .stores.filter(
                           storeItem => storeItem.id == item.storeId,
                         )[0].address
