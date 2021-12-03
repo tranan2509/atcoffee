@@ -67,9 +67,9 @@ const Cart = ({
         paymentName: methodPayment,
         point: Math.floor((amount - discount) / 1000),
         price: amount,
-        promotionCode: cartState.codeDiscount?.redution
-          ? ''
-          : cartState.codeDiscount.code,
+        promotionCode: cartState.codeDiscount?.discount
+          ? cartState.codeDiscount.code
+          : '',
         read: false,
         rewardId: cartState.codeDiscount?.redution
           ? cartState.codeDiscount.id
@@ -88,7 +88,7 @@ const Cart = ({
 
     cartState.cart.forEach(async item => await cartActions.deleteCart(item.id));
     await cartActions.getCart(userInfo.id);
-    //console.log('cart', cartState.cart);
+    setOrderNumber(0);
     ToastAndroid.show('Đặt hàng thành công!', ToastAndroid.LONG);
   };
   //console.log('cart', cartState.payment[0].name);
