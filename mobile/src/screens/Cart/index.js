@@ -62,7 +62,9 @@ const Cart = ({
         customerId: userInfo.id,
         customerName: userInfo.name,
         discount: amountWithoutDiscount - (amount - discount),
-        paymentId: methodPayment,
+        paymentId: cartState.payment.filter(pay => pay.name == methodPayment)[0]
+          .id,
+        paymentName: methodPayment,
         point: Math.floor((amount - discount) / 1000),
         price: amount,
         promotionCode: cartState.codeDiscount?.redution
@@ -75,7 +77,7 @@ const Cart = ({
         staffId: '',
         staffName: '',
         state: true,
-        status: 'PAID',
+        status: 'REQUESTED',
         storeId: storeId,
         billDetails: cartState.cart.map((item, index) => ({
           ...item,
@@ -89,7 +91,7 @@ const Cart = ({
     //console.log('cart', cartState.cart);
     ToastAndroid.show('Đặt hàng thành công!', ToastAndroid.LONG);
   };
-  console.log('cart', cartState);
+  //console.log('cart', cartState.payment[0].name);
   const checkAddressHandler = () => {
     if (!cartState.delivery) {
       setMethodShipping(dummyData.methodShipping[1].name);
