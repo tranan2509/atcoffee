@@ -53,12 +53,17 @@ export default {
 
     async handleChangeStatus(status) {
       let bill = {...this.bill, status};
+      var isSave = false;
       if (this.bill.staffName == '') {
         bill.staffName = this.$store.getters.user.name;
         bill.staffId = this.$store.getters.user.id;
+        isSave = true;
       }
       let result = await BillCommand.updateStatus(bill);
       if (result != null) {
+        if (isSave) {
+          bill.id = result.id;
+        }
         BillDataService.update(bill);
       } else {
         this.isAlertPopup = true;

@@ -8,6 +8,7 @@ const BillModule = {
     return {
       billsNotification: null,
       bills: [],
+      billsLocal: [],
       bill: null,
       sortBill: {
         page: 1,
@@ -32,6 +33,10 @@ const BillModule = {
 
     bill(state) {
       return state.bill;
+    },
+
+    billsLocal(state) {
+      return state.billsLocal;
     },
 
     billsSortByCode(state) {
@@ -80,6 +85,10 @@ const BillModule = {
         }
         return 0;
       });
+    },
+
+    [MutationsName.MUTATION_NAME_SET_BILLS_LOCAL](state, billsLocal) {
+      state.billsLocal = billsLocal;
     },
 
     [MutationsName.MUTATION_NAME_SET_BILL](state, bill) {

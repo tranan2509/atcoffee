@@ -3,7 +3,7 @@
     <div class="col-12">
       <div class="card">
         <div class="card-header">
-          <h4>Danh sách đơn hàng</h4>
+          <h4>Danh sách nhân viên</h4>
           <div class="card-header-form flex-row">
             <div class="form-group flex-row width-auto">
               <div class="form-group flex-row flex-1 order-statistics">
@@ -33,15 +33,15 @@
                 </option>
               </select>
             </div>
-            <div class="empty-space"></div>
-            <form @submit.prevent="handleSearch">
+            <!-- <div class="empty-space"></div> -->
+            <!-- <form @submit.prevent="handleSearch">
               <div class="input-group">
                 <input type="text" class="form-control" placeholder="Tìm kiếm" v-model="keyword">
                 <div class="input-group-btn">
                   <button class="btn btn-primary"><i class="fas fa-search"></i></button>
                 </div>
               </div>
-            </form>
+            </form> -->
           </div>
         </div>
         <div class="card-body p-0">
@@ -51,32 +51,26 @@
                 <tr>
                   <th class="text-center">SST</th>
                   <th class="text-center">Mã</th>
-                  <th class="text-center">Tên khách hàng</th>
                   <th class="text-center">Tên nhân viên</th>
+                  <th class="text-center">Tổng đơn hàng</th>
                   <th class="text-center">Tổng tiền</th>
-                  <th class="text-center">Trạng thái</th>
-                  <th class="text-center">Ngày hoàn thành</th>
                   <th class="text-center">Cửa hàng</th>
-                  <th class="text-center">Chi tiết</th>
                 </tr>
-                <tr v-for="(bill, index) in $store.getters.billsLocal" :key="bill.code">
-                  <td class="text-center">{{number(index)}}</td>
-                  <td class="text-center">{{bill.code}}</td>
-                  <td class="text-center">{{processName(bill.customerId)}}</td>
-                  <td class="text-center">{{processName(bill.staffId)}}</td>
-                  <td class="text-center">{{formatPrice(bill.amount)}}</td>
-                  <td class="text-center order" :class="colorStatus(bill.status)"><i class="fas fa-circle"></i> {{viStatus(bill.status)}}</td>
-                  <td class="text-center">{{formatDateTime(new Date(bill.modifiedDate))}}</td>
-                  <td class="text-center">{{processAddressStore(bill.storeId)}}</td>
-                  <td class="text-center"><i class="fas fa-info-circle" @click="handleOrderInfo(bill.code)"></i></td>
+                <tr v-for="(staff, index) in staffs" :key="staff.code">
+                  <td class="text-center">{{index + 1}}</td>
+                  <td class="text-center">{{staff.code}}</td>
+                  <td class="text-center">{{staff.name}}</td>
+                  <td class="text-center">{{staff.numOrders}}</td>
+                  <td class="text-center">{{formatPrice(staff.revenue)}}</td>
+                  <td class="text-center">{{processAddressStore(staff.storeId)}}</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
-        <div class="card-footer text-right" v-if="this.$store.getters.sortBill.totalPage > 1">
+        <!-- <div class="card-footer text-right" v-if="this.$store.getters.sortBill.totalPage > 1">
           <pagination :currentPage="currentPage" @handleChange="handleChangePage" :totalPage="this.$store.getters.sortBill.totalPage"/>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -89,13 +83,13 @@ import CommonUtils from '../../../common/CommonUtils'
 import BillCommand from '../../../command/BillCommand'
 import StoreCommand from '../../../command/StoreCommand'
 import UserCommand from '../../../command/UserCommand'
-import Pagination from '../../common/common/Pagination.vue'
+// import Pagination from '../../common/common/Pagination.vue'
 
 export default {
-  name: Constants.COMPONENT_NAME_TABLE_ORDER_STATISTICS,
+  name: Constants.COMPONENT_NAME_TABLE_STAFF_STATISTICS,
 
   components: {
-    Pagination,
+    // Pagination,
   },
 
   data() {
@@ -106,6 +100,7 @@ export default {
       keyword: '',
       stores: [],
       users: [],
+      staffs: [],
       type: 'all',
       selectedDate: ''
     }
@@ -176,7 +171,7 @@ export default {
     handleChangePage(page) {
       this.currentPage = page;
       const query = Object.assign({}, this.$route.query);
-      this.$router.push({path: '/admin/statistics/orders', query: {...query, page: this.currentPage}});
+      this.$router.push({path: '/admin/statistics/staffs', query: {...query, page: this.currentPage}});
       this.loadBills();
     },
 
@@ -189,7 +184,7 @@ export default {
     },
 
     handleOrderInfo(billCode) {
-      this.$router.push({path: '/admin/statistics/order-info', query: {code: billCode}});
+      this.$router.push({path: '/admin/statistics/staff-info', query: {code: billCode}});
     },
 
     handleSearch() {
@@ -199,7 +194,7 @@ export default {
         delete query.keyword;
         this.$router.replace({ query });
       } else {
-        this.$router.push({path: '/admin/statistics/orders', query: {...query, page: this.currentPage, keyword: this.keyword}});
+        this.$router.push({path: '/admin/statistics/staffs', query: {...query, page: this.currentPage, keyword: this.keyword}});
       }
       this.loadBills();
     },
@@ -213,13 +208,12 @@ export default {
         delete query.d;
         this.$router.replace({ query });
       } else {
-        this.$router.push({path: '/admin/statistics/orders', query: {...query, page: this.currentPage, t: this.type, d: this.selectedDate}});
+        this.$router.push({path: '/admin/statistics/staffs', query: {...query, page: this.currentPage, t: this.type, d: this.selectedDate}});
       }
       let sortBill = this.$store.getters.sortBill;
       sortBill.type = this.type;
       this.$store.commit(MutationsName.MUTATION_NAME_SET_SORT_BILL, sortBill);
       this.loadBills();
-      this.$emit('handleChangeType', this.type);
     },
 
     handleChangeSelectedDate() {
@@ -230,13 +224,12 @@ export default {
         delete query.d;
         this.$router.replace({ query });
       } else {
-        this.$router.push({path: '/admin/statistics/orders', query: {...query, page: this.currentPage, d: this.selectedDate}});
+        this.$router.push({path: '/admin/statistics/staffs', query: {...query, page: this.currentPage, d: this.selectedDate}});
       }
       let sortBill = this.$store.getters.sortBill;
       sortBill.selectedDate = this.selectedDate;
       this.$store.commit(MutationsName.MUTATION_NAME_SET_SORT_BILL, sortBill);
       this.loadBills();
-      this.$emit('handleChangeSelectedDate', this.selectedDate);
     },
 
     handleChangeStore() {
@@ -246,10 +239,9 @@ export default {
         delete query.storeId;
         this.$router.replace({ query });
       } else {
-        this.$router.push({path: '/admin/statistics/orders', query: {...query, page: this.currentPage, storeId: this.storeId}});
+        this.$router.push({path: '/admin/statistics/staffs', query: {...query, page: this.currentPage, storeId: this.storeId}});
       }
       this.loadBills();
-      this.$emit('handleChangeStore', this.storeId);
     },
 
     loadDate() {
@@ -278,6 +270,29 @@ export default {
         end = CommonUtils.formatDateReverse(endDate);
       }
       await BillCommand.findByOrder(start, end, storeId, this.keyword, Constants.STATUS_BILL.COMPLETED, this.currentPage, Constants.PAGE_SIZE_ORDER_STATISTICS, this.$store);
+      this.processBills(this.$store.getters.billsLocal);
+    },
+
+    processBills(bills) {
+
+      var staffs = this.users.filter(item => item.roleName == Constants.ROLE.ROLE_STAFF);
+      if (this.storeId > 0) {
+        staffs = staffs.filter(item => item.storeId == this.storeId);
+      }
+      staffs = staffs.map(item => {
+        item['numOrders'] = 0;
+        item['revenue'] = 0;
+        return item;
+      });
+      for (var i = 0; i < bills.length; i++) {
+        for (var j = 0; j < staffs.length; j++) {
+          if (staffs[j].id == bills[i].staffId) {
+            staffs[j].numOrders += 1;
+            staffs[j].revenue += bills[i].amount;
+          }
+        }
+      }
+      this.staffs = staffs;
     },
 
     async loadStores() {

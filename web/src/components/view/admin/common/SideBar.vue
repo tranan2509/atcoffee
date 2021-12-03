@@ -80,6 +80,12 @@
           <span>Đơn hàng</span>
         </router-link>
       </li>
+      <li class="nav-item dropdown" :class="menu.staff_statistics.value ? 'active' : ''">  
+        <router-link to="/admin/statistics/staffs?page=1" class="nav-link" @click="handleDropdown(menu.staff_statistics)">
+          <i class="fas fa-users"></i>
+          <span>Nhân viên</span>
+        </router-link>
+      </li>
       <li class="menu-header">HỒ SƠ</li>
       <li class="nav-item dropdown" :class="menu.profile.value ? 'active' : ''">
         <router-link to="" class="nav-link has-dropdown" @click="handleDropdown(menu.profile)">

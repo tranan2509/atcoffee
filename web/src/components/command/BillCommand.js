@@ -22,7 +22,7 @@ const BillCommand = {
   async findByDateBetween(start, end, store = null) {
     const url = `${Constants.HOSTNAME_DEFAULT}/api/staff/bill/statistics?startDate=${start}&endDate=${end}`;
     let result = await ConnectServer.getData(url);
-    store != null ? store.commit(MutationsName.MUTATION_NAME_SET_BILLS, result) : '';
+    store != null ? store.commit(MutationsName.MUTATION_NAME_SET_BILLS_LOCAL, result) : '';
     return result;
   },
 
@@ -56,7 +56,7 @@ const BillCommand = {
     const url = `${Constants.HOSTNAME_DEFAULT}/api/admin/bill/statistics` + path;    
     let res = await ConnectServer.getData(url);
     if (res != null) {
-      store.commit(MutationsName.MUTATION_NAME_SET_BILLS, res.bills);
+      store.commit(MutationsName.MUTATION_NAME_SET_BILLS_LOCAL, res.bills);
       var sortBill = store.getters.sortBill;
       store.commit(MutationsName.MUTATION_NAME_SET_SORT_BILL, {...sortBill, page, storeId, keyword, totalPage: res.totalPage});
       return res.bills;
