@@ -34,7 +34,7 @@
                   <td class="text-center">{{reward.code}}</td>
                   <td class="text-center">{{reward.name}}</td>
                   <td class="text-center">{{reward.proviso}}</td>
-                  <td class="text-center">{{reward.redution}}</td>
+                  <td class="text-center">{{formatPrice(reward.redution)}}</td>
                   <td class="text-center"><i class="fas fa-info-circle" @click="handleInfo(reward.id)"></i></td>
                 </tr>
               </tbody>
@@ -51,6 +51,7 @@
 
 <script>
 import * as Constants from '../../../common/Constants'
+import CommonUtils from '../../../common/CommonUtils'
 import RewardCommand from '../../../command/RewardCommand'
 import Pagination from '../../common/common/Pagination.vue'
 
@@ -80,6 +81,10 @@ export default {
       if (typeof this.keyword == 'undefined') {
         this.keyword = '';
       }
+    },
+
+    formatPrice(price) {
+      return CommonUtils.formatPrice(price);
     },
 
     number(index){

@@ -5,22 +5,6 @@
       <!-- <a href="#"><img src="../../../assets/logo.png" alt="logo"></a> -->
     </div>
     <ul class="sidebar-menu">
-      <li class="menu-header">DASHBOARD</li>
-      <li class="nav-item dropdown" :class="menuStaff.dashboard.value ? 'active' : ''">
-        <router-link to="" class="nav-link has-dropdown" @click="handleDropdown(menuStaff.dashboard)">
-          <i class="fas fa-fire"></i>
-          <span>Dashboard</span>
-          <i class="fas fa-chevron-right"></i>
-        </router-link>
-        <ul class="dropdown-menu" :class="menuStaff.dashboard.value ? 'visible' : ''">
-          <li :class="menuStaff.dashboard.submenu.general ? 'active': ''" @click="handleLink(menuStaff.dashboard, 'general')">
-            <router-link to="/staff" class="nav-link">General Dashboard</router-link>
-          </li>
-          <li :class="menuStaff.dashboard.submenu.ecommerce ? 'active': ''" @click="handleLink(menuStaff.dashboard, 'ecommerce')">
-            <router-link to="/staff/statistics" class="nav-link">Ecommerce Dashboard</router-link>
-          </li>
-        </ul>
-      </li>
       <li class="menu-header">QUẢN LÝ</li>
       <li class="nav-item dropdown" :class="menuStaff.product.value ? 'active' : ''">  
         <router-link to="/staff/products" class="nav-link" @click="handleDropdown(menuStaff.product)">

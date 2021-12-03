@@ -5,7 +5,7 @@
         <router-link to="/staff">Trang chủ</router-link>
       </div>
       <div class="breadcrumb-item active">
-        <router-link to="/staff/orders">Đơn hàng</router-link>
+        <router-link to="/staff/orders">Danh sách đơn hàng</router-link>
       </div>
       <div class="breadcrumb-item">
         Chi tiết đơn hàng

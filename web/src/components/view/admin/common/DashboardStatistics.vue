@@ -8,9 +8,9 @@
         <template v-slot:icon> <i class="fas fa-wallet"></i> </template>
         <template v-slot:title> Tổng doanh thu trong tháng</template>
       </item-statistics>
-      <item-statistics :color="'bg-orange'">
+      <item-statistics :color="'bg-orange'" :value="value.countPromotions">
         <template v-slot:icon> <i class="far fa-user"></i> </template>
-        <template v-slot:title> Tong tong tong </template>
+        <template v-slot:title> Tổng mã khuyến mãi sử dụng </template>
       </item-statistics>
       <item-statistics :color="'bg-green-1'" :value="value.countUsers">
         <template v-slot:icon> <i class="fas fa-user-plus"></i> </template>
@@ -40,6 +40,7 @@ export default {
         countBills: 0,
         amount: 0,
         countUsers: 0,
+        countPromotions: 0
       }
     }
   },
@@ -56,11 +57,16 @@ export default {
       let result = await BillCommand.findByDateBetweenOfMonth(now.getMonth() + 1, now.getFullYear());
       this.value.countBills = result.length;
       let total = 0;
+      let countPromotions= 0;
       result.forEach(item => {
         if (item.amount != null) {
           total += item.amount;
         }
+        if (item.promotionId != null) {
+          countPromotions += 1;
+        }
       });
+      this.value.countPromotions = countPromotions;
       this.value.amount = total;
     },
 

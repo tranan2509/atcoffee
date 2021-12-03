@@ -115,7 +115,6 @@ public class UserAPI {
 			@RequestParam("user") String userJson){
 		try {
 			UserDTO user = objectMapper.readValue(userJson, UserDTO.class);	
-			user.setState(true);
 			if (multipartFile != null) {
 				Map r = this.cloudinary.uploader().upload(multipartFile.getBytes(),
 		                  ObjectUtils.asMap("resource_type", "auto"));

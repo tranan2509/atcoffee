@@ -142,8 +142,8 @@ export default {
       if (typeof this.selectedDate == 'undefined') {
         this.loadDate();
       }
+      await this.loadStores();
       this.loadBills();
-      this.loadStores();
     },
 
     number(index){
@@ -156,6 +156,18 @@ export default {
 
     viStatus(status) {
       return Constants.STATUS_BILL_VI[status];
+    },
+
+    processAddressStore(storeId) {
+      return this.stores.find(item => item.id == storeId).address;
+    },
+
+     processName(userId) {
+      var user = this.users.find(item => item.id == userId);
+      if (user == null || user.id == 1) {
+        return 'Không có';
+      }
+      return user.name;
     },
 
     handleChangePage(page) {
@@ -204,6 +216,7 @@ export default {
       sortBill.type = this.type;
       this.$store.commit(MutationsName.MUTATION_NAME_SET_SORT_BILL, sortBill);
       this.loadBills();
+      this.$emit('handleChangeType', this.type);
     },
 
     handleChangeSelectedDate() {
@@ -220,6 +233,7 @@ export default {
       sortBill.selectedDate = this.selectedDate;
       this.$store.commit(MutationsName.MUTATION_NAME_SET_SORT_BILL, sortBill);
       this.loadBills();
+      this.$emit('handleChangeSelectedDate', this.selectedDate);
     },
 
     handleChangeStore() {
@@ -232,14 +246,7 @@ export default {
         this.$router.push({path: '/admin/statistics/orders', query: {...query, page: this.currentPage, storeId: this.storeId}});
       }
       this.loadBills();
-    },
-
-    processName(userId) {
-      var user = this.users.find(item => item.id == userId);
-      if (user == null || user.id == 1) {
-        return 'Không có';
-      }
-      return user.name;
+      this.$emit('handleChangeStore', this.storeId);
     },
 
     loadDate() {

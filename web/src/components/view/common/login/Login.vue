@@ -112,7 +112,7 @@ export default {
       if (result && result.user.roleName == Constants.ROLE.ROLE_ADMIN) {
         this.$router.push('/admin')
       } else if (result && result.user.roleName == Constants.ROLE.ROLE_STAFF){
-        this.$router.push({path: '/staff'})
+        this.$router.push({path: '/staff/products'})
       } else {
         this.incorrect = true;
       }
@@ -130,7 +130,7 @@ export default {
       if (auth && auth.roleName == Constants.ROLE.ROLE_ADMIN){
         this.$router.push({path: '/admin'});
       } else if (auth && auth.roleName == Constants.ROLE.ROLE_STAFF) {
-        this.$router.push({path: '/staff'});
+        this.$router.push({path: '/staff/products'});
       }
     },
   },
