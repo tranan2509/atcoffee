@@ -42,10 +42,10 @@ const OrderDetail = ({
 
   const [amountMoney, setAmountMoney] = React.useState(0);
 
-  const [selectedLocation, setSelectedLocation] = React.useState(null);
+  const [selectedLocation, setSelectedLocation] = React.useState({});
   const [loading, setLoading] = React.useState(false);
   const userInfo = userState.data.user ? userState.data.user : userState.data;
-  console.log('all pro', orderState.allProducts);
+  console.log('all pro', selectedLocation);
   React.useEffect(() => {
     let {selectedItem} = route?.params;
     setSelectedItem(selectedItem);
@@ -128,6 +128,7 @@ const OrderDetail = ({
   };
 
   const dataItem = () => {
+    console.log('all pro', selectedLocation.id);
     let customerId = userInfo.id;
     let productId = selectedItem.id;
     let storeId = selectedLocation.id;
@@ -826,7 +827,7 @@ const OrderDetail = ({
             alignItems: 'center',
             //borderRadius: 20,
           }}
-          onPress={() => buyNowHandler(() => navigation.navigate('Cart'))}>
+          onPress={() => buyNowHandler(() => navigation.push('Cart'))}>
           <Text style={{color: 'white', ...FONTS.h3}}>Mua ngay</Text>
         </TouchableOpacity>
         {/* Tổng */}

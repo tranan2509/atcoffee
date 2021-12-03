@@ -114,17 +114,18 @@ const Cart = ({
       async item => await cartActions.deleteCart(item.id),
     );
     await cartActions.getCart(userInfo.id);
-    getTotalNumberOrder();
     ToastAndroid.show('Đặt hàng thành công!', ToastAndroid.LONG);
+    setOrderNumber(0);
   };
-  //console.log('cart', cartState.payment[0].name);
+  console.log('cart item', cartState.cart);
+
   const checkAddressHandler = () => {
     if (!cartState.delivery) {
       setMethodShipping(dummyData.methodShipping[1].name);
     }
+
     if (!cartState.delivery) {
-      //let storeId = cartState.cart[0].storeId;
-      //let product = cartState.cart.filter(item => item.storeId != storeId)[0];
+      //let product = cartState.cart.filter(item => item.storeId !== storeId)[0];
       if (product) {
         Alert.alert(
           'Thông báo',
@@ -140,7 +141,7 @@ const Cart = ({
         );
       } else {
         setSelectedLocation(
-          locationState.allLocation.filter(item => (item.id = storeId))[0],
+          locationState.allLocation.filter(item => item.id == storeId)[0],
         );
       }
     }
@@ -157,28 +158,9 @@ const Cart = ({
     }
   };
 
-  //get cart item info
-  // const getCartItemInfoHandler = () => {
-  //   //console.log('info', orderState.allProducts);
-  //   let cartInfo = [];
-  //   if (orderState.allProducts[0]) {
-  //     cartState.cart.forEach(item => {
-  //       //console.log('item', item);
-  //       let productInfo = orderState.allProducts?.find(pro => {
-  //         //console.log('productInfo', pro);
-  //         return pro.id == item.productId;
-  //       });
-  //       //console.log('product', productInfo);
-  //       cartInfo = [...cartInfo, productInfo];
-  //     });
-  //   }
-  //   setItemCart(cartInfo);
-  // };
-
   React.useEffect(() => {
     checkAddressHandler();
     getTotalNumberOrder();
-    //getCartItemInfoHandler();
     amountMoney();
     return () => cartActions.useCodeDiscount({});
   }, [cartState.cart]);
@@ -304,7 +286,11 @@ const Cart = ({
               }}>
               {dummyData.methodShipping.map((item, index) => {
                 return (
-                  <Picker.Item label={item.name} value={item.name} key={item} />
+                  <Picker.Item
+                    label={item.name}
+                    value={item.name}
+                    key={index}
+                  />
                 );
               })}
             </Picker>
@@ -430,13 +416,13 @@ const Cart = ({
                       marginLeft: 10,
                     }}>
                     ĐCCH:{' '}
-                    {
+                    {/* {
                       orderState.allProducts
                         ?.filter(cartItem => cartItem.id == item.productId)[0]
                         .stores.filter(
                           storeItem => storeItem.id == item.storeId,
                         )[0].address
-                    }
+                    } */}
                   </Text>
                   <Text
                     style={{
