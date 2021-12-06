@@ -1,5 +1,6 @@
-export const HOSTNAME = 'http://localhost:8086';
+// export const HOSTNAME = 'http://localhost:8086';
 export const HOSTNAME_DEFAULT = 'http://localhost:8080';
+// export const HOSTNAME_DEFAULT = 'https://atcoffee-web.herokuapp.com';
 export const JWT_NAME = 'jwt';
 export const ROLE = { 
   ROLE_ADMIN:'ADMIN',
