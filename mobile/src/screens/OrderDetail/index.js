@@ -44,6 +44,7 @@ const OrderDetail = ({
 
   const [selectedLocation, setSelectedLocation] = React.useState({});
   const [loading, setLoading] = React.useState(false);
+  const [editedCart, setEditedCart] = React.useState(0);
   const userInfo = userState.data.user ? userState.data.user : userState.data;
   console.log('all pro', selectedLocation);
   React.useEffect(() => {
@@ -104,6 +105,18 @@ const OrderDetail = ({
 
   React.useEffect(() => {
     async () => await cartActions.getCart(userInfo.id);
+    let {editedCart} = route?.params;
+    let {selectedItem} = route?.params;
+    if (editedCart) {
+      setEditedCart(editedCart);
+      setNumberOrder(
+        cartState.cart.find(item => item.productId === selectedItem.id)
+          .quantity,
+      );
+      setSelectedSize(
+        cartState.cart.find(item => item.productId === selectedItem.id).size,
+      );
+    }
     if (loading) {
       setLoading(false);
     }
@@ -111,8 +124,6 @@ const OrderDetail = ({
   }, []);
 
   const checkProInCart = (size, productId, storeId, description) => {
-    //console.log('sizeeeeeeeeeeeeeeeee', size, productId, storeId);
-    //console.log('cartState dayyyyyyyyy', cartState);
     const cartInfo = cartState.cart.find(
       cartItem =>
         cartItem.productId === productId &&
@@ -120,7 +131,7 @@ const OrderDetail = ({
         cartItem.size === size &&
         cartItem.description === description,
     );
-    //console.log('inside checkkkkkkkkkkkkk ne', cartInfo);
+
     if (cartInfo) {
       return {id: cartInfo.id, quantity: cartInfo.quantity};
     }
@@ -128,7 +139,7 @@ const OrderDetail = ({
   };
 
   const dataItem = () => {
-    console.log('all pro', selectedLocation.id);
+    //console.log('all pro', selectedLocation.id);
     let customerId = userInfo.id;
     let productId = selectedItem.id;
     let storeId = selectedLocation.id;
@@ -152,14 +163,33 @@ const OrderDetail = ({
     };
   };
   const updateCart = async data => {
-    //console.log('data updateeeeeeeee', data);
     await cartActions.updateCart(data);
+  };
+
+  const updateCartHandler = async () => {
+    setLoading(true);
+    var dataItems = dataItem();
+    let number = dataItems.quantity;
+
+    await updateCart({
+      ...dataItems,
+      id: selectedItem.id,
+      quantity: number,
+    });
+    await cartActions.getCart(userInfo.id);
+    navigation.goBack();
+  };
+
+  const deleteCartItem = async id => {
+    if (cartState.cart[0]) {
+      await cartActions.deleteCart(id);
+    }
+    navigation.push('Cart');
   };
   const addToCart = async data => {
     await cartActions.addToCart(data);
   };
   const buyNowHandler = async callback => {
-    //await cartActions.getCart(userInfo.id);
     setLoading(true);
     var dataItems = dataItem();
     const idCard = checkProInCart(
@@ -170,7 +200,7 @@ const OrderDetail = ({
     );
     if (idCard.id) {
       let number = dataItems.quantity + idCard.quantity;
-      //console.log('quantityyyyyyy', number);
+
       await updateCart({
         ...dataItems,
         id: idCard.id,
@@ -186,7 +216,6 @@ const OrderDetail = ({
     setLoading(false);
   };
   const addToCartHandler = async () => {
-    //await cartActions.getCart(userInfo.id);
     var dataItems = dataItem();
     const idCard = checkProInCart(
       dataItems.size,
@@ -194,7 +223,7 @@ const OrderDetail = ({
       dataItems.storeId,
       dataItems.description,
     );
-    //console.log('checkkkkkkkkkkkkkkkkkkkkkkk', idCard);
+
     if (idCard.id) {
       let number = dataItems.quantity + idCard.quantity;
       await updateCart({
@@ -204,10 +233,9 @@ const OrderDetail = ({
       });
       ToastAndroid.show('Thêm sản phẩm thành công!', ToastAndroid.LONG);
       await cartActions.getCart(userInfo.id);
-      //callback();
     } else {
       await addToCart(dataItems);
-      //callback();
+
       ToastAndroid.show('Thêm sản phẩm thành công!', ToastAndroid.LONG);
       await cartActions.getCart(userInfo.id);
     }
@@ -304,7 +332,7 @@ const OrderDetail = ({
             backgroundColor: COLORS.black,
           }}
           icon={icons.leftArrow}
-          onPress={() => navigation.navigate('Order')}
+          onPress={() => navigation.goBack()}
         />
         <IconButton
           containerStyle={{
@@ -818,18 +846,33 @@ const OrderDetail = ({
           flexDirection: 'row',
         }}>
         {/* Buy now */}
-        <TouchableOpacity
-          style={{
-            backgroundColor: COLORS.primary,
-            height: '100%',
-            width: SIZES.width * 0.3,
-            justifyContent: 'center',
-            alignItems: 'center',
-            //borderRadius: 20,
-          }}
-          onPress={() => buyNowHandler(() => navigation.push('Cart'))}>
-          <Text style={{color: 'white', ...FONTS.h3}}>Mua ngay</Text>
-        </TouchableOpacity>
+        {!editedCart ? (
+          <TouchableOpacity
+            style={{
+              backgroundColor: COLORS.primary,
+              height: '100%',
+              width: SIZES.width * 0.3,
+              justifyContent: 'center',
+              alignItems: 'center',
+              //borderRadius: 20,
+            }}
+            onPress={() => buyNowHandler(() => navigation.push('Cart'))}>
+            <Text style={{color: 'white', ...FONTS.h3}}>Mua ngay</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={{
+              backgroundColor: COLORS.primary,
+              height: '100%',
+              width: SIZES.width * 0.3,
+              justifyContent: 'center',
+              alignItems: 'center',
+              //borderRadius: 20,
+            }}
+            onPress={updateCartHandler}>
+            <Text style={{color: 'white', ...FONTS.h3}}>Cập nhật</Text>
+          </TouchableOpacity>
+        )}
         {/* Tổng */}
         <View
           style={{
@@ -844,17 +887,31 @@ const OrderDetail = ({
           </Text>
         </View>
         {/* Thêm vào giỏ */}
-        <TouchableOpacity
-          style={{
-            backgroundColor: COLORS.primary,
-            height: '100%',
-            width: SIZES.width * 0.3,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-          onPress={addToCartHandler}>
-          <Text style={{color: 'white', ...FONTS.h3}}>Thêm vào giỏ</Text>
-        </TouchableOpacity>
+        {!editedCart ? (
+          <TouchableOpacity
+            style={{
+              backgroundColor: COLORS.primary,
+              height: '100%',
+              width: SIZES.width * 0.3,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+            onPress={addToCartHandler}>
+            <Text style={{color: 'white', ...FONTS.h3}}>Thêm vào giỏ</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={{
+              backgroundColor: COLORS.red2,
+              height: '100%',
+              width: SIZES.width * 0.3,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+            onPress={() => deleteCartItem(selectedItem.id)}>
+            <Text style={{color: 'white', ...FONTS.h3}}>Xóa sản phẩm</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );

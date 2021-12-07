@@ -117,11 +117,51 @@ const Cart = ({
     ToastAndroid.show('Đặt hàng thành công!', ToastAndroid.LONG);
     setOrderNumber(0);
   };
+
+  const deleteCartItem = async item => {
+    if (cartState.cart[0]) {
+      await cartActions.deleteCart(item.id);
+      setOrderNumber(orderNumber - item.quantity);
+    }
+  };
+
+  const deleteAllCart = async () => {
+    if (cartState.cart[0]) {
+      await cartState.cart.forEach(
+        async item => await cartActions.deleteCart(item),
+      );
+      setOrderNumber(0);
+    } else {
+      Alert.alert('Thông báo', 'Chưa có sản phẩm trong giỏ hàng!', [
+        {
+          text: 'Bỏ qua',
+          onPress: () => {},
+          style: 'cancel',
+        },
+        {text: 'OK', onPress: () => {}},
+      ]);
+    }
+  };
   console.log('cart item', cartState.cart);
 
   const checkAddressHandler = () => {
     if (!cartState.delivery) {
-      setMethodShipping(dummyData.methodShipping[1].name);
+      if (product) {
+        Alert.alert(
+          'Thông báo',
+          'Sản phẩm bạn chọn từ hai cửa hàng khác nhau!',
+          [
+            {
+              text: 'Bỏ qua',
+              onPress: () => {},
+              style: 'cancel',
+            },
+            {text: 'OK', onPress: () => {}},
+          ],
+        );
+      } else {
+        setMethodShipping(dummyData.methodShipping[1].name);
+      }
     }
 
     if (!cartState.delivery) {
@@ -159,8 +199,11 @@ const Cart = ({
   };
 
   React.useEffect(() => {
-    checkAddressHandler();
     getTotalNumberOrder();
+  }, []);
+
+  React.useEffect(() => {
+    checkAddressHandler();
     amountMoney();
     return () => cartActions.useCodeDiscount({});
   }, [cartState.cart]);
@@ -208,7 +251,6 @@ const Cart = ({
       }
     }
   };
-  //console.log('name', selectedLocation?.address);
   const changeAddressHandler = () => {
     //console.log('method', methodShipping);
     if (methodShipping == dummyData.methodShipping[0].name) {
@@ -225,21 +267,11 @@ const Cart = ({
     cartState.cart.forEach(cartItem => {
       total =
         total +
-        orderState.allProducts
-          .filter(pro => pro.id == cartItem.productId)[0]
-          .sizes.filter(sizeItem => sizeItem.size == cartItem.size)[0].price *
+        getProPrice(cartItem) *
           cartItem.quantity *
-          (1 -
-            orderState.allProducts.filter(
-              product => product.id == cartItem.productId,
-            )[0].discount /
-              100);
+          (1 - getProDiscount(cartItem) / 100);
       amountWithoutDiscount =
-        amountWithoutDiscount +
-        orderState.allProducts
-          .filter(pro => pro.id == cartItem.productId)[0]
-          .sizes.filter(sizeItem => sizeItem.size == cartItem.size)[0].price *
-          cartItem.quantity;
+        amountWithoutDiscount + getProPrice(cartItem) * cartItem.quantity;
     });
     setAmount(total);
     setAmountWithoutDiscount(amountWithoutDiscount);
@@ -369,83 +401,113 @@ const Cart = ({
               </Text>
             </TouchableOpacity>
           </View>
-          {cartState.cart.map(item => (
-            <View
-              key={item.id}
-              style={{
-                paddingVertical: 20,
-                borderBottomColor: themeState.appTheme.textColor,
-                borderBottomWidth: 0.5,
-              }}>
+          {cartState.cart[0] ? (
+            cartState.cart.map(item => (
               <View
+                key={item.id}
                 style={{
-                  flexDirection: 'row',
+                  paddingVertical: 20,
+                  borderBottomColor: themeState.appTheme.textColor,
+                  borderBottomWidth: 0.5,
                 }}>
-                <IconButton
-                  icon={item.state ? icons.checkbox : icons.uncheckbox}
-                  iconStyle={{tintColor: themeState.appTheme.textColor}}
-                  onPress={() =>
-                    cartActions.updateStateProductInCart(item.id, item.state)
-                  }
-                />
-                <View>
-                  <Text
-                    style={{
-                      color: themeState.appTheme.textColor,
-                      ...FONTS.body3,
-                      marginLeft: 10,
-                    }}>
-                    {item.quantity} x{' '}
-                    {
-                      orderState.allProducts.filter(
-                        pro => pro.id == item.productId,
-                      )[0].name
-                    }{' '}
-                    x{' '}
-                    {formatMoney(
-                      orderState.allProducts
-                        .filter(pro => pro.id == item.productId)[0]
-                        .sizes.filter(sizeItem => sizeItem.size == item.size)[0]
-                        .price * item.quantity,
-                    )}
-                  </Text>
-                  <Text
-                    style={{
-                      color: themeState.appTheme.textColor,
-                      ...FONTS.body5,
-                      marginLeft: 10,
-                    }}>
-                    ĐCCH:{' '}
-                    {/* {
-                      orderState.allProducts
-                        ?.filter(cartItem => cartItem.id == item.productId)[0]
-                        .stores.filter(
-                          storeItem => storeItem.id == item.storeId,
-                        )[0].address
-                    } */}
-                  </Text>
-                  <Text
-                    style={{
-                      color: themeState.appTheme.textColor,
-                      ...FONTS.body5,
-                      marginLeft: 10,
-                    }}>
-                    Size: {item.size}, {item.description}
-                  </Text>
-                </View>
-                <View style={{flex: 1}}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                  }}>
                   <IconButton
-                    icon={icons.deleted}
-                    containerStyle={{
-                      alignSelf: 'flex-end',
-                      marginTop: 26,
-                    }}
-                    iconStyle={{tintColor: COLORS.red}}
+                    icon={item.state ? icons.checkbox : icons.uncheckbox}
+                    iconStyle={{tintColor: themeState.appTheme.textColor}}
+                    onPress={() =>
+                      cartActions.updateStateProductInCart(item.id, item.state)
+                    }
                   />
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.push('OrderDetail', {
+                        selectedItem: orderState.allProducts.filter(
+                          pro => pro.id == item.productId,
+                        )[0],
+                        selectedLocation: orderState.allProducts
+                          ?.filter(cartItem => cartItem.id == item.productId)[0]
+                          .stores.filter(
+                            storeItem => storeItem.id == item.storeId,
+                          )[0],
+                        editedCart: item.id,
+                      })
+                    }>
+                    <Text
+                      style={{
+                        color: themeState.appTheme.textColor,
+                        ...FONTS.body3,
+                        marginLeft: 10,
+                      }}>
+                      {item.quantity} x{' '}
+                      {
+                        orderState.allProducts.filter(
+                          pro => pro.id == item.productId,
+                        )[0].name
+                      }{' '}
+                      x {formatMoney(getProPrice(item) * item.quantity)}
+                    </Text>
+                    <Text
+                      style={{
+                        color: themeState.appTheme.textColor,
+                        ...FONTS.body5,
+                        marginLeft: 10,
+                      }}>
+                      ĐCCH:{' '}
+                      {
+                        orderState.allProducts
+                          ?.filter(cartItem => cartItem.id == item.productId)[0]
+                          .stores.filter(
+                            storeItem => storeItem.id == item.storeId,
+                          )[0].address
+                      }
+                    </Text>
+                    <Text
+                      style={{
+                        color: themeState.appTheme.textColor,
+                        ...FONTS.body5,
+                        marginLeft: 10,
+                      }}>
+                      Size: {item.size}, {item.description}
+                    </Text>
+                  </TouchableOpacity>
+                  <View style={{flex: 1}}>
+                    <IconButton
+                      icon={icons.deleted}
+                      containerStyle={{
+                        alignSelf: 'flex-end',
+                        marginTop: 26,
+                      }}
+                      iconStyle={{tintColor: COLORS.red}}
+                      onPress={() => deleteCartItem(item)}
+                    />
+                  </View>
                 </View>
               </View>
+            ))
+          ) : (
+            <View
+              style={{
+                paddingVertical: 20,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Text
+                style={{
+                  color: themeState.appTheme.textColor,
+                  ...FONTS.h3,
+                }}>
+                Chưa có sản phẩm trong giỏ!!!!
+              </Text>
+              <Image
+                resizeMode="contain"
+                source={icons.cart}
+                style={{height: 100, width: 100}}
+              />
             </View>
-          ))}
+          )}
         </View>
         {/* Total */}
         <View
@@ -697,7 +759,8 @@ const Cart = ({
               style={{
                 flexDirection: 'row',
                 paddingBottom: 20,
-              }}>
+              }}
+              onPress={deleteAllCart}>
               <IconButton
                 icon={icons.deleted}
                 iconStyle={{tintColor: COLORS.red}}

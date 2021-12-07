@@ -179,7 +179,7 @@ const Order = ({navigation, themeState, route, orderActions, orderState}) => {
             showsVerticalScrollIndicator={false}
             //keyboardDismissMode="on-drag"
             renderItem={({item}) => {
-              return (
+              return item.state ? (
                 <VerticalTextButton
                   label={item.name}
                   containerStyle={{
@@ -190,7 +190,7 @@ const Order = ({navigation, themeState, route, orderActions, orderState}) => {
                   selected={selectedCategory == item.name}
                   onPress={() => setSelectedCategory(item.name)}
                 />
-              );
+              ) : null;
             }}
           />
         </View>
@@ -235,7 +235,7 @@ const Order = ({navigation, themeState, route, orderActions, orderState}) => {
             }}
             keyExtractor={item => item.id}
             renderItem={({item, index}) => {
-              return (
+              return item.state ? (
                 <TouchableWithoutFeedback
                   onPress={() =>
                     navigation.navigate('OrderDetail', {
@@ -311,30 +311,32 @@ const Order = ({navigation, themeState, route, orderActions, orderState}) => {
                             )[0].price,
                           )}{' '}
                         </Text>
-                        <View
-                          style={{
-                            height: 40,
-                            width: 40,
-                            borderRadius: 20,
-                            backgroundColor: COLORS.red,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            marginLeft: 30,
-                          }}>
-                          <Text
+                        {item.discount ? (
+                          <View
                             style={{
-                              color: COLORS.lightYellow,
-                              ...FONTS.h2,
-                              fontSize: 18,
+                              height: 45,
+                              width: 45,
+                              borderRadius: 20,
+                              backgroundColor: COLORS.red,
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              marginLeft: 30,
                             }}>
-                            {item.discount ? -item.discount + '%' : null}
-                          </Text>
-                        </View>
+                            <Text
+                              style={{
+                                color: COLORS.lightYellow,
+                                ...FONTS.h2,
+                                fontSize: 18,
+                              }}>
+                              {-item.discount + '%'}
+                            </Text>
+                          </View>
+                        ) : null}
                       </View>
                     </View>
                   </View>
                 </TouchableWithoutFeedback>
-              );
+              ) : null;
             }}
           />
         </View>
