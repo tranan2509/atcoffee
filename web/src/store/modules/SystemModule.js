@@ -6,6 +6,7 @@ import * as MutationsName from "../../components/common/MutationsName";
 const SystemModule = {
   state() {
     return {
+      miniSidebar: false,
       menu: {
         dashboard: {
           value: false
@@ -90,6 +91,9 @@ const SystemModule = {
     },
     menuStaff(state) {
       return state.menuStaff;
+    },
+    miniSidebar(state) {
+      return state.miniSidebar;
     }
   },
 
@@ -114,6 +118,10 @@ const SystemModule = {
           })
         } 
       })
+    },
+
+    [MutationsName.MUTATION_NAME_SET_MINI_SIDEBAR] (state, miniSidebar) {
+      state.miniSidebar = miniSidebar;
     }
   },
 

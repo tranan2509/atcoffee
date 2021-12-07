@@ -43,7 +43,7 @@ public class InitializationAPI {
 		boolean flag = true;
 		try {
 			if (storeService.findAll().isEmpty()) {
-				StoreDTO store = new StoreDTO("AT_THUDUC", "A&T Coffee", "Thủ Đức, Hồ Chí Minh", "8:00", "23:00");
+				StoreDTO store = new StoreDTO("AT_THUDUC", "A&T Coffee", "Thủ Đức, HCM", "8:00", "23:00");
 				storeService.save(store);
 				store = new StoreDTO("AT_DISTRICT2", "A&T Coffee", "Quận 2, Hồ Chí Minh", "8:00", "23:00");
 				storeService.save(store);

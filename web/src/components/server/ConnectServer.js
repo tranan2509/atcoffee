@@ -6,6 +6,7 @@ const instance = axios.create({
   baseURL: Constants.HOSTNAME_DEFAULT,
   headers: {
     'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
     'Authorization': JWT.getBearerJWT()
   }
 });

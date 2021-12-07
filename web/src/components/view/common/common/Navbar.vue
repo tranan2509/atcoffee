@@ -1,6 +1,15 @@
 <template>
-  <div class="navbar-bg"></div>  
-  <nav class="navbar navbar-expand-lg main-navbar">
+  <div class="navbar-bg" :class="$store.getters.miniSidebar ? 'active' : ''"></div>  
+  <nav class="navbar navbar-expand-lg main-navbar" :class="$store.getters.miniSidebar ? 'active' : ''">
+    <form class="form-inline mr-auto">
+      <ul class="navbar-nav mr-3">
+        <li>
+          <span to="" class="nav-link nav-link-lg" data-toggle="sidebar">
+            <i class="fas fa-bars" @click="handleToggleSidebar"></i>
+          </span>
+        </li>
+      </ul>
+    </form>
     <ul class="navbar-nav navbar-right">
       <li class="dropdown dropdown-list-toggle" v-if="$store.getters.user != null && $store.getters.user.roleName == 'STAFF'">
          <router-link to="" class="nav-link notification-toggle nav-link-lg" :class="this.$store.getters.billsUnread.length > 0 ? 'beep' : ''"
@@ -68,6 +77,7 @@
 
 <script>
 import * as Constants from '../../../common/Constants'
+import * as MutationsName from '../../../common/MutationsName'
 import CommonUtils from '../../../common/CommonUtils'
 import LoginCommand from '../../../command/LoginCommand'
 import BillDataService from '../../../services/BillDataService'
@@ -100,6 +110,10 @@ export default {
 
     fromNow(timeStamp) {
       return CommonUtils.fromNow(timeStamp);
+    },
+
+    handleToggleSidebar() {
+      this.$store.commit(MutationsName.MUTATION_NAME_SET_MINI_SIDEBAR, !this.$store.getters.miniSidebar);
     },
 
     handleShow(navbar) {
@@ -164,6 +178,18 @@ a {
   height: 115px;
   background: var(--primary);
   z-index: 0;
+  transition: all .5s ease;
+}
+
+.navbar-bg.active {
+  margin-left: 65px;
+  width: calc(100vw - 65px);
+
+}
+
+.navbar.active {
+  left: 65px;
+  width: calc(100% - 70px);
 }
 
 .navbar {
@@ -178,6 +204,8 @@ a {
   display: flex;
   flex-direction: row;
   padding: 0.5rem 1rem;
+  width: calc(100% - 255px);
+  left: 250px;
 }
 
 .navbar-expand-lg {
@@ -486,5 +514,19 @@ a.dropdown-item {
 
 .bg-primary {
   background: var(--primary);
+}
+
+.form-inline {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+}
+
+.form-inline .navbar-nav li span{
+  cursor: pointer;
+}
+
+.mr-auto {
+  margin-right: auto !important;
 }
 </style>

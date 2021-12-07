@@ -1,11 +1,11 @@
 <template>
-  <div id="sidebar-wrapper">
+  <div id="sidebar-wrapper" :class="$store.getters.miniSidebar ? 'active' : ''">
     <div class="sidebar-brand">
-      <a>A&#38;T Coffee</a>
+      <a>A&#38;T {{$store.getters.miniSidebar ? '' : 'Coffee'}}</a>
       <!-- <a href="#"><img src="../../../assets/logo.png" alt="logo"></a> -->
     </div>
     <ul class="sidebar-menu">
-      <li class="menu-header">QUẢN LÝ</li>
+      <li class="menu-header">{{$store.getters.miniSidebar ? 'QL' : 'QUẢN LÝ'}}</li>
       <li class="nav-item dropdown" :class="menuStaff.product.value ? 'active' : ''">  
         <router-link to="/staff/products" class="nav-link" @click="handleDropdown(menuStaff.product)">
           <i class="fas fa-store"></i>
@@ -30,7 +30,7 @@
           <span>Thông báo</span>
         </router-link>
       </li>
-      <li class="menu-header">HỒ SƠ</li>
+      <li class="menu-header">{{$store.getters.miniSidebar ? 'HS' : 'HỒ SƠ'}}</li>
       <li class="nav-item dropdown" :class="menuStaff.profile.value ? 'active' : ''">
         <router-link to="" class="nav-link has-dropdown" @click="handleDropdown(menuStaff.profile)">
           <i class="fas fa-user"></i>
@@ -108,6 +108,71 @@ export default {
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: thin;
+  transition: all .5s ease;
+}
+
+#sidebar-wrapper.active {
+  width: 65px;
+}
+
+#sidebar-wrapper.active .sidebar-brand{
+  font-size: 14px;
+  width: 65px;
+}
+
+#sidebar-wrapper.active .sidebar-menu .menu-header{
+  text-align: center;
+}
+
+#sidebar-wrapper.active ul li{
+  transition: all .5s ease-in;
+}
+
+#sidebar-wrapper.active ul li a{
+  border-radius: 3px;
+  height: 45px;
+  padding: 0;
+  justify-content: center;
+  width: 45px;
+  margin: 10px;
+  transition: all .5s ease;
+}
+
+
+#sidebar-wrapper.active ul li.active a{
+  text-align: center;
+  background: var(--primary);
+  box-shadow: 0 4px 8px #acb5f6;
+}
+
+#sidebar-wrapper.active ul li.active a:hover{
+  background: var(--primary);
+}
+
+#sidebar-wrapper.active ul li.active a i, #sidebar-wrapper.active ul li.active a .b-icon{
+  color: #fff;
+}
+
+#sidebar-wrapper.active ul li a span {
+  display: none;
+}
+
+#sidebar-wrapper.active ul li a i:nth-child(3){
+  display: none;
+}
+
+#sidebar-wrapper.active ul li a i{
+  font-size: 18px;
+  transition: all .5s ease-in-out;
+  margin: 0;
+  text-align: center;
+}
+
+#sidebar-wrapper.active ul li a .b-icon{
+  font-size: 18px;
+  transition: all .5s ease-in-out;
+  margin: 0;
+  text-align: center;
 }
 
 #sidebar-wrapper .sidebar-brand {
@@ -116,6 +181,7 @@ export default {
   line-height: 60px;
   text-align: center;
   width: 250px;
+  transition: all .5s ease;
 }
 
 #sidebar-wrapper .sidebar-brand a {
