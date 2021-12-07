@@ -3,7 +3,7 @@
     <div class="background"></div>
     <side-bar />
     <navbar />
-    <div class="section">
+    <div class="section" :class="$store.getters.miniSidebar ? 'active' : ''">
       <slot></slot>
     </div>
   </div>

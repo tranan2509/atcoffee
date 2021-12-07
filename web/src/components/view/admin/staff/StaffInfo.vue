@@ -125,29 +125,4 @@ export default {
 
 <style>
 
-.main-content {
-  position: relative;
-  background: #f4f6f9;
-}
-
-.section {
-  position: absolute;
-  top: 80px;
-  width: calc(100vw - 60px - 250px);
-  z-index: 1;
-  margin-left: calc(30px + 250px);
-  margin-right: 30px;
-}
-
-a {
-  color: var(--primary);
-  font-weight: 500;
-  text-decoration: none;
-  background: transparent;
-}
-
-a:hover {
-  text-decoration: underline;
-  color: var(--primary);
-}
 </style>
