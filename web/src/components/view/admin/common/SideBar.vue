@@ -19,7 +19,16 @@
           <span>Sản phẩm</span>
           <i class="fas fa-chevron-right"></i>
         </router-link>
-        <ul class="dropdown-menu" :class="menu.product.value ? 'visible' : ''">
+        <ul class="dropdown-menu" style="display: block" v-if="$store.getters.miniSidebar">
+          <li class="dropdown-title pt-3">Sản phẩm</li>
+          <li>
+            <router-link to="/admin/products?page=1" class="nav-link" >Danh sách sản phẩm</router-link>
+          </li>
+          <li>
+            <router-link to="/admin/add-product" class="nav-link">Thêm sản phẩm</router-link>
+          </li>
+        </ul>
+        <ul class="dropdown-menu" :class="menu.product.value ? 'visible' : ''" v-else>
           <li :class="menu.product.submenu.products ? 'active': ''" @click="handleLink(menu.product, 'products')">
             <router-link to="/admin/products?page=1" class="nav-link" >Danh sách sản phẩm</router-link>
           </li>
@@ -34,7 +43,16 @@
           <span>Nhân viên</span>
           <i class="fas fa-chevron-right"></i>
         </router-link>
-        <ul class="dropdown-menu" :class="menu.staff.value ? 'visible' : ''">
+         <ul class="dropdown-menu" style="display: block" v-if="$store.getters.miniSidebar">
+          <li class="dropdown-title pt-3">Sản phẩm</li>
+          <li>
+            <router-link to="/admin/staffs?page=1" class="nav-link" >Danh sách nhân viên</router-link>
+          </li>
+          <li>
+            <router-link to="/admin/add-staff" class="nav-link">Thêm nhân viên</router-link>
+          </li>
+        </ul>
+        <ul class="dropdown-menu" :class="menu.staff.value ? 'visible' : ''" v-else>
           <li :class="menu.staff.submenu.staffs ? 'active': ''" @click="handleLink(menu.staff, 'staffs')">
             <router-link to="/admin/staffs?page=1" class="nav-link" >Danh sách nhân viên</router-link>
           </li>
@@ -167,13 +185,13 @@ export default {
   height: 100vh;
   background: #fff;
   overflow-y: auto;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
   scrollbar-width: thin;
   transition: all .5s ease;
 }
 
 #sidebar-wrapper.active {
-  width: 65px;
+  width: 65px !important;
 }
 
 #sidebar-wrapper.active .sidebar-brand{
@@ -199,7 +217,6 @@ export default {
   transition: all .5s ease;
 }
 
-
 #sidebar-wrapper.active ul li.active a{
   text-align: center;
   background: var(--primary);
@@ -214,7 +231,7 @@ export default {
   color: #fff;
 }
 
-#sidebar-wrapper.active ul li a span {
+#sidebar-wrapper.active ul li a span:nth-child(2) {
   visibility: hidden;
   opacity: 0;
   width: 0;
@@ -238,7 +255,15 @@ export default {
   text-align: center;
 }
 
-
+#sidebar-wrapper.active .sidebar-menu li ul.dropdown-menu {
+  position: absolute;
+  background: #000;
+  left: 40px;
+  top: 10px;
+  width: 200px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.03);
+  z-index: 2;
+}
 
 #sidebar-wrapper .sidebar-brand {
   display: inline-block;

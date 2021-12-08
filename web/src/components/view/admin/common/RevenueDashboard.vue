@@ -183,6 +183,10 @@ export default {
   flex-direction: row;
 }
 
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
 .flex-2 {
   flex: 2 !important;
 }

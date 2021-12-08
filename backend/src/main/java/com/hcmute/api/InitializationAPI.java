@@ -78,11 +78,11 @@ public class InitializationAPI {
 						"virtualuser@gmail.com", "Không có địa chỉ", 0, 0, 1L, "USER");
 				user.setCode("VIRTUAL_USER");
 				userService.save(user);
-				user = new UserDTO("admin", "admin", "https://res.cloudinary.com/tranan2509/image/upload/v1635433632/logo_hvnmwc.png", "Admin", "01692889894", "Nam",
+				user = new UserDTO("admin", "admin", "https://res.cloudinary.com/tranan2509/image/upload/v1636107801/avatar_a9azml.png", "Trần Văn Ân", "01692889894", "Nam",
 						"tranan2509@gmail.com", "9 Trình Hoài Đức, Quận 9", dob, "215523098", 1L, "ADMIN");
 				user.setCode("AN_TV");
 				userService.save(user);
-				user = new UserDTO("staff", "staff", "https://res.cloudinary.com/tranan2509/image/upload/v1635433632/logo_hvnmwc.png", "Admin", "01692889893", "Nữ",
+				user = new UserDTO("staff", "staff", "https://res.cloudinary.com/tranan2509/image/upload/v1638505322/otx0l3euew6butlst5br.jpg", "Nguyễn Thị Minh Thư", "01692889893", "Nữ",
 						"thuntm@gmail.com", "9 Trình Hoài Đức, Quận 9", dob, "215533098", 1L, "STAFF");
 				user.setCode("THU_NTM");
 				userService.save(user);

@@ -52,7 +52,7 @@
                   <td class="text-center">{{product.code}}</td>
                   <td class="text-center">{{product.name}}</td>
                   <td class="text-center">
-                    <img :src="product.image" alt="image" @click="handleViewImage(product.image)">
+                    <img :src="product.image" alt="Ảnh" @click="handleViewImage(product.image)">
                   </td>
                   <td class="text-center">{{formatPrice(product.sizes[1].price)}}</td>
                   <td class="text-center"><i class="fas fa-info-circle" @click="handleInfo(product.id)"></i></td>

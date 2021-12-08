@@ -100,7 +100,7 @@ export default {
 .col-lg-2.col-custom {
   position: relative;
   cursor: pointer;
-  flex: 0 0 20%;
+  flex: 0 20%;
   /* max-width: auto; */
   min-width: 280px;
 }

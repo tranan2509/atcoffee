@@ -63,7 +63,7 @@
                   <td class="text-center">{{user.code}}</td>
                   <td class="text-center">{{user.name}}</td>
                   <td class="text-center">
-                    <img :src="user.image" alt="image" @click="handleViewImage(user.image)">
+                    <img :src="user.image" alt="Ảnh" @click="handleViewImage(user.image)">
                   </td>
                   <td class="text-center">{{user.email}}</td>
                   <td class="text-center">{{user.phone}}</td>
