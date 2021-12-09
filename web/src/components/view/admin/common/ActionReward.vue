@@ -56,6 +56,8 @@ import RewardCommand from '../../../command/RewardCommand'
 import RewardEntity from '../../../entities/RewardEntity'
 import Spinner from '../../common/popup/Spinner.vue'
 import AlertPopup from '../../common/popup/AlertPopup.vue'
+import { createToast } from 'mosha-vue-toastify';
+import 'mosha-vue-toastify/dist/style.css';
 
 export default {
   name: Constants.COMPONENT_NAME_ACTION_REWARD,
@@ -77,6 +79,20 @@ export default {
 
   methods: {
 
+    toast(description, type) {
+
+      var color = type == 'success' ? '#40b883' : '#e76666';
+      createToast( {description: description},
+        {
+          showIcon: 'true',
+          hideProgressBar: 'true',
+          position: 'top-right',
+          toastBackgroundColor: color,
+          timeout: 2000,
+          type: type,
+        })
+    },
+
     handleHideAlert() {
       this.isAlertPopup = false;
     },
@@ -95,6 +111,14 @@ export default {
       let result = await RewardCommand.save(this.reward);
       this.isSpinner = false;
       result != null && this.$route.path.includes('rewards') ? this.clearData() : '';
+      var text = '', type = 'success';
+      if (result != null) {
+        text = this.$route.path.includes('rewards') ? 'Thêm phần thưởng thành công' : 'Chỉnh sửa phần thưởng thành công';
+      } else {
+        text = this.$route.path.includes('rewards') ? 'Thêm phần thưởng thất bại' : 'Chỉnh sửa phần thưởng thất bại';
+        type = 'danger';
+      }
+      this.toast(text, type);
       this.$emit('handleDone');
     },
 

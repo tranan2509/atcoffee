@@ -78,6 +78,8 @@ import CommonUtils from '../../../common/CommonUtils'
 import PromotionEntity from '../../../entities/PromotionEntity'
 import Spinner from '../../common/popup/Spinner.vue'
 import AlertPopup from '../../common/popup/AlertPopup.vue'
+import { createToast } from 'mosha-vue-toastify';
+import 'mosha-vue-toastify/dist/style.css';
 
 export default {
   name: Constants.COMPONENT_NAME_ACTION_STORE,
@@ -101,6 +103,20 @@ export default {
 
   methods: {
 
+    toast(description, type) {
+
+      var color = type == 'success' ? '#40b883' : '#e76666';
+      createToast( {description: description},
+        {
+          showIcon: 'true',
+          hideProgressBar: 'true',
+          position: 'top-right',
+          toastBackgroundColor: color,
+          timeout: 2000,
+          type: type,
+        })
+    },
+
     handleHideAlert() {
       this.isAlertPopup = false;
     },
@@ -122,6 +138,14 @@ export default {
       let result = await PromotionCommand.save(this.formData);
       this.isSpinner = false;
       result != null && this.$route.path.includes('promotions') ? this.clearData() : '';
+      var text = '', type = 'success';
+      if (result != null) {
+        text = this.$route.path.includes('promotions') ? 'Thêm khuyến mãi thành công' : 'Chỉnh sửa khuyến mãi thành công';
+      } else {
+        text = this.$route.path.includes('promotions') ? 'Thêm khuyến mãi thất bại' : 'Chỉnh sửa khuyến mãi thất bại';
+        type = 'danger';
+      }
+      this.toast(text, type);
       this.$emit('handleDone');
     },
 

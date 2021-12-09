@@ -93,6 +93,8 @@ import CategoryCommand from '../../../command/CategoryCommand'
 import StoreCommand from '../../../command/StoreCommand'
 import Spinner from '../../common/popup/Spinner.vue'
 import AlertPopup from '../../common/popup/AlertPopup.vue'
+import { createToast } from 'mosha-vue-toastify';
+import 'mosha-vue-toastify/dist/style.css';
 
 export default {
   name: Constants.COMPONENT_NAME_ACTION_PRODUCT,
@@ -138,6 +140,20 @@ export default {
 
   methods: {
 
+    toast(description, type) {
+
+      var color = type == 'success' ? '#40b883' : '#e76666';
+      createToast( {description: description},
+        {
+          showIcon: 'true',
+          hideProgressBar: 'true',
+          position: 'top-right',
+          toastBackgroundColor: color,
+          timeout: 2000,
+          type: type,
+        })
+    },
+
     handleSelectedImage() {
       let file = this.$refs.file.files[0];
       this.url = URL.createObjectURL(file);
@@ -171,6 +187,14 @@ export default {
         let result = await ProductCommand.saveProduct(this.formData);
         this.isSpinner = false;
         result != null && this.$route.path.includes('add-product') ? this.clearData() : this.$router.push({path: '/admin/product-info', query: {id: this.product.id}});
+        var text = '', type = 'success';
+        if (result != null) {
+          text = this.$route.path.includes('add-product') ? 'Thêm sản phẩm thành công' : 'Chỉnh sửa sản phẩm thành công';
+        } else {
+          text = this.$route.path.includes('add-product') ? 'Thêm sản phẩm thất bại' : 'Chỉnh sửa sản phẩm thất bại';
+          type = 'danger';  
+        }
+        this.toast(text, type);
       } else {
         this.error = categories == null ? 'Vui lòng chọn loại đồ uống!' : 'Vui lòng chọn cửa hàng muốn thêm sản phẩm!';
       }
