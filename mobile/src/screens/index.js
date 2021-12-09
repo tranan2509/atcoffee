@@ -9,6 +9,7 @@ import Profile from './Profile';
 import Cart from './Cart';
 import Notification from './Notification';
 import Information from './Profile/Information';
+import changePassword from './Profile/changePassword';
 
 export {
   Home,
@@ -22,4 +23,5 @@ export {
   Cart,
   Notification,
   Information,
+  changePassword,
 };

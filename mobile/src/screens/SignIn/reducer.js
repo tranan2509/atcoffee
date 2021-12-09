@@ -8,8 +8,14 @@ const initialState = {
 
 const signInReducer = function (state = initialState, action) {
   switch (action.type) {
+    case types.EDIT_PASSWORD:
+      console.log('reducer', action.payload);
+      return {
+        ...state,
+        data: action.payload,
+      };
     case types.SIGN_IN || types.AUTO_SIGN_IN:
-      // console.log('reducer');
+      //console.log('reducer', action.payload);
       return {
         ...state,
         data: action.payload,

@@ -18,6 +18,12 @@ const profileReducer = function (state = initialState, action) {
         ...state,
         error: action.error,
       };
+    case types.RESET_PASSWORD:
+      console.log('reducer', action.payload);
+      return {
+        ...state,
+        resetPassword: action.payload,
+      };
     default:
       return state;
   }

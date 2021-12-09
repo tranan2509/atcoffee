@@ -7,7 +7,24 @@ export const ERROR_SIGN_IN = 'ERROR_SIGN_IN';
 export const LOG_OUT = 'LOG_OUT';
 export const GET_USER = 'GET_USER';
 export const GET_TYPE = 'GET_TYPE';
+export const EDIT_PASSWORD = 'EDIT_PASSWORD';
 
+export const editPassword = (user, oldPassword, newPassword) => {
+  return async dispatch => {
+    try {
+      const res = await apiServer.put(`/api/user/change-password`, {
+        user,
+        oldPassword,
+        newPassword,
+      });
+      console.log('action', res.data);
+      dispatch({type: EDIT_PASSWORD, payload: res.data});
+    } catch (err) {
+      console.log('This is error in order-cate', err);
+      dispatch({type: ERROR_EDIT, error: err});
+    }
+  };
+};
 export const signIn = (username, password) => {
   return async dispatch => {
     try {

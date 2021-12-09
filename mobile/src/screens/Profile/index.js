@@ -251,7 +251,7 @@ const Profile = ({
               themeState.appTheme.name == 'dark' ? COLORS.gray1 : COLORS.white,
             marginTop: 10,
           }}
-          onPress={() => _logOut(() => navigation.push('SignIn'))}>
+          onPress={() => navigation.navigate('ChangePassword')}>
           <IconButton
             icon={icons.resetpassword}
             iconStyle={{tintColor: themeState.appTheme.textColor}}

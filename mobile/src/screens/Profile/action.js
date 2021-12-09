@@ -4,6 +4,23 @@ import * as RootNavigation from '../../navigation/navigationRef';
 export const EDIT_PROFILE = 'EDIT_PROFILE';
 export const ERROR_EDIT = 'ERROR_EDIT';
 
+export const RESET_PASSWORD = 'RESET_PASSWORD';
+
+export const resetPassword = email => {
+  return async dispatch => {
+    try {
+      const res = await apiServer.get(
+        `/api/info/reset-password?email=${email}`,
+      );
+      console.log('action', res.data);
+      dispatch({type: RESET_PASSWORD, payload: res.data});
+    } catch (err) {
+      console.log('This is error in profile reset password', err);
+      dispatch({type: ERROR_EDIT, error: err});
+    }
+  };
+};
+
 export const editProfile = (
   id,
   name,
@@ -59,7 +76,6 @@ export const editProfile = (
       const res = await apiServer.put('/api/info/user', data);
       console.log('user', res.data);
       dispatch({type: EDIT_PROFILE, payload: res.data});
-      //RootNavigation.navigate('Profile');
     } catch (err) {
       console.log('This is error in action edit', err);
       dispatch({type: ERROR_EDIT, error: err});
