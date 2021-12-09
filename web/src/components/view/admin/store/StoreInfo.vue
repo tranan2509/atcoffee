@@ -29,6 +29,8 @@ import Admin from '../main/Admin.vue'
 import SectionHeader from '../../common/common/SectionHeader.vue'
 import BasicStoreInfo from '../common/BasicStoreInfo.vue'
 import ActionStore from '../common/ActionStore.vue'
+import { createToast } from 'mosha-vue-toastify';
+import 'mosha-vue-toastify/dist/style.css';
 
 export default {
   name: Constants.COMPONENT_NAME_STAFF_INFO,
@@ -57,6 +59,20 @@ export default {
 
   methods: {
 
+    toast(description, type) {
+
+      var color = type == 'success' ? '#40b883' : '#e76666';
+      createToast( {description: description},
+        {
+          showIcon: 'true',
+          hideProgressBar: 'true',
+          position: 'top-right',
+          toastBackgroundColor: color,
+          timeout: 2000,
+          type: type,
+        })
+    },
+
     init() {
       this.storeId = this.$route.query.id;
       if (typeof this.storeId == 'undefined') {
@@ -73,10 +89,18 @@ export default {
       result['state'] = !isLock;
       this.formData = new FormData();
       this.formData.append('store', JSON.stringify(result));
-      await StoreCommand.save(this.formData);
-      let query = {};
-      query.page = this.$store.getters.sortStore.page;
-      this.$router.push({path: '/admin/stores', query: query});
+      let res = await StoreCommand.save(this.formData);
+      var text = '', type = 'success';
+      if (res != null) {
+        let query = {};
+        query.page = this.$store.getters.sortStore.page;
+        text = 'Loại bỏ cửa hàng thành công';
+        this.$router.push({path: '/admin/stores', query: query});
+      } else {
+        text = 'Loại bỏ cửa hàng thất bại';
+        type = 'danger';
+      }
+      this.toast(text, type);
     },
 
     async handleDone() {

@@ -29,6 +29,8 @@ import Admin from '../main/Admin.vue'
 import SectionHeader from '../../common/common/SectionHeader.vue'
 import PersonalInfo from '../common/PersonalInfo.vue'
 import ActionStaff from '../common/ActionStaff.vue'
+import { createToast } from 'mosha-vue-toastify';
+import 'mosha-vue-toastify/dist/style.css';
 
 export default {
   name: Constants.COMPONENT_NAME_STAFF_INFO,
@@ -77,6 +79,20 @@ export default {
 
   methods: {
 
+    toast(description, type) {
+
+      var color = type == 'success' ? '#40b883' : '#e76666';
+      createToast( {description: description},
+        {
+          showIcon: 'true',
+          hideProgressBar: 'true',
+          position: 'top-right',
+          toastBackgroundColor: color,
+          timeout: 2000,
+          type: type,
+        })
+    },
+
     init() {
       this.userId = this.$route.query.id;
       if (typeof this.userId == 'undefined') {
@@ -94,8 +110,16 @@ export default {
       this.$router.push({path: '/admin/staff-info', query: {id: this.userId}});
       this.formData = new FormData();
       this.formData.append('user', JSON.stringify(result));
-      await UserCommand.save(this.formData);
-      await this.getUserById(this.userId);
+      let res = await UserCommand.save(this.formData);
+      var text = '', type = 'success';
+      if (res != null) {
+        text = 'Khóa tài khoản thành công';
+        await this.getUserById(this.userId);
+      } else {
+        text = 'Khóa tài khoản thất bại';
+        type = 'danger';
+      }
+      this.toast(text, type);
     },
 
     async handleDone() {

@@ -42,6 +42,7 @@ export default {
 </script>
 
 <style>
+
 .background {
   position: fixed;
   top: 0;

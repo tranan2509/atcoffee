@@ -30,6 +30,8 @@ import Admin from '../main/Admin.vue'
 import SectionHeader from '../../common/common/SectionHeader.vue'
 import BasicPromotionInfo from '../common/BasicPromotionInfo.vue'
 import ActionPromotion from '../common/ActionPromotion.vue'
+import { createToast } from 'mosha-vue-toastify';
+import 'mosha-vue-toastify/dist/style.css';
 
 export default {
   name: Constants.COMPONENT_NAME_STAFF_INFO,
@@ -70,6 +72,20 @@ export default {
 
   methods: {
 
+    toast(description, type) {
+
+      var color = type == 'success' ? '#40b883' : '#e76666';
+      createToast( {description: description},
+        {
+          showIcon: 'true',
+          hideProgressBar: 'true',
+          position: 'top-right',
+          toastBackgroundColor: color,
+          timeout: 2000,
+          type: type,
+        })
+    },
+
     init() {
       this.promotionId = this.$route.query.id;
       if (typeof this.promotionId == 'undefined') {
@@ -86,20 +102,27 @@ export default {
       result['state'] = !isLock;
       this.formData = new FormData();
       this.formData.append('promotion', JSON.stringify(result));
-      await PromotionCommand.save(this.formData);
-      let query = {};
-      query.page = this.$store.getters.sortPromotion.page;
-      if (this.$store.getters.sortPromotion.state != '') {
-        query.state = this.$store.getters.sortPromotion.state;
+      let res = await PromotionCommand.save(this.formData);
+      var text = '', type = 'success';
+      if (res != null) {
+        let query = {};
+        query.page = this.$store.getters.sortPromotion.page;
+        if (this.$store.getters.sortPromotion.state != '') {
+          query.state = this.$store.getters.sortPromotion.state;
+        }
+        if (this.$store.getters.sortPromotion.object != '') {
+          query.object = this.$store.getters.sortPromotion.object;
+        }
+        if (this.$store.getters.sortPromotion.keyword != '') {
+          query.keyword = this.$store.getters.sortPromotion.keyword;
+        }
+        text = 'Loại bỏ khuyến mãi thành công';
+        this.$router.push({path: '/admin/promotions', query: query});
+      } else {
+        text = 'Loại bỏ khuyến mãi Loại bỏ khuyến mãi thành công';
+        type = 'danger';
       }
-      if (this.$store.getters.sortPromotion.object != '') {
-        query.object = this.$store.getters.sortPromotion.object;
-      }
-      if (this.$store.getters.sortPromotion.keyword != '') {
-        query.keyword = this.$store.getters.sortPromotion.keyword;
-      }
-      this.$router.push({path: '/admin/promotions', query: query});
-      // await this.getPromotionById(this.promotionId);
+      this.toast(text, type);
     },
 
     async handleDone() {

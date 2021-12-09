@@ -126,6 +126,8 @@ import UserEntity from '../../../entities/UserEntity'
 import Spinner from '../../common/popup/Spinner.vue'
 import AlertPopup from '../../common/popup/AlertPopup.vue'
 import vClickOutside from 'click-outside-vue3'
+import { createToast } from 'mosha-vue-toastify';
+import 'mosha-vue-toastify/dist/style.css';
 
 export default {
   name: Constants.COMPONENT_NAME_ACTION_STAFF,
@@ -156,6 +158,20 @@ export default {
   },
 
   methods: {
+
+    toast(description, type) {
+
+      var color = type == 'success' ? '#40b883' : '#e76666';
+      createToast( {description: description},
+        {
+          showIcon: 'true',
+          hideProgressBar: 'true',
+          position: 'top-right',
+          toastBackgroundColor: color,
+          timeout: 2000,
+          type: type,
+        })
+    },
 
     async init() {
       if (this.$route.path.includes('add-staff') && (typeof this.$route.query.id == 'undefined')) {
@@ -225,6 +241,14 @@ export default {
         let result = await UserCommand.save(this.formData);
         this.isSpinner = false;
         result != null && this.$route.path.includes('add-staff') ? this.clearData() : this.$emit('handleDone');
+        var text = '', type = 'success';
+        if (result != null) {
+          text = this.$route.path.includes('add-staff') ? 'Thêm nhân viên thành công' : 'Chỉnh sửa nhân viên thành công';
+        } else {
+          text = this.$route.path.includes('add-staff') ? 'Thêm nhân viên thất bại' : 'Chỉnh sửa nhân viên thất bại';
+          type = 'danger';
+        }
+        this.toast(text, type);
       } 
     },
 

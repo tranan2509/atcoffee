@@ -29,6 +29,8 @@ import Admin from '../main/Admin.vue'
 import SectionHeader from '../../common/common/SectionHeader.vue'
 import BasicRewardInfo from '../common/BasicRewardInfo.vue'
 import ActionReward from '../common/ActionReward.vue'
+import { createToast } from 'mosha-vue-toastify';
+import 'mosha-vue-toastify/dist/style.css';
 
 export default {
   name: Constants.COMPONENT_NAME_REWARD_INFO,
@@ -63,6 +65,20 @@ export default {
 
   methods: {
 
+    toast(description, type) {
+
+      var color = type == 'success' ? '#40b883' : '#e76666';
+      createToast( {description: description},
+        {
+          showIcon: 'true',
+          hideProgressBar: 'true',
+          position: 'top-right',
+          toastBackgroundColor: color,
+          timeout: 2000,
+          type: type,
+        })
+    },
+
     init() {
       this.rewardId = this.$route.query.id;
       if (typeof this.rewardId == 'undefined') {
@@ -77,13 +93,21 @@ export default {
     async handleLock(isLock) {
       let result = await RewardCommand.findOne(this.rewardId);
       result['state'] = !isLock;
-      await RewardCommand.update(result);
-      let query = {};
-      query.page = this.$store.getters.sortReward.page;
-      if (this.$store.getters.sortReward.keyword != '') {
-        query.keyword = this.$store.getters.sortReward.keyword;
+      let res = await RewardCommand.update(result);
+      var text = '', type = 'success';
+      if (res != null) {
+        let query = {};
+        query.page = this.$store.getters.sortReward.page;
+        if (this.$store.getters.sortReward.keyword != '') {
+          query.keyword = this.$store.getters.sortReward.keyword;
+        }
+        text = 'Loại bỏ phần thưởng thành công';
+        this.$router.push({path: '/admin/rewards', query: query});
+      } else {
+        text = 'Loại bỏ phần thưởng thất bại';
+        type = 'danger';
       }
-      this.$router.push({path: '/admin/rewards', query: query});
+      this.toast(text, type);
     },
 
     async handleDone() {
