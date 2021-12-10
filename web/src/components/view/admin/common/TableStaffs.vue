@@ -71,7 +71,9 @@
                   <td class="text-center">
                     <i class="fas fa-circle" :class="user.state ? 'active' : 'inactive'"></i>
                   </td>
-                  <td class="text-center"><i class="fas fa-info-circle" @click="handleInfo(user.id)"></i></td>
+                  <td class="text-center">
+                    <button class="btn btn-secondary" @click="handleInfo(user.id)">Chi tiết</button>
+                  </td>
                 </tr>
               </tbody>
             </table>

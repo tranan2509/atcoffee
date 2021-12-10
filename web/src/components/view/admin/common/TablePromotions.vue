@@ -58,7 +58,9 @@
                   <td class="text-center">{{formatDate(promotion.startDate)}}</td>
                   <td class="text-center">{{formatDate(promotion.endDate)}}</td>
                   <td class="text-center">{{formatPrice(promotion.proviso)}}</td>
-                  <td class="text-center"><i class="fas fa-info-circle" @click="handleInfo(promotion.id)"></i></td>
+                  <td class="text-center">
+                    <button class="btn btn-secondary" @click="handleInfo(promotion.id)">Chi tiết</button>
+                  </td>
                 </tr>
               </tbody>
             </table>

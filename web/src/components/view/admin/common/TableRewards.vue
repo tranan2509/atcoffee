@@ -35,7 +35,9 @@
                   <td class="text-center">{{reward.name}}</td>
                   <td class="text-center">{{reward.proviso}}</td>
                   <td class="text-center">{{formatPrice(reward.redution)}}</td>
-                  <td class="text-center"><i class="fas fa-info-circle" @click="handleInfo(reward.id)"></i></td>
+                  <td class="text-center">
+                    <button class="btn btn-secondary" @click="handleInfo(reward.id)">Chi tiết</button>
+                  </td>
                 </tr>
               </tbody>
             </table>

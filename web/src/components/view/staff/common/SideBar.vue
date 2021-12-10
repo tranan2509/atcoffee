@@ -232,7 +232,7 @@ export default {
   padding: 0 20px;
   background: #fff;
   box-shadow: 0 0 0 0;
-  width: 100%;
+  width: 180px;
   font-size: 14px;
   text-align: left;
 }

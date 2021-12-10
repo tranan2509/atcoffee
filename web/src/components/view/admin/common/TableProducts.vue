@@ -55,7 +55,9 @@
                     <img :src="product.image" alt="Ảnh" @click="handleViewImage(product.image)">
                   </td>
                   <td class="text-center">{{formatPrice(product.sizes[1].price)}}</td>
-                  <td class="text-center"><i class="fas fa-info-circle" @click="handleInfo(product.id)"></i></td>
+                  <td class="text-center">
+                    <button class="btn btn-secondary" @click="handleInfo(product.id)">Chi tiết</button>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -435,5 +437,12 @@ select.form-custom option {
 
 .empty-space {
   width: 20px;
+}
+
+.btn.btn-secondary {
+  box-shadow: 0 2px 6px #e1e5e8;
+  background-color: #cdd3d8;
+  border-color: #cdd3d8;
+  color: #fff;
 }
 </style>

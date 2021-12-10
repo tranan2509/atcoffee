@@ -29,7 +29,9 @@
                   <td class="text-center">
                     <action-order :bill="bill"></action-order>
                   </td>
-                  <td class="text-center"><i class="fas fa-info-circle" @click="handleOrderInfo(bill.code)"></i></td>
+                  <td class="text-center">
+                    <button class="btn btn-secondary" @click="handleOrderInfo(bill.code)">Chi tiết</button>
+                  </td>
                 </tr>
               </tbody>
             </table>

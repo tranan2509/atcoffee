@@ -56,6 +56,7 @@ export default {
 
     processLinesProducts() {
       this.lines_products = [];
+      var categories = [];
       for (var index = 0; index < this.categories.length; index++) {
         var line_products = this.products.filter(item => {
           for (var j = 0; j < item.categories.length; j++) {
@@ -65,8 +66,12 @@ export default {
           }
           return false;
         })
-        this.lines_products.push(line_products);
+        if (line_products.length > 0) {
+          this.lines_products.push(line_products);
+          categories.push(this.categories[index]);
+        }
       }
+      this.categories = categories;
     },
 
     async loadCategoryById(id) {

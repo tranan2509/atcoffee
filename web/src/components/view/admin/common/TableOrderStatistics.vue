@@ -68,7 +68,9 @@
                   <td class="text-center order" :class="colorStatus(bill.status)"><i class="fas fa-circle"></i> {{viStatus(bill.status)}}</td>
                   <td class="text-center">{{formatDateTime(new Date(bill.modifiedDate))}}</td>
                   <td class="text-center">{{processAddressStore(bill.storeId)}}</td>
-                  <td class="text-center"><i class="fas fa-info-circle" @click="handleOrderInfo(bill.code)"></i></td>
+                  <td class="text-center">
+                    <button class="btn btn-secondary" @click="handleOrderInfo(bill.code)">Chi tiết</button>
+                  </td>
                 </tr>
               </tbody>
             </table>

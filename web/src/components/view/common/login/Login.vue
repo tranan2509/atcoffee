@@ -18,7 +18,7 @@
               :class="['alert', 'alert-danger', incorrect ? 'flex' : '']"
               role="alert"
             >
-              Tên đăng nhập hoặc mật khẩu không khớp!
+              {{msg}}
             </div>
             <div class="card card-primary">
               <div class="card-header"><h4>Đăng nhập</h4></div>
@@ -37,6 +37,7 @@
                       tabindex="1"
                       required
                       v-model="username"
+                      @input="handleChange"
                     />
                     <div class="invalid-feedback">
                       Vui lòng điền tên đăng nhập
@@ -61,6 +62,7 @@
                       tabindex="2"
                       required
                       v-model="password"
+                      @input="handleChange"
                     />
                     <div class="invalid-feedback">
                       Vui lòng điền mật khẩu
@@ -98,10 +100,16 @@ export default {
       username: "",
       password: "",
       incorrect: false,
+      msg: ''
     };
   },
 
   methods: {
+
+    handleChange() {
+      this.incorrect = false;
+      this.msg = '';
+    },
 
     /**
      * Function login
@@ -109,12 +117,16 @@ export default {
     async login(username, password) {
       var params = {username, password};
       const result = await LoginCommand.login(params, this.$store);
-      if (result && result.user.roleName == Constants.ROLE.ROLE_ADMIN) {
+      if (result && !result.user.state) {
+        this.incorrect = true;
+        this.msg = 'Tài khoản đã bị khóa!';
+      } else if (result && result.user.roleName == Constants.ROLE.ROLE_ADMIN) {
         this.$router.push('/admin')
       } else if (result && result.user.roleName == Constants.ROLE.ROLE_STAFF){
         this.$router.push({path: '/staff/products'})
       } else {
         this.incorrect = true;
+        this.msg = 'Tên đăng nhập hoặc mật khẩu không khớp!';
       }
     },
 
@@ -127,11 +139,14 @@ export default {
         return ;
       }
       const auth = await LoginCommand.authenticated(this.$store);
-      if (auth && auth.roleName == Constants.ROLE.ROLE_ADMIN){
-        this.$router.push({path: '/admin'});
-      } else if (auth && auth.roleName == Constants.ROLE.ROLE_STAFF) {
-        this.$router.push({path: '/staff/products'});
+      if (auth.state) {
+        if (auth && auth.roleName == Constants.ROLE.ROLE_ADMIN){
+          this.$router.push({path: '/admin'});
+        } else if (auth && auth.roleName == Constants.ROLE.ROLE_STAFF) {
+          this.$router.push({path: '/staff/products'});
+        }
       }
+      
     },
   },
 

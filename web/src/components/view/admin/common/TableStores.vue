@@ -28,7 +28,9 @@
                   <td class="text-center">{{store.address}}</td>
                   <td class="text-center">{{store.timeOpen}}</td>
                   <td class="text-center">{{store.timeClose}}</td>
-                  <td class="text-center"><i class="fas fa-info-circle" @click="handleInfo(store.id)"></i></td>
+                  <td class="text-center">
+                    <button class="btn btn-secondary" @click="handleInfo(store.id)">Chi tiết</button>
+                  </td>
                 </tr>
               </tbody>
             </table>

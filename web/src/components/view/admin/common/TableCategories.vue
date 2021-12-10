@@ -22,7 +22,9 @@
                   <td class="text-center">{{number(index)}}</td>
                   <td class="text-center">{{category.code}}</td>
                   <td class="text-center">{{category.name}}</td>
-                  <td class="text-center"><i class="fas fa-info-circle" @click="handleInfo(category.id)"></i></td>
+                  <td class="text-center">
+                    <button class="btn btn-secondary" @click="handleInfo(category.id)">Chi tiết</button>
+                  </td>
                 </tr>
               </tbody>
             </table>
