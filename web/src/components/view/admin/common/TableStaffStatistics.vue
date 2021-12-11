@@ -33,6 +33,15 @@
                 </option>
               </select>
             </div>
+            <div class="empty-space"></div>
+            <export-excel
+              class   = "btn btn-outline-success"
+              :data   = "json_data"
+              :fields = "json_fields"
+              worksheet = "Thống kê đơn hàng"
+              :name    = "filename">
+              Export
+            </export-excel>
           </div>
         </div>
         <div class="card-body p-0">
@@ -93,7 +102,17 @@ export default {
       users: [],
       staffs: [],
       type: 'all',
-      selectedDate: ''
+      selectedDate: '',
+      json_fields: {
+        'SST': 'index', 
+        'Mã': 'code',
+        'Tên nhân viên': 'name',
+        'Tổng đơn hàng': 'numOrders',
+        'Tổng tiền': 'revenue',
+        'Cửa hàng': 'store'
+      },
+      json_data: [],
+      filename: 'filename.xlsx'
     }
   },
 
@@ -260,8 +279,8 @@ export default {
         let endDate = new Date(year, month, 0);
         end = CommonUtils.formatDateReverse(endDate);
       }
-      await BillCommand.findByOrder(start, end, storeId, this.keyword, Constants.STATUS_BILL.COMPLETED, this.currentPage, Constants.PAGE_SIZE_ORDER_STATISTICS, this.$store);
-      this.processBills(this.$store.getters.billsLocal);
+      let bills = await BillCommand.findByOrder(start, end, storeId, this.keyword, Constants.STATUS_BILL.COMPLETED, this.currentPage, Constants.PAGE_SIZE_MAX);
+      this.processBills(bills);
     },
 
     processBills(bills) {
@@ -284,7 +303,20 @@ export default {
         }
       }
       this.staffs = staffs;
+      this.processExport(this.staffs);
     },
+
+    processExport(staffs) {
+
+      let self = this;
+      var staffFormat = staffs.map((staff, index) => {
+        staff.index = index + 1;
+        staff.store = self.processAddressStore(staff.storeId);
+        return staff;
+      });
+      this.json_data = staffFormat;
+      this.filename = 'Thống kê nhân viên ' + new Date().getTime() + '.xls';  
+    },  
 
     async loadStores() {
       this.stores = await StoreCommand.findAll();
