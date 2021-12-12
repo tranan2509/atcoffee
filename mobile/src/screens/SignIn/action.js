@@ -20,8 +20,8 @@ export const editPassword = (user, oldPassword, newPassword) => {
       console.log('action', res.data);
       dispatch({type: EDIT_PASSWORD, payload: res.data});
     } catch (err) {
-      console.log('This is error in order-cate', err);
-      dispatch({type: ERROR_EDIT, error: err});
+      console.log('This is error in edit password', err);
+      dispatch({type: ERROR_SIGN_IN, error: err});
     }
   };
 };
@@ -86,6 +86,7 @@ export const logOut = () => {
   return async dispatch => {
     await AsyncStorage.removeItem('token');
     await AsyncStorage.removeItem('delivery');
+    await AsyncStorage.removeItem('dark');
     dispatch({
       type: LOG_OUT,
     });

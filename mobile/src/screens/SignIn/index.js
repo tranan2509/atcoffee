@@ -123,12 +123,49 @@ const SignIn = ({
     }
   };
 
-  //   React.useEffect(() => {
-  //     opacityButton.value = withTiming(0, {
-  //       duration: 2750,
-  //       easing: Easing.bezier(0.3, 0.45, 0.5, 0.55),
-  //     });
-  //   }, []);
+  const toggleSwitch = () => {
+    setRememberMe(previousState => !previousState);
+    async () => await AsyncStorage.setItem('remember', `${!previousState}`);
+  };
+
+  const login = async () => {
+    setLoading(true);
+    await signInActions.signIn(phone, password);
+    if (rememberMe) {
+      await AsyncStorage.setItem('username', phone);
+      await AsyncStorage.setItem('password', password);
+      await AsyncStorage.setItem('remember', 'true');
+      //console.log('item', true);
+    } else {
+      await AsyncStorage.setItem('username', '');
+      await AsyncStorage.setItem('password', '');
+      await AsyncStorage.setItem('remember', 'false');
+      //console.log('item', false);
+    }
+  };
+  //console.log('sign in', signInState.error);
+  const loginHandler = async () => {
+    if (phone && password) {
+      await login();
+      //console.log('sign in', signInState.error);
+    } else {
+      Alert.alert('Thông báo', 'Nhập đầy đủ thông tin!', [
+        {
+          text: 'Bỏ qua',
+          onPress: () => {},
+          style: 'cancel',
+        },
+        {text: 'OK', onPress: () => {}},
+      ]);
+    }
+  };
+
+  // React.useEffect(() => {
+  //   opacityButton.value = withTiming(0, {
+  //     duration: 2750,
+  //     easing: Easing.bezier(0.3, 0.45, 0.5, 0.55),
+  //   });
+  // }, []);
 
   const onCloseState = useAnimatedGestureHandler({
     onEnd: _ => {
@@ -215,38 +252,6 @@ const SignIn = ({
     };
   });
 
-  const toggleSwitch = () => {
-    setRememberMe(previousState => !previousState);
-    async () => await AsyncStorage.setItem('remember', `${!previousState}`);
-  };
-
-  const login = async () => {
-    if (phone && password) {
-      setLoading(true);
-      await signInActions.signIn(phone, password);
-      if (rememberMe) {
-        await AsyncStorage.setItem('username', phone);
-        await AsyncStorage.setItem('password', password);
-        await AsyncStorage.setItem('remember', 'true');
-        //console.log('item', true);
-      } else {
-        await AsyncStorage.setItem('username', '');
-        await AsyncStorage.setItem('password', '');
-        await AsyncStorage.setItem('remember', 'false');
-        //console.log('item', false);
-      }
-    } else {
-      Alert.alert('Thông báo', 'Nhập đầy đủ thông tin!', [
-        {
-          text: 'Bỏ qua',
-          onPress: () => {},
-          style: 'cancel',
-        },
-        {text: 'OK', onPress: () => {}},
-      ]);
-    }
-  };
-
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -328,7 +333,9 @@ const SignIn = ({
                 </Text>
               </View>
               <TapGestureHandler
-                onHandlerStateChange={() => navigation.navigate('SignUp')}>
+                onHandlerStateChange={() =>
+                  navigation.push('ChangePassword', {forgot: true})
+                }>
                 <View
                   style={{
                     alignItems: 'flex-end',
@@ -346,7 +353,7 @@ const SignIn = ({
                 </View>
               </TapGestureHandler>
             </View>
-            <TapGestureHandler onHandlerStateChange={login}>
+            <TapGestureHandler onHandlerStateChange={loginHandler}>
               <View style={styles.button}>
                 <Text style={{fontSize: 20, fontWeight: 'bold'}}>
                   Đăng nhập

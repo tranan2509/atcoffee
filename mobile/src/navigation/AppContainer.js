@@ -5,7 +5,13 @@ import SignUpNavigator from './SignUpNavigator';
 import SignInNavigator from './SignInNavigator';
 import CartNavigator from './CartNavigator';
 import LocationStackNavigator from './LocationNavigator';
-import {Order, OrderDetail, Notification, Location} from '../screens';
+import {
+  Order,
+  OrderDetail,
+  Notification,
+  Location,
+  changePassword,
+} from '../screens';
 
 const AppContainerStack = createStackNavigator();
 const AppContainer = () => {
@@ -22,6 +28,10 @@ const AppContainer = () => {
       <AppContainerStack.Screen name="Order" component={Order} />
       <AppContainerStack.Screen name="OrderDetail" component={OrderDetail} />
       <AppContainerStack.Screen name="Cart" component={CartNavigator} />
+      <AppContainerStack.Screen
+        name="ChangePassword"
+        component={changePassword}
+      />
     </AppContainerStack.Navigator>
   );
 };

@@ -13,23 +13,27 @@ const signInReducer = function (state = initialState, action) {
       return {
         ...state,
         data: action.payload,
+        error: '',
       };
     case types.SIGN_IN || types.AUTO_SIGN_IN:
       //console.log('reducer', action.payload);
       return {
         ...state,
         data: action.payload,
+        error: '',
       };
     case types.GET_USER:
       return {
         ...state,
         data: action.payload,
+        error: '',
       };
     case types.AUTO_SIGN_IN:
       //console.log('reducer');
       return {
         ...state,
         data: action.payload,
+        error: '',
       };
     case types.ERROR_SIGN_IN:
       return {
@@ -45,6 +49,7 @@ const signInReducer = function (state = initialState, action) {
       return {
         ...state,
         allType: action.payload,
+        error: '',
       };
     default:
       return state;

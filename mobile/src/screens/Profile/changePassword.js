@@ -14,18 +14,28 @@ const changePassword = ({
   profileState,
   navigation,
   signInActions,
+  route,
 }) => {
   const [email, setEmail] = React.useState('');
-  const [resetHide, setResetHide] = React.useState(true);
+  const [resetPass, setResetPass] = React.useState(true);
   const [oldPassword, setOldPassword] = React.useState('');
   const [newPassword, setNewPassword] = React.useState('');
   const [confirmPassword, setConfirmPassword] = React.useState('');
+  const [phone, setPhone] = React.useState('');
   const [loading, setLoading] = React.useState(false);
+  const [forgotPass, setForgotPass] = React.useState(false);
   const userInfo = signInState.data.user
     ? signInState.data.user
     : signInState.data;
 
-  React.useEffect(() => {});
+  React.useEffect(() => {
+    let forgot = route.params?.forgot;
+    if (!forgot) {
+      setResetPass(false);
+    } else {
+      setForgotPass(true);
+    }
+  }, []);
   const editPassword = async () => {
     setLoading(true);
     await signInActions.editPassword(userInfo, oldPassword, newPassword);
@@ -43,20 +53,31 @@ const changePassword = ({
     } else if (newPassword === confirmPassword) {
       await editPassword();
       setLoading(false);
-      Alert.alert('Thông báo', 'Bạn đã cập nhật mật khẩu mới thành công!', [
-        {
-          text: 'Bỏ qua',
-          onPress: () => navigation.navigate('Profile'),
-          style: 'cancel',
-        },
-        {text: 'OK', onPress: () => navigation.navigate('Profile')},
-      ]);
+      if (signInState.err !== '') {
+        Alert.alert('Thông báo', 'Có lỗi xảy ra vui lòng thử lại!', [
+          {
+            text: 'Bỏ qua',
+            onPress: () => {},
+            style: 'cancel',
+          },
+          {text: 'OK', onPress: () => {}},
+        ]);
+      } else {
+        Alert.alert('Thông báo', 'Bạn đã cập nhật mật khẩu mới thành công!', [
+          {
+            text: 'Bỏ qua',
+            onPress: () => navigation.navigate('Profile'),
+            style: 'cancel',
+          },
+          {text: 'OK', onPress: () => navigation.navigate('Profile')},
+        ]);
+      }
     }
   };
 
   const resetPasswordHandler = async () => {
     const res = await resetPassword();
-    if (res) {
+    if (res && signInState.data) {
       Alert.alert(
         'Thông báo',
         'Bạn kiểm tra email vừa nhập để nhận mật khẩu vừa được reset!',
@@ -66,11 +87,15 @@ const changePassword = ({
             onPress: () => {},
             style: 'cancel',
           },
-          {text: 'OK', onPress: () => {}},
+          {
+            text: 'OK',
+            onPress: () => {
+              navigation.navigate('SignIn');
+            },
+          },
         ],
       );
-      setResetHide(false);
-      console.log('profile', profileState);
+      //setResetPass(false);
     } else {
       Alert.alert('Thông báo', 'Có lỗi xảy ra, vui lòng thử lại!', [
         {
@@ -84,8 +109,8 @@ const changePassword = ({
     setLoading(false);
   };
   const resetPassword = async () => {
-    if (email === '') {
-      Alert.alert('Thông báo', 'Bạn chưa nhập email!', [
+    if (email === '' || phone === '') {
+      Alert.alert('Thông báo', 'Bạn chưa nhập đầy đủ thông tin!', [
         {
           text: 'Bỏ qua',
           onPress: () => {},
@@ -93,18 +118,21 @@ const changePassword = ({
         },
         {text: 'OK', onPress: () => {}},
       ]);
+
       return false;
     } else {
       setLoading(true);
+      await signInActions.getUser(phone);
       await profileActions.resetPassword(email);
       return true;
     }
   };
+
   //console.log('profile', profileState);
   return (
     <View style={{flex: 1}}>
       <Header
-        title={resetHide ? 'Nhập email của bạn' : 'Mật khẩu mới'}
+        title={resetPass ? 'Nhập email của bạn' : 'Mật khẩu mới'}
         navigation={navigation}
       />
       <View
@@ -120,12 +148,27 @@ const changePassword = ({
             backgroundColor:
               themeState.appTheme.name == 'dark' ? COLORS.gray1 : COLORS.white,
           }}>
-          {resetHide ? (
+          {resetPass ? (
             <View>
               <TextInput
                 placeholder="Nhập email"
                 value={email}
                 onChangeText={setEmail}
+                style={{
+                  height: 50,
+                  borderRadius: 25,
+                  borderWidth: 0.5,
+                  marginHorizontal: 20,
+                  backgroundColor: '#dedcdc',
+                  paddingLeft: 10,
+                  marginVertical: 5,
+                  borderColor: 'rgba(0,0,0,2)',
+                }}
+              />
+              <TextInput
+                placeholder="Nhập số điện thoại"
+                value={phone}
+                onChangeText={setPhone}
                 style={{
                   height: 50,
                   borderRadius: 25,
@@ -155,7 +198,7 @@ const changePassword = ({
           ) : (
             <View style={{marginVertical: 10}}>
               <TextInput
-                placeholder="Nhập password vừa nhận"
+                placeholder="Nhập mật khẩu hiện tại"
                 value={oldPassword}
                 onChangeText={setOldPassword}
                 style={{
