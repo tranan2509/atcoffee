@@ -16,4 +16,5 @@ public interface StoreService {
 	List<StoreDTO> findByState(Boolean state);
 	StoreResponse findAll(Pageable pageable);
 	StoreResponse findByState(Boolean state, Pageable pageable);
+	StoreResponse findByKeywordAndState(String keyword, Boolean state, Pageable pageable);
 }

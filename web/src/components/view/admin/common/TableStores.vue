@@ -5,6 +5,15 @@
         <div class="card-header">
           <h4>Danh sách cửa hàng</h4>
           <div class="card-header-form flex-row">
+            <form @submit.prevent="handleSearch">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Tìm kiếm" v-model="keyword">
+                <div class="input-group-btn">
+                  <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                </div>
+              </div>
+            </form>
+            <div class="empty-space"></div>
             <button class="btn btn-success btn-medium" @click.capture="handleAdd">Thêm</button>
           </div>
         </div>
@@ -60,6 +69,7 @@ export default {
     return {
       stores: [],
       currentPage: 1,
+      keyword: ''
     }
   },
 
@@ -70,7 +80,10 @@ export default {
       if (typeof this.currentPage == 'undefined') {
         this.currentPage = 1;
       }
-      
+      this.keyword = this.$route.query.keyword;
+      if (typeof this.keyword == 'undefined') {
+        this.keyword = '';
+      }
     },
 
     number(index){
@@ -88,6 +101,18 @@ export default {
       this.loadStores(this.currentPage, Constants.PAGE_SIZE_STORE);
     },
 
+    handleSearch(){
+      const query = Object.assign({}, this.$route.query);
+      this.currentPage = 1;
+      if (this.keyword.trim() == '') {
+        delete query.keyword;
+        this.$router.replace({ query });
+      } else {
+        this.$router.push({path: '/admin/stores', query: {...query, page: this.currentPage, keyword: this.keyword}});
+      }
+      this.loadData();
+    },
+
     handleAdd() {
       this.$emit('handleAdd');
     },
@@ -97,8 +122,9 @@ export default {
     },
     
     async loadStores(page, size) {
-      let result = await StoreCommand.findAllByPagination(page, size, this.$store);
+      let result = await StoreCommand.findAllByPagination(page, size, this.keyword, this.$store);
       this.stores = result;
+      console.log(this.stores);
     },
   },
 

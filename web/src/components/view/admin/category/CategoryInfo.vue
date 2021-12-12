@@ -53,7 +53,12 @@ export default {
 
   computed: {
     linkBackCategories() {
-      return `/admin/categories?page=${this.$store.getters.sortCategory.page}`;
+      var sortCategory = this.$store.getters.sortCategory;
+      var urlKeyword = '';
+      if (sortCategory.keyword != '') {
+        urlKeyword += '&keyword=' + sortCategory.keyword;
+      }
+      return `/admin/categories?page=${this.$store.getters.sortCategory.page + urlKeyword}`;
     }
   },
 

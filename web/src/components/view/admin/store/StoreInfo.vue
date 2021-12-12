@@ -53,7 +53,12 @@ export default {
 
   computed: {
     linkBackStores() {
-      return `/admin/stores?page=${this.$store.getters.sortStore.page}`;
+      var sortStore = this.$store.getters.sortStore;
+      var urlKeyword = '';
+      if (sortStore.keyword != '') {
+        urlKeyword += '&keyword=' + sortStore.keyword;
+      }
+      return `/admin/stores?page=${this.$store.getters.sortStore.page + urlKeyword}`;
     }
   },
 

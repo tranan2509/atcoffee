@@ -63,9 +63,11 @@ public class CategoryAPI {
 	
 	@GetMapping(value = "/api/info/category", params = {"page", "size"})
 	public ResponseEntity<CategoryResponse> findAll(@RequestParam(name = "page", defaultValue = "1") int page,
-			@RequestParam(name = "size") int size, @RequestParam(name = "state", defaultValue = "true", required = false) Boolean state){
+			@RequestParam(name = "size", defaultValue = "10000", required = false) int size, 
+			@RequestParam(name = "keyword", defaultValue = "", required = false) String keyword,
+			@RequestParam(name = "state", defaultValue = "true", required = false) Boolean state){
 		Pageable pageable = new PageRequest(page - 1, size);
-		return ResponseEntity.ok(categoryService.findByState(state, pageable));
+		return ResponseEntity.ok(categoryService.findByKeywordAndState(keyword, state, pageable));
 	}
 	
 }

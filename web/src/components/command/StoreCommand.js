@@ -20,12 +20,12 @@ var StoreCommand = {
     return null;
   },
 
-  async findAllByPagination(page, size, store = null) {
-    const url = `${Constants.HOSTNAME_DEFAULT}/api/info/store?page=${page}&size=${size}`;
+  async findAllByPagination(page, size, keyword, store = null) {
+    const url = `${Constants.HOSTNAME_DEFAULT}/api/info/store?keyword=${keyword}&page=${page}&size=${size}`;
     let result = await ConnectServer.getData(url);
     if (result != null) {
       store != null ? store.commit(MutationsName.MUTATION_NAME_SET_STORES, result.stores) : null;
-      store != null ? store.commit(MutationsName.MUTATION_NAME_SET_SORT_STORE, {page, totalPage: result.totalPage}) : null;
+      store != null ? store.commit(MutationsName.MUTATION_NAME_SET_SORT_STORE, {page, totalPage: result.totalPage, keyword}) : null;
       return result.stores;
     }
     return null;

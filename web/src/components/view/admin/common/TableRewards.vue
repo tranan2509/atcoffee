@@ -104,7 +104,7 @@ export default {
       this.loadRewardsBySort(this.currentPage, Constants.PAGE_SIZE_REWARD);
     },
 
-     handleSearch(){
+    handleSearch(){
       const query = Object.assign({}, this.$route.query);
       this.currentPage = 1;
       if (this.keyword.trim() == '') {
