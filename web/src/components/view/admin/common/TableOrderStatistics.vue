@@ -42,6 +42,15 @@
                 </div>
               </div>
             </form>
+            <div class="empty-space"></div>
+            <export-excel
+              class   = "btn btn-outline-success"
+              :data   = "json_data"
+              :fields = "json_fields"
+              worksheet = "Thống kê đơn hàng"
+              :name    = "filename">
+              Export
+            </export-excel>
           </div>
         </div>
         <div class="card-body p-0">
@@ -54,6 +63,8 @@
                   <th class="text-center">Tên khách hàng</th>
                   <th class="text-center">Tên nhân viên</th>
                   <th class="text-center">Tổng tiền</th>
+                  <th class="text-center">Số tiền giảm</th>
+                  <th class="text-center">Thành tiền</th>
                   <th class="text-center">Trạng thái</th>
                   <th class="text-center">Ngày hoàn thành</th>
                   <th class="text-center">Cửa hàng</th>
@@ -64,6 +75,8 @@
                   <td class="text-center">{{bill.code}}</td>
                   <td class="text-center">{{processName(bill.customerId)}}</td>
                   <td class="text-center">{{processName(bill.staffId)}}</td>
+                  <td class="text-center">{{formatPrice(bill.price)}}</td>
+                  <td class="text-center">{{formatPrice(bill.discount)}}</td>
                   <td class="text-center">{{formatPrice(bill.amount)}}</td>
                   <td class="text-center order" :class="colorStatus(bill.status)"><i class="fas fa-circle"></i> {{viStatus(bill.status)}}</td>
                   <td class="text-center">{{formatDateTime(new Date(bill.modifiedDate))}}</td>
@@ -109,7 +122,21 @@ export default {
       stores: [],
       users: [],
       type: 'all',
-      selectedDate: ''
+      selectedDate: '',
+      json_fields: {
+        'SST': 'index', 
+        'Mã': 'code',
+        'Tên khách hàng': 'customerName',
+        'Tên nhân viên': 'staffName',
+        'Tổng tiền': 'price',
+        'Số tiền giảm': 'discount',
+        'Thành tiền': 'amount',
+        'Trạng thái': 'status',
+        'Ngày hoàn thành': 'modifiedDate',
+        'Cửa hàng': 'store'
+      },
+      json_data: [],
+      filename: 'filename.xlsx'
     }
   },
 
@@ -280,6 +307,24 @@ export default {
         end = CommonUtils.formatDateReverse(endDate);
       }
       await BillCommand.findByOrder(start, end, storeId, this.keyword, Constants.STATUS_BILL.COMPLETED, this.currentPage, Constants.PAGE_SIZE_ORDER_STATISTICS, this.$store);
+      let bills = await BillCommand.findByOrder(start, end, storeId, this.keyword, Constants.STATUS_BILL.COMPLETED, 1, Constants.PAGE_SIZE_MAX);
+      this.processExport(bills);
+    },
+
+    processExport(bills) {
+      var self = this;
+      var billsFormat = bills.map((bill, index) => {
+
+        bill.index = index + 1;
+        bill.customerName = self.processName(bill.customerId);
+        bill.staffName = self.processName(bill.staffId);
+        bill.status = self.viStatus(bill.status);
+        bill.modifiedDate = self.formatDateTime(new Date(bill.modifiedDate));
+        bill.store = self.processAddressStore(bill.storeId);
+        return bill;
+      });
+      this.json_data = billsFormat;
+      this.filename = 'Thống kê đơn hàng ' + new Date().getTime() + '.xls';  
     },
 
     async loadStores() {
