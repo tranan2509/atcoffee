@@ -50,7 +50,8 @@ export default {
     return {
       title: 'Danh sách loại sản phẩm',
       isBlankPopup: false,
-      flag: false
+      flag: false,
+      keyword: ''
     }
   },
 
@@ -77,12 +78,16 @@ export default {
       if (typeof currentPage == 'undefined') {
         currentPage = 1;
       }
+      this.keyword = this.$route.query.keyword;
+      if (typeof this.keyword == 'undefined') {
+        this.keyword = '';
+      }
       await this.loadStores(currentPage, Constants.PAGE_SIZE_CATEGORY);
       this.isBlankPopup = false;
     },
 
     async loadStores(page, size) {
-      await CategoryCommand.findAllByPagination(page, size, this.$store);
+      await CategoryCommand.findAllByPagination(page, size, this.keyword, this.$store);
     },
   },
 

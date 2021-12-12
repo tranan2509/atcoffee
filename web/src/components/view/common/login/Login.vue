@@ -1,6 +1,6 @@
 <template>
   <div class="login container-fluid center">
-    <section class="section">
+    <section class="section-custom">
       <div class="container">
         <div class="row">
           <div
@@ -50,9 +50,9 @@
                         >Mật khẩu</label
                       >
                       <div class="float-right">
-                        <a href="/forgot-password" class="text-small">
+                        <router-link to="/forgot-password" class="text-small">
                           Quên mật khẩu?
-                        </a>
+                        </router-link>
                       </div>
                     </div>
                     <input

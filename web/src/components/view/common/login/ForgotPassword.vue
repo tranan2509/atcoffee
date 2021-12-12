@@ -1,6 +1,6 @@
 <template>
   <div class="login container-fluid center index-1">
-    <section class="section">
+    <section class="section-custom">
       <div class="container">
         <div class="row">
           <div
@@ -41,6 +41,11 @@
                     <div class="invalid-feedback">
                       Vui lòng điền email
                     </div>
+                    <div class="float-right">
+                        <router-link to="/login" class="text-small">
+                          Đăng nhập
+                        </router-link>
+                      </div>
                   </div>
                   <div class="form-group">
                     <button

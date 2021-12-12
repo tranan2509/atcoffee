@@ -5,10 +5,10 @@
           <router-link to="/admin">Trang chủ</router-link>
         </div>
         <div class="breadcrumb-item active">
-          <router-link to="">Nhân viên</router-link>
+          <router-link to="">Cửa hàng</router-link>
         </div>
         <div class="breadcrumb-item">
-          Danh sách nhân viên
+          Danh sách cửa hàng
         </div>
       </section-header>
       <div class="section-body">
@@ -50,7 +50,8 @@ export default {
     return {
       title: 'Danh sách cửa hàng',
       isBlankPopup: false,
-      flag: false
+      flag: false,
+      keyword: ''
     }
   },
 
@@ -77,12 +78,16 @@ export default {
       if (typeof currentPage == 'undefined') {
         currentPage = 1;
       }
+      this.keyword = this.$route.query.keyword;
+      if (typeof this.keyword == 'undefined') {
+        this.keyword = '';
+      }
       await this.loadStores(currentPage, Constants.PAGE_SIZE_STORE);
       this.isBlankPopup = false;
     },
 
     async loadStores(page, size) {
-      await StoreCommand.findAllByPagination(page, size, this.$store);
+      await StoreCommand.findAllByPagination(page, size, this.keyword, this.$store);
     },
   },
 
