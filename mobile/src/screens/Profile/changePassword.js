@@ -25,6 +25,7 @@ const changePassword = ({
     ? signInState.data.user
     : signInState.data;
 
+  React.useEffect(() => {});
   const editPassword = async () => {
     setLoading(true);
     await signInActions.editPassword(userInfo, oldPassword, newPassword);
@@ -99,7 +100,7 @@ const changePassword = ({
       return true;
     }
   };
-  console.log('profile', profileState);
+  //console.log('profile', profileState);
   return (
     <View style={{flex: 1}}>
       <Header

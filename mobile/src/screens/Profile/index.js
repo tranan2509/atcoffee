@@ -251,7 +251,7 @@ const Profile = ({
               themeState.appTheme.name == 'dark' ? COLORS.gray1 : COLORS.white,
             marginTop: 10,
           }}
-          onPress={() => navigation.navigate('ChangePassword')}>
+          onPress={() => navigation.navigate('ChangePassword', {forgot: true})}>
           <IconButton
             icon={icons.resetpassword}
             iconStyle={{tintColor: themeState.appTheme.textColor}}
@@ -264,6 +264,31 @@ const Profile = ({
               marginLeft: 10,
             }}>
             Đổi mật khẩu
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            paddingHorizontal: 20,
+            flexDirection: 'row',
+            paddingTop: 20,
+            paddingBottom: 20,
+            backgroundColor:
+              themeState.appTheme.name == 'dark' ? COLORS.gray1 : COLORS.white,
+            marginTop: 10,
+          }}
+          onPress={() => _logOut(() => navigation.navigate('ManageOrder'))}>
+          <IconButton
+            icon={icons.logout}
+            iconStyle={{tintColor: themeState.appTheme.textColor}}
+          />
+          <Text
+            style={{
+              paddingTop: 5,
+              color: themeState.appTheme.textColor,
+              ...FONTS.body3,
+              marginLeft: 10,
+            }}>
+            Đơn hàng
           </Text>
         </TouchableOpacity>
         <TouchableOpacity

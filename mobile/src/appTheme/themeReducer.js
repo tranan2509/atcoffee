@@ -22,6 +22,11 @@ const themeReducer = (state = initialState, action) => {
         ...state,
         error: action.payload.error,
       };
+    case themeActionTypes.GET_THEME:
+      return {
+        ...state,
+        appTheme: action.payload,
+      };
     default:
       return state;
   }

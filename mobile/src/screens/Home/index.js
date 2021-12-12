@@ -385,7 +385,7 @@ const Home = ({
           marginTop: -25,
           borderTopLeftRadius: SIZES.radius * 2,
           borderTopRightRadius: SIZES.radius * 2,
-          backgroundColor: themeState.appTheme.backgroundColor,
+          backgroundColor: themeState.appTheme?.backgroundColor,
         }}
         contentContainerStyle={{
           paddingBottom: 150,

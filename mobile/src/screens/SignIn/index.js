@@ -34,6 +34,7 @@ import * as locationActionsCreator from '../Location/action';
 import * as orderActionsCreator from '../Order/action';
 import * as rewardActionsCreator from '../Rewards/action';
 import * as cartActionsCreator from '../Cart/action';
+import * as themeActionsCreator from '../../appTheme/themeAction';
 
 const SignIn = ({
   navigation,
@@ -43,6 +44,7 @@ const SignIn = ({
   locationActions,
   rewardActions,
   cartActions,
+  themeActions,
 }) => {
   const {width, height} = Dimensions.get('window');
   const opacityButton = useSharedValue(1);
@@ -93,6 +95,8 @@ const SignIn = ({
     orderActions.getAllProducts('');
     //get all Type
     signInActions.getType();
+    //get theme
+    themeActions.getTheme();
     //clean
     return () => setLoading(false);
   }, []);
@@ -435,6 +439,7 @@ function mapDispatchToProp(dispatch) {
     orderActions: bindActionCreators(orderActionsCreator, dispatch),
     rewardActions: bindActionCreators(rewardActionsCreator, dispatch),
     cartActions: bindActionCreators(cartActionsCreator, dispatch),
+    themeActions: bindActionCreators(themeActionsCreator, dispatch),
   };
 }
 
