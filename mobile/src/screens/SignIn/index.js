@@ -110,6 +110,22 @@ const SignIn = ({
     }
     return () => setLoading(false);
   }, [token]);
+
+  React.useEffect(() => {
+    if (signInState.error !== '') {
+      Alert.alert('Thông báo', 'Đã xảy ra lỗi vui lòng thử lại!', [
+        {
+          text: 'Bỏ qua',
+          onPress: () => {},
+          style: 'cancel',
+        },
+        {text: 'OK', onPress: () => {}},
+      ]);
+      if (loading) {
+        setLoading(false);
+      }
+    }
+  }, [signInState.error]);
   const rememberMeHandler = async () => {
     const _username = await AsyncStorage.getItem('username');
     const _password = await AsyncStorage.getItem('password');

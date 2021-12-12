@@ -24,6 +24,7 @@ const changePassword = ({
   const [phone, setPhone] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const [forgotPass, setForgotPass] = React.useState(false);
+  const [error, setError] = React.useState(false);
   const userInfo = signInState.data.user
     ? signInState.data.user
     : signInState.data;
@@ -38,6 +39,7 @@ const changePassword = ({
   }, []);
   const editPassword = async () => {
     setLoading(true);
+    setError(true);
     await signInActions.editPassword(userInfo, oldPassword, newPassword);
   };
   const editPasswordHandler = async () => {
@@ -53,7 +55,21 @@ const changePassword = ({
     } else if (newPassword === confirmPassword) {
       await editPassword();
       setLoading(false);
-      if (signInState.err !== '') {
+      //console.log('errorrr', signInState.error);
+    } else {
+      Alert.alert('Thông báo', 'Mật khẩu và xác nhận lại không giống nhau!', [
+        {
+          text: 'Bỏ qua',
+          onPress: () => {},
+          style: 'cancel',
+        },
+        {text: 'OK', onPress: () => {}},
+      ]);
+    }
+  };
+  React.useEffect(() => {
+    if (error) {
+      if (signInState.error) {
         Alert.alert('Thông báo', 'Có lỗi xảy ra vui lòng thử lại!', [
           {
             text: 'Bỏ qua',
@@ -73,7 +89,7 @@ const changePassword = ({
         ]);
       }
     }
-  };
+  }, [signInState.error]);
 
   const resetPasswordHandler = async () => {
     const res = await resetPassword();
@@ -193,7 +209,7 @@ const changePassword = ({
                   Tiếp tục
                 </Text>
               </TouchableOpacity>
-              {loading && <LoadingProcess title="Đang tải ..." />}
+              {/* {loading && <LoadingProcess title="Đang tải ..." />} */}
             </View>
           ) : (
             <View style={{marginVertical: 10}}>
@@ -258,6 +274,7 @@ const changePassword = ({
             </View>
           )}
         </View>
+        {loading && <LoadingProcess title="Đang tải ..." />}
       </View>
     </View>
   );

@@ -9,19 +9,21 @@ import {rewardReducer} from '../screens/Rewards/reducer';
 import {profileReducer} from '../screens/Profile/reducer';
 
 // const rootReducer = (state, action) => {
-//     // when a logout action is dispatched it will reset redux state
-//     switch (action.type) {
-//         case 'RESET_ALL':
-//             state = undefined;
-//             break;
-//         case 'CLEAR_STATE':
-//             state.loginReducer = undefined;
-//             break;
-//         default:
-//             break;
-//     }
+//   // when a logout action is dispatched it will reset redux state
+//   switch (action.type) {
+//     case 'RESET_ALL':
+//       state = undefined;
+//       break;
+//     case 'CLEAR_STATE':
+//       state.signInReducer = undefined;
+//       state.cartReducer = undefined;
+//       state.themeReducer = undefined;
+//       break;
+//     default:
+//       break;
+//   }
 
-//     return appReducer(state, action);
+//   return appReducer(state, action);
 // };
 const rootReducer = combineReducers({
   themeReducer,

@@ -75,7 +75,11 @@ export const editProfile = (
       data.append('user', JSON.stringify(user));
       const res = await apiServer.put('/api/info/user', data);
       console.log('user', res.data);
-      dispatch({type: EDIT_PROFILE, payload: res.data});
+      if (res.data) {
+        dispatch({type: EDIT_PROFILE, payload: res.data});
+      } else {
+        dispatch({type: ERROR_EDIT, error: 'error'});
+      }
     } catch (err) {
       console.log('This is error in action edit', err);
       dispatch({type: ERROR_EDIT, error: err});

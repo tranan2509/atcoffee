@@ -134,12 +134,12 @@ const Tabs = () => {
         }}
       />
       <Tab.Screen
-        name="Rewards"
+        name="Favourite"
         component={RewardsStackNavigator}
         options={{
           tabBarIcon: ({focused}) => (
             <Image
-              source={icons.bubbleTea}
+              source={icons.heart}
               resizeMode="contain"
               style={{
                 width: 35,
@@ -181,16 +181,16 @@ const Tabs = () => {
         }}
       />
       <Tab.Screen
-        name="Favourite"
+        name="Notification"
         component={RewardsStackNavigator}
         options={{
           tabBarIcon: ({focused}) => (
             <Image
-              source={icons.heart}
+              source={icons.notification}
               resizeMode="contain"
               style={{
-                width: 35,
-                height: 35,
+                width: 40,
+                height: 40,
                 tintColor: focused ? COLORS.primary : COLORS.black,
               }}
             />

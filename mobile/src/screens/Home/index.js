@@ -164,15 +164,15 @@ const Home = ({
     if (!token) {
       await AsyncStorage.setItem('token', signInState.data.jwt);
     }
+    cartActions.getCart(userInfo.id);
   };
   const userInfo = signInState.data.user
     ? signInState.data.user
     : signInState.data;
   React.useEffect(() => {
     setToken();
-    //console.log('user', signInState.data);
+    console.log('user', signInState.data);
     //get cart
-    cartActions.getCart(userInfo.id);
   }, []);
   // React.useEffect(() => {
   //   const newReference = database().ref('/users').push();

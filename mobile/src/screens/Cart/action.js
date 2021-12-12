@@ -55,7 +55,11 @@ export const updateCart = product => {
     try {
       const res = await apiServer.put('/api/user/cart', product);
       console.log('updatecart', res.data);
-      dispatch({type: UPDATE_CART, payload: res.data});
+      if (res.data) {
+        dispatch({type: UPDATE_CART, payload: res.data});
+      } else {
+        dispatch({type: ERROR_CART, error: 'error'});
+      }
     } catch (err) {
       console.log('This is error in action update cart', err);
       dispatch({type: ERROR_CART, error: err});

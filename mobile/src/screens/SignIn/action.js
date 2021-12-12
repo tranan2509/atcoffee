@@ -18,7 +18,12 @@ export const editPassword = (user, oldPassword, newPassword) => {
         newPassword,
       });
       console.log('action', res.data);
-      dispatch({type: EDIT_PASSWORD, payload: res.data});
+      if (res.data) {
+        console.log('action', res.data);
+        dispatch({type: EDIT_PASSWORD, payload: res.data});
+      } else {
+        dispatch({type: ERROR_SIGN_IN, error: 'error'});
+      }
     } catch (err) {
       console.log('This is error in edit password', err);
       dispatch({type: ERROR_SIGN_IN, error: err});
@@ -34,7 +39,7 @@ export const signIn = (username, password) => {
       };
       const res = await apiServer.post('/api/authenticate', user);
       dispatch({type: SIGN_IN, payload: res.data});
-      RootNavigation.navigate('Main');
+      RootNavigation.navigate('Main', {screen: 'Home'});
     } catch (err) {
       console.log('This is error in action Sign In', err);
       dispatch({type: ERROR_SIGN_IN, error: err});

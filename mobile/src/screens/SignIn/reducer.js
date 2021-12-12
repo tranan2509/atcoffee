@@ -36,6 +36,7 @@ const signInReducer = function (state = initialState, action) {
         error: '',
       };
     case types.ERROR_SIGN_IN:
+      console.log('error', action.error);
       return {
         ...state,
         error: action.error,
@@ -43,7 +44,7 @@ const signInReducer = function (state = initialState, action) {
     case types.LOG_OUT:
       return {
         data: {},
-        err: '',
+        error: '',
       };
     case types.GET_TYPE:
       return {

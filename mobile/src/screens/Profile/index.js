@@ -278,7 +278,7 @@ const Profile = ({
           }}
           onPress={() => _logOut(() => navigation.navigate('ManageOrder'))}>
           <IconButton
-            icon={icons.logout}
+            icon={icons.orderManage}
             iconStyle={{tintColor: themeState.appTheme.textColor}}
           />
           <Text
