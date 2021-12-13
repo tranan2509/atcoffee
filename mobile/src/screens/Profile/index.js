@@ -276,7 +276,7 @@ const Profile = ({
               themeState.appTheme.name == 'dark' ? COLORS.gray1 : COLORS.white,
             marginTop: 10,
           }}
-          onPress={() => _logOut(() => navigation.navigate('ManageOrder'))}>
+          onPress={() => navigation.navigate('ManageOrder')}>
           <IconButton
             icon={icons.orderManage}
             iconStyle={{tintColor: themeState.appTheme.textColor}}
