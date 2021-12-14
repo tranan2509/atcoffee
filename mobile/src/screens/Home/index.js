@@ -22,6 +22,7 @@ import {connect} from 'react-redux';
 import {HeaderBar, CustomButton} from '../../components';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as cartActionsCreator from '../Cart/action';
+import * as manageOrderActionsCreator from '../ManageOrder/action';
 import {bindActionCreators} from 'redux';
 
 const promoTabs = constants.promoTabs.map(promoTab => ({
@@ -148,6 +149,8 @@ const Home = ({
   signInState,
   cartActions,
   cartState,
+  manageOrderActions,
+  manageOrderState,
 }) => {
   const scrollX = React.useRef(new Animated.Value(0)).current;
 
@@ -164,14 +167,15 @@ const Home = ({
     if (!token) {
       await AsyncStorage.setItem('token', signInState.data.jwt);
     }
-    cartActions.getCart(userInfo.id);
+    await cartActions.getCart(userInfo.id);
+    await manageOrderActions.getData(userInfo.id);
   };
   const userInfo = signInState.data.user
     ? signInState.data.user
     : signInState.data;
   React.useEffect(() => {
     setToken();
-    console.log('user', signInState.data);
+    console.log('bills', manageOrderState);
     //get cart
   }, []);
   // React.useEffect(() => {
@@ -410,12 +414,14 @@ function mapStateToProps(state) {
     themeState: state.themeReducer,
     signInState: state.signInReducer,
     cartState: state.cartReducer,
+    manageOrderState: state.manageOrderReducer,
   };
 }
 
 function mapDispatchToProp(dispatch) {
   return {
     cartActions: bindActionCreators(cartActionsCreator, dispatch),
+    manageOrderActions: bindActionCreators(manageOrderActionsCreator, dispatch),
   };
 }
 

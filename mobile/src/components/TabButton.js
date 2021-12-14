@@ -2,7 +2,7 @@ import React from 'react';
 import {Text, TextStyle, View, TouchableOpacity} from 'react-native';
 import {COLORS, FONTS} from '../constants';
 
-const TabButton = ({containerStyle, label, selected, onPress}) => {
+const TabButton = ({containerStyle, label, selected, onPress, textStyle}) => {
   return (
     <TouchableOpacity
       style={{
@@ -16,6 +16,7 @@ const TabButton = ({containerStyle, label, selected, onPress}) => {
           color: selected ? COLORS.primary : COLORS.gray,
           ...FONTS.body2,
           fontSize: 18,
+          ...textStyle,
         }}>
         {label}
       </Text>

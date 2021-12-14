@@ -37,7 +37,7 @@ const Order = ({navigation, themeState, route, orderActions, orderState}) => {
     //get products
     //orderActions.getAllProducts(selectedLocation.code);
     //return () => console.log('cleanup');
-    setMenu(orderState.allProducts);
+    setMenu(orderState.products);
     //console.log('allProducts', orderState.allProducts);
   }, []);
 
@@ -46,7 +46,7 @@ const Order = ({navigation, themeState, route, orderActions, orderState}) => {
     // if (selectedCategory == '') {
     //   setMenu(orderState.allProducts);
     // } else {
-    let menuList = orderState.allProducts.filter(
+    let menuList = orderState.products.filter(
       pro =>
         1 &&
         pro.categories.filter(menuItem => menuItem.name == selectedCategory)[0],
@@ -235,108 +235,110 @@ const Order = ({navigation, themeState, route, orderActions, orderState}) => {
             }}
             keyExtractor={item => item.id}
             renderItem={({item, index}) => {
-              return item.state ? (
-                <TouchableWithoutFeedback
-                  onPress={() =>
-                    navigation.navigate('OrderDetail', {
-                      selectedItem: item,
-                      selectedLocation: selectedLocation,
-                    })
-                  }>
-                  <View
-                    style={{
-                      height: 150,
-                      paddingHorizontal: SIZES.padding,
-                      marginTop: index > 0 ? SIZES.padding : 0,
-                      alignItems: 'flex-end',
-                      justifyContent: 'flex-end',
-                    }}>
-                    {/* Image */}
+              return (
+                item.state && (
+                  <TouchableWithoutFeedback
+                    onPress={() =>
+                      navigation.navigate('OrderDetail', {
+                        selectedItem: item,
+                        selectedLocation: selectedLocation,
+                      })
+                    }>
+                    <View
+                      style={{
+                        height: 150,
+                        paddingHorizontal: SIZES.padding,
+                        marginTop: index > 0 ? SIZES.padding : 0,
+                        alignItems: 'flex-end',
+                        justifyContent: 'flex-end',
+                      }}>
+                      {/* Image */}
 
-                    <View
-                      style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: SIZES.padding,
-                        width: 130,
-                        height: 140,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        borderRadius: SIZES.radius,
-                        backgroundColor: COLORS.lightYellow,
-                        zIndex: 1,
-                      }}>
-                      <Image
-                        source={{
-                          uri: item.image,
-                        }}
-                        resizeMode="contain"
+                      <View
                         style={{
-                          width: 100,
-                          height: 100,
-                        }}
-                      />
-                    </View>
-                    {/* Detail */}
-                    <View
-                      style={{
-                        width: '70%',
-                        height: '85%',
-                        paddingLeft: '22%',
-                        paddingRight: SIZES.base,
-                        paddingVertical: SIZES.base,
-                        borderRadius: SIZES.radius,
-                        justifyContent: 'space-between',
-                        backgroundColor: COLORS.primary,
-                      }}>
-                      <Text
-                        style={{
-                          color: COLORS.white,
-                          ...FONTS.h2,
-                          fontSize: 18,
-                          lineHeight: 25,
+                          position: 'absolute',
+                          top: 0,
+                          left: SIZES.padding,
+                          width: 130,
+                          height: 140,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          borderRadius: SIZES.radius,
+                          backgroundColor: COLORS.lightYellow,
+                          zIndex: 1,
                         }}>
-                        {item.name}
-                      </Text>
-                      <View style={{flexDirection: 'row'}}>
+                        <Image
+                          source={{
+                            uri: item.image,
+                          }}
+                          resizeMode="contain"
+                          style={{
+                            width: 100,
+                            height: 100,
+                          }}
+                        />
+                      </View>
+                      {/* Detail */}
+                      <View
+                        style={{
+                          width: '70%',
+                          height: '85%',
+                          paddingLeft: '22%',
+                          paddingRight: SIZES.base,
+                          paddingVertical: SIZES.base,
+                          borderRadius: SIZES.radius,
+                          justifyContent: 'space-between',
+                          backgroundColor: COLORS.primary,
+                        }}>
                         <Text
                           style={{
-                            color: COLORS.lightYellow,
+                            color: COLORS.white,
                             ...FONTS.h2,
                             fontSize: 18,
+                            lineHeight: 25,
                           }}>
-                          {formatMoney(
-                            item.sizes.filter(
-                              sizeItem => sizeItem.size == 'S',
-                            )[0].price,
-                          )}{' '}
+                          {item.name}
                         </Text>
-                        {item.discount ? (
-                          <View
+                        <View style={{flexDirection: 'row'}}>
+                          <Text
                             style={{
-                              height: 45,
-                              width: 45,
-                              borderRadius: 20,
-                              backgroundColor: COLORS.red,
-                              justifyContent: 'center',
-                              alignItems: 'center',
-                              marginLeft: 30,
+                              color: COLORS.lightYellow,
+                              ...FONTS.h2,
+                              fontSize: 18,
                             }}>
-                            <Text
+                            {formatMoney(
+                              item.sizes.filter(
+                                sizeItem => sizeItem.size == 'S',
+                              )[0].price,
+                            )}{' '}
+                          </Text>
+                          {item.discount ? (
+                            <View
                               style={{
-                                color: COLORS.lightYellow,
-                                ...FONTS.h2,
-                                fontSize: 18,
+                                height: 45,
+                                width: 45,
+                                borderRadius: 20,
+                                backgroundColor: COLORS.red,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                marginLeft: 30,
                               }}>
-                              {-item.discount + '%'}
-                            </Text>
-                          </View>
-                        ) : null}
+                              <Text
+                                style={{
+                                  color: COLORS.lightYellow,
+                                  ...FONTS.h2,
+                                  fontSize: 18,
+                                }}>
+                                {-item.discount + '%'}
+                              </Text>
+                            </View>
+                          ) : null}
+                        </View>
                       </View>
                     </View>
-                  </View>
-                </TouchableWithoutFeedback>
-              ) : null;
+                  </TouchableWithoutFeedback>
+                )
+              );
             }}
           />
         </View>

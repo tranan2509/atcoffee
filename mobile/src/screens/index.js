@@ -11,6 +11,7 @@ import Notification from './Notification';
 import Information from './Profile/Information';
 import changePassword from './Profile/changePassword';
 import ManageOrder from './ManageOrder';
+import detailsOrder from './ManageOrder/detailsOrder';
 
 export {
   Home,
@@ -26,4 +27,5 @@ export {
   Information,
   changePassword,
   ManageOrder,
+  detailsOrder,
 };

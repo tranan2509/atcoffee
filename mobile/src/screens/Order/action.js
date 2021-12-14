@@ -3,6 +3,7 @@ import apiServer from '../../api/apiServer';
 export const GET_CATEGORIES = 'GET_CATEGORIES';
 export const ERROR_CATEGORIES = 'ERROR_CATEGORIES';
 export const GET_PRODUCTS = 'GET_PRODUCTS';
+export const GET_ALL_PRODUCTS = 'GET_ALL_PRODUCTS';
 export const ERROR_PRODUCTS = 'ERROR_PRODUCTS';
 
 export function getAllCategories() {
@@ -22,18 +23,18 @@ export function getAllProducts(storeCode) {
   return async dispatch => {
     //console.log('action 1');
     try {
-      let res;
       if (storeCode != '') {
-        res = await apiServer.get(
+        const res = await apiServer.get(
           `/api/info/product??page=1&size=1000&store=${storeCode}&category&keyword`,
         );
+        dispatch({type: GET_PRODUCTS, payload: res.data.products});
       } else {
-        //console.log('action');
-        res = await apiServer.get(
+        const res = await apiServer.get(
           `/api/info/product??page=1&size=1000&store&category&keyword`,
         );
+        //console.log('action', res.data.products);
+        dispatch({type: GET_ALL_PRODUCTS, payload: res.data.products});
       }
-      dispatch({type: GET_PRODUCTS, payload: res.data.products});
     } catch (err) {
       console.log('This is error in order-pro', err);
       dispatch({type: ERROR_CATEGORIES, error: err});

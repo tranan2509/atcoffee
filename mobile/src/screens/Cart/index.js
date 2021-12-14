@@ -40,6 +40,7 @@ const Cart = ({
   const [loading, setLoading] = React.useState(false);
   //const [itemCart, setItemCart] = React.useState([]);
   const [orderNumber, setOrderNumber] = React.useState(0);
+  const [money, setMoney] = React.useState(amount - discount);
   const userInfo = signInState.data.user
     ? signInState.data.user
     : signInState.data;
@@ -96,26 +97,30 @@ const Cart = ({
         state: true,
         status: 'REQUESTED',
         storeId: storeId,
-        billDetails: cartState.cart.map((item, index) => ({
-          ...item,
-          code: code + `D${index + 1}`,
-          name: getProName(item),
-          price: getProPrice(item),
-          discount: getProDiscount(item),
-          amount:
-            getProPrice(item) *
-            item.quantity *
-            (1 - getProDiscount(item) / 100),
-        })),
+        billDetails: cartState.cart
+          .map(
+            (item, index) =>
+              item.state && {
+                ...item,
+                code: code + `D${index + 1}`,
+                name: getProName(item),
+                price: getProPrice(item),
+                discount: getProDiscount(item),
+                amount:
+                  getProPrice(item) *
+                  item.quantity *
+                  (1 - getProDiscount(item) / 100),
+              },
+          )
+          .filter(item => item),
       })
       .then(() => console.log('Data set.'));
 
     await cartState.cart.forEach(
-      async item => await cartActions.deleteCart(item.id),
+      async item => item.state && (await deleteCartItem(item)),
     );
     await cartActions.getCart(userInfo.id);
     ToastAndroid.show('Đặt hàng thành công!', ToastAndroid.LONG);
-    setOrderNumber(0);
   };
 
   const deleteCartItem = async item => {
@@ -142,7 +147,7 @@ const Cart = ({
       ]);
     }
   };
-  console.log('cart item', cartState.cart);
+  //console.log('cart item', cartState.cart);
 
   const checkAddressHandler = () => {
     if (!cartState.delivery) {
@@ -191,7 +196,10 @@ const Cart = ({
   const getTotalNumberOrder = () => {
     if (cartState.cart[0]) {
       let total = cartState.cart.reduce(
-        (previousValue, currentValue) => previousValue + currentValue.quantity,
+        (previousValue, currentValue) =>
+          currentValue.state
+            ? previousValue + currentValue.quantity
+            : previousValue,
         0,
       );
       setOrderNumber(total);
@@ -201,20 +209,25 @@ const Cart = ({
   React.useEffect(() => {
     getTotalNumberOrder();
   }, []);
+  React.useEffect(() => {
+    setMoney(amount - discount);
+  }, [amount, discount]);
 
   React.useEffect(() => {
     checkAddressHandler();
     amountMoney();
     return () => cartActions.useCodeDiscount({});
   }, [cartState.cart]);
-  console.log('code', cartState.codeDiscount);
+  //console.log('code', cartState.codeDiscount);
   React.useEffect(() => {
-    console.log('code in useEffet', cartState.codeDiscount);
+    //console.log('code in useEffet', cartState.codeDiscount);
 
     if (cartState.codeDiscount?.redution) {
       setDiscount(cartState.codeDiscount.redution);
+      //setMoney(amount - cartState.codeDiscount.redution);
     } else if (cartState.codeDiscount?.discount) {
       setDiscount((amount * cartState.codeDiscount?.discount) / 100);
+      //setMoney(amount - (amount * cartState.codeDiscount?.discount) / 100);
     } else {
       setDiscount(0);
     }
@@ -265,16 +278,19 @@ const Cart = ({
     let total = 0;
     let amountWithoutDiscount = 0;
     cartState.cart.forEach(cartItem => {
-      total =
-        total +
-        getProPrice(cartItem) *
-          cartItem.quantity *
-          (1 - getProDiscount(cartItem) / 100);
-      amountWithoutDiscount =
-        amountWithoutDiscount + getProPrice(cartItem) * cartItem.quantity;
+      if (cartItem.state) {
+        total =
+          total +
+          getProPrice(cartItem) *
+            cartItem.quantity *
+            (1 - getProDiscount(cartItem) / 100);
+        amountWithoutDiscount =
+          amountWithoutDiscount + getProPrice(cartItem) * cartItem.quantity;
+      }
     });
     setAmount(total);
     setAmountWithoutDiscount(amountWithoutDiscount);
+    //setMoney(amount - discount);
     //return formatMoney(total);
   };
   //console.log('amount without discount', amountDiscount);
@@ -303,7 +319,7 @@ const Cart = ({
               paddingBottom: 20,
             }}>
             <Picker
-              dropdownIconColor={COLORS.white}
+              dropdownIconColor={themeState.appTheme.textColor}
               style={{
                 backgroundColor: COLORS.transparent,
                 color: themeState.appTheme.textColor,
@@ -607,7 +623,7 @@ const Cart = ({
               }}>
               <TouchableOpacity
                 onPress={() =>
-                  navigation.navigate('PromoAvai', {total: amount})
+                  navigation.navigate('PromoAvai', {total: money})
                 }>
                 <Text
                   style={{
@@ -803,7 +819,7 @@ const Cart = ({
                 ...FONTS.h3,
                 marginLeft: 20,
               }}>
-              {formatMoney(amount - discount)}
+              {formatMoney(money)}
             </Text>
           </View>
           <View>
@@ -826,7 +842,7 @@ const Cart = ({
               marginLeft: 50,
               borderRadius: 20,
               marginRight: 10,
-              paddingRight: 28,
+              paddingRight: 34,
             }}
             onPress={orderHandler}>
             <Text

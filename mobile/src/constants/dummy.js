@@ -234,6 +234,34 @@ const methodShipping = [
   },
 ];
 
+const statusBill = [
+  {
+    id: 1,
+    name: 'Chờ xác nhận',
+    status: 'REQUESTED',
+  },
+  {
+    id: 2,
+    name: 'Đang chuẩn bị',
+    status: 'APPROVED',
+  },
+  {
+    id: 3,
+    name: 'Đang giao',
+    status: 'DELIVERING',
+  },
+  {
+    id: 4,
+    name: 'Hoàn thành',
+    status: 'COMPLETED',
+  },
+  {
+    id: 5,
+    name: 'Đã hủy',
+    status: 'CANCELED',
+  },
+];
+
 const dummyData = {
   availableRewards,
   locations,
@@ -241,6 +269,7 @@ const dummyData = {
   milkList,
   promos,
   methodShipping,
+  statusBill,
 };
 
 export default dummyData;

@@ -11,6 +11,8 @@ import {
   Notification,
   Location,
   changePassword,
+  ManageOrder,
+  detailsOrder,
 } from '../screens';
 
 const AppContainerStack = createStackNavigator();
@@ -28,6 +30,8 @@ const AppContainer = () => {
       <AppContainerStack.Screen name="Order" component={Order} />
       <AppContainerStack.Screen name="OrderDetail" component={OrderDetail} />
       <AppContainerStack.Screen name="Cart" component={CartNavigator} />
+      <AppContainerStack.Screen name="ManageOrder" component={ManageOrder} />
+      <AppContainerStack.Screen name="DetailOrder" component={detailsOrder} />
       <AppContainerStack.Screen
         name="ChangePassword"
         component={changePassword}
