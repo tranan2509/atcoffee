@@ -54,7 +54,6 @@ const ManageOrder = ({
         }}
         data={dummyData.statusBill}
         keyExtractor={item => item.id}
-        //showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         horizontal
         renderItem={({item}) => {
@@ -81,7 +80,21 @@ const ManageOrder = ({
       </FlatList>
     );
   }
-  function renderLocationList() {
+  const flastListEmpty = () => {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Image
+          resizeMode="contain"
+          source={icons.createOrder}
+          style={{height: 75, width: 75}}
+        />
+        <Text style={{color: themeState.appTheme.textColor, ...FONTS.body3}}>
+          Chưa có đơn hàng
+        </Text>
+      </View>
+    );
+  };
+  function renderOrderList() {
     return (
       <FlatList
         style={{
@@ -91,6 +104,7 @@ const ManageOrder = ({
         data={manageOrderState.bills.filter(
           item => item.status === getStatusOrder(),
         )}
+        ListEmptyComponent={flastListEmpty}
         keyExtractor={item => item.code}
         showsVerticalScrollIndicator={false}
         keyboardDismissMode="on-drag"
@@ -201,7 +215,9 @@ const ManageOrder = ({
                     paddingRight: 15,
                     marginTop: 5,
                   }}
-                  onPress={() => navigation.navigate('DetailOrder')}>
+                  onPress={() =>
+                    navigation.navigate('DetailOrder', {bills: item})
+                  }>
                   <Text style={{color: COLORS.red}}>{'>>>>'}Xem chi tiết</Text>
                 </TouchableOpacity>
               </View>
@@ -227,8 +243,8 @@ const ManageOrder = ({
           padding: SIZES.padding,
         }}>
         {renderTopBarSection()}
-        <View style={{height: 530}}>{renderLocationList()}</View>
-        {/* {renderLocationList()} */}
+        <View style={{height: 530}}>{renderOrderList()}</View>
+        {/* {renderOrderList()} */}
       </View>
     </View>
   );

@@ -41,6 +41,7 @@ const Cart = ({
   //const [itemCart, setItemCart] = React.useState([]);
   const [orderNumber, setOrderNumber] = React.useState(0);
   const [money, setMoney] = React.useState(amount - discount);
+  const [num, setNum] = React.useState([]);
   const userInfo = signInState.data.user
     ? signInState.data.user
     : signInState.data;
@@ -62,66 +63,91 @@ const Cart = ({
   };
 
   const orderHandler = async () => {
-    let now = new Date();
-    let code = `BI${now.getTime().toString().slice(1, 9)}`;
-    //console.log('all pro', getProName(cartState.cart[0]));
-    database()
-      .ref(`/bills/${code}`)
-      .set({
-        address: cartState.delivery
-          ? userInfo.address
-          : selectedLocation?.address,
-        amount: amount - discount,
-        code: code,
-        createdDate: new Date().getTime(),
-        customerId: userInfo.id,
-        customerName: userInfo.name,
-        discount: amountWithoutDiscount - (amount - discount),
-        paymentId: cartState.payment.filter(pay => pay.name == methodPayment)[0]
-          .id,
-        paymentName: methodPayment,
-        point: Math.floor((amount - discount) / 1000),
-        price: amount,
-        promotionId: cartState.codeDiscount?.discount
-          ? cartState.codeDiscount.id
-          : 0,
-        promotionCode: cartState.codeDiscount?.discount
-          ? cartState.codeDiscount.code
-          : '',
-        read: false,
-        rewardId: cartState.codeDiscount?.redution
-          ? cartState.codeDiscount.id
-          : 0,
-        staffId: '',
-        staffName: '',
-        state: true,
-        status: 'REQUESTED',
-        storeId: storeId,
-        billDetails: cartState.cart
-          .map(
-            (item, index) =>
-              item.state && {
-                ...item,
-                code: code + `D${index + 1}`,
-                name: getProName(item),
-                price: getProPrice(item),
-                discount: getProDiscount(item),
-                amount:
-                  getProPrice(item) *
-                  item.quantity *
-                  (1 - getProDiscount(item) / 100),
-              },
-          )
-          .filter(item => item),
-      })
-      .then(() => console.log('Data set.'));
-
-    await cartState.cart.forEach(
-      async item => item.state && (await deleteCartItem(item)),
-    );
-    await cartActions.getCart(userInfo.id);
-    ToastAndroid.show('Đặt hàng thành công!', ToastAndroid.LONG);
+    if (product) {
+      Alert.alert('Thông báo', 'Sản phẩm bạn chọn từ hai cửa hàng khác nhau!', [
+        {
+          text: 'Bỏ qua',
+          onPress: () => {},
+          style: 'cancel',
+        },
+        {text: 'OK', onPress: () => {}},
+      ]);
+    } else {
+      let now = new Date();
+      let code = `BI${now.getTime().toString().slice(1, 9)}`;
+      //console.log('all pro', getProName(cartState.cart[0]));
+      database()
+        .ref(`/bills/${code}`)
+        .set({
+          address: cartState.delivery
+            ? userInfo.address
+            : selectedLocation?.address,
+          amount: amount - discount,
+          code: code,
+          createdDate: new Date().getTime(),
+          customerId: userInfo.id,
+          customerName: userInfo.name,
+          discount: amountWithoutDiscount - (amount - discount),
+          paymentId: cartState.payment.filter(
+            pay => pay.name == methodPayment,
+          )[0].id,
+          paymentName: methodPayment,
+          point: Math.floor((amount - discount) / 1000),
+          price: amount,
+          promotionId: cartState.codeDiscount?.discount
+            ? cartState.codeDiscount.id
+            : 0,
+          promotionCode: cartState.codeDiscount?.discount
+            ? cartState.codeDiscount.code
+            : '',
+          read: false,
+          rewardId: cartState.codeDiscount?.redution
+            ? cartState.codeDiscount.id
+            : 0,
+          staffId: '',
+          staffName: '',
+          state: true,
+          status: 'REQUESTED',
+          storeId: storeId,
+          billDetails: cartState.cart
+            .map(
+              (item, index) =>
+                item.state && {
+                  ...item,
+                  code: code + `D${index + 1}`,
+                  name: getProName(item),
+                  price: getProPrice(item),
+                  discount: getProDiscount(item),
+                  amount:
+                    getProPrice(item) *
+                    item.quantity *
+                    (1 - getProDiscount(item) / 100),
+                },
+            )
+            .filter(item => item),
+        })
+        .then(() => console.log('Data set.'));
+      await cartState.cart.forEach(async item =>
+        item.state
+          ? await deleteCartItem(item)
+          : setNum([...num, item.quantity]),
+      );
+      await cartActions.getCart(userInfo.id);
+      ToastAndroid.show('Đặt hàng thành công!', ToastAndroid.LONG);
+    }
   };
+
+  React.useEffect(() => {
+    console.log('num', num);
+    if (num) {
+      setOrderNumber(
+        num?.reduce(
+          (previousValue, currentValue) => previousValue + currentValue,
+          0,
+        ),
+      );
+    }
+  }, [num]);
 
   const deleteCartItem = async item => {
     if (cartState.cart[0]) {
@@ -147,7 +173,6 @@ const Cart = ({
       ]);
     }
   };
-  //console.log('cart item', cartState.cart);
 
   const checkAddressHandler = () => {
     if (!cartState.delivery) {
@@ -290,10 +315,18 @@ const Cart = ({
     });
     setAmount(total);
     setAmountWithoutDiscount(amountWithoutDiscount);
-    //setMoney(amount - discount);
-    //return formatMoney(total);
   };
-  //console.log('amount without discount', amountDiscount);
+  const updateStateCheckBox = async (id, state) => {
+    await cartActions.updateStateProductInCart(id, state);
+    cartState.cart.forEach(item =>
+      item.id === id && state
+        ? setOrderNumber(orderNumber - item.quantity)
+        : item.id === id
+        ? setOrderNumber(orderNumber + item.quantity)
+        : null,
+    );
+  };
+
   return (
     <View style={{flex: 1}}>
       <Header title="Giỏ hàng" navigation={navigation} />
@@ -433,9 +466,7 @@ const Cart = ({
                   <IconButton
                     icon={item.state ? icons.checkbox : icons.uncheckbox}
                     iconStyle={{tintColor: themeState.appTheme.textColor}}
-                    onPress={() =>
-                      cartActions.updateStateProductInCart(item.id, item.state)
-                    }
+                    onPress={() => updateStateCheckBox(item.id, item.state)}
                   />
                   <TouchableOpacity
                     onPress={() =>

@@ -36,6 +36,7 @@ const resetpassword = require('../assets/icons/resetpass.png');
 const cart = require('../assets/icons/cart.png');
 const orderManage = require('../assets/icons/manageOrder.png');
 const notification = require('../assets/icons/notification.png');
+const createOrder = require('../assets/icons/createOrder.png');
 export default {
   add,
   bookmark,
@@ -75,4 +76,5 @@ export default {
   cart,
   orderManage,
   notification,
+  createOrder,
 };
