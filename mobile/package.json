@@ -28,6 +28,7 @@
     "react-native": "0.65.1",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-keyboard-aware-scroll-view": "github:APSL/react-native-keyboard-aware-scroll-view#pull/501/head",
+    "react-native-modal": "^13.0.0",
     "react-native-modal-datetime-picker": "^13.0.0",
     "react-native-push-notification": "^8.1.1",
     "react-native-ratings": "^8.1.0",

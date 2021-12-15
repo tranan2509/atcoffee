@@ -260,6 +260,11 @@ const statusBill = [
     name: 'Đã hủy',
     status: 'CANCELED',
   },
+  {
+    id: 6,
+    name: 'Đánh giá',
+    status: 'RATE',
+  },
 ];
 
 const dummyData = {

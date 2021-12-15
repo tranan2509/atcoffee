@@ -27,7 +27,20 @@ const ManageOrder = ({
     //console.log('status: ', st, getStatusOrder());
     //console.log('uriImage', getUriImage(2));
     //console.log('quantity', getQuantityOrder(manageOrderState.bills[0]));
+    console.log('product', getProRate());
   }, [manageOrderState.bills]);
+
+  const getProRate = () => {
+    let listPro = [];
+    const listOrder = manageOrderState.bills?.filter(
+      item => item?.status === 'COMPLETED',
+    );
+    listOrder.forEach(item =>
+      item?.billDetails.forEach(pro => pro.state && listPro.push(pro)),
+    );
+    console.log('order', listOrder);
+    return listPro;
+  };
 
   const getQuantityOrder = bill => {
     return bill.billDetails.reduce(
@@ -43,13 +56,10 @@ const ManageOrder = ({
   const getStatusOrder = () => {
     return dummyData.statusBill.find(item => item.id === selectedTab).status;
   };
-
   function renderTopBarSection() {
     return (
       <FlatList
         style={{
-          // marginTop: -SIZES.radius * 15,
-          //paddingHorizontal: SIZES.radius,
           height: 50,
         }}
         data={dummyData.statusBill}
@@ -207,7 +217,7 @@ const ManageOrder = ({
                     lineHeight: 25,
                     marginTop: 5,
                   }}>
-                  {getQuantityOrder(item)} sản phẩm x {formatMoney(item.amount)}
+                  {getQuantityOrder(item)} sản phẩm - {formatMoney(item.amount)}
                 </Text>
                 <TouchableOpacity
                   style={{
@@ -218,7 +228,124 @@ const ManageOrder = ({
                   onPress={() =>
                     navigation.navigate('DetailOrder', {bills: item})
                   }>
-                  <Text style={{color: COLORS.red}}>{'>>>>'}Xem chi tiết</Text>
+                  <Text>{'>>>>'}Xem chi tiết</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          );
+        }}
+      />
+    );
+  }
+
+  const headerRate = () => {
+    return (
+      <View style={{paddingBottom: 10}}>
+        <Text style={{color: themeState.appTheme.textColor, ...FONTS.h3}}>
+          Hãy đánh giá để được tích thêm điểm nhé!!!
+        </Text>
+      </View>
+    );
+  };
+
+  const emptyRate = () => {
+    return (
+      <View style={{justifyContent: 'center', alignItems: 'center'}}>
+        <Text style={{color: themeState.appTheme.textColor, ...FONTS.h2}}>
+          Chưa có sản phẩm có thể đánh giá!!!
+        </Text>
+      </View>
+    );
+  };
+
+  function renderRateList() {
+    return (
+      <FlatList
+        style={{
+          //marginTop: -SIZES.radius * 15,
+          paddingHorizontal: SIZES.radius,
+        }}
+        data={getProRate()}
+        ListEmptyComponent={emptyRate}
+        ListHeaderComponent={headerRate}
+        keyExtractor={item => item.code}
+        showsVerticalScrollIndicator={false}
+        keyboardDismissMode="on-drag"
+        renderItem={({item, index}) => {
+          return (
+            <View
+              style={{
+                height: 150,
+                //paddingHorizontal: SIZES.padding,
+                marginTop: index > 0 ? SIZES.padding : 0,
+                alignItems: 'flex-end',
+                justifyContent: 'flex-end',
+              }}>
+              {/* Image */}
+              <View
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: 130,
+                  height: 140,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: SIZES.radius,
+                  backgroundColor: COLORS.lightYellow,
+                  zIndex: 1,
+                }}>
+                <Image
+                  source={{
+                    uri: getUriImage(item.productId),
+                  }}
+                  resizeMode="contain"
+                  style={{
+                    width: 100,
+                    height: 100,
+                  }}
+                />
+              </View>
+              <View
+                style={{
+                  width: '75%',
+                  height: '85%',
+                  paddingLeft: '20%',
+                  paddingRight: SIZES.base,
+                  paddingVertical: SIZES.base,
+                  borderRadius: SIZES.radius,
+                  //justifyContent: 'space-between',
+                  backgroundColor: COLORS.primary,
+                }}>
+                <Text
+                  style={{
+                    color: COLORS.white,
+                    ...FONTS.h2,
+                    fontSize: 18,
+                    lineHeight: 25,
+                  }}>
+                  {item.name}
+                </Text>
+                <Text
+                  style={{
+                    color: COLORS.yellow,
+                    ...FONTS.h2,
+                    fontSize: 14,
+                    lineHeight: 25,
+                    marginTop: 5,
+                  }}>
+                  Size: {item.size}, {item.description}
+                </Text>
+                <TouchableOpacity
+                  style={{
+                    alignItems: 'flex-end',
+                    paddingRight: 15,
+                    marginTop: 5,
+                  }}
+                  onPress={() =>
+                    navigation.navigate('DetailOrder', {bills: item})
+                  }>
+                  <Text>{'>>>>'}Đánh giá</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -243,7 +370,11 @@ const ManageOrder = ({
           padding: SIZES.padding,
         }}>
         {renderTopBarSection()}
-        <View style={{height: 530}}>{renderOrderList()}</View>
+        {getStatusOrder() !== 'RATE' ? (
+          <View style={{height: 530}}>{renderOrderList()}</View>
+        ) : (
+          <View style={{height: 530}}>{renderRateList()}</View>
+        )}
         {/* {renderOrderList()} */}
       </View>
     </View>

@@ -92,11 +92,8 @@ const detailsOrder = ({
     return (
       <View
         style={{
-          //   backgroundColor:
-          //     themeState.appTheme.name == 'dark' ? COLORS.gray1 : COLORS.white,
           width: '100%',
           paddingBottom: 20,
-          //paddingTop: 5,
         }}>
         <View
           style={{
@@ -351,7 +348,7 @@ const detailsOrder = ({
           //borderTopRightRadius: SIZES.radius * 2,
           padding: SIZES.padding,
         }}>
-        <View style={{}}>{renderProductList()}</View>
+        <View>{renderProductList()}</View>
       </View>
     </View>
   );

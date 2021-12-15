@@ -1,36 +1,26 @@
 import * as types from './action';
 
 const initialState = {
-  user: [],
-  resetPassword: false,
+  ratePro: [],
   error: '',
 };
 
-const profileReducer = function (state = initialState, action) {
+const rateReducer = function (state = initialState, action) {
   switch (action.type) {
-    case types.EDIT_PROFILE:
+    case types.ADD_RATE:
       //console.log('reducer', action.payload);
       return {
         ...state,
-        user: action.payload,
+        ratePro: action.payload,
+        error: '',
       };
-    case types.ERROR_EDIT:
+    case types.ERROR_RATE:
       return {
         ...state,
         error: action.error,
-      };
-    case types.RESET_PASSWORD:
-      return {
-        ...state,
-        resetPassword: action.payload,
-      };
-    case types.EDIT_PASSWORD:
-      return {
-        ...state,
-        user: action.payload,
       };
     default:
       return state;
   }
 };
-export {profileReducer};
+export {rateReducer};

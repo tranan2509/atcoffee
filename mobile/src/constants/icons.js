@@ -16,7 +16,6 @@ const sunny = require('../assets/icons/sunny.png');
 const search = require('../assets/icons/search.png');
 const coffee_cup = require('../assets/icons/coffee-cup.png');
 const reward_cup = require('../assets/icons/reward-cup.png');
-const bell = require('../assets/icons/bell.png');
 const info = require('../assets/icons/info.png');
 const logout = require('../assets/icons/logout.png');
 const point = require('../assets/icons/point.png');
@@ -37,6 +36,8 @@ const cart = require('../assets/icons/cart.png');
 const orderManage = require('../assets/icons/manageOrder.png');
 const notification = require('../assets/icons/notification.png');
 const createOrder = require('../assets/icons/createOrder.png');
+const rating = require('../assets/icons/rating.png');
+const star = require('../assets/icons/star.png');
 export default {
   add,
   bookmark,
@@ -56,7 +57,6 @@ export default {
   search,
   coffee_cup,
   reward_cup,
-  bell,
   info,
   logout,
   point,
@@ -77,4 +77,6 @@ export default {
   orderManage,
   notification,
   createOrder,
+  rating,
+  star,
 };
