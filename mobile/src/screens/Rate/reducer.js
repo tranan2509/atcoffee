@@ -19,6 +19,11 @@ const rateReducer = function (state = initialState, action) {
         ...state,
         error: action.error,
       };
+    case types.UPDATE_STATE_RATE:
+      return {
+        ...state,
+        error: '',
+      };
     default:
       return state;
   }

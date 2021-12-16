@@ -440,8 +440,7 @@ const OrderDetail = ({
                       }
                     : {
                         marginTop: 3,
-                        color: COLORS.white,
-
+                        color: themeState.appTheme.textColor,
                         ...FONTS.body3,
                       }
                 }>
@@ -451,7 +450,7 @@ const OrderDetail = ({
                 <Text
                   style={{
                     marginTop: 3,
-                    color: COLORS.white,
+                    color: themeState.appTheme.textColor,
                     ...FONTS.body3,
                   }}>
                   {formatMoney(
@@ -497,7 +496,7 @@ const OrderDetail = ({
                       }
                     : {
                         marginTop: 3,
-                        color: COLORS.white,
+                        color: themeState.appTheme.textColor,
 
                         ...FONTS.body3,
                       }
@@ -508,7 +507,7 @@ const OrderDetail = ({
                 <Text
                   style={{
                     marginTop: 3,
-                    color: COLORS.white,
+                    color: themeState.appTheme.textColor,
                     ...FONTS.body3,
                   }}>
                   {formatMoney(
@@ -555,8 +554,7 @@ const OrderDetail = ({
                       }
                     : {
                         marginTop: 3,
-                        color: COLORS.white,
-
+                        color: themeState.appTheme.textColor,
                         ...FONTS.body3,
                       }
                 }>
@@ -566,7 +564,7 @@ const OrderDetail = ({
                 <Text
                   style={{
                     marginTop: 3,
-                    color: COLORS.white,
+                    color: themeState.appTheme.textColor,
                     ...FONTS.body3,
                   }}>
                   {formatMoney(

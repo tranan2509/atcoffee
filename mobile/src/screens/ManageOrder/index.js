@@ -1,11 +1,13 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, FlatList, Image} from 'react-native';
-import {Header, TabButton} from '../../components';
+import {Header, TabButton, LoadingProcess} from '../../components';
 import {COLORS, FONTS, images, icons, SIZES, dummyData} from '../../constants';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as manageActionsCreator from './action';
 import {formatMoney} from '../../common/format';
+import Rate from '../Rate';
+import database from '@react-native-firebase/database';
 
 const ManageOrder = ({
   navigation,
@@ -17,6 +19,9 @@ const ManageOrder = ({
   orderState,
 }) => {
   const [selectedTab, setSelectedTab] = React.useState(1);
+  const [visible, setVisible] = React.useState(false);
+  const [itemPro, setItemPro] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
   const userInfo = signInState.data.user
     ? signInState.data.user
     : signInState.data;
@@ -27,8 +32,41 @@ const ManageOrder = ({
     //console.log('status: ', st, getStatusOrder());
     //console.log('uriImage', getUriImage(2));
     //console.log('quantity', getQuantityOrder(manageOrderState.bills[0]));
+    //manageOrderActions.getData(userInfo.id);
     console.log('product', getProRate());
+
+    //updateStateRate('BI63966690D1');
   }, [manageOrderState.bills]);
+
+  const updateStateRate = async code => {
+    let codeBill = code.split(`D`);
+    database()
+      .ref(`/bills/${codeBill[0]}/billDetails/${codeBill[1] - 1}`)
+      .update({
+        state: false,
+      })
+      .then(() => console.log('Data updated.'));
+    // let data = [];
+    // console.log('code', codeBill[0]);
+    // await database()
+    //   .ref(`/bills/${codeBill[0]}/billDetails/${codeBill[1] - 1}`)
+    //   .once('value')
+    //   .then(snapshot => {
+    //     // for (const property in snapshot.val()) {
+    //     //   //console.log(`${property}: ${snapshot.val()[property].customerId}`);
+    //     //   snapshot.val()[property].customerId === userInfo.id
+    //     //     ? data.push(snapshot.val()[property])
+    //     //     : null;
+    //     // }
+    //     console.log('data state: ', snapshot.val());
+    //   });
+    //console.log('data: ', data);
+  };
+
+  const rateHandler = pro => {
+    setItemPro(pro);
+    setVisible(true);
+  };
 
   const getProRate = () => {
     let listPro = [];
@@ -240,9 +278,14 @@ const ManageOrder = ({
 
   const headerRate = () => {
     return (
-      <View style={{paddingBottom: 10}}>
+      <View
+        style={{
+          paddingBottom: 10,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
         <Text style={{color: themeState.appTheme.textColor, ...FONTS.h3}}>
-          Hãy đánh giá để được tích thêm điểm nhé!!!
+          Hãy đánh giá để quán rút kinh nghiệm ạ!!!
         </Text>
       </View>
     );
@@ -251,7 +294,7 @@ const ManageOrder = ({
   const emptyRate = () => {
     return (
       <View style={{justifyContent: 'center', alignItems: 'center'}}>
-        <Text style={{color: themeState.appTheme.textColor, ...FONTS.h2}}>
+        <Text style={{color: themeState.appTheme.textColor, ...FONTS.h3}}>
           Chưa có sản phẩm có thể đánh giá!!!
         </Text>
       </View>
@@ -342,9 +385,7 @@ const ManageOrder = ({
                     paddingRight: 15,
                     marginTop: 5,
                   }}
-                  onPress={() =>
-                    navigation.navigate('DetailOrder', {bills: item})
-                  }>
+                  onPress={() => rateHandler(item)}>
                   <Text>{'>>>>'}Đánh giá</Text>
                 </TouchableOpacity>
               </View>
@@ -355,7 +396,8 @@ const ManageOrder = ({
     );
   }
   return (
-    <View style={{flex: 1}}>
+    <View
+      style={{flex: 1, backgroundColor: themeState.appTheme.backgroundColor}}>
       <Header title="Đơn hàng" navigation={navigation} />
       {/* <TouchableOpacity onPress={() => manageOrderActions.getData(userInfo.id)}>
         <Text>Get</Text>
@@ -375,8 +417,28 @@ const ManageOrder = ({
         ) : (
           <View style={{height: 530}}>{renderRateList()}</View>
         )}
-        {/* {renderOrderList()} */}
       </View>
+      {visible && (
+        <View
+          //zIndex={1}
+          style={{
+            // height: '80%',
+            width: '100%',
+            paddingLeft: 10,
+            paddingRight: 10,
+          }}>
+          <Rate
+            onPress={() => setVisible(false)}
+            itemPro={itemPro}
+            showLoading={params => setLoading(params)}
+          />
+        </View>
+      )}
+      {loading && (
+        <View zIndex={1} style={{marginTop: -100}}>
+          <LoadingProcess title="Đang tải..." />
+        </View>
+      )}
     </View>
   );
 };

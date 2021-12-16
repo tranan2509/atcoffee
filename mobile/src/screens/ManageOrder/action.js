@@ -18,7 +18,6 @@ export const getData = userId => {
               ? data.push(snapshot.val()[property])
               : null;
           }
-          //console.log('data: ', data);
         });
       console.log('data: ', data);
       dispatch({type: GET_BILLS, payload: data});

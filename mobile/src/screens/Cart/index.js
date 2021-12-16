@@ -17,6 +17,7 @@ import * as cartActionsCreator from './action';
 import * as orderActionsCreator from '../Order/action';
 import {bindActionCreators} from 'redux';
 import {formatMoney} from '../../common/format';
+import * as manageOrderActionsCreator from '../ManageOrder/action';
 const Cart = ({
   themeState,
   navigation,
@@ -26,6 +27,7 @@ const Cart = ({
   cartActions,
   orderState,
   orderActions,
+  manageOrderActions,
 }) => {
   const [discount, setDiscount] = React.useState(0);
   const [amount, setAmount] = React.useState(0);
@@ -42,6 +44,7 @@ const Cart = ({
   const [orderNumber, setOrderNumber] = React.useState(0);
   const [money, setMoney] = React.useState(amount - discount);
   const [num, setNum] = React.useState([]);
+  const [flag, setFlag] = React.useState(0);
   const userInfo = signInState.data.user
     ? signInState.data.user
     : signInState.data;
@@ -127,27 +130,27 @@ const Cart = ({
             .filter(item => item),
         })
         .then(() => console.log('Data set.'));
+      let totalNum = 0;
       await cartState.cart.forEach(async item =>
-        item.state
-          ? await deleteCartItem(item)
-          : setNum([...num, item.quantity]),
+        item.state ? await deleteCartItem(item) : (totalNum += item.quantity),
       );
+      setNum(totalNum);
       await cartActions.getCart(userInfo.id);
+      setFlag(1);
+      await manageOrderActions.getData(userInfo.id);
+      // if (cartState.codeDiscount?.redution) {
+
+      // }
       ToastAndroid.show('Đặt hàng thành công!', ToastAndroid.LONG);
     }
   };
 
   React.useEffect(() => {
     console.log('num', num);
-    if (num) {
-      setOrderNumber(
-        num?.reduce(
-          (previousValue, currentValue) => previousValue + currentValue,
-          0,
-        ),
-      );
+    if (num && flag) {
+      setOrderNumber(num);
     }
-  }, [num]);
+  }, [flag]);
 
   const deleteCartItem = async item => {
     if (cartState.cart[0]) {
@@ -285,12 +288,10 @@ const Cart = ({
           locationState.allLocation.filter(item => (item.id = storeId))[0],
         );
         await cartActions.updateDelivery(!cartState.delivery);
-        // navigation.navigate('Location', {stateNow: true});
       }
     }
   };
   const changeAddressHandler = () => {
-    //console.log('method', methodShipping);
     if (methodShipping == dummyData.methodShipping[0].name) {
       navigation.navigate('Address');
     }
@@ -905,6 +906,8 @@ function mapDispatchToProp(dispatch) {
   return {
     cartActions: bindActionCreators(cartActionsCreator, dispatch),
     orderActions: bindActionCreators(orderActionsCreator, dispatch),
+    manageOrderActions: bindActionCreators(manageOrderActionsCreator, dispatch),
+    profileActions: bindActionCreators(profileActionsCreator, dispatch),
   };
 }
 
