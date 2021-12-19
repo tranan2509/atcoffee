@@ -15,6 +15,8 @@ import database from '@react-native-firebase/database';
 import {Picker} from '@react-native-picker/picker';
 import * as cartActionsCreator from './action';
 import * as orderActionsCreator from '../Order/action';
+import * as profileActionsCreator from '../Profile/action';
+import * as signInActionsCreator from '../SignIn/action';
 import {bindActionCreators} from 'redux';
 import {formatMoney} from '../../common/format';
 import * as manageOrderActionsCreator from '../ManageOrder/action';
@@ -28,6 +30,8 @@ const Cart = ({
   orderState,
   orderActions,
   manageOrderActions,
+  profileActions,
+  signInActions,
 }) => {
   const [discount, setDiscount] = React.useState(0);
   const [amount, setAmount] = React.useState(0);
@@ -138,16 +142,29 @@ const Cart = ({
       await cartActions.getCart(userInfo.id);
       setFlag(1);
       await manageOrderActions.getData(userInfo.id);
-      // if (cartState.codeDiscount?.redution) {
-
-      // }
+      if (cartState.codeDiscount?.redution) {
+        await profileActions.editProfile(
+          userInfo.id,
+          userInfo.name,
+          userInfo.gender,
+          userInfo.phone,
+          userInfo.identityCard,
+          userInfo.email,
+          userInfo.password,
+          userInfo.address,
+          userInfo.dob,
+          userInfo.accumulatedPoints,
+          userInfo.currentPoints - cartState.codeDiscount?.proviso,
+        );
+      }
+      await signInActions.getUser(userInfo.username);
       ToastAndroid.show('Đặt hàng thành công!', ToastAndroid.LONG);
     }
   };
 
   React.useEffect(() => {
     console.log('num', num);
-    if (num && flag) {
+    if (flag) {
       setOrderNumber(num);
     }
   }, [flag]);
@@ -908,6 +925,7 @@ function mapDispatchToProp(dispatch) {
     orderActions: bindActionCreators(orderActionsCreator, dispatch),
     manageOrderActions: bindActionCreators(manageOrderActionsCreator, dispatch),
     profileActions: bindActionCreators(profileActionsCreator, dispatch),
+    signInActions: bindActionCreators(signInActionsCreator, dispatch),
   };
 }
 

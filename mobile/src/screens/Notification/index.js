@@ -4,7 +4,7 @@ import {View, Text} from 'react-native';
 const Notification = () => {
   return (
     <View>
-      <Text></Text>
+      <Text>Notifications</Text>
     </View>
   );
 };

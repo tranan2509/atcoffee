@@ -25,6 +25,9 @@ import {RadioButton, IconButton, LoadingProcess} from '../../components';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as SignUpActionsCreator from './action';
+import messaging from '@react-native-firebase/messaging';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 const SignUp = ({navigation, signUpActions, signUpState}) => {
   const {width, height} = Dimensions.get('window');
@@ -42,8 +45,13 @@ const SignUp = ({navigation, signUpActions, signUpState}) => {
   const [loading, setLoading] = React.useState(false);
   const [idCard, setIdCard] = React.useState('');
   const [flag, setFlag] = React.useState(false);
+  // const getTokenDe = async () => {
+  //   const token = await messaging().getToken();
+  //   //console.log('token..........', token);
+  // };
   React.useEffect(() => {
     //console.log(signUpState);
+    //getTokenDe();
     if (loading) {
       setLoading(false);
     }
@@ -116,6 +124,20 @@ const SignUp = ({navigation, signUpActions, signUpState}) => {
                 address,
               );
 
+              await messaging()
+                .getToken()
+                .then(token => {
+                  console.log(token);
+                  firestore()
+                    .collection('usertoken')
+                    .doc(phone)
+                    .set({
+                      token: token,
+                    })
+                    .then(() => {
+                      console.log('User added!');
+                    });
+                });
               ToastAndroid.show('Đăng ký thành công', ToastAndroid.LONG);
             } else if (selectedFemale) {
               await signUpActions.signUp(

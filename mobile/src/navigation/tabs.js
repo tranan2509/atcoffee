@@ -16,6 +16,7 @@ import RewardsStackNavigator from './RewardsNavigator';
 import HomeStackNavigation from './HomeNavigator';
 import ProfileStackNavigator from './ProfileNavigator';
 import LocationStackNavigator from './LocationNavigator';
+import {Notification} from '../screens';
 
 import {COLORS, SIZES, icons} from '../constants';
 
@@ -182,7 +183,7 @@ const Tabs = () => {
       />
       <Tab.Screen
         name="Notification"
-        component={RewardsStackNavigator}
+        component={Notification}
         options={{
           tabBarIcon: ({focused}) => (
             <Image
