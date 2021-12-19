@@ -24,6 +24,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as cartActionsCreator from '../Cart/action';
 import * as manageOrderActionsCreator from '../ManageOrder/action';
 import {bindActionCreators} from 'redux';
+import firestore from '@react-native-firebase/firestore';
+import axios from 'axios';
 
 const promoTabs = constants.promoTabs.map(promoTab => ({
   ...promoTab,
@@ -176,6 +178,7 @@ const Home = ({
   React.useEffect(() => {
     setToken();
     console.log('bills', manageOrderState);
+    sendNotification('Don hang da hoan thanh vui long nhan hang ngay a!!!');
     //get cart
   }, []);
   // React.useEffect(() => {
@@ -191,6 +194,32 @@ const Home = ({
   // }, []);
 
   //console.log(promoTabs);
+
+  const sendNotification = message => {
+    firestore()
+      .collection('usertoken')
+      .doc(userInfo.phone)
+      .get()
+      .then(querySnap => {
+        console.log(querySnap._data.token);
+        let data = {token: querySnap._data.token, message: message};
+        try {
+          axios.post(
+            'http://2dee-2402-9d80-3aa-3056-4d69-bd9e-127-fe5a.ngrok.io/send-noti',
+            data,
+          );
+        } catch (err) {
+          console.log(err);
+        }
+      });
+  };
+  const getDataChange = () => {
+    const onChildAdd = database()
+      .ref('/bills/BI63967324')
+      .on('child_added', snapshot => {
+        console.log('A new node has been added', snapshot.val());
+      });
+  };
   function renderAvailableRewards() {
     return (
       <TouchableOpacity

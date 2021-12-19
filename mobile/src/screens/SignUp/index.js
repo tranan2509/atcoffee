@@ -45,13 +45,34 @@ const SignUp = ({navigation, signUpActions, signUpState}) => {
   const [loading, setLoading] = React.useState(false);
   const [idCard, setIdCard] = React.useState('');
   const [flag, setFlag] = React.useState(false);
-  // const getTokenDe = async () => {
-  //   const token = await messaging().getToken();
-  //   //console.log('token..........', token);
-  // };
+  const [token, setToken] = React.useState('');
+  const getTokenDe = async () => {
+    const token = await messaging().getToken();
+    setToken(token);
+  };
+  const addToken = username => {
+    firestore()
+      .collection('usertoken')
+      .doc(username)
+      .set({token: token})
+      .then(() => {
+        console.log('update');
+      });
+  };
+  // React.useEffect(() => {
+  //   //console.log(signUpState);
+  //   //getTokenDe();
+  //   //console.log(firestore().collection('usertoken').get());
+  //   if (phone) {
+  //     addToken(phone);
+  //   }
+  //   console.log('update');
+  // }, [phone]);
   React.useEffect(() => {
     //console.log(signUpState);
-    //getTokenDe();
+    getTokenDe();
+    //console.log(firestore().collection('usertoken').get());
+    //addToken('nam');
     if (loading) {
       setLoading(false);
     }
@@ -114,6 +135,7 @@ const SignUp = ({navigation, signUpActions, signUpState}) => {
             setLoading(true);
             setFlag(true);
             if (selectedMale) {
+              addToken(phone);
               await signUpActions.signUp(
                 name,
                 'Nam',
@@ -123,21 +145,6 @@ const SignUp = ({navigation, signUpActions, signUpState}) => {
                 password,
                 address,
               );
-
-              await messaging()
-                .getToken()
-                .then(token => {
-                  console.log(token);
-                  firestore()
-                    .collection('usertoken')
-                    .doc(phone)
-                    .set({
-                      token: token,
-                    })
-                    .then(() => {
-                      console.log('User added!');
-                    });
-                });
               ToastAndroid.show('Đăng ký thành công', ToastAndroid.LONG);
             } else if (selectedFemale) {
               await signUpActions.signUp(

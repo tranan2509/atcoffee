@@ -13,25 +13,26 @@ admin.initializeApp({
 
 app.post('/send-noti', (req, res) => {
   console.log(req.body);
-  //   const message = {
-  //     notification: {
-  //       title: 'Thông báo',
-  //       body: 'Đơn hàng của bạn đã hoàn thành. Vui lòng nhận hàng ạ!!!',
-  //     },
-  //     token:
-  //       'dc3oorhUQMOAArV8SO1OmB:APA91bHIXhbFqNFIZnXHVKoSh4wGf4pAUhvuqXFXx6oGqtII77UBwf1h0yPMve1bNcfOkrTytlmBtM8TuBfkdDNMdlrEay6eCeekjRDfc3mxY7vqXm2Cgqxpgy4QZXcToneg6WyRVKOP',
-  //   };
-  //   admin
-  //     .messaging()
-  //     .send(message)
-  //     .then(res => {
-  //       console.log('send Success');
-  //     })
-  //     .catch(err => {
-  //       console.log(err);
-  //     });
+  const message = {
+    notification: {
+      title: 'Thông báo',
+      body: req.body.message,
+    },
+    token: req.body.token,
+  };
+  admin
+    .messaging()
+    .send(message)
+    .then(res => {
+      console.log('send Success');
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  res.send(true);
 });
 
 app.listen(3000, () => {
   console.log('server running');
 });
+//app.timeout = 120000; //
