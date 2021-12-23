@@ -135,13 +135,19 @@ const Cart = ({
         })
         .then(() => console.log('Data set.'));
       let totalNum = 0;
+      //let idCart = []
       await cartState.cart.forEach(async item =>
-        item.state ? await deleteCartItem(item) : (totalNum += item.quantity),
+        item.state
+          ? await cartActions.deleteCart(item.id)
+          : (totalNum += item.quantity),
       );
-      setNum(totalNum);
+      //console.log('numberOrder');
+      //setNum(totalNum);
+      console.log('num', totalNum);
+      setOrderNumber(totalNum);
       await cartActions.getCart(userInfo.id);
       setFlag(1);
-      await manageOrderActions.getData(userInfo.id);
+      //await manageOrderActions.getData(userInfo.id);
       if (cartState.codeDiscount?.redution) {
         await profileActions.editProfile(
           userInfo.id,
@@ -162,12 +168,13 @@ const Cart = ({
     }
   };
 
-  React.useEffect(() => {
-    console.log('num', num);
-    if (flag) {
-      setOrderNumber(num);
-    }
-  }, [flag]);
+  // React.useEffect(() => {
+  //   console.log('num', num);
+  //   if (flag) {
+  //     console.log('numberOrder');
+  //     setOrderNumber(num);
+  //   }
+  // }, [flag]);
 
   const deleteCartItem = async item => {
     if (cartState.cart[0]) {

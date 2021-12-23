@@ -42,7 +42,7 @@ const Rate = ({
     };
     await rateActions.addRate(ratePro);
     await rateActions.updateStateRate(itemPro.code);
-    await manageOrderActions.getData(userInfo.id);
+    //await manageOrderActions.getData(userInfo.id);
     showLoading(false);
   };
 

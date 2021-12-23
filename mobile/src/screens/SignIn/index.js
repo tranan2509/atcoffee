@@ -97,9 +97,12 @@ const SignIn = ({
     signInActions.getType();
     //get theme
     themeActions.getTheme();
+    //realtime
+
     //clean
     return () => setLoading(false);
   }, []);
+
   React.useEffect(() => {
     if (token) {
       setLoading(true);

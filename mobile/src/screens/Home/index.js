@@ -18,14 +18,13 @@ import {
   FONTS,
   dummyData,
 } from '../../constants';
+import database from '@react-native-firebase/database';
 import {connect} from 'react-redux';
 import {HeaderBar, CustomButton} from '../../components';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as cartActionsCreator from '../Cart/action';
 import * as manageOrderActionsCreator from '../ManageOrder/action';
 import {bindActionCreators} from 'redux';
-import firestore from '@react-native-firebase/firestore';
-import axios from 'axios';
 
 const promoTabs = constants.promoTabs.map(promoTab => ({
   ...promoTab,
@@ -163,7 +162,9 @@ const Home = ({
       offset: promoTabIndex * SIZES.width,
     });
   });
-
+  const userInfo = signInState.data.user
+    ? signInState.data.user
+    : signInState.data;
   const setToken = async () => {
     const token = await AsyncStorage.getItem('token');
     if (!token) {
@@ -171,15 +172,14 @@ const Home = ({
     }
     await cartActions.getCart(userInfo.id);
     await manageOrderActions.getData(userInfo.id);
+    await manageOrderActions.updateOrder(userInfo.id, userInfo.phone);
   };
-  const userInfo = signInState.data.user
-    ? signInState.data.user
-    : signInState.data;
   React.useEffect(() => {
     setToken();
-    console.log('bills', manageOrderState);
-    sendNotification('Don hang da hoan thanh vui long nhan hang ngay a!!!');
+    console.log('billssssssss', manageOrderState);
+    //sendNotification('Don hang da hoan thanh vui long nhan hang ngay a!!!');
     //get cart
+    //getChangeOrder();
   }, []);
   // React.useEffect(() => {
   //   const newReference = database().ref('/users').push();
@@ -193,33 +193,6 @@ const Home = ({
   //     .then(() => console.log('Data updated.'));
   // }, []);
 
-  //console.log(promoTabs);
-
-  const sendNotification = message => {
-    firestore()
-      .collection('usertoken')
-      .doc(userInfo.phone)
-      .get()
-      .then(querySnap => {
-        console.log(querySnap._data.token);
-        let data = {token: querySnap._data.token, message: message};
-        try {
-          axios.post(
-            'http://2dee-2402-9d80-3aa-3056-4d69-bd9e-127-fe5a.ngrok.io/send-noti',
-            data,
-          );
-        } catch (err) {
-          console.log(err);
-        }
-      });
-  };
-  const getDataChange = () => {
-    const onChildAdd = database()
-      .ref('/bills/BI63967324')
-      .on('child_added', snapshot => {
-        console.log('A new node has been added', snapshot.val());
-      });
-  };
   function renderAvailableRewards() {
     return (
       <TouchableOpacity

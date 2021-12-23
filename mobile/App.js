@@ -6,6 +6,7 @@ import store from './src/stores/store';
 import {Provider} from 'react-redux';
 import {navigationRef} from './src/navigation/navigationRef';
 import messaging from '@react-native-firebase/messaging';
+import database from '@react-native-firebase/database';
 
 const App = () => {
   React.useEffect(() => {
@@ -16,6 +17,9 @@ const App = () => {
     const token = await messaging().getToken();
     console.log('token..........', token);
   };
+  React.useEffect(() => {
+    console.log('yeah');
+  }, [database]);
   React.useEffect(() => {
     getToken();
     messaging().onMessage(async remoteMessage => {

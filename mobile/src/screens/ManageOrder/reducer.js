@@ -2,6 +2,7 @@ import * as types from './action';
 
 const initialState = {
   bills: [],
+  changing: {},
   error: '',
 };
 
@@ -11,6 +12,12 @@ const manageOrderReducer = function (state = initialState, action) {
       return {
         ...state,
         bills: action.payload,
+        error: '',
+      };
+    case types.UPDATE_ORDER:
+      return {
+        ...state,
+        changing: action.payload,
         error: '',
       };
     case types.ERROR:

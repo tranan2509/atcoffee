@@ -17,6 +17,14 @@ app.post('/send-noti', (req, res) => {
     notification: {
       title: 'Thông báo',
       body: req.body.message,
+      //sound: 'default',
+      //icon: 'https://res.cloudinary.com/tranan2509/image/upload/v1635433632/logo_hvnmwc.png',
+    },
+    android: {
+      notification: {
+        sound: 'default',
+        icon: 'https://res.cloudinary.com/tranan2509/image/upload/v1635433632/logo_hvnmwc.png',
+      },
     },
     token: req.body.token,
   };
