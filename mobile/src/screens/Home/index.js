@@ -24,6 +24,7 @@ import {HeaderBar, CustomButton} from '../../components';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as cartActionsCreator from '../Cart/action';
 import * as manageOrderActionsCreator from '../ManageOrder/action';
+import * as notificationActionCreators from '../Notification/action';
 import {bindActionCreators} from 'redux';
 
 const promoTabs = constants.promoTabs.map(promoTab => ({
@@ -152,6 +153,8 @@ const Home = ({
   cartState,
   manageOrderActions,
   manageOrderState,
+  notificationsActions,
+  notificationState,
 }) => {
   const scrollX = React.useRef(new Animated.Value(0)).current;
 
@@ -173,10 +176,11 @@ const Home = ({
     await cartActions.getCart(userInfo.id);
     await manageOrderActions.getData(userInfo.id);
     await manageOrderActions.updateOrder(userInfo.id, userInfo.phone);
+    await notificationsActions.getDataNotifications(userInfo.phone);
   };
   React.useEffect(() => {
     setToken();
-    console.log('billssssssss', manageOrderState);
+
     //sendNotification('Don hang da hoan thanh vui long nhan hang ngay a!!!');
     //get cart
     //getChangeOrder();
@@ -417,6 +421,7 @@ function mapStateToProps(state) {
     signInState: state.signInReducer,
     cartState: state.cartReducer,
     manageOrderState: state.manageOrderReducer,
+    notificationState: state.notificationReducer,
   };
 }
 
@@ -424,6 +429,10 @@ function mapDispatchToProp(dispatch) {
   return {
     cartActions: bindActionCreators(cartActionsCreator, dispatch),
     manageOrderActions: bindActionCreators(manageOrderActionsCreator, dispatch),
+    notificationsActions: bindActionCreators(
+      notificationActionCreators,
+      dispatch,
+    ),
   };
 }
 

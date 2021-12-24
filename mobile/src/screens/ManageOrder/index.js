@@ -22,21 +22,46 @@ const ManageOrder = ({
   const [visible, setVisible] = React.useState(false);
   const [itemPro, setItemPro] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
+  const [bill, setBill] = React.useState(null);
+  const [isFetching, setIsFetching] = React.useState(false);
   const userInfo = signInState.data.user
     ? signInState.data.user
     : signInState.data;
   React.useEffect(() => {
-    //console.log('bills: ', manageOrderState);
+    //console.log('tab: ', bill);
     //console.log('products: ', orderState);
     //let st = getStatusOrder();
     //console.log('status: ', st, getStatusOrder());
     //console.log('uriImage', getUriImage(2));
     //console.log('quantity', getQuantityOrder(manageOrderState.bills[0]));
     //manageOrderActions.getData(userInfo.id);
-    console.log('product', getProRate());
+    //console.log('product', getProRate());
 
     //updateStateRate('BI63966690D1');
-  }, [manageOrderState.bills]);
+    console.log('bill', manageOrderState);
+    console.log(
+      'bill statusssssss',
+      manageOrderState?.bills.filter(item => item.status === getStatusOrder()),
+    );
+    console.log(
+      'bill statusssssss',
+      manageOrderState?.bills.filter(item => item.status === 'DELIVERING'),
+    );
+  }, [manageOrderState.bills[0], selectedTab]);
+
+  const fetchData = () => {
+    setBill(
+      manageOrderState?.bills.filter(item => item.status === getStatusOrder()),
+    );
+    setIsFetching(false);
+    console.log('bill statusssssss');
+  };
+
+  const onRefresh = () => {
+    setIsFetching(true);
+    fetchData();
+    console.log('bill statusssssss', bill);
+  };
 
   const updateStateRate = async code => {
     let codeBill = code.split(`D`);
@@ -92,6 +117,7 @@ const ManageOrder = ({
   };
 
   const getStatusOrder = () => {
+    //console.log('status', selectedTab);
     return dummyData.statusBill.find(item => item.id === selectedTab).status;
   };
   function renderTopBarSection() {
@@ -149,12 +175,13 @@ const ManageOrder = ({
           //marginTop: -SIZES.radius * 15,
           paddingHorizontal: SIZES.radius,
         }}
-        data={manageOrderState.bills.filter(
+        data={manageOrderState?.bills.filter(
           item => item.status === getStatusOrder(),
         )}
         ListEmptyComponent={flastListEmpty}
         keyExtractor={item => item.code}
         showsVerticalScrollIndicator={false}
+        extraData={manageOrderState.bills}
         keyboardDismissMode="on-drag"
         renderItem={({item, index}) => {
           return (
@@ -313,6 +340,7 @@ const ManageOrder = ({
         ListHeaderComponent={headerRate}
         keyExtractor={item => item.code}
         showsVerticalScrollIndicator={false}
+        extraData={getProRate()}
         keyboardDismissMode="on-drag"
         renderItem={({item, index}) => {
           return (
@@ -412,9 +440,10 @@ const ManageOrder = ({
           padding: SIZES.padding,
         }}>
         {renderTopBarSection()}
-        {getStatusOrder() !== 'RATE' ? (
+        {getStatusOrder() !== 'RATE' && (
           <View style={{height: 530}}>{renderOrderList()}</View>
-        ) : (
+        )}
+        {getStatusOrder() === 'RATE' && (
           <View style={{height: 530}}>{renderRateList()}</View>
         )}
       </View>

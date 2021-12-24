@@ -13,35 +13,50 @@ const App = () => {
     SplashScreen.hide();
   }, []);
 
-  const getToken = async () => {
-    const token = await messaging().getToken();
-    console.log('token..........', token);
-  };
-  React.useEffect(() => {
-    console.log('yeah');
-  }, [database]);
-  React.useEffect(() => {
-    getToken();
-    messaging().onMessage(async remoteMessage => {
-      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
-    });
-    messaging().onNotificationOpenedApp(remoteMessage => {
-      console.log(
-        'Notification caused app to open from background state:',
-        JSON.stringify(remoteMessage),
-      );
-    });
-    messaging()
-      .getInitialNotification()
-      .then(remoteMessage => {
-        if (remoteMessage) {
-          console.log(
-            'Notification caused app to open from quit state:',
-            JSON.stringify(remoteMessage),
-          );
-        }
-      });
-  }, []);
+  // const getToken = async () => {
+  //   const token = await messaging().getToken();
+  //   console.log('token..........', token);
+  // };
+
+  // React.useEffect(() => {
+  //   getToken();
+
+  //   messaging().onMessage(async remoteMessage => {
+  //     PushNotification.getChannels(function (channel_ids) {
+  //       console.log(channel_ids); // ['channel_id_1']
+  //     });
+  //     Alert.alert(
+  //       remoteMessage.notification.title,
+  //       remoteMessage.notification.body,
+  //       // [
+  //       //   {
+  //       //     text: 'Bỏ qua',
+  //       //     onPress: () => {},
+  //       //     style: 'cancel',
+  //       //   },
+  //       //   {text: 'OK', onPress: () => {}},
+  //       // ],
+  //     );
+  //     console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
+  //
+  //   });
+  //   messaging().onNotificationOpenedApp(remoteMessage => {
+  //     console.log(
+  //       'Notification caused app to open from background state:',
+  //       JSON.stringify(remoteMessage),
+  //     );
+  //   });
+  //   messaging()
+  //     .getInitialNotification()
+  //     .then(remoteMessage => {
+  //       if (remoteMessage) {
+  //         console.log(
+  //           'Notification caused app to open from quit state:',
+  //           JSON.stringify(remoteMessage),
+  //         );
+  //       }
+  //     });
+  // }, []);
 
   return (
     <NavigationContainer ref={navigationRef}>

@@ -11,7 +11,6 @@ const rateReducer = function (state = initialState, action) {
       //console.log('reducer', action.payload);
       return {
         ...state,
-        ratePro: action.payload,
         error: '',
       };
     case types.ERROR_RATE:
@@ -22,6 +21,12 @@ const rateReducer = function (state = initialState, action) {
     case types.UPDATE_STATE_RATE:
       return {
         ...state,
+        error: '',
+      };
+    case types.GET_RATE:
+      return {
+        ...state,
+        ratePro: action.payload,
         error: '',
       };
     default:

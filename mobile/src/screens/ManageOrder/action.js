@@ -7,22 +7,22 @@ export const UPDATE_ORDER = 'UPDATE_ORDER';
 
 export const getData = userId => {
   return dispatch => {
-    let data = [];
-    console.log('id: ', userId);
+    //console.log('id: ', userId);
     try {
       database()
         .ref('/bills')
         .on('value', snapshot => {
           console.log('User data: ', snapshot.val());
+          let data = [];
           for (const property in snapshot.val()) {
             //console.log(`${property}: ${snapshot.val()[property].customerId}`);
             snapshot.val()[property].customerId === userId
               ? data.push(snapshot.val()[property])
               : null;
           }
+          console.log('data: ', data);
+          dispatch({type: GET_BILLS, payload: data});
         });
-      console.log('data: ', data);
-      dispatch({type: GET_BILLS, payload: data});
     } catch (err) {
       console.log('error in manage order', err);
       dispatch({type: ERROR, error: err});
@@ -59,6 +59,20 @@ export const updateOrder = (userId, phone) => {
                 break;
             }
             sendNotification(mess, phone);
+            database()
+              .ref(
+                `/notifications/${phone}/${snapshot.val().code}_${
+                  snapshot.val().status
+                }`,
+              )
+              .set({
+                title: 'Thông báo',
+                body: mess,
+                isSeen: false,
+                codeOrder: snapshot.val().code,
+                code: `${snapshot.val().code}_${snapshot.val().status}`,
+              })
+              .then(() => console.log('Data Noti set.'));
           }
         });
       //console.log('data: ', data);
@@ -79,7 +93,10 @@ const sendNotification = (message, phone) => {
       let data = {token: querySnap._data.token, message: message};
       try {
         console.log('querySnap._data.token');
-        axios.post('http://1ca7-103-199-53-220.ngrok.io/send-noti', data);
+        axios.post(
+          'http://430b-2402-9d80-3b4-b83-dd18-92a7-f0fa-498f.ngrok.io/send-noti',
+          data,
+        );
       } catch (err) {
         console.log(err);
       }
