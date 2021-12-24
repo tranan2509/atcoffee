@@ -24,12 +24,12 @@
                   <td class="text-center">{{number(index)}}</td>
                   <td class="text-center">{{rate.code}}</td>
                   <td class="text-center" v-if="$route.path.includes('/admin/rates')">
-                    {{products.find(item => item.id == rate.productId).name}}
+                    {{products?.find(item => item.id == rate.productId).name}}
                   </td>
                   <td class="text-center" v-if="$route.path.includes('/admin/rates')">
-                    <img :src="products.find(item => item.id == rate.productId).image"/>
+                    <img :src="products?.find(item => item.id == rate.productId).image"/>
                   </td>
-                  <td class="text-center">{{customers.find(item => item.id == rate.customerId).name}}</td>
+                  <td class="text-center">{{customers?.find(item => item.id == rate.userId).name}}</td>
                   <td class="text-center">{{rate.comment}}</td>
                   <td class="text-center">{{formatDateTime(new Date(rate.modifiedDate))}}</td>
                 </tr>
@@ -47,6 +47,7 @@
 
 <script>
 import * as Constants from '../../../common/Constants'
+import * as MutationsName from '../../../common/MutationsName'
 import CommonUtils from '../../../common/CommonUtils'
 import RateCommand from '../../../command/RateCommand'
 import ProductCommand from '../../../command/ProductCommand'
@@ -94,9 +95,8 @@ export default {
     },
 
     async loadData() {
-      await Promise.all(
-        [this.loadProducts, this.loadCustomers]
-        );
+      await this.loadProducts();
+      await this.loadCustomers();
       await this.loadRateBySort(this.currentPage, Constants.PAGE_SIZE_RATE);
     },
 
@@ -114,7 +114,7 @@ export default {
     },
 
     async loadCustomers() {
-      this.customers = await UserCommand.findAll().filter(item => item.roleName == Constants.ROLE.ROLE_USER);
+      this.customers = await UserCommand.findAll();
     }
     
   },
@@ -122,6 +122,7 @@ export default {
   created(){
     this.init();
     this.loadData();
+    this.$store.commit(MutationsName.MUTATION_NAME_SET_RATES, []);
   }
 }
 </script>
