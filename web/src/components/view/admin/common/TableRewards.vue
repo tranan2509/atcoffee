@@ -126,7 +126,7 @@ export default {
 
     async loadRewardsBySort(page, size) {
       var keyword = this.keyword;
-      this.users = await RewardCommand.findByOrder(page, size, keyword, this.$store);
+      await RewardCommand.findByOrder(page, size, keyword, this.$store);
     },
     
   },

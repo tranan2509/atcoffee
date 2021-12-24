@@ -74,4 +74,11 @@ public class RateAPI {
 			Pageable pageable = new PageRequest(page - 1, size);
 		return ResponseEntity.ok(rateService.findByProductIdAndUserId(productId, userId, pageable));
 	}
+	
+	@GetMapping(value = "/api/admin/rate")
+	public ResponseEntity<RateResponse> findAll(@RequestParam(name = "page", required = false, defaultValue = "1") int page,
+			@RequestParam(name = "size",required = false, defaultValue = "10000") int size) {
+		Pageable pageable = new PageRequest(page - 1, size);
+		return ResponseEntity.ok(rateService.findAll(pageable));
+	}
 }

@@ -16,6 +16,7 @@
       </section-header>
       <div class="section-body">
         <basic-product-info :product="product" :type="type" @handleEdit="handleEdit" v-if="!isEdit"></basic-product-info>
+        <table-rates></table-rates>
       </div>
   </admin>
 </template>
@@ -24,6 +25,7 @@
 import * as Constants from '../../../common/Constants'
 import * as MutationsName from '../../../common/MutationsName'
 import ProductCommand from '../../../command/ProductCommand'
+import TableRates from '../common/TableRates.vue'
 import BasicProductInfo from '../common/BasicProductInfo.vue'
 import Admin from '../main/Admin.vue'
 import SectionHeader from '../../common/common/SectionHeader.vue'
@@ -34,7 +36,8 @@ export default {
   components: {
     Admin,
     SectionHeader,
-    BasicProductInfo
+    BasicProductInfo,
+    TableRates
   },
 
   data() {
