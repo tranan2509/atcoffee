@@ -10,8 +10,8 @@ const manageOrderReducer = function (state = initialState, action) {
   switch (action.type) {
     case types.GET_BILLS:
       return {
-        ...state,
         bills: action.payload,
+        changing: {},
         error: '',
       };
     case types.UPDATE_ORDER:

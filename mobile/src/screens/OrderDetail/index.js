@@ -46,7 +46,7 @@ const OrderDetail = ({
   const [loading, setLoading] = React.useState(false);
   const [editedCart, setEditedCart] = React.useState(0);
   const userInfo = userState.data.user ? userState.data.user : userState.data;
-  console.log('all pro', selectedLocation);
+  //console.log('all pro', selectedLocation);
   React.useEffect(() => {
     let {selectedItem} = route?.params;
     setSelectedItem(selectedItem);

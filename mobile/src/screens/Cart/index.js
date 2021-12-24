@@ -20,6 +20,8 @@ import * as signInActionsCreator from '../SignIn/action';
 import {bindActionCreators} from 'redux';
 import {formatMoney} from '../../common/format';
 import * as manageOrderActionsCreator from '../ManageOrder/action';
+import firestore from '@react-native-firebase/firestore';
+import axios from 'axios';
 const Cart = ({
   themeState,
   navigation,
@@ -134,6 +136,17 @@ const Cart = ({
             .filter(item => item),
         })
         .then(() => console.log('Data set.'));
+      sendNotification(`Đơn hàng ${code} đang chờ xác nhận`, userInfo.phone);
+      database()
+        .ref(`/notifications/${userInfo.phone}/${code}_REQUESTED`)
+        .set({
+          title: 'Thông báo',
+          body: `Đơn hàng ${code} đang chờ xác nhận`,
+          isSeen: false,
+          codeOrder: code,
+          code: `${code}_REQUESTED`,
+        })
+        .then(() => console.log('Data Noti set.'));
       let totalNum = 0;
       //let idCart = []
       await cartState.cart.forEach(async item =>
@@ -166,6 +179,26 @@ const Cart = ({
       await signInActions.getUser(userInfo.username);
       ToastAndroid.show('Đặt hàng thành công!', ToastAndroid.LONG);
     }
+  };
+
+  const sendNotification = (message, phone) => {
+    firestore()
+      .collection('usertoken')
+      .doc(phone)
+      .get()
+      .then(querySnap => {
+        console.log(querySnap._data.token);
+        let data = {token: querySnap._data.token, message: message};
+        try {
+          console.log('querySnap._data.token');
+          axios.post(
+            'http://430b-2402-9d80-3b4-b83-dd18-92a7-f0fa-498f.ngrok.io/send-noti',
+            data,
+          );
+        } catch (err) {
+          console.log(err);
+        }
+      });
   };
 
   // React.useEffect(() => {
