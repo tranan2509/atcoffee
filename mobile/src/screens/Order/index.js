@@ -17,8 +17,17 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as OrderActionsCreator from './action';
 import {formatMoney} from '../../common/format';
+import * as RateActionsCreator from '../Rate/action';
 
-const Order = ({navigation, themeState, route, orderActions, orderState}) => {
+const Order = ({
+  navigation,
+  themeState,
+  route,
+  orderActions,
+  orderState,
+  rateState,
+  rateActions,
+}) => {
   const [selectedLocation, setSelectedLocation] = React.useState(null);
 
   const [selectedTab, setSelectedTab] = React.useState(0);
@@ -28,6 +37,30 @@ const Order = ({navigation, themeState, route, orderActions, orderState}) => {
   );
 
   const [menu, setMenu] = React.useState(null);
+  // const avgStar = () => {
+  //   let sum = rateState.ratePro.reduce(
+  //     (previousValue, currentValue) =>
+  //       currentValue.state ? previousValue + currentValue.star : previousValue,
+  //     0,
+  //   );
+  //   return Math.round(sum / rateState.ratePro.length);
+  // };
+  // const getRate = async id => {
+  //   await rateActions.getRateByProduct(id);
+  // };
+
+  // React.useEffect(() => {
+  //   let rating = [];
+  //   menu?.forEach(item => {
+  //     getRate(item?.id);
+  //     if (rateState.ratePro) {
+  //       console.log(rateState.ratePro);
+  //       let avg = avgStar();
+  //       rating.push({[item?.id]: avg});
+  //     }
+  //   });
+  //   console.log('avgffffff', rating);
+  // }, [menu]);
 
   React.useEffect(() => {
     let {selectedLocation} = route.params;
@@ -303,14 +336,11 @@ const Order = ({navigation, themeState, route, orderActions, orderState}) => {
                           <Text
                             style={{
                               color: COLORS.lightYellow,
-                              ...FONTS.h2,
-                              fontSize: 18,
+                              marginTop: -30,
+                              ...FONTS.h3,
+                              fontSize: 15,
                             }}>
-                            {formatMoney(
-                              item.sizes.filter(
-                                sizeItem => sizeItem.size == 'S',
-                              )[0].price,
-                            )}{' '}
+                            Size: S, M, L
                           </Text>
                           {item.discount ? (
                             <View
@@ -318,10 +348,11 @@ const Order = ({navigation, themeState, route, orderActions, orderState}) => {
                                 height: 45,
                                 width: 45,
                                 borderRadius: 20,
+                                marginTop: -40,
                                 backgroundColor: COLORS.red,
                                 justifyContent: 'center',
                                 alignItems: 'center',
-                                marginLeft: 30,
+                                marginLeft: 25,
                               }}>
                               <Text
                                 style={{
@@ -333,6 +364,27 @@ const Order = ({navigation, themeState, route, orderActions, orderState}) => {
                               </Text>
                             </View>
                           ) : null}
+                        </View>
+                        <View style={{flexDirection: 'row'}}>
+                          <Text
+                            style={{
+                              color: COLORS.lightYellow,
+                              marginTop: -40,
+                              ...FONTS.h3,
+                              fontSize: 15,
+                            }}>
+                            {formatMoney(
+                              item.sizes.filter(
+                                sizeItem => sizeItem.size == 'S',
+                              )[0].price,
+                            )}
+                            -
+                            {formatMoney(
+                              item.sizes.filter(
+                                sizeItem => sizeItem.size == 'L',
+                              )[0].price,
+                            )}
+                          </Text>
                         </View>
                       </View>
                     </View>
@@ -357,12 +409,14 @@ function mapStateToProps(state) {
   return {
     themeState: state.themeReducer,
     orderState: state.orderReducer,
+    rateState: state.rateReducer,
   };
 }
 
 function mapDispatchToProp(dispatch) {
   return {
     orderActions: bindActionCreators(OrderActionsCreator, dispatch),
+    rateActions: bindActionCreators(RateActionsCreator, dispatch),
   };
 }
 

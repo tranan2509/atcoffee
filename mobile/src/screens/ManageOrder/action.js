@@ -38,7 +38,10 @@ export const updateOrder = (userId, phone) => {
         .ref('/bills')
         .on('child_changed', snapshot => {
           console.log('A new node has been added', snapshot.val());
-          if (snapshot.val().customerId === userId) {
+          if (
+            snapshot.val().customerId === userId &&
+            snapshot.val().length < 2
+          ) {
             dispatch({type: UPDATE_ORDER, payload: snapshot.val()});
             let mess = '';
             switch (snapshot.val().status) {

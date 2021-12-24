@@ -20,6 +20,8 @@ const Notification = ({
   signInState,
   cartState,
   notificationState,
+  manageOrderState,
+  notificationsActions,
 }) => {
   const userInfo = signInState.data.user
     ? signInState.data.user
@@ -28,6 +30,15 @@ const Notification = ({
   React.useEffect(() => {
     console.log('billssssssss', notificationState.notifications);
   });
+
+  const onActionNotification = async item => {
+    navigation.navigate('DetailOrder', {
+      bills: manageOrderState.bills.find(
+        itemBill => itemBill.code === item.codeOrder,
+      ),
+    }),
+      await notificationsActions.updateIsSeen(item.code);
+  };
 
   const flastListEmpty = () => {
     return (
@@ -59,9 +70,25 @@ const Notification = ({
         //keyboardDismissMode="on-drag"
         renderItem={({item, index}) => {
           return (
-            <View>
-              <Text>{item.body}</Text>
-            </View>
+            <TouchableOpacity
+              style={{
+                backgroundColor: !item.isSeen
+                  ? themeState.appTheme.name == 'dark'
+                    ? COLORS.gray1
+                    : COLORS.white
+                  : themeState.appTheme.backgroundColor,
+                padding: 10,
+                marginBottom: 10,
+              }}
+              onPress={() => onActionNotification(item)}>
+              <Text style={{color: themeState.appTheme.textColor, ...FONTS.h2}}>
+                {item.title}
+              </Text>
+              <Text
+                style={{color: themeState.appTheme.textColor, ...FONTS.body3}}>
+                {item.body}
+              </Text>
+            </TouchableOpacity>
           );
         }}
       />
@@ -74,13 +101,17 @@ function mapStateToProps(state) {
     signInState: state.signInReducer,
     cartState: state.cartReducer,
     notificationState: state.notificationReducer,
+    manageOrderState: state.manageOrderReducer,
   };
 }
 
 function mapDispatchToProp(dispatch) {
   return {
     //signInActions: bindActionCreators(signInActionsCreator, dispatch),
-    //notificationsActions: bindActionCreators(notificationActionCreators, dispatch)
+    notificationsActions: bindActionCreators(
+      notificationActionCreators,
+      dispatch,
+    ),
   };
 }
 

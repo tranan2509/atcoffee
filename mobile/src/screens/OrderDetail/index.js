@@ -14,6 +14,7 @@ import {IconButton, LoadingProcess} from '../../components';
 import {connect} from 'react-redux';
 import {formatMoney} from '../../common/format';
 import * as CartActionsCreator from '../Cart/action';
+import * as RateActionsCreator from '../Rate/action';
 import {bindActionCreators} from 'redux';
 
 const OrderDetail = ({
@@ -24,6 +25,8 @@ const OrderDetail = ({
   cartState,
   userState,
   orderState,
+  rateState,
+  rateActions,
 }) => {
   const [selectedItem, setSelectedItem] = React.useState(null);
 
@@ -47,6 +50,14 @@ const OrderDetail = ({
   const [editedCart, setEditedCart] = React.useState(0);
   const userInfo = userState.data.user ? userState.data.user : userState.data;
   //console.log('all pro', selectedLocation);
+  const getRate = async id => {
+    await rateActions.getRateByProduct(id);
+  };
+  React.useEffect(() => {
+    let {selectedItem} = route?.params;
+    getRate(selectedItem.id);
+  }, []);
+  console.log('rateeeeeeeeee', rateState);
   React.useEffect(() => {
     let {selectedItem} = route?.params;
     setSelectedItem(selectedItem);
@@ -815,6 +826,83 @@ const OrderDetail = ({
       </View>
     );
   }
+  const renderRateProduct = () => {
+    return (
+      <View style={{paddingTop: 30}}>
+        <View
+          style={{
+            alignSelf: 'center',
+            justifyContent: 'center',
+          }}>
+          <Text style={{color: themeState.appTheme.textColor, ...FONTS.h2}}>
+            ------Nhận xét và Đánh giá-----
+          </Text>
+        </View>
+        {rateState.ratePro.map(item => (
+          <View
+            key={item.code}
+            style={{
+              padding: 25,
+              marginBottom: 10,
+              backgroundColor:
+                themeState.appTheme.name == 'dark'
+                  ? COLORS.gray1
+                  : COLORS.white,
+            }}>
+            <View style={{flexDirection: 'row'}}>
+              <IconButton
+                icon={icons.profile}
+                iconStyle={{
+                  tintColor: themeState.appTheme.textColor,
+                  height: 40,
+                  width: 40,
+                }}
+              />
+              <View style={{marginLeft: 20}}>
+                <View style={{flexDirection: 'row'}}>
+                  <Text
+                    style={{
+                      color: themeState.appTheme.textColor,
+
+                      ...FONTS.h3,
+                    }}>
+                    User{' '}
+                    {
+                      rateState?.ratePro.find(
+                        rateItem => rateItem.code == item.code,
+                      ).userId
+                    }{' '}
+                    - 4
+                  </Text>
+                  <IconButton
+                    icon={icons.star}
+                    iconStyle={{
+                      tintColor: COLORS.yellow,
+                      height: 20,
+                      width: 20,
+                    }}
+                  />
+                </View>
+                <View>
+                  <Text
+                    style={{
+                      color: themeState.appTheme.textColor,
+                      ...FONTS.body4,
+                    }}>
+                    {
+                      rateState?.ratePro.find(
+                        rateItem => rateItem.code == item.code,
+                      ).comment
+                    }
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </View>
+        ))}
+      </View>
+    );
+  };
   return (
     <View
       style={{
@@ -823,7 +911,7 @@ const OrderDetail = ({
       }}>
       <ScrollView
         contentContainerStyle={{
-          paddingBottom: 150,
+          paddingBottom: 300,
         }}>
         {/* Header */}
         {renderHeaderSection()}
@@ -835,6 +923,7 @@ const OrderDetail = ({
             <LoadingProcess title="Đang tải ..." />
           </View>
         ) : null}
+        {renderRateProduct()}
       </ScrollView>
       <View
         style={{
@@ -921,12 +1010,14 @@ function mapStateToProps(state) {
     cartState: state.cartReducer,
     userState: state.signInReducer,
     orderState: state.orderReducer,
+    rateState: state.rateReducer,
   };
 }
 
 function mapDispatchToProp(dispatch) {
   return {
     cartActions: bindActionCreators(CartActionsCreator, dispatch),
+    rateActions: bindActionCreators(RateActionsCreator, dispatch),
   };
 }
 

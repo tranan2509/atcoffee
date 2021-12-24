@@ -32,7 +32,7 @@ export const updateIsSeen = (phone, code) => {
       database()
         .ref(`/notification/${phone}/${code}`)
         .update({
-          state: true,
+          isSeen: true,
         })
         .then(() => console.log('Data updated.'));
       dispatch({type: UPDATE_NOTIFICATIONS});
