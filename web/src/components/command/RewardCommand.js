@@ -10,7 +10,7 @@ const RewardCommand = {
     if (result != null) {
       store != null ? store.commit(MutationsName.MUTATION_NAME_SET_REWARDS, result.rewards) : null;
       store != null ? store.commit(MutationsName.MUTATION_NAME_SET_SORT_REWARD, {page, totalPage: result.totalPage, keyword}) : null;
-      return result;
+      return result.rewards;
     }
     return null;
   },
