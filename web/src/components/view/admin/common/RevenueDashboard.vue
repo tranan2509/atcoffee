@@ -120,7 +120,7 @@ export default {
       var products = await this.loadProducts();
       for (let index = 0; index < dataPre.length; index++) {
         var product = products.find(item => item.id == dataPre[index].productId);
-        labels.push(product.name);
+        labels.push(product?.name);
         data.push(dataPre[index].quantity);
       }
       this.bestSellingData.labels = labels;

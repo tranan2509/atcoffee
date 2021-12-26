@@ -13,6 +13,12 @@ var ProductCommand = {
     }
   },
 
+  async updateState(product) {
+    const url = `${Constants.HOSTNAME_DEFAULT}/api/admin/product/state`;
+    let res = await ConnectServer.postData(url, product);
+    return res != null ? res : null;
+  },
+
   async findOne(id) {
     const url = `${Constants.HOSTNAME_DEFAULT}/api/info/product/${id}`;
     let res = await ConnectServer.getData(url);

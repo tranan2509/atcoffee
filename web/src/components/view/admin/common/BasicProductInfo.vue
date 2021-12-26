@@ -7,11 +7,11 @@
             <div class="dropdown dropdown-setting">
                 <i class="fas fa-cog icon-absolute" @click="handleToggleSetting"></i>
                 <div class="dropdown-menu dropdown-menu-right show" v-if="isSetting" v-click-outside="handleHideSetting">
-                  <a class="dropdown-item has-icon" @click="handleEdit">
+                  <router-link to="" class="dropdown-item has-icon" @click="handleEdit">
                     <i class="fas fa-edit"></i>
                     Chỉnh sửa
-                  </a>
-                  <router-link to="" class="dropdown-item has-icon">
+                  </router-link>
+                  <router-link to="" class="dropdown-item has-icon" @click="handleLock">
                     <i class="fas fa-lock"></i>
                     Ngừng bán
                   </router-link>

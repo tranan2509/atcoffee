@@ -39,6 +39,7 @@ public class PromotionAPI {
 		try {
 			PromotionDTO promotion = objectMapper.readValue(promotionJson, PromotionDTO.class);	
 			if (multipartFile != null) {
+				@SuppressWarnings("rawtypes")
 				Map r = this.cloudinary.uploader().upload(multipartFile.getBytes(),
 		                  ObjectUtils.asMap("resource_type", "auto"));
 				String img = (String) r.get("secure_url");

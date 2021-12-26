@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,6 +37,7 @@ public class ProductAPI {
 		try {
 			ProductDTO product = objectMapper.readValue(productJson, ProductDTO.class);	
 			if (multipartFile != null) {
+				@SuppressWarnings("rawtypes")
 				Map r = this.cloudinary.uploader().upload(multipartFile.getBytes(),
 		                  ObjectUtils.asMap("resource_type", "auto"));
 				String img = (String) r.get("secure_url");
@@ -46,6 +48,11 @@ public class ProductAPI {
 		} catch (Exception e) {
 			return ResponseEntity.ok(null);
 		}
+	}
+	
+	@PostMapping (value = "/api/admin/product/state")
+	public ResponseEntity<ProductDTO> updateState(@RequestBody ProductDTO productDTO) {
+		return ResponseEntity.ok(productService.updateState(productDTO.getId(), productDTO.isState()));
 	}
 	
 	@GetMapping("/api/info/product/{id}")
