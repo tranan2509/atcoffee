@@ -49,7 +49,7 @@ public class RateServiceImpl implements RateService{
 		entities.forEach(entity -> dtos.add(mapper.map(entity, RateDTO.class)));
 		return dtos;
 	}
-
+	
 	@Override
 	public List<RateDTO> findByProductId(Long productId) {
 		ProductEntity product = productRepository.findOne(productId);
