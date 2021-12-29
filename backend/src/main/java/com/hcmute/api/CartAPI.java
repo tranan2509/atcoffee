@@ -47,7 +47,7 @@ public class CartAPI {
 	 * @param rateDeleteRequest
 	 * @return
 	 */
-	@PostMapping("/api/info/cart/delete")
+	@PostMapping("/api/user/cart/delete")
 	public ResponseEntity<Boolean> delete(@RequestBody RateDeleteRequest rateDeleteRequest) {
 		return ResponseEntity.ok(cartService.delete(rateDeleteRequest.getIds()));
 	}
