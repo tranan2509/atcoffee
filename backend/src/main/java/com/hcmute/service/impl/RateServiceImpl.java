@@ -41,6 +41,14 @@ public class RateServiceImpl implements RateService{
 		entity = rateRepository.save(entity);
 		return mapper.map(entity, RateDTO.class);
 	}
+	
+	@Override
+	public List<RateDTO> findAll() {
+		List<RateEntity> entities = rateRepository.findAll();
+		List<RateDTO> dtos = new ArrayList<RateDTO>();
+		entities.forEach(entity -> dtos.add(mapper.map(entity, RateDTO.class)));
+		return dtos;
+	}
 
 	@Override
 	public List<RateDTO> findByProductId(Long productId) {

@@ -124,7 +124,6 @@ export default {
     async loadStores(page, size) {
       let result = await StoreCommand.findAllByPagination(page, size, this.keyword, this.$store);
       this.stores = result;
-      console.log(this.stores);
     },
   },
 
