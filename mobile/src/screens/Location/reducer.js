@@ -2,6 +2,7 @@ import * as types from './action';
 
 const initialState = {
   allLocation: [],
+  locationLike: [],
   error: '',
 };
 
@@ -11,11 +12,18 @@ const locationReducer = function (state = initialState, action) {
       return {
         ...state,
         allLocation: action.payload,
+        error: '',
       };
     case types.ERROR_LOCATION:
       return {
         ...state,
         error: action.error,
+      };
+    case types.GET_LOCATION_LIKE:
+      return {
+        ...state,
+        locationLike: action.payload,
+        error: '',
       };
     default:
       return state;

@@ -37,7 +37,7 @@ const Notification = ({
         itemBill => itemBill.code === item.codeOrder,
       ),
     }),
-      await notificationsActions.updateIsSeen(item.code);
+      await notificationsActions.updateIsSeen(userInfo.phone, item.code);
   };
 
   const flastListEmpty = () => {

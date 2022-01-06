@@ -30,7 +30,7 @@ export const updateIsSeen = (phone, code) => {
   return async dispatch => {
     try {
       database()
-        .ref(`/notification/${phone}/${code}`)
+        .ref(`/notifications/${phone}/${code}`)
         .update({
           isSeen: true,
         })

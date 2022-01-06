@@ -17,6 +17,7 @@
                   <th class="text-center" v-if="$route.path.includes('/admin/rates')">Tên sản phẩm</th>
                   <th class="text-center" v-if="$route.path.includes('/admin/rates')">Ảnh sản phẩm</th>
                   <th class="text-center">Khách hàng</th>
+                  <th class="text-center">Số sao</th>
                   <th class="text-center">Nội dung</th>
                   <th class="text-center">Thời gian</th>
                 </tr>
@@ -30,6 +31,7 @@
                     <img :src="products?.find(item => item.id == rate.productId).image"/>
                   </td>
                   <td class="text-center">{{customers?.find(item => item.id == rate.userId).name}}</td>
+                  <td class="text-center">{{rate.star}}</td>
                   <td class="text-center">{{rate.comment}}</td>
                   <td class="text-center">{{formatDateTime(new Date(rate.modifiedDate))}}</td>
                 </tr>

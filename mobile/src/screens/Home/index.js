@@ -25,6 +25,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as cartActionsCreator from '../Cart/action';
 import * as manageOrderActionsCreator from '../ManageOrder/action';
 import * as notificationActionCreators from '../Notification/action';
+import * as locationActionsCreator from '../Location/action';
 import {bindActionCreators} from 'redux';
 
 const promoTabs = constants.promoTabs.map(promoTab => ({
@@ -155,6 +156,7 @@ const Home = ({
   manageOrderState,
   notificationsActions,
   notificationState,
+  locationActions,
 }) => {
   const scrollX = React.useRef(new Animated.Value(0)).current;
 
@@ -177,6 +179,7 @@ const Home = ({
     await manageOrderActions.getData(userInfo.id);
     await manageOrderActions.updateOrder(userInfo.id, userInfo.phone);
     await notificationsActions.getDataNotifications(userInfo.phone);
+    await locationActions.getData(userInfo.phone);
   };
   React.useEffect(() => {
     setToken();
@@ -433,6 +436,7 @@ function mapDispatchToProp(dispatch) {
       notificationActionCreators,
       dispatch,
     ),
+    locationActions: bindActionCreators(locationActionsCreator, dispatch),
   };
 }
 

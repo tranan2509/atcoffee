@@ -49,20 +49,6 @@ const ManageOrder = ({
     );
   }, [manageOrderState.bills[0], selectedTab]);
 
-  const fetchData = () => {
-    setBill(
-      manageOrderState?.bills.filter(item => item.status === getStatusOrder()),
-    );
-    setIsFetching(false);
-    console.log('bill statusssssss');
-  };
-
-  const onRefresh = () => {
-    setIsFetching(true);
-    fetchData();
-    console.log('bill statusssssss', bill);
-  };
-
   const updateStateRate = async code => {
     let codeBill = code.split(`D`);
     database()

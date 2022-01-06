@@ -257,7 +257,7 @@ const OrderDetail = ({
       <View
         style={{
           width: '100%',
-          height: '50%',
+          height: 400,
           alignItems: 'center',
           justifyContent: 'center',
         }}>
@@ -872,7 +872,7 @@ const OrderDetail = ({
                         rateItem => rateItem.code == item.code,
                       ).userId
                     }{' '}
-                    - 4
+                    - {item.star}
                   </Text>
                   <IconButton
                     icon={icons.star}
@@ -911,7 +911,7 @@ const OrderDetail = ({
       }}>
       <ScrollView
         contentContainerStyle={{
-          paddingBottom: 300,
+          paddingBottom: 50,
         }}>
         {/* Header */}
         {renderHeaderSection()}

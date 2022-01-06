@@ -37,11 +37,7 @@ export const updateOrder = (userId, phone) => {
       database()
         .ref('/bills')
         .on('child_changed', snapshot => {
-          console.log('A new node has been added', snapshot.val());
-          if (
-            snapshot.val().customerId === userId &&
-            snapshot.val().length < 2
-          ) {
+          if (snapshot.val().customerId === userId) {
             dispatch({type: UPDATE_ORDER, payload: snapshot.val()});
             let mess = '';
             switch (snapshot.val().status) {
@@ -74,6 +70,7 @@ export const updateOrder = (userId, phone) => {
                 isSeen: false,
                 codeOrder: snapshot.val().code,
                 code: `${snapshot.val().code}_${snapshot.val().status}`,
+                //time:
               })
               .then(() => console.log('Data Noti set.'));
           }
@@ -97,7 +94,7 @@ const sendNotification = (message, phone) => {
       try {
         console.log('querySnap._data.token');
         axios.post(
-          'http://430b-2402-9d80-3b4-b83-dd18-92a7-f0fa-498f.ngrok.io/send-noti',
+          'http://5887-2402-9d80-36d-aa65-2d43-4811-aa25-7f22.ngrok.io/send-noti',
           data,
         );
       } catch (err) {

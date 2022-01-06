@@ -17,7 +17,6 @@ app.post('/send-noti', (req, res) => {
     notification: {
       title: 'Thông báo',
       body: req.body.message,
-
       //sound: 'default',
       //icon: 'https://res.cloudinary.com/tranan2509/image/upload/v1635433632/logo_hvnmwc.png',
     },
@@ -25,6 +24,7 @@ app.post('/send-noti', (req, res) => {
       notification: {
         sound: 'default',
         icon: 'https://res.cloudinary.com/tranan2509/image/upload/v1635433632/logo_hvnmwc.png',
+        //icon: 'stock_ticker_update',
         priority: 'high',
         visibility: 'public',
       },

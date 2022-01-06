@@ -16,6 +16,7 @@ import {connect} from 'react-redux';
 import * as locationActionsCreator from './action';
 import {bindActionCreators} from 'redux';
 import * as OrderActionsCreator from '../Order/action';
+import database from '@react-native-firebase/database';
 
 const Location = ({
   navigation,
@@ -24,6 +25,7 @@ const Location = ({
   locationActions,
   orderActions,
   cartState,
+  signInState,
   route,
 }) => {
   const [selectedTab, setSelectedTab] = React.useState(0);
@@ -36,6 +38,7 @@ const Location = ({
     if (stateNow) {
       setStateMethod(false);
     }
+    console.log('like', locationState);
   }, []);
 
   function renderTopBarSection() {
@@ -49,7 +52,7 @@ const Location = ({
           containerStyle={{
             width: 80,
           }}
-          label="Nearby"
+          label="Tất cả"
           selected={selectedTab == 0}
           onPress={() => setSelectedTab(0)}
         />
@@ -58,7 +61,7 @@ const Location = ({
           containerStyle={{
             width: 100,
           }}
-          label="Previous"
+          label="Đã mua"
           selected={selectedTab == 1}
           onPress={() => setSelectedTab(1)}
         />
@@ -67,7 +70,7 @@ const Location = ({
           containerStyle={{
             width: 100,
           }}
-          label="Favourite"
+          label="Yêu thích"
           selected={selectedTab == 2}
           onPress={() => setSelectedTab(2)}
         />
@@ -93,7 +96,7 @@ const Location = ({
             color: COLORS.black,
             ...FONTS.body3,
           }}
-          placeholder="Enter your city, state or zip code"
+          placeholder="Nhập địa chỉ..."
           placeholderTextColor={COLORS.lightGray2}
         />
         <Image
@@ -142,16 +145,18 @@ const Location = ({
                   }}>
                   {item.name}
                 </Text>
-                {/* <Image
-                  source={
-                    item.bookmarked ? icons.bookmarkFilled : icons.bookmark
-                  }
-                  style={{
-                    height: 20,
-                    width: 20,
-                    tintColor: item.bookmarked ? COLORS.red2 : COLORS.white,
-                  }}
-                /> */}
+                <TouchableOpacity onPress={() => likeClick(item)}>
+                  <Image
+                    source={
+                      item.bookmarked ? icons.bookmarkFilled : icons.bookmark
+                    }
+                    style={{
+                      height: 20,
+                      width: 20,
+                      tintColor: item.bookmarked ? COLORS.red2 : COLORS.white,
+                    }}
+                  />
+                </TouchableOpacity>
               </View>
               {/* Address */}
               <View
@@ -241,6 +246,29 @@ const Location = ({
       />
     );
   }
+
+  const userInfo = signInState.data.user
+    ? signInState.data.user
+    : signInState.data;
+
+  const setData = id => {
+    try {
+      database()
+        .ref(`/locations/${userInfo.phone}/${id - 1}`)
+        .set({
+          idLocation: id,
+          state: true,
+        })
+        .then(() => console.log('Data updated.'));
+    } catch (e) {
+      console.log('This error in location likeClick', e.message);
+    }
+  };
+
+  const likeClick = item => {
+    setData(item.id);
+  };
+
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -274,6 +302,7 @@ function mapStateToProps(state) {
     themeState: state.themeReducer,
     locationState: state.locationReducer,
     cartState: state.cartReducer,
+    signInState: state.signInReducer,
   };
 }
 
