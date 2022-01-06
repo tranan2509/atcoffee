@@ -58,6 +58,14 @@ public class CartServiceImpl implements CartService{
 	public void delete(Long id) {
 		cartRespository.delete(id);
 	}
+	
+	@Override
+	public Boolean delete(List<Long> ids) {
+		for (int i = 0; i < ids.size(); i++) {
+			cartRespository.delete(ids.get(i));
+		}
+		return true;
+	}
 
 	@Override
 	public boolean deleteByUserId(Long userId) {

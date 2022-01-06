@@ -9,6 +9,7 @@ import com.hcmute.dto.ProductDTO;
 
 public interface ProductService {
 	ProductDTO save(ProductDTO dto);
+	ProductDTO updateState(Long id, boolean state);
 	ProductDTO findOne(long id);
 	ProductDTO findOneByCode(String code);
 	int countByCategoryCode(String categoryCode);

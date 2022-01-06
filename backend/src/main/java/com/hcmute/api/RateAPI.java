@@ -33,7 +33,12 @@ public class RateAPI {
 	public ResponseEntity<RateDTO> update(@RequestBody RateDTO rateDTO) {
 		return ResponseEntity.ok(rateService.save(rateDTO));
 	}
-	
+			
+	@GetMapping("/api/info/rate")
+	public ResponseEntity<List<RateDTO>> findAll() {
+		return ResponseEntity.ok(rateService.findAll());
+	}
+
 	@GetMapping(value = "/api/info/rate", params = "productId")
 	public ResponseEntity<List<RateDTO>> findByProductId(@RequestParam(name = "productId") Long productId) {
 		return ResponseEntity.ok(rateService.findByProductId(productId));

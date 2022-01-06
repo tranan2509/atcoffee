@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hcmute.api.request.RateDeleteRequest;
 import com.hcmute.dto.CartDTO;
 import com.hcmute.service.CartService;
 
@@ -34,6 +35,21 @@ public class CartAPI {
 	@PutMapping("/api/user/cart") 
 	public ResponseEntity<CartDTO> update(@RequestBody CartDTO cartDTO) {
 		return ResponseEntity.ok(cartService.save(cartDTO));
+	}
+	
+	/**
+	 * Object send
+	 	{
+    		"ids": [1, 2, 3, 4, 5]
+		}
+	 * 
+	 * 
+	 * @param rateDeleteRequest
+	 * @return
+	 */
+	@PostMapping("/api/user/cart/delete")
+	public ResponseEntity<Boolean> delete(@RequestBody RateDeleteRequest rateDeleteRequest) {
+		return ResponseEntity.ok(cartService.delete(rateDeleteRequest.getIds()));
 	}
 	
 	@DeleteMapping(value = "/api/user/cart", params = {"cartId"}) 

@@ -68,6 +68,14 @@ public class ProductServiceImpl implements ProductService{
 		}
 		return mapper.map(entity, ProductDTO.class);
 	}
+	
+	@Override
+	public ProductDTO updateState(Long id, boolean state) {
+		ProductEntity productEntity = productRepository.findOne(id);
+		productEntity.setState(state);
+		productEntity = productRepository.save(productEntity);
+		return mapper.map(productEntity, ProductDTO.class);
+	}
 
 	@Override
 	public ProductDTO findOne(long id) {

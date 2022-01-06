@@ -97,6 +97,7 @@ public class UserAPI {
 			user.setCurrentPoints(0);
 			user.setTypeId(1L);
 			if (multipartFile != null) {
+				@SuppressWarnings("rawtypes")
 				Map r = this.cloudinary.uploader().upload(multipartFile.getBytes(),
 		                  ObjectUtils.asMap("resource_type", "auto"));
 				String img = (String) r.get("secure_url");
@@ -116,6 +117,7 @@ public class UserAPI {
 		try {
 			UserDTO user = objectMapper.readValue(userJson, UserDTO.class);	
 			if (multipartFile != null) {
+				@SuppressWarnings("rawtypes")
 				Map r = this.cloudinary.uploader().upload(multipartFile.getBytes(),
 		                  ObjectUtils.asMap("resource_type", "auto"));
 				String img = (String) r.get("secure_url");
@@ -137,6 +139,7 @@ public class UserAPI {
 		try {
 			UserDTO user = objectMapper.readValue(userJson, UserDTO.class);	
 			if (multipartFile != null) {
+				@SuppressWarnings("rawtypes")
 				Map r = this.cloudinary.uploader().upload(multipartFile.getBytes(),
 		                  ObjectUtils.asMap("resource_type", "auto"));
 				String img = (String) r.get("secure_url");

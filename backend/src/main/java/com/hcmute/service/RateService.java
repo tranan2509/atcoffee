@@ -10,6 +10,7 @@ import com.hcmute.dto.RateDTO;
 public interface RateService {
 	
 	RateDTO save(RateDTO rateDTO);
+	List<RateDTO> findAll();
 	List<RateDTO> findByProductId(Long productId);
 	List<RateDTO> findByUserId(Long userId);
 	RateDTO findByProductIdAndUserId(Long productId, Long userId);

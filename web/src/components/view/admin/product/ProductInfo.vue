@@ -15,7 +15,7 @@
         </div>
       </section-header>
       <div class="section-body">
-        <basic-product-info :product="product" :type="type" @handleEdit="handleEdit" v-if="!isEdit"></basic-product-info>
+        <basic-product-info :product="product" :type="type" @handleEdit="handleEdit" v-if="!isEdit" @handleLock="handleLock"></basic-product-info>
         <table-rates></table-rates>
       </div>
   </admin>
@@ -29,6 +29,8 @@ import TableRates from '../common/TableRates.vue'
 import BasicProductInfo from '../common/BasicProductInfo.vue'
 import Admin from '../main/Admin.vue'
 import SectionHeader from '../../common/common/SectionHeader.vue'
+import { createToast } from 'mosha-vue-toastify';
+import 'mosha-vue-toastify/dist/style.css';
 
 export default {
   name: Constants.COMPONENT_NAME_PRODUCT_INFO,
@@ -69,6 +71,20 @@ export default {
 
   methods: {
 
+    toast(description, type) {
+
+      var color = type == 'success' ? '#40b883' : '#e76666';
+      createToast( {description: description},
+        {
+          showIcon: 'true',
+          hideProgressBar: 'true',
+          position: 'top-right',
+          toastBackgroundColor: color,
+          timeout: 2000,
+          type: type,
+        })
+    },
+
     init() {
       this.productId = this.$route.query.id;
       if (typeof this.productId == 'undefined') {
@@ -94,7 +110,34 @@ export default {
       this.product = await ProductCommand.findOne(id);
       this.product.categories = this.product.categories.filter(item => item.state);
       this.product.stores = this.product.stores.filter(item => item.state);
-    }
+    },
+
+    async handleLock(isLock) {
+      let result = await ProductCommand.findOne(this.productId);
+      result['state'] = !isLock;
+      let res = await ProductCommand.updateState(result);
+      var text = '', type = 'success';
+      if (res != null) {
+        let query = {};
+        query.page = this.$store.getters.sortProduct.page;
+        if (this.$store.getters.sortProduct.store != '') {
+          query.store = this.$store.getters.sortProduct.store;
+        }
+        if (this.$store.getters.sortProduct.category != '') {
+          query.category = this.$store.getters.sortProduct.category;
+        }
+        if (this.$store.getters.sortProduct.keyword != '') {
+          query.keyword = this.$store.getters.sortProduct.keyword;
+        }
+        text = 'Loại bỏ sản phẩm thành công';
+        this.$router.push({path: '/admin/products', query: query});
+      } else {
+        text = 'Loại bỏ sản phẩm Loại bỏ sản phẩm thành công';
+        type = 'danger';
+      }
+      this.toast(text, type);
+    },
+
   },
 
   created() {
