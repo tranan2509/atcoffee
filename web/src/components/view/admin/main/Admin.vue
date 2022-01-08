@@ -28,7 +28,7 @@ export default {
     async authenticated () {
       const isAuth = await LoginCommand.authenticated(this.$store);
       if (isAuth != null && isAuth.roleName == Constants.ROLE.ROLE_ADMIN) {
-        console.log(isAuth);
+        // console.log(isAuth);
       } else {
         this.$router.push({path: '/login'})
       }

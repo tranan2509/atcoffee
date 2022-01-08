@@ -91,6 +91,7 @@
 <script>
 import * as Constants from "../../../common/Constants";
 import LoginCommand from '../../../command/LoginCommand'
+import StoreCommand from '../../../command/StoreCommand'
 
 export default {
   name: Constants.COMPONENT_NAME_LOGIN,
@@ -136,17 +137,22 @@ export default {
     async authenticated() {
       const jwt = localStorage.getItem('jwt');
       if (jwt == null){
-        return ;
+        return;
       }
       const auth = await LoginCommand.authenticated(this.$store);
       if (auth.state) {
         if (auth && auth.roleName == Constants.ROLE.ROLE_ADMIN){
           this.$router.push({path: '/admin'});
         } else if (auth && auth.roleName == Constants.ROLE.ROLE_STAFF) {
-          this.$router.push({path: '/staff/products'});
+          const store = await StoreCommand.findOne(auth.storeId);
+          if (store.state) {
+            this.$router.push({path: '/staff/products'});
+          } else {
+            this.incorrect = true;
+            this.msg = 'Cửa hàng không còn tồn tại!';
+          }
         }
       }
-      
     },
   },
 
