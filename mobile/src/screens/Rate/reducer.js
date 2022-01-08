@@ -1,6 +1,7 @@
 import * as types from './action';
 
 const initialState = {
+  allRate: [],
   ratePro: [],
   error: '',
 };
@@ -27,6 +28,12 @@ const rateReducer = function (state = initialState, action) {
       return {
         ...state,
         ratePro: action.payload,
+        error: '',
+      };
+    case types.GET_ALL:
+      return {
+        ...state,
+        allRate: action.payload,
         error: '',
       };
     default:

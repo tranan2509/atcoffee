@@ -1,14 +1,38 @@
 import React from 'react';
-import {View, Text, StyleSheet, FlatList, ImageBackground} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  ImageBackground,
+  Image,
+} from 'react-native';
 import {HeaderBar, CustomButton} from '../../components';
 import {FONTS, COLORS, dummyData, SIZES, icons} from '../../constants';
 import {connect} from 'react-redux';
 
-const Rewards = ({navigation, themeState, signInState, cartState}) => {
+const Rewards = ({
+  navigation,
+  themeState,
+  signInState,
+  cartState,
+  rewardsState,
+}) => {
   const userInfo = signInState.data.user
     ? signInState.data.user
     : signInState.data;
   const amountProduct = cartState.cart.length;
+  const getType = () => {
+    let typeUser = 'Đồng';
+    signInState.allType.forEach(types =>
+      userInfo.currentPoints > types.point
+        ? (typeUser = types.name)
+        : console.log('typeUser', types),
+    );
+    //console.log('typeeee', typeUser);
+    return typeUser;
+  };
+  //console.log('hangggggggggggg', getType());
   function renderRewardPointSection() {
     return (
       <View
@@ -23,7 +47,7 @@ const Rewards = ({navigation, themeState, signInState, cartState}) => {
             ...FONTS.h1,
             fontSize: 35,
           }}>
-          Rewards
+          Phần thưởng
         </Text>
         <Text
           style={{
@@ -34,8 +58,25 @@ const Rewards = ({navigation, themeState, signInState, cartState}) => {
             ...FONTS.h3,
             lineHeight: 18,
           }}>
-          You have 60 points away from your next reward.
+          Bạn có: {userInfo.currentPoints} điểm
         </Text>
+        <View style={{flexDirection: 'row'}}>
+          <Text
+            style={{
+              color: themeState.appTheme.textColor,
+              marginTop: 10,
+
+              textAlign: 'center',
+              ...FONTS.h3,
+              lineHeight: 18,
+            }}>
+            Hạng : {getType()}
+          </Text>
+          <Image
+            source={icons.point}
+            style={{height: 25, width: 25, tintColor: 'yellow', marginTop: 5}}
+          />
+        </View>
         {/* Image */}
         <ImageBackground
           source={icons.reward_cup}
@@ -62,42 +103,7 @@ const Rewards = ({navigation, themeState, signInState, cartState}) => {
       </View>
     );
   }
-  function renderButtons() {
-    return (
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-        {/* Scan */}
-        <CustomButton
-          isPrimaryButton={true}
-          label="Scan in store"
-          containerStyle={{
-            width: 130,
-            paddingVertical: 5,
-            marginRight: SIZES.radius,
-            borderRadius: SIZES.radius * 2,
-          }}
-          labelStyle={{...FONTS.h3}}
-          onPress={() => navigation.navigate('Location')}
-        />
-        {/* Redeem */}
-        <CustomButton
-          isSecondaryButton={true}
-          label="Redeem"
-          containerStyle={{
-            width: 130,
-            paddingVertical: 5,
-            borderRadius: SIZES.radius * 2,
-          }}
-          labelStyle={{...FONTS.h3}}
-          onPress={() => navigation.navigate('Location')}
-        />
-      </View>
-    );
-  }
+
   function renderAvailableRewardsHeader() {
     return (
       <View
@@ -107,7 +113,7 @@ const Rewards = ({navigation, themeState, signInState, cartState}) => {
           paddingHorizontal: SIZES.padding,
         }}>
         <Text style={{color: themeState.appTheme.textColor, ...FONTS.h2}}>
-          Available Rewards
+          Phần thưởng dùng được
         </Text>
       </View>
     );
@@ -129,15 +135,13 @@ const Rewards = ({navigation, themeState, signInState, cartState}) => {
           borderTopRightRadius: SIZES.radius * 2,
           backgroundColor: themeState.appTheme.backgroundColor,
         }}
-        data={dummyData.availableRewards}
+        data={rewardsState.allRewards}
         keyExtractor={item => `${item.id}`}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
           <View>
             {/* Reward Point */}
             {renderRewardPointSection()}
-            {/* Buttons */}
-            {renderButtons()}
             {/* Header Label */}
             {renderAvailableRewardsHeader()}
           </View>
@@ -151,15 +155,21 @@ const Rewards = ({navigation, themeState, signInState, cartState}) => {
                 marginHorizontal: SIZES.padding,
                 marginBottom: SIZES.base,
                 paddingVertical: SIZES.base,
-                borderRadius: 20,
-                backgroundColor: item.eligible ? COLORS.yellow : COLORS.gray2,
+                borderRadius: 40,
+                backgroundColor:
+                  userInfo.currentPoints > item.proviso
+                    ? COLORS.yellow
+                    : COLORS.gray2,
               }}>
               <Text
                 style={{
-                  color: item.eligible ? COLORS.black : COLORS.lightGray2,
+                  color:
+                    userInfo.currentPoints > item.proviso
+                      ? COLORS.black
+                      : COLORS.lightGray2,
                   ...FONTS.body3,
                 }}>
-                {item.title}
+                {item.name}
               </Text>
             </View>
           );
@@ -179,9 +189,9 @@ const styles = StyleSheet.create({
 function mapStateToProps(state) {
   return {
     themeState: state.themeReducer,
-    //error: state.error,
     signInState: state.signInReducer,
     cartState: state.cartReducer,
+    rewardsState: state.rewardReducer,
   };
 }
 

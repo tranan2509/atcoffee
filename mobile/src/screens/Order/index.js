@@ -62,6 +62,30 @@ const Order = ({
   //   console.log('avgffffff', rating);
   // }, [menu]);
 
+  const _getAllRate = async () => {
+    await rateActions.getAllRate();
+  };
+
+  const getStarAvg = proId => {
+    let sum = {avg: 0, total: 0};
+    let arr = rateState.allRate?.find(item => item && item?.productId === proId)
+      ?.id
+      ? rateState.allRate?.filter(item => item && item.productId === proId)
+      : [];
+    if (arr.length > 0) {
+      sum = {
+        avg: Math.round(
+          arr.reduce(
+            (previousValue, currentValue) => previousValue + currentValue.star,
+            0,
+          ) / arr.length,
+        ),
+        total: arr.length,
+      };
+    }
+    return sum;
+  };
+
   React.useEffect(() => {
     let {selectedLocation} = route.params;
     setSelectedLocation(selectedLocation);
@@ -72,8 +96,10 @@ const Order = ({
     //return () => console.log('cleanup');
     setMenu(orderState.products);
     //console.log('allProducts', orderState.allProducts);
+    _getAllRate();
   }, []);
 
+  console.log('rateeeeeeeeee', rateState.allRate);
   React.useEffect(() => {
     //let {selectedLocation} = route.params;
     // if (selectedCategory == '') {
@@ -174,7 +200,7 @@ const Order = ({
             containerStyle={{
               width: 90,
             }}
-            label="Previous"
+            label="Mua trước"
             selected={selectedTab == 1}
             onPress={() => setSelectedTab(1)}
           />
@@ -182,7 +208,7 @@ const Order = ({
             containerStyle={{
               width: 90,
             }}
-            label="Favourite"
+            label="Yêu thích"
             selected={selectedTab == 2}
             onPress={() => setSelectedTab(2)}
           />
@@ -336,7 +362,7 @@ const Order = ({
                           <Text
                             style={{
                               color: COLORS.lightYellow,
-                              marginTop: -30,
+                              marginTop: -20,
                               ...FONTS.h3,
                               fontSize: 15,
                             }}>
@@ -368,8 +394,37 @@ const Order = ({
                         <View style={{flexDirection: 'row'}}>
                           <Text
                             style={{
+                              color: 'yellow',
+                              ...FONTS.h3,
+                              marginTop: -25,
+                              marginRight: 5,
+                            }}>
+                            {getStarAvg(item.id).avg}
+                          </Text>
+                          <Image
+                            source={icons.star}
+                            style={{
+                              height: 20,
+                              width: 20,
+                              marginTop: -25,
+                              tintColor: 'yellow',
+                            }}
+                          />
+                          <Text
+                            style={{
+                              color: 'yellow',
+                              ...FONTS.h4,
+                              marginTop: -25,
+                              marginRight: 5,
+                            }}>
+                            / {getStarAvg(item.id).total} đánh giá
+                          </Text>
+                        </View>
+                        <View style={{flexDirection: 'row'}}>
+                          <Text
+                            style={{
                               color: COLORS.lightYellow,
-                              marginTop: -40,
+                              marginTop: -30,
                               ...FONTS.h3,
                               fontSize: 15,
                             }}>

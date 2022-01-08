@@ -919,7 +919,13 @@ const OrderDetail = ({
         {/* Detail */}
         {renderDetailSection()}
         {loading ? (
-          <View style={{marginTop: -250}} zIndex={1}>
+          <View
+            style={{
+              marginTop: -250,
+              height: 300,
+              width: 400,
+            }}
+            zIndex={1}>
             <LoadingProcess title="Đang tải ..." />
           </View>
         ) : null}

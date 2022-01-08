@@ -284,7 +284,7 @@ const Location = ({
           padding: SIZES.padding,
         }}>
         {renderTopBarSection()}
-        {renderSearchBar()}
+        {/* {renderSearchBar()} */}
         {renderLocationList()}
       </View>
     </View>

@@ -135,12 +135,12 @@ const Tabs = () => {
         }}
       />
       <Tab.Screen
-        name="Favourite"
+        name="Rewards"
         component={RewardsStackNavigator}
         options={{
           tabBarIcon: ({focused}) => (
             <Image
-              source={icons.heart}
+              source={icons.coffee_cup}
               resizeMode="contain"
               style={{
                 width: 35,
