@@ -50,8 +50,8 @@ const SignUp = ({navigation, signUpActions, signUpState}) => {
     const token = await messaging().getToken();
     setToken(token);
   };
-  const addToken = username => {
-    firestore()
+  const addToken = async username => {
+    await firestore()
       .collection('usertoken')
       .doc(username)
       .set({token: token})
@@ -135,7 +135,7 @@ const SignUp = ({navigation, signUpActions, signUpState}) => {
             setLoading(true);
             setFlag(true);
             if (selectedMale) {
-              addToken(phone);
+              await addToken(phone);
               await signUpActions.signUp(
                 name,
                 'Nam',

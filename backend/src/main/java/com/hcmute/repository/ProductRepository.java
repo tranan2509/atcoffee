@@ -11,8 +11,8 @@ import com.hcmute.entity.ProductEntity;
 
 public interface ProductRepository extends JpaRepository<ProductEntity, Long>{
 	Page<ProductEntity> findByState(Boolean state, Pageable pageable);
-	@Query("select p from ProductEntity p join p.stores as s join p.categories as c where s.state = 1 AND c.state = 1 "
-			+ "AND (p.name LIKE %?1% OR p.code LIKE %?2%) AND p.state = ?3")
+	@Query("select p from ProductEntity p "
+			+ "Where (p.name LIKE %?1% OR p.code LIKE %?2%) AND p.state = ?3")
 	Page<ProductEntity> findByNameContainingOrCodeContainingAndState(String name, String code, Boolean state, Pageable pageable);
 	@Query("select p from ProductEntity p left join p.categories as s where s.id = ?1 AND p.state = 1")
 	List<ProductEntity> findByCategoryId(Long categoryId);

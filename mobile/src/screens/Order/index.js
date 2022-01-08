@@ -107,7 +107,7 @@ const Order = ({
     // } else {
     let menuList = orderState.products.filter(
       pro =>
-        1 &&
+        pro.state &&
         pro.categories.filter(menuItem => menuItem.name == selectedCategory)[0],
     );
     //console.log(menuList);
@@ -146,7 +146,7 @@ const Order = ({
                 ...FONTS.h1,
                 fontSize: 25,
               }}>
-              Pick-up Order
+              Sản phẩm
             </Text>
           </View>
           <View style={{width: 25}} />

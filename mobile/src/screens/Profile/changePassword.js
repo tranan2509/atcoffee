@@ -89,7 +89,8 @@ const changePassword = ({
         ]);
       }
     }
-  }, [signInState.error]);
+  }, [signInState.data]);
+  console.log('kkkkkkkkkkkkk', signInState.error);
 
   const resetPasswordHandler = async () => {
     const res = await resetPassword();
