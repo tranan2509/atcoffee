@@ -12,6 +12,7 @@
 <script>
 import * as Constants from '../../../common/Constants';
 import LoginCommand from '../../../command/LoginCommand'
+import StoreCommand from '../../../command/StoreCommand'
 import SideBar from '../common/SideBar';
 import Navbar from '../../common/common/Navbar.vue'
 
@@ -28,10 +29,17 @@ export default {
     async authenticated () {
       const isAuth = await LoginCommand.authenticated(this.$store);
       if (isAuth != null && isAuth.roleName == Constants.ROLE.ROLE_STAFF) {
-        console.log(isAuth);
+        const store = await StoreCommand.findOne(isAuth.storeId);
+        if (!store.state) {
+          this.$router.push({path: '/login'});
+        }
       } else {
-        this.$router.push({path: '/login'})
+        this.$router.push({path: '/login'});
       }
+    },
+
+    async getStoreById() {
+
     }
   },
 
