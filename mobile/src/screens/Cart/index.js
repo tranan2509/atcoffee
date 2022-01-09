@@ -191,10 +191,7 @@ const Cart = ({
         let data = {token: querySnap._data.token, message: message};
         try {
           console.log('querySnap._data.token');
-          axios.post(
-            'http://e250-2402-9d80-301-110e-8846-b521-8cfc-601c.ngrok.io/send-noti',
-            data,
-          );
+          axios.post('http://de2f-103-199-69-121.ngrok.io/send-noti', data);
         } catch (err) {
           console.log(err);
         }
