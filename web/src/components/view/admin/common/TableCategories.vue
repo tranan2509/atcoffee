@@ -25,12 +25,16 @@
                   <th class="text-center">SST</th>
                   <th class="text-center">Mã</th>
                   <th class="text-center">Tên</th>
+                  <th class="text-center">Trạng thái</th>
                   <th class="text-center">Chi tiết</th>
                 </tr>
                 <tr v-for="(category, index) in this.$store.getters.categories" :key="category.id">
                   <td class="text-center">{{number(index)}}</td>
                   <td class="text-center">{{category.code}}</td>
                   <td class="text-center">{{category.name}}</td>
+                  <td class="text-center">
+                    <i class="fas fa-circle" :class="category.state ? 'active' : 'inactive'"></i>
+                  </td>
                   <td class="text-center">
                     <button class="btn btn-secondary" @click="handleInfo(category.id)">Chi tiết</button>
                   </td>
@@ -116,7 +120,7 @@ export default {
     },
     
     async loadCategories(page, size) {
-      let result = await CategoryCommand.findAllByPagination(page, size, this.keyword, this.$store);
+      let result = await CategoryCommand.findAllByOrder(page, size, this.keyword, this.$store);
       this.stores = result;
     },
   },

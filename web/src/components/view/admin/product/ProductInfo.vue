@@ -113,6 +113,7 @@ export default {
     },
 
     async handleLock(isLock) {
+      let action = isLock ? 'Ngừng bán' : 'Mở bán';
       let result = await ProductCommand.findOne(this.productId);
       result['state'] = !isLock;
       let res = await ProductCommand.updateState(result);
@@ -129,10 +130,10 @@ export default {
         if (this.$store.getters.sortProduct.keyword != '') {
           query.keyword = this.$store.getters.sortProduct.keyword;
         }
-        text = 'Loại bỏ sản phẩm thành công';
+        text = action + ' sản phẩm thành công';
         this.$router.push({path: '/admin/products', query: query});
       } else {
-        text = 'Loại bỏ sản phẩm Loại bỏ sản phẩm thành công';
+        text = action + ' sản phẩm Loại bỏ sản phẩm thành công';
         type = 'danger';
       }
       this.toast(text, type);

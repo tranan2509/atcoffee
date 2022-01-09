@@ -17,4 +17,5 @@ public interface StoreService {
 	StoreResponse findAll(Pageable pageable);
 	StoreResponse findByState(Boolean state, Pageable pageable);
 	StoreResponse findByKeywordAndState(String keyword, Boolean state, Pageable pageable);
+	StoreResponse findByKeyword(String keyword, Pageable pageable);
 }

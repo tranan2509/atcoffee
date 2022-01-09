@@ -78,6 +78,12 @@ public class StoreServiceImpl implements StoreService {
 		return resultResponse(page, pageable);
 	}
 	
+	@Override
+	public StoreResponse findByKeyword(String keyword, Pageable pageable) {
+		Page<StoreEntity> page = storeRepository.findByKeyword(keyword, pageable);
+		return resultResponse(page, pageable);
+	}
+	
 	public StoreResponse resultResponse(Page<StoreEntity> page, Pageable pageable) {
 		List<StoreEntity> entities = page.getContent();
 		List<StoreDTO> dtos = new ArrayList<StoreDTO>();

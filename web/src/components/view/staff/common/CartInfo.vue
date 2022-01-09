@@ -169,6 +169,7 @@ export default {
       setTimeout(()=> {
         this.isSpinnerSuccess = false;
         this.src = '';
+        this.$router.push({path: '/staff/products'});
       }, 1000);
     },
 
@@ -214,7 +215,7 @@ export default {
         bill.id = result.id;
         BillDataService.save(bill);
         this.$store.commit(MutationsName.MUTATION_NAME_SET_CARTS, []);
-        this.processSpinnerSuccess();
+        await this.processSpinnerSuccess();
       } else {
         this.isAlertPopup = true;
         this.msg = 'Thanh toán không thành công!';

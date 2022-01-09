@@ -77,6 +77,12 @@ public class CategoryServiceImpl implements CategoryService{
 		return resultResponse(page, pageable);
 	}
 	
+	@Override
+	public CategoryResponse findByKeyword(String keyword, Pageable pageable) {
+		Page<CategoryEntity> page = categoryRepository.findByKeyword(keyword, pageable);
+		return resultResponse(page, pageable);
+	}
+	
 	public CategoryResponse resultResponse(Page<CategoryEntity> page, Pageable pageable) {
 		List<CategoryEntity> entities = page.getContent();
 		List<CategoryDTO> dtos = new ArrayList<CategoryDTO>();

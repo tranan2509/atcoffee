@@ -16,4 +16,5 @@ public interface CategoryService {
 	List<CategoryDTO> findByState(Boolean state);
 	CategoryResponse findByState(Boolean state, Pageable pageable);
 	CategoryResponse findByKeywordAndState(String keyword, Boolean state, Pageable pageable);
+	CategoryResponse findByKeyword(String keyword, Pageable pageable);
 }

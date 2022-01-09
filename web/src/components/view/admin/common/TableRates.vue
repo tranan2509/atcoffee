@@ -112,7 +112,7 @@ export default {
     },
 
     async loadProducts() {
-      this.products = await ProductCommand.fineAll(1, Constants.PAGE_SIZE_MAX);
+      this.products = await ProductCommand.findAllIgnore();
     },
 
     async loadCustomers() {

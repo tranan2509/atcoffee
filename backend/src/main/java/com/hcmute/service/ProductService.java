@@ -21,4 +21,9 @@ public interface ProductService {
 	ProductResponse findByCategoryCodeAndKeyword(String categoryCode, String keyword , Pageable pageable);
 	ProductResponse findByStoreCodeAndCategoryCodeAndKeyword(String storeCode, String categoryCode, String keyword, Pageable pageable);
 	int countItem();
+	ProductResponse findByStateIgnore(Boolean state, Pageable pageable);
+	ProductResponse findByKeywordIgnore(String keyword, Pageable pageable);
+	ProductResponse findByStoreCodeAndKeywordIgnore(String storeCode, String keyword , Pageable pageable);	
+	ProductResponse findByCategoryCodeAndKeywordIgnore(String categoryCode, String keyword , Pageable pageable);
+	ProductResponse findByStoreCodeAndCategoryCodeAndKeywordIgnore(String storeCode, String categoryCode, String keyword, Pageable pageable);
 }

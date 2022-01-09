@@ -26,7 +26,7 @@ public class ProductServiceImpl implements ProductService{
 	
 	@Autowired
 	private ModelMapper mapper;
-	@Autowired
+	@Autowired	
 	private ProductRepository productRepository;
 	@Autowired
 	private StoreRepository storeRepository;
@@ -144,6 +144,40 @@ public class ProductServiceImpl implements ProductService{
 	@Override
 	public ProductResponse findByKeyword(String keyword, Pageable pageable) {
 		Page<ProductEntity> page = productRepository.findByNameContainingOrCodeContainingAndState(keyword, keyword, true, pageable);
+		return resultResponse(page, pageable);
+	}
+	
+	@Override
+	public ProductResponse findByStateIgnore(Boolean state, Pageable pageable) {
+		Page<ProductEntity> page = productRepository.findByState(state, pageable);
+		return resultResponse(page, pageable);
+	}
+	
+	@Override
+	public ProductResponse findByStoreCodeAndKeywordIgnore(String storeCode, String keyword, Pageable pageable) {
+		StoreEntity store = storeRepository.findOneByCode(storeCode);
+		Page<ProductEntity> page = productRepository.findByStoreIdAndKeywordIgnore(store.getId(), keyword, pageable);
+		return resultResponse(page, pageable);
+	}
+
+	@Override
+	public ProductResponse findByCategoryCodeAndKeywordIgnore(String categoryCode, String keyword,  Pageable pageable) {
+		CategoryEntity category = categoryRepository.findOneByCode(categoryCode);
+		Page<ProductEntity> page = productRepository.findByCategoryIdAndKeywordIgnore(category.getId(), keyword, pageable);
+		return resultResponse(page, pageable);
+	}
+
+	@Override
+	public ProductResponse findByStoreCodeAndCategoryCodeAndKeywordIgnore(String storeCode, String categoryCode, String keyword, Pageable pageable) {
+		StoreEntity store = storeRepository.findOneByCode(storeCode);
+		CategoryEntity category = categoryRepository.findOneByCode(categoryCode);
+		Page<ProductEntity> page = productRepository.findByStoreIdAndCategoryIdAndKeywordIgnore(store.getId(), category.getId(), keyword, pageable);
+		return resultResponse(page, pageable);
+	}
+
+	@Override
+	public ProductResponse findByKeywordIgnore(String keyword, Pageable pageable) {
+		Page<ProductEntity> page = productRepository.findByKeywordIgnore(keyword, pageable);
 		return resultResponse(page, pageable);
 	}
 	

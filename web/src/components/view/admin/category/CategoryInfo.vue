@@ -90,6 +90,7 @@ export default {
     },
 
     async handleLock(isLock) {
+      let action = isLock ? 'Ngừng sử dụng' : 'Mở hoạt động';
       let result = await CategoryCommand.findOne(this.categoryId);
       result['state'] = !isLock;
       this.formData = new FormData();
@@ -99,10 +100,10 @@ export default {
       if (res != null) {
         let query = {};
         query.page = this.$store.getters.sortCategory.page;
-        text = 'Loại bỏ loại sản phẩm thành công';
+        text = action + ' loại sản phẩm thành công';
         this.$router.push({path: '/admin/categories', query: query});
       } else {
-        text = 'Loại bỏ loại sản phẩm thất bại';
+        text = action + ' loại sản phẩm thất bại';
         type = 'danger';
       }
       this.toast(text, type);

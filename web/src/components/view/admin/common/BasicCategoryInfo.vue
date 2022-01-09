@@ -13,7 +13,7 @@
                   </a>
                   <router-link to="" class="dropdown-item has-icon" @click="handleLock(category.state)">
                     <i class="far fa-trash-alt"></i>
-                    {{category.state ? 'Xóa mã loại sản phẩm' : ''}}
+                    {{category.state ? 'Ngừng sử dụng' : 'Mở hoạt động'}}
                   </router-link>
                 </div>
               </div>

@@ -13,7 +13,7 @@
                   </a>
                   <router-link to="" class="dropdown-item has-icon" @click="handleLock(store.state)">
                    <i class="far fa-trash-alt"></i>
-                    {{store.state ? 'Ngừng hoạt động' : ''}}
+                    {{store.state ? 'Ngừng hoạt động' : 'Mở hoạt động'}}
                   </router-link>
                 </div>
               </div>

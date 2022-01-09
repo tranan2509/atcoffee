@@ -42,14 +42,14 @@ public class StoreAPI {
 		return ResponseEntity.ok(storeService.findByState(true));
 	}
 	
-//	@GetMapping(value = "/api/info/store", params = {"page", "size"})
-//	public ResponseEntity<StoreResponse> findAll(@RequestParam(name = "page", defaultValue = "1") int page,
-//			@RequestParam(name = "size") int size,
-//			@RequestParam(name = "state", defaultValue = "true", required = false) Boolean state){
-//		Pageable pageable = new PageRequest(page - 1, size);
-//		return ResponseEntity.ok(storeService.findByState(state, pageable));
-//	}
-//	
+	@GetMapping(value = "/api/staff/store", params = {"page", "size", "keyword"})
+	public ResponseEntity<StoreResponse> findAllWithStaff(@RequestParam(name = "page", defaultValue = "1") int page,
+			@RequestParam(name = "size") int size,
+			@RequestParam(name="keyword") String keyword){
+		Pageable pageable = new PageRequest(page - 1, size);
+		return ResponseEntity.ok(storeService.findByKeyword(keyword, pageable));
+	}
+	
 	@GetMapping(value = "/api/info/store", params = {"page", "size", "keyword"})
 	public ResponseEntity<StoreResponse> findAll(@RequestParam(name = "page", defaultValue = "1") int page,
 			@RequestParam(name = "size") int size,
