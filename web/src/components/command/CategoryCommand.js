@@ -31,6 +31,17 @@ var CategoryCommand = {
     return null;
   },
 
+  async findAllByOrder(page, size, keyword, store = null) {
+    const url = `${Constants.HOSTNAME_DEFAULT}/api/staff/category?keyword=${keyword}&page=${page}&size=${size}`;
+    let result = await ConnectServer.getData(url);
+    if (result != null) {
+      store != null ? store.commit(MutationsName.MUTATION_NAME_SET_CATEGORIES, result.categories) : '';
+      store != null ? store.commit(MutationsName.MUTATION_NAME_SET_SORT_CATEGORY, {page, totalPage: result.totalPage, keyword}) : '';
+      return result;
+    }
+    return null;
+  },
+
   async findOne(id, store = null) {
     const url = `${Constants.HOSTNAME_DEFAULT}/api/info/category/${id}`;
     let result = await ConnectServer.getData(url);

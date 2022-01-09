@@ -1,5 +1,6 @@
 package com.hcmute.api;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +71,11 @@ public class ProductAPI {
 		return ResponseEntity.ok(productService.countByCategoryCode(categoryCode));
 	}
 	
+	@GetMapping("/api/staff/product/list")
+	public ResponseEntity<List<ProductDTO>> findAll() {
+		return ResponseEntity.ok(productService.findAll());
+	}
+	
 	@GetMapping("/api/info/product") 
 	public ResponseEntity<ProductResponse> findAll(@RequestParam(name = "page", defaultValue = "1") int page,
 			@RequestParam(name = "size", defaultValue = "10000") int size, @RequestParam(name = "store", required = false) String storeCode,
@@ -91,6 +97,27 @@ public class ProductAPI {
 			} else {
 				result = productService.findByKeyword(keyword, pageable);
 			}
+		}
+		return ResponseEntity.ok(result);
+	}
+	
+	@GetMapping("/api/staff/product") 
+	public ResponseEntity<ProductResponse> findAllWithStaff(@RequestParam(name = "page", defaultValue = "1") int page,
+			@RequestParam(name = "size", defaultValue = "10000") int size, 
+			@RequestParam(name = "store", required = false, defaultValue = "") String storeCode,
+			@RequestParam(name="category", required = false, defaultValue = "") String categoryCode,
+			@RequestParam(name = "keyword", required = false, defaultValue = "") String keyword) {
+		
+		ProductResponse result  = new ProductResponse();
+		Pageable pageable = new PageRequest(page - 1, size);
+		if (!"".equals(storeCode) && !"".equals(categoryCode)) {
+			result = productService.findByStoreCodeAndCategoryCodeAndKeywordIgnore(storeCode, categoryCode, keyword, pageable);
+		} else if (!"".equals(storeCode)) {
+			result = productService.findByStoreCodeAndKeywordIgnore(storeCode, keyword, pageable);
+		} else if (!"".equals(categoryCode)) {
+			result = productService.findByCategoryCodeAndKeywordIgnore(categoryCode, keyword, pageable);
+		} else {
+			result = productService.findByKeywordIgnore(keyword, pageable);
 		}
 		return ResponseEntity.ok(result);
 	}

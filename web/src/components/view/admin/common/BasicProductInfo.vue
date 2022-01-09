@@ -11,9 +11,9 @@
                     <i class="fas fa-edit"></i>
                     Chỉnh sửa
                   </router-link>
-                  <router-link to="" class="dropdown-item has-icon" @click="handleLock">
+                  <router-link to="" class="dropdown-item has-icon" @click="handleLock(product.state)">
                     <i class="fas fa-lock"></i>
-                    Ngừng bán
+                    {{product.state ? 'Ngừng bán' : 'Mở bán'}}
                   </router-link>
                 </div>
               </div>

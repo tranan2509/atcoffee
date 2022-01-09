@@ -87,7 +87,7 @@ export default {
     },
 
     async loadStores(page, size) {
-      await StoreCommand.findAllByPagination(page, size, this.keyword, this.$store);
+      await StoreCommand.findAllByOrder(page, size, this.keyword, this.$store);
     },
   },
 

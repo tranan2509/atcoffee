@@ -90,6 +90,7 @@ export default {
     },
 
     async handleLock(isLock) {
+      let action = isLock ? 'Ngừng hoạt động' : 'Mở hoạt động';
       let result = await StoreCommand.findOne(this.storeId);
       result['state'] = !isLock;
       this.formData = new FormData();
@@ -99,10 +100,10 @@ export default {
       if (res != null) {
         let query = {};
         query.page = this.$store.getters.sortStore.page;
-        text = 'Loại bỏ cửa hàng thành công';
+        text = action + ' cửa hàng thành công';
         this.$router.push({path: '/admin/stores', query: query});
       } else {
-        text = 'Loại bỏ cửa hàng thất bại';
+        text = action + ' cửa hàng thất bại';
         type = 'danger';
       }
       this.toast(text, type);

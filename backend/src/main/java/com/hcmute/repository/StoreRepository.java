@@ -15,4 +15,6 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Long>{
 	Page<StoreEntity> findByState(Boolean state, Pageable pageable);
 	@Query("select s from StoreEntity s where (s.name like %?1% OR s.code LIKE %?1% OR s.address LIKE %?1%) AND s.state = ?2")
 	Page<StoreEntity> findByKeywordAndState(String keyword, Boolean state, Pageable pageable);
+	@Query("select s from StoreEntity s where (s.name like %?1% OR s.code LIKE %?1% OR s.address LIKE %?1%)")
+	Page<StoreEntity> findByKeyword(String keyword, Pageable pageable);
 }

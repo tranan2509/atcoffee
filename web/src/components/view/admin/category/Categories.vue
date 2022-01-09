@@ -82,12 +82,12 @@ export default {
       if (typeof this.keyword == 'undefined') {
         this.keyword = '';
       }
-      await this.loadStores(currentPage, Constants.PAGE_SIZE_CATEGORY);
+      await this.loadCategories(currentPage, Constants.PAGE_SIZE_CATEGORY);
       this.isBlankPopup = false;
     },
 
-    async loadStores(page, size) {
-      await CategoryCommand.findAllByPagination(page, size, this.keyword, this.$store);
+    async loadCategories(page, size) {
+      await CategoryCommand.findAllByOrder(page, size, this.keyword, this.$store);
     },
   },
 

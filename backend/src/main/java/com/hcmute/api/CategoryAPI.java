@@ -70,4 +70,12 @@ public class CategoryAPI {
 		return ResponseEntity.ok(categoryService.findByKeywordAndState(keyword, state, pageable));
 	}
 	
+	@GetMapping(value = "/api/staff/category", params = {"page", "size"})
+	public ResponseEntity<CategoryResponse> findAllWithStaff(@RequestParam(name = "page", defaultValue = "1") int page,
+			@RequestParam(name = "size", defaultValue = "10000", required = false) int size, 
+			@RequestParam(name = "keyword", defaultValue = "", required = false) String keyword){
+		Pageable pageable = new PageRequest(page - 1, size);
+		return ResponseEntity.ok(categoryService.findByKeyword(keyword, pageable));
+	}
+	
 }

@@ -45,6 +45,7 @@
                   <th class="text-center">Tên sản phẩm</th>
                   <th class="text-center">Hình ảnh</th>
                   <th class="text-center">Giá sản phẩm</th>
+                  <th class="text-center">Trạng thái</th>
                   <th class="text-center">Chi tiết</th>
                 </tr>
                 <tr v-for="(product, index) in products" :key="product.id">
@@ -55,6 +56,9 @@
                     <img :src="product.image" alt="Ảnh" @click="handleViewImage(product.image)">
                   </td>
                   <td class="text-center">{{formatPrice(product.sizes[1].price)}}</td>
+                  <td class="text-center">
+                    <i class="fas fa-circle" :class="product.state ? 'active' : 'inactive'"></i>
+                  </td>
                   <td class="text-center">
                     <button class="btn btn-secondary" @click="handleInfo(product.id)">Chi tiết</button>
                   </td>
@@ -197,7 +201,7 @@ export default {
       var store = this.storeSelected == 'ALL' ? '' : this.storeSelected;
       var category = this.categorySelected == 'ALL' ? '' : this.categorySelected;
       var keyword = this.keyword;
-      this.products = await ProductCommand.findAllByOrder(page, size, store, category, keyword, this.$store);
+      this.products = await ProductCommand.findAllByOrderIgnore(page, size, store, category, keyword, this.$store);
     },
 
     async loadCategories() {

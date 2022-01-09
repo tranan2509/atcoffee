@@ -31,6 +31,17 @@ var StoreCommand = {
     return null;
   },
 
+  async findAllByOrder(page, size, keyword, store = null) {
+    const url = `${Constants.HOSTNAME_DEFAULT}/api/staff/store?keyword=${keyword}&page=${page}&size=${size}`;
+    let result = await ConnectServer.getData(url);
+    if (result != null) {
+      store != null ? store.commit(MutationsName.MUTATION_NAME_SET_STORES, result.stores) : null;
+      store != null ? store.commit(MutationsName.MUTATION_NAME_SET_SORT_STORE, {page, totalPage: result.totalPage, keyword}) : null;
+      return result.stores;
+    }
+    return null;
+  },
+
   async findOne(id, store = null) {
     const url = `${Constants.HOSTNAME_DEFAULT}/api/info/store/${id}`;
     let result = await ConnectServer.getData(url);

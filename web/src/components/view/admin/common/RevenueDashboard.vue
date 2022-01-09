@@ -166,7 +166,7 @@ export default {
     },
 
     async loadProducts() {
-      return await ProductCommand.findAllByOrder(1, Constants.PAGE_SIZE_MAX, null, null, null);
+      return await ProductCommand.findAllByOrderIgnore(1, Constants.PAGE_SIZE_MAX, null, null, null);
     }
   },
 

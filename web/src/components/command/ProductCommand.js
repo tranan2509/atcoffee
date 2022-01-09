@@ -37,6 +37,16 @@ var ProductCommand = {
     return null;
   },
 
+  async findAllIgnore(store = null) {
+    const url = `${Constants.HOSTNAME_DEFAULT}/api/staff/product/list`;
+    let res = await ConnectServer.getData(url);
+    if (res != null) {
+      store != null ? store.commit(MutationsName.MUTATION_NAME_SET_PRODUCTS, res): "";
+      return res;
+    }
+    return null;
+  },
+
   async fineAll(page, size, store = null) {
     const url = `${
       Constants.HOSTNAME_DEFAULT
@@ -72,6 +82,43 @@ var ProductCommand = {
     categoryCode = categoryCode == null ? "" : categoryCode;
     keyword = keyword == null ? "" : keyword;
     const url = `${Constants.HOSTNAME_DEFAULT}/api/info/product?page=${page}&size=${size}&store=${storeCode}&category=${categoryCode}&keyword=${keyword}`;
+    let res = await ConnectServer.getData(url);
+    if (res != null) {
+      store != null
+        ? store.commit(MutationsName.MUTATION_NAME_SET_PRODUCTS, res.products)
+        : "";
+      store != null
+        ? store.commit(
+            MutationsName.MUTATION_NAME_SET_TOTAL_PAGE_PRODUCT,
+            res.totalPage
+          )
+        : "";
+      store != null
+        ? store.commit(MutationsName.MUTATION_NAME_SET_SORT_PRODUCT, {
+            page,
+            store: storeCode,
+            category: categoryCode,
+            keyword,
+            totalPage: res.totalPage,
+          })
+        : "";
+      return res.products;
+    }
+    return null;
+  },
+
+  async findAllByOrderIgnore(
+    page,
+    size,
+    storeCode,
+    categoryCode,
+    keyword,
+    store = null
+  ) {
+    storeCode = storeCode == null ? "" : storeCode;
+    categoryCode = categoryCode == null ? "" : categoryCode;
+    keyword = keyword == null ? "" : keyword;
+    const url = `${Constants.HOSTNAME_DEFAULT}/api/staff/product?page=${page}&size=${size}&store=${storeCode}&category=${categoryCode}&keyword=${keyword}`;
     let res = await ConnectServer.getData(url);
     if (res != null) {
       store != null
