@@ -23,7 +23,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>{
 			+ " (u.name LIKE %?1% OR u.code LIKE %?1% OR u.phone LIKE %?1% OR u.email LIKE %?1% OR u.identityCard LIKE %?1%)"
 			+ " AND (u.role = ?2 OR u.role = ?3)")
 	Page<UserEntity> findByKeyword(String keyword, RoleEntity admin, RoleEntity staff, Pageable pageable);
-	@Query("select u from UserEntity u WHERE u.store = ?1 AND"
+	@Query("select u from UserEntity u WHERE u.store = ?1 AND u.role != 3 AND"
 			+ " (u.name like %?2% OR u.code LIKE %?2% OR u.phone LIKE %?2% OR u.email LIKE %?2% OR u.identityCard LIKE %?2%)"
 			+ " ")
 	Page<UserEntity> findByStoreAndKeyword(StoreEntity store, String keyword, Pageable pageable);
@@ -37,7 +37,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>{
 	@Query("select u from UserEntity u WHERE u.store = ?1 AND u.role = ?2 AND"
 			+ " (u.name like %?3% OR u.code LIKE %?3% OR u.phone LIKE %?3% OR u.email LIKE %?3%  OR u.identityCard LIKE %?3%)")
 	Page<UserEntity> findByStoreAndRoleAndKeyword(StoreEntity store, RoleEntity role, String keyword, Pageable pageable);
-	@Query("select u from UserEntity u WHERE u.store = ?1 AND u.state = ?2 AND"
+	@Query("select u from UserEntity u WHERE u.store = ?1 AND u.state = ?2 AND u.role != 3 AND"
 			+ " (u.name like %?3% OR u.code LIKE %?3% OR u.phone LIKE %?3% OR u.email LIKE %?3%  OR u.identityCard LIKE %?3%)")
 	Page<UserEntity> findByStoreAndStateAndKeyword(StoreEntity store, Boolean state, String keyword, Pageable pageable);
 	@Query("select u from UserEntity u WHERE u.role = ?1 AND u.state = ?2 AND"	

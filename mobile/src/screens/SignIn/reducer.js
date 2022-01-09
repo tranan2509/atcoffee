@@ -44,6 +44,7 @@ const signInReducer = function (state = initialState, action) {
     case types.LOG_OUT:
       return {
         data: {},
+        allType: [],
         error: '',
       };
     case types.GET_TYPE:

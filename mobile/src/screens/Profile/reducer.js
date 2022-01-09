@@ -12,6 +12,7 @@ const profileReducer = function (state = initialState, action) {
       return {
         ...state,
         user: action.payload,
+        error: '',
       };
     case types.ERROR_EDIT:
       return {
@@ -23,6 +24,7 @@ const profileReducer = function (state = initialState, action) {
       return {
         ...state,
         resetPassword: action.payload,
+        error: '',
       };
     default:
       return state;

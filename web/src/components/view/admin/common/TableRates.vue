@@ -25,10 +25,10 @@
                   <td class="text-center">{{number(index)}}</td>
                   <td class="text-center">{{rate.code}}</td>
                   <td class="text-center" v-if="$route.path.includes('/admin/rates')">
-                    {{products?.find(item => item.id == rate.productId).name}}
+                    {{products?.find(item => item.id == rate.productId)?.name }}
                   </td>
                   <td class="text-center" v-if="$route.path.includes('/admin/rates')">
-                    <img :src="products?.find(item => item.id == rate.productId).image"/>
+                    <img :src="products?.find(item => item.id == rate.productId)?.image"/>
                   </td>
                   <td class="text-center">{{customers?.find(item => item.id == rate.userId).name}}</td>
                   <td class="text-center">{{rate.star}}</td>
@@ -104,7 +104,7 @@ export default {
 
     async loadRateBySort(page, size) {
       if (this.$route.path.includes('/admin/rates')) {
-         await RateCommand.findAll(page, size, this.$store);
+        await RateCommand.findAll(page, size, this.$store);
       } else {
         var productId = this.$route.query.id;
         await RateCommand.findByProductId(page, size, productId, this.$store);

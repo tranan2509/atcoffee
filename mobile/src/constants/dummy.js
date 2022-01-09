@@ -203,7 +203,7 @@ const promos = [
   {
     id: 1,
     name: 'Strawberry Sensation',
-    description: 'Strawberry smoothie with strawberry bits',
+    description: 'Dâu tây thơm lừng, chín mọng',
     calories: '379 - 570',
     image: require('../assets/images/strawberry-background.png'),
   },

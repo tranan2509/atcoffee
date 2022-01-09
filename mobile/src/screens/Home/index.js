@@ -157,6 +157,7 @@ const Home = ({
   notificationsActions,
   notificationState,
   locationActions,
+  rewardsState,
 }) => {
   const scrollX = React.useRef(new Animated.Value(0)).current;
 
@@ -172,8 +173,10 @@ const Home = ({
     : signInState.data;
   const setToken = async () => {
     const token = await AsyncStorage.getItem('token');
+    console.log('lalalaaaa', token);
     if (!token) {
       await AsyncStorage.setItem('token', signInState.data.jwt);
+      console.log('lalalaaaa2', token);
     }
     await cartActions.getCart(userInfo.id);
     await manageOrderActions.getData(userInfo.id);
@@ -267,7 +270,7 @@ const Home = ({
               ...FONTS.h2,
               fontSize: 20,
             }}>
-            Available Rewards
+            Phần thưởng khả dụng
           </Text>
           <View
             style={{
@@ -281,7 +284,13 @@ const Home = ({
                 color: COLORS.white,
                 ...FONTS.body3,
               }}>
-              150 points - $2.50 off
+              {rewardsState.allRewards.find(
+                reward => reward && userInfo.currentPoints > reward.proviso,
+              )?.name
+                ? rewardsState.allRewards.find(
+                    reward => reward && userInfo.currentPoints > reward.proviso,
+                  )?.name
+                : 'Chưa đạt điều kiện'}
             </Text>
           </View>
         </View>
@@ -364,7 +373,7 @@ const Home = ({
               </Text> */}
               {/* Button */}
               <CustomButton
-                label="Order Now"
+                label="Mua ngay"
                 isPrimaryButton={true}
                 containerStyle={{
                   marginTop: 10,
@@ -425,6 +434,7 @@ function mapStateToProps(state) {
     cartState: state.cartReducer,
     manageOrderState: state.manageOrderReducer,
     notificationState: state.notificationReducer,
+    rewardsState: state.rewardReducer,
   };
 }
 
