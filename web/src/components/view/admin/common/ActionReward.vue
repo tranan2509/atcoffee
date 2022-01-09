@@ -27,7 +27,7 @@
                       <input type="text" class="form-control" id="proviso" v-model="reward.proviso" required>
                     </div>
                      <div class="info-group flex-1">
-                      <label for="redution">Mức giảm</label>
+                      <label for="redution">Mức giảm (vnđ)</label>
                       <input type="number" class="form-control" id="redution" v-model="reward.redution" placeholder="vnđ" required> 
                     </div>
                   </div>

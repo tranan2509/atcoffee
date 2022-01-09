@@ -21,7 +21,7 @@
                       <input type="text" class="form-control" id="name" v-model="promotion.name" required>
                     </div>
                     <div class="info-group flex-1">
-                      <label for="discount">Mức giảm giá</label>
+                      <label for="discount">Mức giảm giá (%)</label>
                       <input type="number" class="form-control text-right" id="discount" min="0" max="100" v-model="promotion.discount" required>
                     </div>
                   </div>
@@ -41,7 +41,7 @@
                       </span>
                     </div>
                     <div class="info-group flex-1">
-                      <label for="proviso">Điều kiện đơn hàng tối thiểu</label>
+                      <label for="proviso">Điều kiện đơn hàng tối thiểu (vnđ)</label>
                       <input type="number" class="form-control" id="proviso" v-model="promotion.proviso" required>
                     </div>
                   </div>
