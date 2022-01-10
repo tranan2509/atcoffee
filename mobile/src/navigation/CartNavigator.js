@@ -3,7 +3,6 @@ import React from 'react';
 import {Cart} from '../screens';
 import addressShipping from '../screens/Cart/adressShipping';
 import promotionAvailable from '../screens/Cart/promotionAvailable';
-
 const CartStack = createStackNavigator();
 const CartStackNavigator = () => {
   return (

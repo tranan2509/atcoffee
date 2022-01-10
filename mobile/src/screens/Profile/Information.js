@@ -119,7 +119,17 @@ const Information = ({
           onPress={() =>
             editProfileHandler(() => navigation.navigate('Profile'))
           }>
-          <Text style={{color: COLORS.blueLight, ...FONTS.h2}}>Lưu</Text>
+          <Text
+            style={{
+              color:
+                themeState.appTheme.name === 'dark'
+                  ? COLORS.perano
+                  : COLORS.blueLight,
+              textDecorationLine: 'underline',
+              ...FONTS.h2,
+            }}>
+            Lưu
+          </Text>
         </TouchableOpacity>
         {/* Name */}
         <View style={{marginTop: 15, marginHorizontal: 20}}>

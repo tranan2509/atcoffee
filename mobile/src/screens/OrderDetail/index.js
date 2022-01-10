@@ -15,7 +15,9 @@ import {connect} from 'react-redux';
 import {formatMoney} from '../../common/format';
 import * as CartActionsCreator from '../Cart/action';
 import * as RateActionsCreator from '../Rate/action';
+import * as orderActionsCreator from '../Order/action';
 import {bindActionCreators} from 'redux';
+import {FlatList} from 'react-native-gesture-handler';
 
 const OrderDetail = ({
   navigation,
@@ -27,6 +29,8 @@ const OrderDetail = ({
   orderState,
   rateState,
   rateActions,
+  orderActions,
+  signInState,
 }) => {
   const [selectedItem, setSelectedItem] = React.useState(null);
 
@@ -44,6 +48,8 @@ const OrderDetail = ({
   const [favorites, setFavorites] = React.useState(false);
 
   const [amountMoney, setAmountMoney] = React.useState(0);
+
+  const [selectedStar, setSelectedStar] = React.useState(0);
 
   const [selectedLocation, setSelectedLocation] = React.useState({});
   const [loading, setLoading] = React.useState(false);
@@ -77,6 +83,32 @@ const OrderDetail = ({
         (1 - selectedItem?.discount / 100),
     );
   }
+
+  // const userInfo = signInState.data.user
+  //   ? signInState.data.user
+  //   : signInState.data;
+
+  const getTotalRating = item => {
+    let sum = 0;
+    if (item === -1) {
+      sum = rateState.ratePro?.length;
+    } else if (item === 0) {
+      sum = rateState.ratePro?.reduce(
+        (previousValue, currentValue) =>
+          currentValue.userId === userInfo.id
+            ? previousValue + 1
+            : previousValue,
+        0,
+      );
+    } else {
+      sum = rateState.ratePro?.reduce(
+        (previousValue, currentValue) =>
+          currentValue.star === item ? previousValue + 1 : previousValue,
+        0,
+      );
+    }
+    return sum;
+  };
 
   function numberOrderHandler(action) {
     let total = 0;
@@ -133,7 +165,7 @@ const OrderDetail = ({
     }
     return () => setLoading(false);
   }, []);
-
+  console.log('orderdetail', orderState.allProducts);
   const checkProInCart = (size, productId, storeId, description) => {
     const cartInfo = cartState.cart.find(
       cartItem =>
@@ -226,6 +258,14 @@ const OrderDetail = ({
     }
     setLoading(false);
   };
+
+  const goToCart = async () => {
+    setLoading(true);
+    await cartActions.getCart(userInfo.id);
+    setLoading(false);
+    navigation.push('Cart');
+  };
+
   const addToCartHandler = async () => {
     var dataItems = dataItem();
     const idCard = checkProInCart(
@@ -242,13 +282,17 @@ const OrderDetail = ({
         id: idCard.id,
         quantity: number,
       });
-      ToastAndroid.show('Thêm sản phẩm thành công!', ToastAndroid.LONG);
+      ToastAndroid.show(
+        'Sản phẩm được cập nhật thành công!',
+        ToastAndroid.LONG,
+      );
       await cartActions.getCart(userInfo.id);
+      navigation.goBack();
     } else {
       await addToCart(dataItems);
-
       ToastAndroid.show('Thêm sản phẩm thành công!', ToastAndroid.LONG);
       await cartActions.getCart(userInfo.id);
+      navigation.goBack();
     }
   };
 
@@ -664,7 +708,7 @@ const OrderDetail = ({
             <Text
               style={{
                 marginTop: SIZES.base,
-                color: COLORS.white,
+                color: themeState.appTheme.textColor,
                 ...FONTS.body3,
               }}>
               {dummyData.milkList[selectedMilkIndex].name}
@@ -829,77 +873,145 @@ const OrderDetail = ({
   const renderRateProduct = () => {
     return (
       <View style={{paddingTop: 30}}>
-        <View
-          style={{
-            alignSelf: 'center',
-            justifyContent: 'center',
-          }}>
-          <Text style={{color: themeState.appTheme.textColor, ...FONTS.h2}}>
-            ------Nhận xét và Đánh giá-----
-          </Text>
-        </View>
-        {rateState.ratePro.map(item => (
-          <View
-            key={item.code}
-            style={{
-              padding: 25,
-              marginBottom: 10,
-              backgroundColor:
-                themeState.appTheme.name == 'dark'
-                  ? COLORS.gray1
-                  : COLORS.white,
-            }}>
-            <View style={{flexDirection: 'row'}}>
-              <IconButton
-                icon={icons.profile}
-                iconStyle={{
-                  tintColor: themeState.appTheme.textColor,
-                  height: 40,
-                  width: 40,
+        {rateState.ratePro.length > 0 && (
+          <View>
+            <View
+              style={{
+                alignSelf: 'center',
+                justifyContent: 'center',
+              }}>
+              <Text style={{color: themeState.appTheme.textColor, ...FONTS.h2}}>
+                ------Nhận xét và Đánh giá-----
+              </Text>
+            </View>
+            <View style={{justifyContent: 'center', alignItems: 'center'}}>
+              <FlatList
+                data={[-1, 0, 1, 2, 3, 4, 5]}
+                keyExtractor={item => item}
+                horizontal
+                contentContainerStyle={{marginBottom: 10}}
+                renderItem={({item}) => {
+                  return (
+                    <View>
+                      <TouchableOpacity
+                        style={{
+                          height: 50,
+                          width: item === 0 ? 150 : 80,
+                          borderRadius: 10,
+                          borderWidth: 0.5,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          flexDirection: 'row',
+                          borderColor: COLORS.primary,
+                          margin: 5,
+                          backgroundColor:
+                            selectedStar === item ? COLORS.primary : null,
+                        }}
+                        onPress={() => setSelectedStar(item)}>
+                        <Text
+                          style={{
+                            color: themeState.appTheme.textColor,
+                            ...FONTS.h3,
+                          }}>
+                          {item === -1
+                            ? 'Tất cả'
+                            : item === 0
+                            ? 'Đánh giá của bạn'
+                            : item}
+                        </Text>
+                        {item !== 0 && item !== -1 && (
+                          <IconButton
+                            icon={icons.star}
+                            iconStyle={{
+                              tintColor: COLORS.yellow,
+                              height: 20,
+                              width: 20,
+                            }}
+                            onPress={() => setSelectedStar(item)}
+                          />
+                        )}
+                        <Text
+                          style={{
+                            color: themeState.appTheme.textColor,
+                            ...FONTS.b,
+                          }}>
+                          ({getTotalRating(item)})
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  );
                 }}
               />
-              <View style={{marginLeft: 20}}>
-                <View style={{flexDirection: 'row'}}>
-                  <Text
-                    style={{
-                      color: themeState.appTheme.textColor,
-
-                      ...FONTS.h3,
-                    }}>
-                    User{' '}
-                    {
-                      rateState?.ratePro.find(
-                        rateItem => rateItem.code == item.code,
-                      ).userId
-                    }{' '}
-                    - {item.star}
-                  </Text>
-                  <IconButton
-                    icon={icons.star}
-                    iconStyle={{
-                      tintColor: COLORS.yellow,
-                      height: 20,
-                      width: 20,
-                    }}
-                  />
-                </View>
-                <View>
-                  <Text
-                    style={{
-                      color: themeState.appTheme.textColor,
-                      ...FONTS.body4,
-                    }}>
-                    {
-                      rateState?.ratePro.find(
-                        rateItem => rateItem.code == item.code,
-                      ).comment
-                    }
-                  </Text>
-                </View>
-              </View>
             </View>
           </View>
-        ))}
+        )}
+        {rateState.ratePro.map(
+          item =>
+            (item.star === selectedStar ||
+              selectedStar === -1 ||
+              (selectedStar === 0 && item.userId === userInfo.id)) && (
+              <View
+                key={item.code}
+                style={{
+                  padding: 25,
+                  marginBottom: 10,
+                  backgroundColor:
+                    themeState.appTheme.name == 'dark'
+                      ? COLORS.gray1
+                      : COLORS.white,
+                }}>
+                <View style={{flexDirection: 'row'}}>
+                  <IconButton
+                    icon={icons.profile}
+                    iconStyle={{
+                      tintColor: themeState.appTheme.textColor,
+                      height: 40,
+                      width: 40,
+                    }}
+                  />
+                  <View style={{marginLeft: 20}}>
+                    <View style={{flexDirection: 'row'}}>
+                      <Text
+                        style={{
+                          color: themeState.appTheme.textColor,
+
+                          ...FONTS.h3,
+                        }}>
+                        User{' '}
+                        {
+                          rateState?.ratePro.find(
+                            rateItem => rateItem.code == item.code,
+                          ).userId
+                        }{' '}
+                        - {item.star}
+                      </Text>
+                      <IconButton
+                        icon={icons.star}
+                        iconStyle={{
+                          tintColor: COLORS.yellow,
+                          height: 20,
+                          width: 20,
+                        }}
+                      />
+                    </View>
+                    <View>
+                      <Text
+                        style={{
+                          color: themeState.appTheme.textColor,
+                          ...FONTS.body4,
+                        }}>
+                        {
+                          rateState?.ratePro.find(
+                            rateItem => rateItem.code == item.code,
+                          ).comment
+                        }
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            ),
+        )}
       </View>
     );
   };
@@ -949,8 +1061,10 @@ const OrderDetail = ({
               alignItems: 'center',
               //borderRadius: 20,
             }}
-            onPress={() => buyNowHandler(() => navigation.push('Cart'))}>
-            <Text style={{color: 'white', ...FONTS.h3}}>Mua ngay</Text>
+            onPress={goToCart}>
+            <Text style={{color: 'white', ...FONTS.h3}}>
+              Giỏ hàng ({cartState.cart.length})
+            </Text>
           </TouchableOpacity>
         ) : (
           <TouchableOpacity
@@ -1017,6 +1131,7 @@ function mapStateToProps(state) {
     userState: state.signInReducer,
     orderState: state.orderReducer,
     rateState: state.rateReducer,
+    signInState: state.signInReducer,
   };
 }
 
@@ -1024,6 +1139,7 @@ function mapDispatchToProp(dispatch) {
   return {
     cartActions: bindActionCreators(CartActionsCreator, dispatch),
     rateActions: bindActionCreators(RateActionsCreator, dispatch),
+    orderActions: bindActionCreators(orderActionsCreator, dispatch),
   };
 }
 

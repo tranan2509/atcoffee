@@ -140,7 +140,17 @@ const Rate = ({
           paddingTop: 35,
         }}
         onPress={ratingHandler}>
-        <Text style={{color: COLORS.blueLight, ...FONTS.h2}}>Gửi</Text>
+        <Text
+          style={{
+            color:
+              themeState.appTheme.name === 'dark'
+                ? COLORS.perano
+                : COLORS.blueLight,
+            textDecorationLine: 'underline',
+            ...FONTS.h2,
+          }}>
+          Gửi
+        </Text>
       </TouchableOpacity>
     </View>
   );

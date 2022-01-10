@@ -8,7 +8,7 @@ import {
   Alert,
   ToastAndroid,
 } from 'react-native';
-import {Header, IconButton} from '../../components';
+import {Header, IconButton, LoadingProcess} from '../../components';
 import {images, COLORS, SIZES, icons, FONTS, dummyData} from '../../constants';
 import {connect} from 'react-redux';
 import database from '@react-native-firebase/database';
@@ -51,6 +51,7 @@ const Cart = ({
   const [money, setMoney] = React.useState(amount - discount);
   const [num, setNum] = React.useState([]);
   const [flag, setFlag] = React.useState(0);
+
   const userInfo = signInState.data.user
     ? signInState.data.user
     : signInState.data;
@@ -58,16 +59,17 @@ const Cart = ({
   let product = cartState.cart?.filter(item => item.storeId != storeId)[0];
 
   const getProName = pro => {
-    return orderState.allProducts.find(item => item.id == pro.productId).name;
+    return orderState.allProducts.find(item => item && item.id == pro.productId)
+      .name;
   };
 
   const getProPrice = pro => {
     return orderState.allProducts
-      .find(item => item.id == pro.productId)
+      .find(item => item && item.id == pro.productId)
       .sizes.find(sizeItem => sizeItem.size == pro.size).price;
   };
   const getProDiscount = pro => {
-    return orderState.allProducts.find(item => item.id == pro.productId)
+    return orderState.allProducts.find(item => item && item.id == pro.productId)
       .discount;
   };
 
@@ -81,7 +83,21 @@ const Cart = ({
         },
         {text: 'OK', onPress: () => {}},
       ]);
+    } else if (cartState.cart.length <= 0) {
+      Alert.alert(
+        'Thông báo',
+        'Chưa có sản phẩm trong giỏ! Thêm sản phẩm vào giỏ nào!!!',
+        [
+          {
+            text: 'Bỏ qua',
+            onPress: () => {},
+            style: 'cancel',
+          },
+          {text: 'OK', onPress: () => navigation.navigate('Location')},
+        ],
+      );
     } else {
+      setLoading(true);
       let now = new Date();
       let code = `BI${now.getTime().toString().slice(1, 9)}`;
       //console.log('all pro', getProName(cartState.cart[0]));
@@ -177,6 +193,8 @@ const Cart = ({
         );
       }
       await signInActions.getUser(userInfo.username);
+      setLoading(false);
+      navigation.navigate('ManageOrder');
       ToastAndroid.show('Đặt hàng thành công!', ToastAndroid.LONG);
     }
   };
@@ -191,7 +209,10 @@ const Cart = ({
         let data = {token: querySnap._data.token, message: message};
         try {
           console.log('querySnap._data.token');
-          axios.post('http://de2f-103-199-69-121.ngrok.io/send-noti', data);
+          axios.post(
+            'http://3c9d-2402-9d80-36b-d30-18f8-656b-4013-148.ngrok.io/send-noti',
+            data,
+          );
         } catch (err) {
           console.log(err);
         }
@@ -437,8 +458,12 @@ const Cart = ({
                 <Text
                   style={{
                     paddingTop: 5,
-                    color: COLORS.blueLight,
+                    color:
+                      themeState.appTheme.name === 'dark'
+                        ? COLORS.perano
+                        : COLORS.blueLight,
                     alignSelf: 'flex-end',
+                    textDecorationLine: 'underline',
                     ...FONTS.body3,
                   }}>
                   Thay đổi
@@ -497,7 +522,11 @@ const Cart = ({
               <Text
                 style={{
                   paddingTop: 5,
-                  color: COLORS.blueLight,
+                  color:
+                    themeState.appTheme.name === 'dark'
+                      ? COLORS.perano
+                      : COLORS.blueLight,
+                  textDecorationLine: 'underline',
                   alignSelf: 'flex-end',
                   ...FONTS.body3,
                 }}>
@@ -527,10 +556,13 @@ const Cart = ({
                     onPress={() =>
                       navigation.push('OrderDetail', {
                         selectedItem: orderState.allProducts.filter(
-                          pro => pro.id == item.productId,
+                          pro => pro && pro.id == item.productId,
                         )[0],
                         selectedLocation: orderState.allProducts
-                          ?.filter(cartItem => cartItem.id == item.productId)[0]
+                          ?.filter(
+                            cartItem =>
+                              cartItem && cartItem.id == item.productId,
+                          )[0]
                           .stores.filter(
                             storeItem => storeItem.id == item.storeId,
                           )[0],
@@ -546,7 +578,7 @@ const Cart = ({
                       {item.quantity} x{' '}
                       {
                         orderState.allProducts.filter(
-                          pro => pro.id == item.productId,
+                          pro => pro && pro.id == item.productId,
                         )[0].name
                       }{' '}
                       x {formatMoney(getProPrice(item) * item.quantity)}
@@ -560,7 +592,10 @@ const Cart = ({
                       ĐCCH:{' '}
                       {
                         orderState.allProducts
-                          ?.filter(cartItem => cartItem.id == item.productId)[0]
+                          ?.filter(
+                            cartItem =>
+                              cartItem && cartItem.id == item.productId,
+                          )[0]
                           .stores.filter(
                             storeItem => storeItem.id == item.storeId,
                           )[0].address
@@ -610,7 +645,20 @@ const Cart = ({
               />
             </View>
           )}
+          {loading && (
+            <View
+              zIndex={1}
+              style={{
+                height: 250,
+                width: 300,
+                marginTop: -200,
+                marginLeft: 30,
+              }}>
+              <LoadingProcess title="Đang tải ..." />
+            </View>
+          )}
         </View>
+
         {/* Total */}
         <View
           style={{
@@ -713,7 +761,11 @@ const Cart = ({
                 }>
                 <Text
                   style={{
-                    color: COLORS.blueLight,
+                    color:
+                      themeState.appTheme.name === 'dark'
+                        ? COLORS.perano
+                        : COLORS.blueLight,
+                    textDecorationLine: 'underline',
                     ...FONTS.body3,
                   }}>
                   Mã khuyến mãi
@@ -867,14 +919,13 @@ const Cart = ({
                 icon={icons.deleted}
                 iconStyle={{tintColor: COLORS.red}}
               />
-
               <Text
                 style={{
                   color: COLORS.red,
                   ...FONTS.body3,
                   marginLeft: 10,
                 }}>
-                Xóa đơn hàng
+                Xóa giỏ hàng
               </Text>
             </TouchableOpacity>
           </View>

@@ -81,6 +81,7 @@ const Rewards = ({
         <ImageBackground
           source={icons.reward_cup}
           resizeMode="stretch"
+          imageStyle={{tintColor: themeState.appTheme.textColor}}
           style={{
             marginTop: SIZES.padding,
             width: SIZES.width * 0.65,
@@ -97,7 +98,7 @@ const Rewards = ({
               justifyContent: 'center',
               backgroundColor: COLORS.white,
             }}>
-            <Text style={{...FONTS.h1}}>280</Text>
+            <Text style={{...FONTS.h1}}>{userInfo.currentPoints}</Text>
           </View>
         </ImageBackground>
       </View>
@@ -113,7 +114,7 @@ const Rewards = ({
           paddingHorizontal: SIZES.padding,
         }}>
         <Text style={{color: themeState.appTheme.textColor, ...FONTS.h2}}>
-          Phần thưởng dùng được
+          Phần thưởng
         </Text>
       </View>
     );

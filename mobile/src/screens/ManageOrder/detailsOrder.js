@@ -55,7 +55,11 @@ const detailsOrder = ({
           </Text>
           <Text
             style={{
-              color: COLORS.blueLight,
+              color:
+                themeState.appTheme.name === 'dark'
+                  ? COLORS.perano
+                  : COLORS.blueLight,
+              textDecorationLine: 'underline',
               ...FONTS.h3,
               paddingBottom: 10,
               paddingTop: 10,
@@ -76,7 +80,11 @@ const detailsOrder = ({
           </Text>
           <Text
             style={{
-              color: COLORS.blueLight,
+              color:
+                themeState.appTheme.name === 'dark'
+                  ? COLORS.perano
+                  : COLORS.blueLight,
+              textDecorationLine: 'underline',
               ...FONTS.h3,
               paddingBottom: 10,
               paddingTop: 10,

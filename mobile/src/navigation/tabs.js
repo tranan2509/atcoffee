@@ -140,7 +140,7 @@ const Tabs = () => {
         options={{
           tabBarIcon: ({focused}) => (
             <Image
-              source={icons.coffee_cup}
+              source={icons.rewards}
               resizeMode="contain"
               style={{
                 width: 35,

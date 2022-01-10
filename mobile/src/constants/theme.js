@@ -26,7 +26,8 @@ export const COLORS = {
 
   pink: '#D993B4',
   lightPink: '#F3DEE8',
-  blueLight: 'rgba(0,87,190,1.0)',
+  blueLight: 'rgba(0,90,190,1.0)',
+  perano: 'rgba(155,165,255,1)',
 
   transparentWhite: 'rgba(255, 255, 255, 0.2)',
   transparentBlack: 'rgba(0, 0, 0, 0.4)',
@@ -88,7 +89,7 @@ export const lightTheme = {
   headerColor: COLORS.red,
 };
 
-export const selectedTheme = darkTheme;
+export const selectedTheme = lightTheme;
 
 const appTheme = {COLORS, SIZES, FONTS, darkTheme, lightTheme};
 

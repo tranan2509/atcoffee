@@ -10,8 +10,8 @@ export const getTheme = () => {
   return async dispatch => {
     const mode = await AsyncStorage.getItem(`dark`);
     console.log('modeeeeeeeeeee', mode);
-    if (mode === 'false') {
-      dispatch({type: GET_THEME, payload: lightTheme});
+    if (mode === 'true') {
+      dispatch({type: GET_THEME, payload: darkTheme});
     }
   };
 };

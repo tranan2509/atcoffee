@@ -45,6 +45,7 @@ const SignIn = ({
   rewardActions,
   cartActions,
   themeActions,
+  orderState,
 }) => {
   const {width, height} = Dimensions.get('window');
   const opacityButton = useSharedValue(1);
@@ -455,6 +456,7 @@ const styles = StyleSheet.create({
 function mapStateToProps(state) {
   return {
     signInState: state.signInReducer,
+    orderState: state.orderReducer,
   };
 }
 

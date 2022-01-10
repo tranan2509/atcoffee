@@ -10,7 +10,12 @@ import {
   FlatList,
   StyleSheet,
 } from 'react-native';
-import {IconButton, TabButton, VerticalTextButton} from '../../components';
+import {
+  IconButton,
+  TabButton,
+  VerticalTextButton,
+  LoadingProcess,
+} from '../../components';
 import {icons, COLORS, SIZES, FONTS, dummyData} from '../../constants';
 import Svg, {Circle} from 'react-native-svg';
 import {bindActionCreators} from 'redux';
@@ -27,10 +32,12 @@ const Order = ({
   orderState,
   rateState,
   rateActions,
+  cartState,
 }) => {
   const [selectedLocation, setSelectedLocation] = React.useState(null);
 
   const [selectedTab, setSelectedTab] = React.useState(0);
+  const [loading, setLoading] = React.useState(false);
 
   const [selectedCategory, setSelectedCategory] = React.useState(
     orderState.allCategories[0].name,
@@ -62,6 +69,12 @@ const Order = ({
   //   console.log('avgffffff', rating);
   // }, [menu]);
 
+  const _setSelectedCategory = item => {
+    //setLoading(true);
+    setSelectedCategory(item);
+    //setLoading(false);
+  };
+
   const _getAllRate = async () => {
     await rateActions.getAllRate();
   };
@@ -86,35 +99,22 @@ const Order = ({
     return sum;
   };
 
+  const checkCate = pro => {
+    let catePro = pro.categories.filter(cate => cate.name === selectedCategory);
+    //console.log('prrooooooooooo', selectedCategory);
+    return catePro[0];
+  };
+
   React.useEffect(() => {
     let {selectedLocation} = route.params;
     setSelectedLocation(selectedLocation);
-    //get categories
-    //orderActions.getAllCategories();
-    //get products
     //orderActions.getAllProducts(selectedLocation.code);
     //return () => console.log('cleanup');
-    setMenu(orderState.products);
+    //setMenu(orderState.products.filter(product => product.state === 1));
     //console.log('allProducts', orderState.allProducts);
     _getAllRate();
+    //getMenu();
   }, []);
-
-  console.log('rateeeeeeeeee', rateState.allRate);
-  React.useEffect(() => {
-    //let {selectedLocation} = route.params;
-    // if (selectedCategory == '') {
-    //   setMenu(orderState.allProducts);
-    // } else {
-    let menuList = orderState.products.filter(
-      pro =>
-        pro.state &&
-        pro.categories.filter(menuItem => menuItem.name == selectedCategory)[0],
-    );
-    //console.log(menuList);
-    setMenu(menuList);
-    // }
-  }, [selectedCategory]);
-  //console.log(menu);
   function renderHeaderSection() {
     return (
       <SafeAreaView
@@ -247,7 +247,7 @@ const Order = ({
                     marginBottom: 40,
                   }}
                   selected={selectedCategory == item.name}
-                  onPress={() => setSelectedCategory(item.name)}
+                  onPress={() => _setSelectedCategory(item.name)}
                 />
               ) : null;
             }}
@@ -259,6 +259,19 @@ const Order = ({
       </View>
     );
   }
+
+  const _renderEmpty = () => {
+    return (
+      <View
+        //zIndex={1}
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <Text style={{...FONTS.h3}}>Chưa có sản phẩm</Text>
+      </View>
+    );
+  };
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -287,11 +300,13 @@ const Order = ({
 
           {/* Listing */}
           <FlatList
-            data={menu}
+            data={orderState.products.filter(pro => pro && checkCate(pro))}
+            extraData={selectedCategory}
             contentContainerStyle={{
               marginTop: SIZES.padding,
               paddingBottom: 50,
             }}
+            ListEmptyComponent={_renderEmpty}
             keyExtractor={item => item.id}
             renderItem={({item, index}) => {
               return (
@@ -450,6 +465,52 @@ const Order = ({
           />
         </View>
       </View>
+      {cartState.cart.length > 0 && (
+        <View
+          style={{
+            backgroundColor: COLORS.white1,
+            height: 70,
+            width: '100%',
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}>
+          <View style={{paddingLeft: 10}}>
+            <Text style={{color: COLORS.gray3, ...FONTS.h2}}>Xem giỏ hàng</Text>
+          </View>
+          <View style={{flex: 1, alignItems: 'flex-end', marginRight: 10}}>
+            <TouchableOpacity
+              style={{
+                flexDirection: 'row',
+                //flex: 1,
+                backgroundColor: COLORS.purple,
+                //justifyContent: 'center',
+                alignItems: 'center',
+                //paddingLeft: 10,
+                borderRadius: 35,
+                height: 60,
+                width: 150,
+                marginLeft: 10,
+                justifyContent: 'center',
+              }}
+              onPress={() => navigation.push('Cart')}>
+              <View
+                style={{
+                  height: 30,
+                  width: 30,
+                  backgroundColor: COLORS.white,
+                  borderRadius: 15,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text style={{...FONTS.h3}}>{cartState.cart.length}</Text>
+              </View>
+              <View>
+                <Text style={{...FONTS.h3}}>Sản phẩm</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
     </View>
   );
 };
@@ -465,6 +526,7 @@ function mapStateToProps(state) {
     themeState: state.themeReducer,
     orderState: state.orderReducer,
     rateState: state.rateReducer,
+    cartState: state.cartReducer,
   };
 }
 

@@ -98,9 +98,12 @@ const Profile = ({
               <Text
                 style={{
                   paddingTop: 5,
-                  color: COLORS.blueLight,
+                  color:
+                    themeState.appTheme.name === 'dark'
+                      ? COLORS.perano
+                      : COLORS.blueLight,
                   alignSelf: 'flex-end',
-
+                  textDecorationLine: 'underline',
                   ...FONTS.body3,
                 }}>
                 Chỉnh sửa

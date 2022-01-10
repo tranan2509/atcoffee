@@ -93,7 +93,10 @@ const sendNotification = (message, phone) => {
       let data = {token: querySnap._data.token, message: message};
       try {
         console.log('querySnap._data.token');
-        axios.post('http://de2f-103-199-69-121.ngrok.io/send-noti', data);
+        axios.post(
+          'http://3c9d-2402-9d80-36b-d30-18f8-656b-4013-148.ngrok.io/send-noti',
+          data,
+        );
       } catch (err) {
         console.log(err);
       }
