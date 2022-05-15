@@ -39,6 +39,7 @@ const createOrder = require('../assets/icons/createOrder.png');
 const rating = require('../assets/icons/rating.png');
 const star = require('../assets/icons/star.png');
 const rewards = require('../assets/icons/rewards.png');
+const gift = require('../assets/icons/gift.png');
 export default {
   add,
   bookmark,
@@ -81,4 +82,5 @@ export default {
   rating,
   star,
   rewards,
+  gift,
 };

@@ -267,6 +267,7 @@ const OrderDetail = ({
   };
 
   const addToCartHandler = async () => {
+    setLoading(true);
     var dataItems = dataItem();
     const idCard = checkProInCart(
       dataItems.size,
@@ -287,11 +288,13 @@ const OrderDetail = ({
         ToastAndroid.LONG,
       );
       await cartActions.getCart(userInfo.id);
+      setLoading(false);
       navigation.goBack();
     } else {
       await addToCart(dataItems);
       ToastAndroid.show('Thêm sản phẩm thành công!', ToastAndroid.LONG);
       await cartActions.getCart(userInfo.id);
+      setLoading(false);
       navigation.goBack();
     }
   };

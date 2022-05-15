@@ -149,19 +149,20 @@ const SignIn = ({
   };
 
   const login = async () => {
-    setLoading(true);
-    await signInActions.signIn(phone, password);
-    if (rememberMe) {
-      await AsyncStorage.setItem('username', phone);
-      await AsyncStorage.setItem('password', password);
-      await AsyncStorage.setItem('remember', 'true');
-      //console.log('item', true);
-    } else {
-      await AsyncStorage.setItem('username', '');
-      await AsyncStorage.setItem('password', '');
-      await AsyncStorage.setItem('remember', 'false');
-      //console.log('item', false);
-    }
+    navigation.navigate('Main', {screen: 'Home'});
+    // setLoading(true);
+    // await signInActions.signIn(phone, password);
+    // if (rememberMe) {
+    //   await AsyncStorage.setItem('username', phone);
+    //   await AsyncStorage.setItem('password', password);
+    //   await AsyncStorage.setItem('remember', 'true');
+    //   //console.log('item', true);
+    // } else {
+    //   await AsyncStorage.setItem('username', '');
+    //   await AsyncStorage.setItem('password', '');
+    //   await AsyncStorage.setItem('remember', 'false');
+    //   //console.log('item', false);
+    // }
   };
   //console.log('sign in', signInState.error);
   const loginHandler = async () => {

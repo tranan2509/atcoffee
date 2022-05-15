@@ -1,42 +1,34 @@
 {
   "project_info": {
-    "project_number": "683061952642",
-    "firebase_url": "https://atcoffee-adea8-default-rtdb.firebaseio.com",
-    "project_id": "atcoffee-adea8",
-    "storage_bucket": "atcoffee-adea8.appspot.com"
+    "project_number": "1071664638689",
+    "firebase_url": "https://atcoffeeapp-2f281-default-rtdb.firebaseio.com",
+    "project_id": "atcoffeeapp-2f281",
+    "storage_bucket": "atcoffeeapp-2f281.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:683061952642:android:31eb65dabd22d280e4f49b",
+        "mobilesdk_app_id": "1:1071664638689:android:f1dc54c5098d267f1a25a0",
         "android_client_info": {
           "package_name": "com.drinkapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "683061952642-hiefv0r4rf9toavkcb3lpcqqs9ufba31.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.drinkapp",
-            "certificate_hash": "e183eec0a2d2bdf67591dd485141bbbbbc1c8c9c"
-          }
-        },
-        {
-          "client_id": "683061952642-1d8h24a6fmlegijce6119inhttn0pabr.apps.googleusercontent.com",
+          "client_id": "1071664638689-2lh7ve70d2ob78s94co17t9aml7jlgb3.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCTH8XEopx5Pq4oYbLvmYhZvMGArICLpx0"
+          "current_key": "AIzaSyBdfxEK0JewEKuVwaBPW9wdfjoxcUSTwaQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "683061952642-1d8h24a6fmlegijce6119inhttn0pabr.apps.googleusercontent.com",
+              "client_id": "1071664638689-2lh7ve70d2ob78s94co17t9aml7jlgb3.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

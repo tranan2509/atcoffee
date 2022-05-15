@@ -210,7 +210,7 @@ const Cart = ({
         try {
           console.log('querySnap._data.token');
           axios.post(
-            'http://3c9d-2402-9d80-36b-d30-18f8-656b-4013-148.ngrok.io/send-noti',
+            'http://4278-2402-9d80-387-d81e-b15c-5ea4-4a3-7135.ngrok.io/send-noti',
             data,
           );
         } catch (err) {
