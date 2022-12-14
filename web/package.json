@@ -17,7 +17,7 @@
     "chart.js": "^3.6.0",
     "click-outside-vue3": "^4.0.1",
     "core-js": "^3.6.5",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "firebase": "^9.2.0",
     "lottie-web-vue": "^1.2.0",
     "mosha-vue-toastify": "^1.0.23",
